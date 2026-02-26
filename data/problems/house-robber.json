@@ -1,0 +1,127 @@
+{
+  "id": "house-robber",
+  "title": "House Robber",
+  "difficulty": "medium",
+  "tags": ["dynamic-programming", "array"],
+  "description": "## House Robber\n\nYou are a security consultant auditing a string of connected server nodes. Each node stores a certain amount of data. However, any two directly adjacent nodes are linked by an alarm — if you extract data from both, the alarm triggers.\n\nGiven an integer array `nums` where `nums[i]` represents the data in the i-th node, return the **maximum amount of data** you can extract without triggering any alarm (i.e., without selecting two adjacent nodes).\n\n**Constraints:**\n- `1 <= nums.length <= 100`\n- `0 <= nums[i] <= 400`",
+  "examples": [
+    {
+      "input": "nums = [1, 2, 3, 1]",
+      "output": "4",
+      "explanation": "Take node 0 (1) and node 2 (3) = 4."
+    },
+    {
+      "input": "nums = [2, 7, 9, 3, 1]",
+      "output": "12",
+      "explanation": "Take node 0 (2), node 2 (9), node 4 (1) = 12."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [1, 2, 3, 1]},
+      "expected": 4,
+      "explanation": "Take index 0 and 2"
+    },
+    {
+      "input": {"nums": [2, 7, 9, 3, 1]},
+      "expected": 12,
+      "explanation": "Take index 0, 2, 4"
+    },
+    {
+      "input": {"nums": [5, 1, 1, 5]},
+      "expected": 10,
+      "explanation": "Take first and last"
+    },
+    {
+      "input": {"nums": [2, 1, 1, 2]},
+      "expected": 4,
+      "explanation": "Take first and last"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1]},
+      "expected": 1,
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [1, 2]},
+      "expected": 2,
+      "explanation": "Two elements, take larger"
+    },
+    {
+      "input": {"nums": [2, 1]},
+      "expected": 2,
+      "explanation": "Two elements, take larger"
+    },
+    {
+      "input": {"nums": [0, 0, 0]},
+      "expected": 0,
+      "explanation": "All zeros"
+    },
+    {
+      "input": {"nums": [400, 1, 400]},
+      "expected": 800,
+      "explanation": "Take both ends"
+    },
+    {
+      "input": {"nums": [1, 100, 1, 100, 1]},
+      "expected": 200,
+      "explanation": "Take alternating 100s"
+    },
+    {
+      "input": {"nums": [10, 1, 10, 1, 10]},
+      "expected": 30,
+      "explanation": "Take every other"
+    },
+    {
+      "input": {"nums": [2, 1, 1, 2, 1]},
+      "expected": 4,
+      "explanation": "Non-trivial selection"
+    },
+    {
+      "input": {"nums": [5, 5, 5, 5, 5]},
+      "expected": 15,
+      "explanation": "All same, take alternating (indices 0,2,4)"
+    },
+    {
+      "input": {"nums": [1, 3, 1, 3, 100]},
+      "expected": 103,
+      "explanation": "Take index 1 (3) and 4 (100)"
+    },
+    {
+      "input": {"nums": [100, 1, 1, 100]},
+      "expected": 200,
+      "explanation": "Take first and last"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    pass"
+  },
+  "functionName": "rob",
+  "solutions": [
+    {
+      "label": "Recursive with Memoization — O(n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    memo = {}\n    def dp(i):\n        if i >= len(nums):\n            return 0\n        if i in memo:\n            return memo[i]\n        # Either skip this house or rob it (and skip next)\n        memo[i] = max(dp(i + 1), nums[i] + dp(i + 2))\n        return memo[i]\n    return dp(0)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "At each house, choose the maximum of: skipping it and considering the next, or robbing it and jumping two ahead. Memoize to avoid redundant computation."
+    },
+    {
+      "label": "Iterative DP — O(n) space O(1)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    if not nums:\n        return 0\n    if len(nums) == 1:\n        return nums[0]\n    prev2, prev1 = 0, 0\n    for num in nums:\n        curr = max(prev1, prev2 + num)\n        prev2, prev1 = prev1, curr\n    return prev1",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "dp[i] = max amount obtainable from houses 0..i. dp[i] = max(dp[i-1], dp[i-2] + nums[i]). Only track the last two values. Roll forward until the end."
+    }
+  ],
+  "hints": [
+    "For each house, you decide: rob it (plus best from two back) or skip it (best from one back).",
+    "You only need to remember the last two DP values."
+  ],
+  "lcEquivalent": "198. House Robber"
+}

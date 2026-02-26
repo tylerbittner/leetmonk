@@ -1,0 +1,290 @@
+{
+  "id": "two-sum-sorted",
+  "title": "Two Sum II \u2014 Input Array Is Sorted",
+  "difficulty": "medium",
+  "tags": [
+    "two-pointers",
+    "binary-search",
+    "array"
+  ],
+  "description": "## Two Sum II \u2014 Input Array Is Sorted\n\nYou are calibrating a spectrometer by matching pairs of frequency readings. The frequency table has already been sorted in non-decreasing order. You need to find two readings that sum to a target frequency and report their positions (1-indexed).\n\nGiven a **1-indexed** sorted array `numbers` and an integer `target`, return the indices of the two numbers (as a `[index1, index2]` pair with `index1 < index2`) that add up to `target`.\n\nEach input has **exactly one solution**. You may not use the same element twice. Your solution must use **O(1)** extra space.\n\n**Constraints:**\n- `2 <= numbers.length <= 3 * 10^4`\n- `-1000 <= numbers[i] <= 1000`\n- `numbers` is sorted in non-decreasing order.\n- `-1000 <= target <= 1000`\n- Exactly one solution exists.",
+  "examples": [
+    {
+      "input": "numbers = [2, 7, 11, 15], target = 9",
+      "output": "[1, 2]",
+      "explanation": "numbers[0] + numbers[1] = 2 + 7 = 9. Return [1, 2] (1-indexed)."
+    },
+    {
+      "input": "numbers = [2, 3, 4], target = 6",
+      "output": "[1, 3]",
+      "explanation": "numbers[0] + numbers[2] = 2 + 4 = 6."
+    },
+    {
+      "input": "numbers = [-1, 0], target = -1",
+      "output": "[1, 2]",
+      "explanation": "-1 + 0 = -1."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {
+        "numbers": [
+          2,
+          7,
+          11,
+          15
+        ],
+        "target": 9
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "First two elements sum to target"
+    },
+    {
+      "input": {
+        "numbers": [
+          2,
+          3,
+          4
+        ],
+        "target": 6
+      },
+      "expected": [
+        1,
+        3
+      ],
+      "explanation": "First and last"
+    },
+    {
+      "input": {
+        "numbers": [
+          -1,
+          0
+        ],
+        "target": -1
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "Negative number"
+    },
+    {
+      "input": {
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 9
+      },
+      "expected": [
+        4,
+        5
+      ],
+      "explanation": "Last two elements"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {
+        "numbers": [
+          1,
+          3
+        ],
+        "target": 4
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "Two element array"
+    },
+    {
+      "input": {
+        "numbers": [
+          -1000,
+          1000
+        ],
+        "target": 0
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "Extreme values summing to zero"
+    },
+    {
+      "input": {
+        "numbers": [
+          0,
+          0,
+          3,
+          4
+        ],
+        "target": 0
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "Two zeros"
+    },
+    {
+      "input": {
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          4,
+          9,
+          56,
+          90
+        ],
+        "target": 8
+      },
+      "expected": [
+        4,
+        5
+      ],
+      "explanation": "Duplicate values forming the sum"
+    },
+    {
+      "input": {
+        "numbers": [
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3
+        ],
+        "target": 0
+      },
+      "expected": [
+        1,
+        7
+      ],
+      "explanation": "-3 + 3 = 0"
+    },
+    {
+      "input": {
+        "numbers": [
+          5,
+          25,
+          75
+        ],
+        "target": 100
+      },
+      "expected": [
+        2,
+        3
+      ],
+      "explanation": "25 + 75 = 100"
+    },
+    {
+      "input": {
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "target": 11
+      },
+      "expected": [
+        1,
+        10
+      ],
+      "explanation": "1 + 10 = 11"
+    },
+    {
+      "input": {
+        "numbers": [
+          2,
+          2
+        ],
+        "target": 4
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "explanation": "Both elements same"
+    },
+    {
+      "input": {
+        "numbers": [
+          -5,
+          -3,
+          -1,
+          2,
+          4
+        ],
+        "target": -4
+      },
+      "expected": [
+        2,
+        3
+      ],
+      "explanation": "-3 + (-1) = -4. Indices 2 and 3 (1-indexed)"
+    },
+    {
+      "input": {
+        "numbers": [
+          1,
+          5,
+          8,
+          10
+        ],
+        "target": 9
+      },
+      "expected": [
+        1,
+        3
+      ],
+      "explanation": "1 + 8 = 9"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    pass"
+  },
+  "functionName": "two_sum_sorted",
+  "solutions": [
+    {
+      "label": "Binary Search \u2014 O(n log n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\nimport bisect\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    n = len(numbers)\n    for i in range(n):\n        complement = target - numbers[i]\n        # Binary search for complement in the rest of the array\n        j = bisect.bisect_left(numbers, complement, i + 1)\n        if j < n and numbers[j] == complement:\n            return [i + 1, j + 1]\n    return []",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "For each element, binary search the remaining sorted subarray for its complement. Returns 1-indexed positions."
+    },
+    {
+      "label": "Two Pointers \u2014 O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    left, right = 0, len(numbers) - 1\n    while left < right:\n        total = numbers[left] + numbers[right]\n        if total == target:\n            return [left + 1, right + 1]\n        elif total < target:\n            left += 1\n        else:\n            right -= 1\n    return []",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers from both ends. If sum < target, move left pointer right to increase sum. If sum > target, move right pointer left to decrease sum. The sorted order guarantees this converges to the answer."
+    }
+  ],
+  "hints": [
+    "The array is sorted \u2014 what happens to the sum when you move the left pointer right? Or move the right pointer left?",
+    "Start with the widest possible window (leftmost and rightmost elements) and converge based on the current sum."
+  ],
+  "lcEquivalent": "167. Two Sum II - Input Array Is Sorted"
+}

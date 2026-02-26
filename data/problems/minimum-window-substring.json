@@ -1,0 +1,132 @@
+{
+  "id": "minimum-window-substring",
+  "title": "Minimum Window Substring",
+  "difficulty": "hard",
+  "tags": ["sliding-window", "hash-map", "string"],
+  "description": "## Minimum Window Substring\n\nYou are writing a text search engine. Given a document string `s` and a query string `t`, find the shortest contiguous section of the document that contains all the characters in the query (including duplicates). This is the minimum context window needed to satisfy the query.\n\nReturn the **minimum window substring** of `s` such that every character in `t` (including duplicates) is included. If no such window exists, return an empty string `\"\"`.\n\n**Constraints:**\n- `m == s.length`\n- `n == t.length`\n- `1 <= m, n <= 10^5`\n- `s` and `t` consist of uppercase and lowercase English letters.",
+  "examples": [
+    {
+      "input": "s = \"ADOBECODEBANC\", t = \"ABC\"",
+      "output": "\"BANC\"",
+      "explanation": "The minimum window is \"BANC\" which contains A, B, and C."
+    },
+    {
+      "input": "s = \"a\", t = \"a\"",
+      "output": "\"a\"",
+      "explanation": "The only window is the entire string."
+    },
+    {
+      "input": "s = \"a\", t = \"aa\"",
+      "output": "\"\"",
+      "explanation": "Both 'a's of t must appear in window. s has only one 'a'."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "ADOBECODEBANC", "t": "ABC"},
+      "expected": "BANC",
+      "explanation": "Minimum window containing A, B, C"
+    },
+    {
+      "input": {"s": "a", "t": "a"},
+      "expected": "a",
+      "explanation": "Single character match"
+    },
+    {
+      "input": {"s": "a", "t": "aa"},
+      "expected": "",
+      "explanation": "Not enough characters"
+    },
+    {
+      "input": {"s": "aa", "t": "aa"},
+      "expected": "aa",
+      "explanation": "Both characters needed"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "abc", "t": "abc"},
+      "expected": "abc",
+      "explanation": "Entire string is the window"
+    },
+    {
+      "input": {"s": "abc", "t": "cba"},
+      "expected": "abc",
+      "explanation": "All chars present, order doesn't matter"
+    },
+    {
+      "input": {"s": "ab", "t": "a"},
+      "expected": "a",
+      "explanation": "Single char target, multiple positions"
+    },
+    {
+      "input": {"s": "aaab", "t": "aab"},
+      "expected": "aab",
+      "explanation": "Need two a's and one b"
+    },
+    {
+      "input": {"s": "bba", "t": "ab"},
+      "expected": "ba",
+      "explanation": "Minimum window at end"
+    },
+    {
+      "input": {"s": "xyz", "t": "a"},
+      "expected": "",
+      "explanation": "Target char not in source"
+    },
+    {
+      "input": {"s": "cabwefgewcwaefgcf", "t": "cae"},
+      "expected": "cwae",
+      "explanation": "Minimum window with c, a, e"
+    },
+    {
+      "input": {"s": "ADOBECODEBANC", "t": "AABC"},
+      "expected": "ADOBECODEBA",
+      "explanation": "Two A's needed"
+    },
+    {
+      "input": {"s": "a", "t": "b"},
+      "expected": "",
+      "explanation": "Different single chars"
+    },
+    {
+      "input": {"s": "aab", "t": "aab"},
+      "expected": "aab",
+      "explanation": "Exact match of whole string"
+    },
+    {
+      "input": {"s": "bbaa", "t": "aba"},
+      "expected": "baa",
+      "explanation": "Need 1 b and 2 a's: 'baa' is shortest"
+    }
+  ],
+  "starterCode": {
+    "python": "def min_window(s: str, t: str) -> str:\n    pass"
+  },
+  "functionName": "min_window",
+  "solutions": [
+    {
+      "label": "Brute Force — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from collections import Counter\n\ndef min_window(s: str, t: str) -> str:\n    if not t or not s:\n        return \"\"\n    need = Counter(t)\n    n = len(s)\n    best = \"\"\n    for i in range(n):\n        window = Counter()\n        for j in range(i, n):\n            window[s[j]] += 1\n            valid = all(window[c] >= need[c] for c in need)\n            if valid:\n                if not best or j - i + 1 < len(best):\n                    best = s[i:j+1]\n                break\n    return best",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(m+n)",
+      "explanation": "Try every starting index. Extend the window until it contains all required characters. Record the shortest such window."
+    },
+    {
+      "label": "Sliding Window — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from collections import Counter\n\ndef min_window(s: str, t: str) -> str:\n    if not t or not s:\n        return \"\"\n    need = Counter(t)\n    missing = len(t)\n    best_start, best_len = 0, float('inf')\n    left = 0\n    for right, char in enumerate(s):\n        if need[char] > 0:\n            missing -= 1\n        need[char] -= 1\n        if missing == 0:\n            # Shrink from the left\n            while need[s[left]] < 0:\n                need[s[left]] += 1\n                left += 1\n            if right - left + 1 < best_len:\n                best_len = right - left + 1\n                best_start = left\n            # Move left to try finding a shorter window\n            need[s[left]] += 1\n            missing += 1\n            left += 1\n    return s[best_start:best_start + best_len] if best_len != float('inf') else \"\"",
+      "timeComplexity": "O(m+n)",
+      "spaceComplexity": "O(m+n)",
+      "explanation": "Expand the right pointer to include characters. Track `missing` (how many required chars still needed). When window is valid, shrink from left to find minimum valid window. Use a counter to know when we can shrink."
+    }
+  ],
+  "hints": [
+    "Use a hash map to track how many of each character from t you still need in the current window.",
+    "Use a variable to count how many required characters are still missing. When it hits 0, try shrinking the window from the left."
+  ],
+  "lcEquivalent": "76. Minimum Window Substring"
+}

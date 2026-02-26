@@ -1,0 +1,132 @@
+{
+  "id": "coin-change",
+  "title": "Coin Change",
+  "difficulty": "medium",
+  "tags": ["dynamic-programming", "array"],
+  "description": "## Coin Change\n\nYou are programming a vending machine for a space station commissary. The machine has an unlimited supply of coins in given denominations. Given a target price, the machine should always dispense change using the **fewest possible coins**.\n\nGiven an array of coin denominations `coins` and an integer `amount`, return the **fewest number of coins** needed to make up that amount. If the amount cannot be made with the given denominations, return `-1`.\n\nYou may use each coin denomination an unlimited number of times.\n\n**Constraints:**\n- `1 <= coins.length <= 12`\n- `1 <= coins[i] <= 2^31 - 1`\n- `0 <= amount <= 10^4`",
+  "examples": [
+    {
+      "input": "coins = [1, 2, 5], amount = 11",
+      "output": "3",
+      "explanation": "11 = 5 + 5 + 1. Three coins."
+    },
+    {
+      "input": "coins = [2], amount = 3",
+      "output": "-1",
+      "explanation": "Cannot make 3 with only 2s."
+    },
+    {
+      "input": "coins = [1], amount = 0",
+      "output": "0",
+      "explanation": "Zero amount requires zero coins."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"coins": [1, 2, 5], "amount": 11},
+      "expected": 3,
+      "explanation": "5+5+1=11"
+    },
+    {
+      "input": {"coins": [2], "amount": 3},
+      "expected": -1,
+      "explanation": "Impossible"
+    },
+    {
+      "input": {"coins": [1], "amount": 0},
+      "expected": 0,
+      "explanation": "Zero amount"
+    },
+    {
+      "input": {"coins": [1, 5, 10, 25], "amount": 30},
+      "expected": 2,
+      "explanation": "25 + 5 = 30, two coins"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"coins": [1], "amount": 1},
+      "expected": 1,
+      "explanation": "Single coin matches amount"
+    },
+    {
+      "input": {"coins": [1], "amount": 100},
+      "expected": 100,
+      "explanation": "Many 1-coins needed"
+    },
+    {
+      "input": {"coins": [5, 10], "amount": 3},
+      "expected": -1,
+      "explanation": "Impossible, amount too small"
+    },
+    {
+      "input": {"coins": [2, 5, 10, 1], "amount": 27},
+      "expected": 4,
+      "explanation": "10+10+5+2=27"
+    },
+    {
+      "input": {"coins": [186, 419, 83, 408], "amount": 6249},
+      "expected": 20,
+      "explanation": "Complex denomination set"
+    },
+    {
+      "input": {"coins": [1, 2, 5], "amount": 0},
+      "expected": 0,
+      "explanation": "Zero amount"
+    },
+    {
+      "input": {"coins": [3, 5], "amount": 11},
+      "expected": 3,
+      "explanation": "3+3+5=11"
+    },
+    {
+      "input": {"coins": [2], "amount": 0},
+      "expected": 0,
+      "explanation": "Zero amount with even coin"
+    },
+    {
+      "input": {"coins": [1, 3, 4, 5], "amount": 7},
+      "expected": 2,
+      "explanation": "3+4=7"
+    },
+    {
+      "input": {"coins": [2, 5, 10, 1], "amount": 1},
+      "expected": 1,
+      "explanation": "Single coin for amount 1"
+    },
+    {
+      "input": {"coins": [100], "amount": 9999},
+      "expected": -1,
+      "explanation": "Cannot make 9999 with 100s"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    pass"
+  },
+  "functionName": "coin_change",
+  "solutions": [
+    {
+      "label": "BFS — O(amount * len(coins))",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import deque\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    if amount == 0:\n        return 0\n    visited = {0}\n    queue = deque([0])\n    steps = 0\n    while queue:\n        steps += 1\n        for _ in range(len(queue)):\n            curr = queue.popleft()\n            for coin in coins:\n                nxt = curr + coin\n                if nxt == amount:\n                    return steps\n                if nxt < amount and nxt not in visited:\n                    visited.add(nxt)\n                    queue.append(nxt)\n    return -1",
+      "timeComplexity": "O(amount * len(coins))",
+      "spaceComplexity": "O(amount)",
+      "explanation": "Model as a shortest-path problem: BFS from 0 to amount, where each edge represents adding a coin. Each BFS level = one more coin. First time we reach `amount`, we have the minimum."
+    },
+    {
+      "label": "Bottom-Up DP — O(amount * len(coins))",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for coin in coins:\n            if coin <= a:\n                dp[a] = min(dp[a], dp[a - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
+      "timeComplexity": "O(amount * len(coins))",
+      "spaceComplexity": "O(amount)",
+      "explanation": "Build dp[i] = minimum coins needed to make amount i. For each amount from 1 to target, try each coin: dp[i] = min(dp[i], dp[i - coin] + 1). Initialize dp[0] = 0 and everything else as infinity."
+    }
+  ],
+  "hints": [
+    "Think of it as finding the shortest path from 0 to amount, where each step adds a coin's value.",
+    "Use a DP array: dp[i] = minimum coins to make amount i. Build up from dp[0] = 0."
+  ],
+  "lcEquivalent": "322. Coin Change"
+}

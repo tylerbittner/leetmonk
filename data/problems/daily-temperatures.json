@@ -1,0 +1,132 @@
+{
+  "id": "daily-temperatures",
+  "title": "Daily Temperatures",
+  "difficulty": "medium",
+  "tags": ["stack", "array"],
+  "description": "## Daily Temperatures\n\nYou are managing an agricultural monitoring system that records daily soil temperatures. Farmers need to know how many days they'll have to wait until the next warmer day to schedule irrigation.\n\nGiven an array of integers `temperatures` where `temperatures[i]` represents the temperature on day `i`, return an array `answer` such that `answer[i]` is the number of days after day `i` until a warmer temperature. If there is no future warmer day, `answer[i] == 0`.\n\n**Constraints:**\n- `1 <= temperatures.length <= 10^5`\n- `30 <= temperatures[i] <= 100`",
+  "examples": [
+    {
+      "input": "temperatures = [73, 74, 75, 71, 69, 72, 76, 73]",
+      "output": "[1, 1, 4, 2, 1, 1, 0, 0]",
+      "explanation": "Day 0 (73): next warmer is day 1 (74), wait 1 day. Day 2 (75): next warmer is day 6 (76), wait 4 days."
+    },
+    {
+      "input": "temperatures = [30, 40, 50, 60]",
+      "output": "[1, 1, 1, 0]",
+      "explanation": "Strictly increasing, each day waits exactly 1."
+    },
+    {
+      "input": "temperatures = [30, 60, 90]",
+      "output": "[1, 1, 0]",
+      "explanation": "Each day has a warmer next day except the last."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"temperatures": [73, 74, 75, 71, 69, 72, 76, 73]},
+      "expected": [1, 1, 4, 2, 1, 1, 0, 0],
+      "explanation": "Classic example"
+    },
+    {
+      "input": {"temperatures": [30, 40, 50, 60]},
+      "expected": [1, 1, 1, 0],
+      "explanation": "Increasing temperatures"
+    },
+    {
+      "input": {"temperatures": [30, 60, 90]},
+      "expected": [1, 1, 0],
+      "explanation": "Increasing by large amounts"
+    },
+    {
+      "input": {"temperatures": [90, 60, 30]},
+      "expected": [0, 0, 0],
+      "explanation": "Decreasing temperatures"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"temperatures": [30]},
+      "expected": [0],
+      "explanation": "Single element"
+    },
+    {
+      "input": {"temperatures": [30, 30]},
+      "expected": [0, 0],
+      "explanation": "Same temperature, no warmer day"
+    },
+    {
+      "input": {"temperatures": [30, 31]},
+      "expected": [1, 0],
+      "explanation": "Two elements, first waits one day"
+    },
+    {
+      "input": {"temperatures": [100, 100, 100]},
+      "expected": [0, 0, 0],
+      "explanation": "All same maximum temperature"
+    },
+    {
+      "input": {"temperatures": [60, 50, 70]},
+      "expected": [2, 1, 0],
+      "explanation": "Day 0 waits 2 for 70, day 1 waits 1 for 70"
+    },
+    {
+      "input": {"temperatures": [55, 38, 53, 81, 61, 93, 97, 32, 43, 78]},
+      "expected": [3, 1, 1, 2, 1, 1, 0, 1, 1, 0],
+      "explanation": "Complex case"
+    },
+    {
+      "input": {"temperatures": [70, 71, 70, 72, 70, 73]},
+      "expected": [1, 2, 1, 2, 1, 0],
+      "explanation": "Alternating pattern"
+    },
+    {
+      "input": {"temperatures": [89, 62, 70, 58, 47, 47, 46, 76, 100, 70]},
+      "expected": [8, 1, 5, 4, 3, 2, 1, 1, 0, 0],
+      "explanation": "Large distances to next warmer"
+    },
+    {
+      "input": {"temperatures": [30, 31, 30, 31, 30, 31]},
+      "expected": [1, 0, 1, 0, 1, 0],
+      "explanation": "Alternating two values"
+    },
+    {
+      "input": {"temperatures": [50, 50, 50, 51]},
+      "expected": [3, 2, 1, 0],
+      "explanation": "All waiting for last warmer day"
+    },
+    {
+      "input": {"temperatures": [34, 80, 80, 34, 34, 80, 80, 34, 34, 34]},
+      "expected": [1, 0, 0, 2, 1, 0, 0, 0, 0, 0],
+      "explanation": "Block pattern"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    pass"
+  },
+  "functionName": "daily_temperatures",
+  "solutions": [
+    {
+      "label": "Brute Force — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    for i in range(n):\n        for j in range(i + 1, n):\n            if temperatures[j] > temperatures[i]:\n                answer[i] = j - i\n                break\n    return answer",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "explanation": "For each day, scan forward until a warmer temperature is found. Record the distance."
+    },
+    {
+      "label": "Monotonic Stack — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # Stack of indices with unresolved 'next warmer day'\n    for i, temp in enumerate(temperatures):\n        while stack and temperatures[stack[-1]] < temp:\n            idx = stack.pop()\n            answer[idx] = i - idx\n        stack.append(i)\n    return answer",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Maintain a monotonic decreasing stack of indices. When a temperature is warmer than the stack's top, the top index has found its 'next warmer day'. Pop and record the distance. Each index is pushed and popped at most once, giving O(n) total."
+    }
+  ],
+  "hints": [
+    "A stack can help track days that haven't yet found a warmer day.",
+    "When you encounter a temperature warmer than the stack top, pop and resolve that day's answer."
+  ],
+  "lcEquivalent": "739. Daily Temperatures"
+}

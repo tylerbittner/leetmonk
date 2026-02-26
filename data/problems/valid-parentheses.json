@@ -1,0 +1,132 @@
+{
+  "id": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "difficulty": "easy",
+  "tags": ["stack", "string"],
+  "description": "## Valid Parentheses\n\nYou are building a syntax validator for a configuration file parser. The configuration uses three types of bracket pairs to group settings. Your validator must ensure every opening bracket is closed by the matching closing bracket, in the correct order.\n\nGiven a string `s` containing only the characters `'('`, `')'`, `'{'`, `'}'`, `'['`, and `']'`, determine if the input string is **valid**.\n\nA string is valid if:\n1. Open brackets must be closed by the same type of bracket.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.\n\n**Constraints:**\n- `1 <= s.length <= 10^4`\n- `s` consists of parentheses only `()[]{}` .",
+  "examples": [
+    {
+      "input": "s = \"()\"",
+      "output": "true",
+      "explanation": "Simple matching pair."
+    },
+    {
+      "input": "s = \"()[]{}\"",
+      "output": "true",
+      "explanation": "Three different pair types, all valid."
+    },
+    {
+      "input": "s = \"(]\"",
+      "output": "false",
+      "explanation": "Mismatched bracket types."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "()"},
+      "expected": true,
+      "explanation": "Simple pair"
+    },
+    {
+      "input": {"s": "()[]{}"},
+      "expected": true,
+      "explanation": "Three pairs"
+    },
+    {
+      "input": {"s": "(]"},
+      "expected": false,
+      "explanation": "Mismatched types"
+    },
+    {
+      "input": {"s": "([])"},
+      "expected": true,
+      "explanation": "Nested brackets"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "("},
+      "expected": false,
+      "explanation": "Only opening bracket"
+    },
+    {
+      "input": {"s": ")"},
+      "expected": false,
+      "explanation": "Only closing bracket"
+    },
+    {
+      "input": {"s": "(("},
+      "expected": false,
+      "explanation": "Two unmatched opens"
+    },
+    {
+      "input": {"s": "([)]"},
+      "expected": false,
+      "explanation": "Interleaved brackets"
+    },
+    {
+      "input": {"s": "{[]}"},
+      "expected": true,
+      "explanation": "Square inside curly"
+    },
+    {
+      "input": {"s": "((()))"},
+      "expected": true,
+      "explanation": "Deeply nested same type"
+    },
+    {
+      "input": {"s": "{{}[]}()"},
+      "expected": true,
+      "explanation": "Multiple valid groups"
+    },
+    {
+      "input": {"s": "]"},
+      "expected": false,
+      "explanation": "Single close bracket"
+    },
+    {
+      "input": {"s": "[({})]"},
+      "expected": true,
+      "explanation": "Three levels of nesting"
+    },
+    {
+      "input": {"s": "((({{{[[[]}}})))"},
+      "expected": false,
+      "explanation": "Mismatched deeply nested"
+    },
+    {
+      "input": {"s": "(){}[](){[()]}"},
+      "expected": true,
+      "explanation": "Complex valid expression"
+    }
+  ],
+  "starterCode": {
+    "python": "def is_valid(s: str) -> bool:\n    pass"
+  },
+  "functionName": "is_valid",
+  "solutions": [
+    {
+      "label": "Stack — O(n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "def is_valid(s: str) -> bool:\n    stack = []\n    matching = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in '([{':\n            stack.append(char)\n        elif char in ')]}':\n            if not stack or stack[-1] != matching[char]:\n                return False\n            stack.pop()\n    return len(stack) == 0",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Push opening brackets onto a stack. When encountering a closing bracket, check if the top of the stack holds the matching opener. If not, or if the stack is empty, it's invalid. After processing all characters, the stack must be empty."
+    },
+    {
+      "label": "Stack with Open Set — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def is_valid(s: str) -> bool:\n    stack = []\n    pairs = {'(': ')', '[': ']', '{': '}'}\n    for char in s:\n        if char in pairs:\n            stack.append(pairs[char])  # Push the expected closing bracket\n        elif not stack or stack.pop() != char:\n            return False\n    return not stack",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "When we see an opener, push the expected closer onto the stack. When we see a closer, pop from the stack and verify it matches. This is slightly cleaner than the first approach — the stack holds what we expect to see next."
+    }
+  ],
+  "hints": [
+    "Use a stack to track opening brackets. When you see a closing bracket, check if it matches the most recent opener.",
+    "After processing all characters, the stack should be empty if all brackets are matched."
+  ],
+  "lcEquivalent": "20. Valid Parentheses"
+}

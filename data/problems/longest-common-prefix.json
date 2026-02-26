@@ -1,0 +1,127 @@
+{
+  "id": "longest-common-prefix",
+  "title": "Longest Common Prefix",
+  "difficulty": "easy",
+  "tags": ["string", "array"],
+  "description": "## Longest Common Prefix\n\nYou are building an autocomplete system for a search engine. When a user types characters, the system needs to find the longest shared prefix across all matching words — this prefix represents what can be safely auto-completed without ambiguity.\n\nGiven an array of strings `strs`, return the **longest common prefix** shared by all strings. If there is no common prefix, return an empty string `\"\"`.\n\n**Constraints:**\n- `1 <= strs.length <= 200`\n- `0 <= strs[i].length <= 200`\n- `strs[i]` consists of only lowercase English letters.",
+  "examples": [
+    {
+      "input": "strs = [\"flower\",\"flow\",\"flight\"]",
+      "output": "\"fl\"",
+      "explanation": "All three strings share the prefix \"fl\"."
+    },
+    {
+      "input": "strs = [\"dog\",\"racecar\",\"car\"]",
+      "output": "\"\"",
+      "explanation": "No common prefix among the three strings."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"strs": ["flower", "flow", "flight"]},
+      "expected": "fl",
+      "explanation": "Common prefix is \"fl\""
+    },
+    {
+      "input": {"strs": ["dog", "racecar", "car"]},
+      "expected": "",
+      "explanation": "No common prefix"
+    },
+    {
+      "input": {"strs": ["interstellar", "internet", "interface"]},
+      "expected": "inter",
+      "explanation": "Common prefix \"inter\""
+    },
+    {
+      "input": {"strs": ["abc", "abc", "abc"]},
+      "expected": "abc",
+      "explanation": "All identical strings"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"strs": ["a"]},
+      "expected": "a",
+      "explanation": "Single string"
+    },
+    {
+      "input": {"strs": ["ab", "a"]},
+      "expected": "a",
+      "explanation": "One string is prefix of another"
+    },
+    {
+      "input": {"strs": ["", "abc"]},
+      "expected": "",
+      "explanation": "Empty string means no common prefix"
+    },
+    {
+      "input": {"strs": ["abc", ""]},
+      "expected": "",
+      "explanation": "Empty string in array"
+    },
+    {
+      "input": {"strs": ["abc", "abd"]},
+      "expected": "ab",
+      "explanation": "Differ at third character"
+    },
+    {
+      "input": {"strs": ["abcdef", "abcde", "abcd", "abc"]},
+      "expected": "abc",
+      "explanation": "Each is a prefix of the previous"
+    },
+    {
+      "input": {"strs": ["aaa", "aa", "a"]},
+      "expected": "a",
+      "explanation": "All same character, shortest has length 1"
+    },
+    {
+      "input": {"strs": ["z", "z", "z"]},
+      "expected": "z",
+      "explanation": "All same single char"
+    },
+    {
+      "input": {"strs": ["pre", "predict", "prefix", "prevent"]},
+      "expected": "pre",
+      "explanation": "All share \"pre\""
+    },
+    {
+      "input": {"strs": ["abc", "abcd", "abcde"]},
+      "expected": "abc",
+      "explanation": "Shortest is the prefix"
+    },
+    {
+      "input": {"strs": ["hello", "heaven", "heavy"]},
+      "expected": "he",
+      "explanation": "Common prefix \"he\""
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    pass"
+  },
+  "functionName": "longest_common_prefix",
+  "solutions": [
+    {
+      "label": "Horizontal Scanning — O(S)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix:\n                return \"\"\n    return prefix",
+      "timeComplexity": "O(S)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Start with the first string as the candidate prefix. For each subsequent string, trim the prefix from the right until it becomes a prefix of that string (or becomes empty)."
+    },
+    {
+      "label": "Vertical Scanning — O(S)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    for i, char in enumerate(strs[0]):\n        for s in strs[1:]:\n            if i >= len(s) or s[i] != char:\n                return strs[0][:i]\n    return strs[0]",
+      "timeComplexity": "O(S)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Compare character by character across all strings simultaneously. For each position i, check if all strings have the same character. Stop as soon as a mismatch is found or any string is exhausted."
+    }
+  ],
+  "hints": [
+    "Start with the first string as the prefix candidate and trim it as needed.",
+    "Alternatively, compare column by column — check the same character position across all strings."
+  ],
+  "lcEquivalent": "14. Longest Common Prefix"
+}

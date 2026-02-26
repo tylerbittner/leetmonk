@@ -1,0 +1,132 @@
+{
+  "id": "longest-substring-no-repeat",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "medium",
+  "tags": ["sliding-window", "hash-map", "string"],
+  "description": "## Longest Substring Without Repeating Characters\n\nYou are designing a DNA sequencing analyzer. Each character in a sequence represents a nucleotide marker. You want to find the longest contiguous segment of the sequence where no marker appears twice — this represents a region of maximum genetic diversity.\n\nGiven a string `s`, return the length of the **longest substring without repeating characters**.\n\n**Constraints:**\n- `0 <= s.length <= 5 * 10^4`\n- `s` consists of English letters, digits, symbols, and spaces.",
+  "examples": [
+    {
+      "input": "s = \"abcabcbb\"",
+      "output": "3",
+      "explanation": "The longest substring without repeating characters is \"abc\", length 3."
+    },
+    {
+      "input": "s = \"bbbbb\"",
+      "output": "1",
+      "explanation": "The longest is \"b\", length 1."
+    },
+    {
+      "input": "s = \"pwwkew\"",
+      "output": "3",
+      "explanation": "The longest is \"wke\", length 3."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "abcabcbb"},
+      "expected": 3,
+      "explanation": "\"abc\" is the longest unique substring"
+    },
+    {
+      "input": {"s": "bbbbb"},
+      "expected": 1,
+      "explanation": "All same character"
+    },
+    {
+      "input": {"s": "pwwkew"},
+      "expected": 3,
+      "explanation": "\"wke\" is the longest"
+    },
+    {
+      "input": {"s": "abcdef"},
+      "expected": 6,
+      "explanation": "All unique characters"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": ""},
+      "expected": 0,
+      "explanation": "Empty string"
+    },
+    {
+      "input": {"s": " "},
+      "expected": 1,
+      "explanation": "Single space"
+    },
+    {
+      "input": {"s": "au"},
+      "expected": 2,
+      "explanation": "Two different characters"
+    },
+    {
+      "input": {"s": "aa"},
+      "expected": 1,
+      "explanation": "Two same characters"
+    },
+    {
+      "input": {"s": "dvdf"},
+      "expected": 3,
+      "explanation": "\"vdf\" length 3"
+    },
+    {
+      "input": {"s": "anviaj"},
+      "expected": 5,
+      "explanation": "\"nviam\" ... \"nviaj\" is 5"
+    },
+    {
+      "input": {"s": "abba"},
+      "expected": 2,
+      "explanation": "\"ab\" or \"ba\""
+    },
+    {
+      "input": {"s": "tmmzuxt"},
+      "expected": 5,
+      "explanation": "\"mzuxt\" length 5"
+    },
+    {
+      "input": {"s": "aab"},
+      "expected": 2,
+      "explanation": "\"ab\" at end"
+    },
+    {
+      "input": {"s": "abcdeafbcgj"},
+      "expected": 8,
+      "explanation": "\"deafbcgj\" — 8 unique chars from index 3 to 10"
+    },
+    {
+      "input": {"s": "!@#$%^&*"},
+      "expected": 8,
+      "explanation": "All unique special characters"
+    }
+  ],
+  "starterCode": {
+    "python": "def length_of_longest_substring(s: str) -> int:\n    pass"
+  },
+  "functionName": "length_of_longest_substring",
+  "solutions": [
+    {
+      "label": "Brute Force — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "def length_of_longest_substring(s: str) -> int:\n    n = len(s)\n    max_len = 0\n    for i in range(n):\n        seen = set()\n        for j in range(i, n):\n            if s[j] in seen:\n                break\n            seen.add(s[j])\n            max_len = max(max_len, j - i + 1)\n    return max_len",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(min(n, m))",
+      "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen."
+    },
+    {
+      "label": "Sliding Window — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(min(n, m))",
+      "explanation": "Use a sliding window [left, right]. For each character, if it was seen before and its last index is within the current window, move `left` past that occurrence. Store the latest index of each character. Update max_len each step."
+    }
+  ],
+  "hints": [
+    "Think of a window that expands right and contracts left when a duplicate is found.",
+    "Store the most recent index of each character. When a duplicate appears, jump the left pointer past the previous occurrence."
+  ],
+  "lcEquivalent": "3. Longest Substring Without Repeating Characters"
+}

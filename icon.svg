@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="monkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#a8b4c8"/>
+      <stop offset="100%" style="stop-color:#6b7a90"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="roundRect">
+      <rect x="0" y="0" width="1024" height="1024" rx="200" ry="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="200" ry="200" fill="url(#bg)"/>
+
+  <!-- Subtle radial glow behind monk -->
+  <radialGradient id="centerGlow" cx="50%" cy="62%" r="38%">
+    <stop offset="0%" style="stop-color:#39d353;stop-opacity:0.12"/>
+    <stop offset="100%" style="stop-color:#39d353;stop-opacity:0"/>
+  </radialGradient>
+  <rect x="0" y="0" width="1024" height="1024" rx="200" ry="200" fill="url(#centerGlow)"/>
+
+  <!-- Terminal prompt: LM >_ (50% larger) -->
+  <g filter="url(#glow)" opacity="0.85">
+    <!-- L -->
+    <line x1="200" y1="155" x2="200" y2="282" stroke="#39d353" stroke-width="34" stroke-linecap="round"/>
+    <line x1="200" y1="282" x2="278" y2="282" stroke="#39d353" stroke-width="34" stroke-linecap="round"/>
+    <!-- M -->
+    <polyline points="318,282 318,155 374,228 430,155 430,282" fill="none" stroke="#39d353" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- > chevron (wider gap after LM) -->
+    <polyline points="536,155 610,218 536,282" fill="none" stroke="#39d353" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- _ cursor -->
+    <line x1="636" y1="282" x2="728" y2="282" stroke="#39d353" stroke-width="34" stroke-linecap="round"/>
+  </g>
+
+  <!-- MONK SILHOUETTE — scaled up, longer body, no base shape -->
+  <g clip-path="url(#roundRect)" transform="translate(512,720) scale(1.13) translate(-512,-720)">
+
+    <!-- Robe body — longer torso reaching lower -->
+    <path d="M 385,630
+             C 362,642 334,675 322,722
+             C 310,768 315,815 325,848
+             C 375,868 450,878 512,878
+             C 574,878 649,868 699,848
+             C 709,815 714,768 702,722
+             C 690,675 662,642 639,630
+             C 614,618 562,608 512,608
+             C 462,608 410,618 385,630 Z"
+          fill="#607080"/>
+
+    <!-- Robe fold lines -->
+    <line x1="512" y1="632" x2="478" y2="870" stroke="#4a5a70" stroke-width="4" opacity="0.5"/>
+    <line x1="512" y1="632" x2="546" y2="870" stroke="#4a5a70" stroke-width="4" opacity="0.5"/>
+
+    <!-- Arms -->
+    <path d="M 395,652 C 362,686 346,720 352,754 C 357,772 382,776 414,768 C 446,760 474,744 492,734"
+          fill="none" stroke="#7a8fa8" stroke-width="40" stroke-linecap="round"/>
+    <path d="M 629,652 C 662,686 678,720 672,754 C 667,772 642,776 610,768 C 578,760 550,744 532,734"
+          fill="none" stroke="#7a8fa8" stroke-width="40" stroke-linecap="round"/>
+
+    <!-- Hands in lap -->
+    <ellipse cx="512" cy="748" rx="72" ry="30" fill="#8a9db8"/>
+
+    <!-- Neck -->
+    <rect x="490" y="558" width="44" height="58" rx="18" fill="#7a8fa8"/>
+
+    <!-- Head -->
+    <ellipse cx="512" cy="504" rx="92" ry="100" fill="url(#monkGrad)"/>
+
+    <!-- Ears -->
+    <ellipse cx="424" cy="512" rx="17" ry="23" fill="#8a9db8"/>
+    <ellipse cx="600" cy="512" rx="17" ry="23" fill="#8a9db8"/>
+
+    <!-- Closed eyes -->
+    <path d="M 468,516 Q 483,527 498,516" fill="none" stroke="#2d3a4a" stroke-width="7" stroke-linecap="round"/>
+    <path d="M 526,516 Q 541,527 556,516" fill="none" stroke="#2d3a4a" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Smile -->
+    <path d="M 487,550 Q 512,566 537,550" fill="none" stroke="#2d3a4a" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Curly braces around head -->
+    <path d="M 390,392 C 360,392 348,406 348,430 L 348,480 C 348,504 330,515 312,526 C 330,537 348,548 348,572 L 348,622 C 348,646 360,660 390,660"
+          fill="none" stroke="#39d353" stroke-width="17" stroke-linecap="round" stroke-linejoin="round" opacity="0.78"/>
+    <path d="M 634,392 C 664,392 676,406 676,430 L 676,480 C 676,504 694,515 712,526 C 694,537 676,548 676,572 L 676,622 C 676,646 664,660 634,660"
+          fill="none" stroke="#39d353" stroke-width="17" stroke-linecap="round" stroke-linejoin="round" opacity="0.78"/>
+
+    <!-- Third eye -->
+    <circle cx="512" cy="484" r="10" fill="#39d353" opacity="0.9" filter="url(#glow)"/>
+
+  </g>
+</svg>

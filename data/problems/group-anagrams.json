@@ -1,0 +1,132 @@
+{
+  "id": "group-anagrams",
+  "title": "Group Anagrams",
+  "difficulty": "medium",
+  "tags": ["string", "hash-map", "sorting"],
+  "description": "## Group Anagrams\n\nYou are curating a thesaurus system. Words that are anagrams of each other should be grouped together so users can discover all related rearrangements at once.\n\nGiven an array of strings `strs`, group the **anagrams** together. You can return the answer in any order.\n\n**Note:** The returned groups should each be sorted alphabetically, and the list of groups should be sorted lexicographically for consistent comparison.\n\n**Constraints:**\n- `1 <= strs.length <= 10^4`\n- `0 <= strs[i].length <= 100`\n- `strs[i]` consists of lowercase English letters.",
+  "examples": [
+    {
+      "input": "strs = [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]",
+      "output": "[[\"ate\",\"eat\",\"tea\"],[\"bat\"],[\"nat\",\"tan\"]]",
+      "explanation": "\"eat\", \"tea\", and \"ate\" are anagrams. \"nat\" and \"tan\" are anagrams. \"bat\" has no anagram partner."
+    },
+    {
+      "input": "strs = [\"\"]",
+      "output": "[[\"\"]]",
+      "explanation": "Single empty string."
+    },
+    {
+      "input": "strs = [\"a\"]",
+      "output": "[[\"a\"]]",
+      "explanation": "Single character string."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"strs": ["eat", "tea", "tan", "ate", "nat", "bat"]},
+      "expected": [["ate", "eat", "tea"], ["bat"], ["nat", "tan"]],
+      "explanation": "Three groups of anagrams"
+    },
+    {
+      "input": {"strs": [""]},
+      "expected": [[""]],
+      "explanation": "Single empty string"
+    },
+    {
+      "input": {"strs": ["a"]},
+      "expected": [["a"]],
+      "explanation": "Single character"
+    },
+    {
+      "input": {"strs": ["abc", "bca", "cab", "xyz"]},
+      "expected": [["abc", "bca", "cab"], ["xyz"]],
+      "explanation": "One group of three, one singleton"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"strs": ["a", "b", "c"]},
+      "expected": [["a"], ["b"], ["c"]],
+      "explanation": "All singletons"
+    },
+    {
+      "input": {"strs": ["ab", "ba", "ab"]},
+      "expected": [["ab", "ab", "ba"]],
+      "explanation": "Duplicate strings are grouped together"
+    },
+    {
+      "input": {"strs": ["", ""]},
+      "expected": [["", ""]],
+      "explanation": "Two empty strings"
+    },
+    {
+      "input": {"strs": ["z"]},
+      "expected": [["z"]],
+      "explanation": "Single z"
+    },
+    {
+      "input": {"strs": ["abc", "def", "ghi"]},
+      "expected": [["abc"], ["def"], ["ghi"]],
+      "explanation": "No anagrams"
+    },
+    {
+      "input": {"strs": ["listen", "silent", "enlist", "google", "inlets"]},
+      "expected": [["enlist", "inlets", "listen", "silent"], ["google"]],
+      "explanation": "Four anagrams and one singleton"
+    },
+    {
+      "input": {"strs": ["aa", "aa"]},
+      "expected": [["aa", "aa"]],
+      "explanation": "Identical duplicates"
+    },
+    {
+      "input": {"strs": ["abc", "cba", "bac", "bca", "acb", "cab"]},
+      "expected": [["abc", "acb", "bac", "bca", "cab", "cba"]],
+      "explanation": "All 6 permutations of abc"
+    },
+    {
+      "input": {"strs": ["dog", "god", "cat", "tac", "act"]},
+      "expected": [["act", "cat", "tac"], ["dog", "god"]],
+      "explanation": "Two anagram groups"
+    },
+    {
+      "input": {"strs": ["a", "b", "a"]},
+      "expected": [["a", "a"], ["b"]],
+      "explanation": "Duplicate single-char strings"
+    },
+    {
+      "input": {"strs": ["abcdefg", "gfedcba"]},
+      "expected": [["abcdefg", "gfedcba"]],
+      "explanation": "Two long anagrams"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    pass"
+  },
+  "functionName": "group_anagrams",
+  "solutions": [
+    {
+      "label": "Sort Key — O(n * k log k)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        key = ''.join(sorted(s))\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",
+      "timeComplexity": "O(n * k log k)",
+      "spaceComplexity": "O(n * k)",
+      "explanation": "Group strings by their sorted form as the hash key. Anagrams will have the same sorted key. Sort each group and sort the outer list for deterministic output."
+    },
+    {
+      "label": "Character Count Key — O(n * k)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        count = [0] * 26\n        for c in s:\n            count[ord(c) - ord('a')] += 1\n        key = tuple(count)\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",
+      "timeComplexity": "O(n * k)",
+      "spaceComplexity": "O(n * k)",
+      "explanation": "Instead of sorting each string (O(k log k)), compute a character frequency tuple as the key (O(k)). Anagrams have identical frequency counts. Sort the output for consistency."
+    }
+  ],
+  "hints": [
+    "Two strings are anagrams if and only if their sorted characters are equal.",
+    "Use the sorted string (or character count tuple) as a hash map key to group anagrams."
+  ],
+  "lcEquivalent": "49. Group Anagrams"
+}

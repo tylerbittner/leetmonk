@@ -1,0 +1,12 @@
+node_modules/
+out/
+dist/
+.DS_Store
+*.log
+
+# User runtime data
+data/progress.json
+data/editor-state.json
+data/timer-state.json
+data/review-schedule.json
+data/sessions.json

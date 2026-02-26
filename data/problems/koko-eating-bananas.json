@@ -1,0 +1,132 @@
+{
+  "id": "koko-eating-bananas",
+  "title": "Koko Eating Bananas",
+  "difficulty": "medium",
+  "tags": ["binary-search", "array"],
+  "description": "## Koko Eating Bananas\n\nYou are managing an automated fruit-sorting factory. The conveyor belt carries piles of oranges and you must configure the processing speed of the sorting machine. Each hour, the machine can process at most `k` oranges from one pile. If a pile has fewer than `k` oranges, the machine finishes that pile and sits idle for the rest of that hour.\n\nGiven an integer array `piles` (where `piles[i]` is the size of the i-th pile) and an integer `h` (the number of hours available), return the **minimum processing speed** `k` such that all piles can be processed within `h` hours.\n\n**Constraints:**\n- `1 <= piles.length <= 10^4`\n- `piles.length <= h <= 10^9`\n- `1 <= piles[i] <= 10^9`",
+  "examples": [
+    {
+      "input": "piles = [3, 6, 7, 11], h = 8",
+      "output": "4",
+      "explanation": "At speed 4: pile 3→1hr, pile 6→2hr, pile 7→2hr, pile 11→3hr. Total = 8hrs."
+    },
+    {
+      "input": "piles = [30, 11, 23, 4, 20], h = 5",
+      "output": "30",
+      "explanation": "With only 5 hours and 5 piles, must process at least one pile/hour. Max pile is 30."
+    },
+    {
+      "input": "piles = [30, 11, 23, 4, 20], h = 6",
+      "output": "23",
+      "explanation": "Speed 23 allows finishing in 6 hours."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"piles": [3, 6, 7, 11], "h": 8},
+      "expected": 4,
+      "explanation": "Minimum speed to finish in 8 hours"
+    },
+    {
+      "input": {"piles": [30, 11, 23, 4, 20], "h": 5},
+      "expected": 30,
+      "explanation": "Must eat max pile per hour"
+    },
+    {
+      "input": {"piles": [30, 11, 23, 4, 20], "h": 6},
+      "expected": 23,
+      "explanation": "One extra hour allows lower speed"
+    },
+    {
+      "input": {"piles": [1, 1, 1, 1], "h": 4},
+      "expected": 1,
+      "explanation": "Minimum speed of 1 suffices"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"piles": [100000], "h": 1},
+      "expected": 100000,
+      "explanation": "Single pile, must eat it all in one hour"
+    },
+    {
+      "input": {"piles": [1], "h": 1000000000},
+      "expected": 1,
+      "explanation": "Plenty of time, minimum speed"
+    },
+    {
+      "input": {"piles": [2, 2], "h": 4},
+      "expected": 1,
+      "explanation": "Speed 1: 2+2=4 hours"
+    },
+    {
+      "input": {"piles": [3, 3, 3], "h": 3},
+      "expected": 3,
+      "explanation": "Exactly one pile per hour"
+    },
+    {
+      "input": {"piles": [3, 3, 3], "h": 9},
+      "expected": 1,
+      "explanation": "Three hours per pile possible"
+    },
+    {
+      "input": {"piles": [1, 2, 3, 4, 5], "h": 5},
+      "expected": 5,
+      "explanation": "One pile per hour required"
+    },
+    {
+      "input": {"piles": [1, 2, 3, 4, 5], "h": 15},
+      "expected": 1,
+      "explanation": "Plenty of time"
+    },
+    {
+      "input": {"piles": [1000000000], "h": 1000000000},
+      "expected": 1,
+      "explanation": "Large pile but abundant time — speed 1 works (needs exactly 10^9 hours)"
+    },
+    {
+      "input": {"piles": [100, 200, 300], "h": 6},
+      "expected": 100,
+      "explanation": "ceil(100/100)+ceil(200/100)+ceil(300/100)=1+2+3=6"
+    },
+    {
+      "input": {"piles": [7, 15, 6, 3], "h": 8},
+      "expected": 5,
+      "explanation": "ceil(7/5)+ceil(15/5)+ceil(6/5)+ceil(3/5)=2+3+2+1=8"
+    },
+    {
+      "input": {"piles": [10], "h": 3},
+      "expected": 4,
+      "explanation": "ceil(10/4)=3 hours"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    pass"
+  },
+  "functionName": "min_eating_speed",
+  "solutions": [
+    {
+      "label": "Linear Search — O(max_pile * n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n    k = 1\n    while hours_needed(k) > h:\n        k += 1\n    return k",
+      "timeComplexity": "O(max_pile * n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Try every speed from 1 upward until we find one that finishes all piles in h hours. Correct but very slow for large pile sizes."
+    },
+    {
+      "label": "Binary Search — O(n log max_pile)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n\n    left, right = 1, max(piles)\n    while left < right:\n        mid = left + (right - left) // 2\n        if hours_needed(mid) <= h:\n            right = mid\n        else:\n            left = mid + 1\n    return left",
+      "timeComplexity": "O(n log max_pile)",
+      "spaceComplexity": "O(1)",
+      "explanation": "The answer lies in [1, max(piles)]. Use binary search on the speed. If speed `mid` allows finishing in ≤ h hours, the answer could be mid or smaller, so search left. Otherwise, search right. The monotonic property (more speed → fewer hours) makes binary search valid."
+    }
+  ],
+  "hints": [
+    "The answer is between 1 and max(piles). The search space is monotonic: higher speed always finishes faster.",
+    "Binary search on the speed: check if a given speed k allows finishing all piles in h hours."
+  ],
+  "lcEquivalent": "875. Koko Eating Bananas"
+}

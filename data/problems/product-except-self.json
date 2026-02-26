@@ -1,0 +1,127 @@
+{
+  "id": "product-except-self",
+  "title": "Product of Array Except Self",
+  "difficulty": "medium",
+  "tags": ["array", "prefix-sum"],
+  "description": "## Product of Array Except Self\n\nYou are calibrating sensors in a research laboratory. Each sensor's calibration factor must be set to the product of all other sensors' readings — but never its own. Division is unreliable in this environment and must not be used.\n\nGiven an integer array `nums`, return an array `answer` where `answer[i]` equals the product of all elements in `nums` except `nums[i]`.\n\nYou must solve this **without using division** and in O(n) time.\n\n**Constraints:**\n- `2 <= nums.length <= 10^5`\n- `-30 <= nums[i] <= 30`\n- The product of any prefix or suffix fits in a 32-bit integer.",
+  "examples": [
+    {
+      "input": "nums = [1, 2, 3, 4]",
+      "output": "[24, 12, 8, 6]",
+      "explanation": "answer[0]=2*3*4=24, answer[1]=1*3*4=12, answer[2]=1*2*4=8, answer[3]=1*2*3=6."
+    },
+    {
+      "input": "nums = [-1, 1, 0, -3, 3]",
+      "output": "[0, 0, 9, 0, 0]",
+      "explanation": "The zero makes most products zero. Only answer[2] is non-zero: (-1)*1*(-3)*3=9."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [1, 2, 3, 4]},
+      "expected": [24, 12, 8, 6],
+      "explanation": "Each element is product of all others"
+    },
+    {
+      "input": {"nums": [-1, 1, 0, -3, 3]},
+      "expected": [0, 0, 9, 0, 0],
+      "explanation": "Zero causes most results to be zero"
+    },
+    {
+      "input": {"nums": [2, 3, 4, 5]},
+      "expected": [60, 40, 30, 24],
+      "explanation": "Standard case"
+    },
+    {
+      "input": {"nums": [1, 1, 1, 1]},
+      "expected": [1, 1, 1, 1],
+      "explanation": "All ones"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [2, 2]},
+      "expected": [2, 2],
+      "explanation": "Two elements"
+    },
+    {
+      "input": {"nums": [0, 0]},
+      "expected": [0, 0],
+      "explanation": "Two zeros"
+    },
+    {
+      "input": {"nums": [1, 0]},
+      "expected": [0, 1],
+      "explanation": "One zero"
+    },
+    {
+      "input": {"nums": [-1, -2, -3]},
+      "expected": [6, 3, 2],
+      "explanation": "All negative: (-2)*(-3)=6, (-1)*(-3)=3, (-1)*(-2)=2"
+    },
+    {
+      "input": {"nums": [0, 1, 2, 3]},
+      "expected": [6, 0, 0, 0],
+      "explanation": "Zero at start"
+    },
+    {
+      "input": {"nums": [1, 2, 0, 4]},
+      "expected": [0, 0, 8, 0],
+      "explanation": "Zero in middle"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 0]},
+      "expected": [0, 0, 0, 6],
+      "explanation": "Zero at end"
+    },
+    {
+      "input": {"nums": [2, 0, 0, 4]},
+      "expected": [0, 0, 0, 0],
+      "explanation": "Two zeros, everything is 0"
+    },
+    {
+      "input": {"nums": [-1, 2, -3, 4]},
+      "expected": [-24, 12, -8, 6],
+      "explanation": "Mixed signs"
+    },
+    {
+      "input": {"nums": [5, 1, 1, 1]},
+      "expected": [1, 5, 5, 5],
+      "explanation": "One dominant element"
+    },
+    {
+      "input": {"nums": [30, 30, 30]},
+      "expected": [900, 900, 900],
+      "explanation": "All same large value"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    pass"
+  },
+  "functionName": "product_except_self",
+  "solutions": [
+    {
+      "label": "Brute Force — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n):\n        product = 1\n        for j in range(n):\n            if j != i:\n                product *= nums[j]\n        result.append(product)\n    return result",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "explanation": "For each index i, iterate through all other indices and multiply their values. Simple but redundant computation."
+    },
+    {
+      "label": "Prefix/Suffix Products — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = [1] * n\n\n    # Build prefix products into result\n    prefix = 1\n    for i in range(n):\n        result[i] = prefix\n        prefix *= nums[i]\n\n    # Multiply by suffix products from the right\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        result[i] *= suffix\n        suffix *= nums[i]\n\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "First pass (left to right): store the product of all elements to the LEFT of index i. Second pass (right to left): multiply by the product of all elements to the RIGHT. No division needed. The output array itself is the only extra space used."
+    }
+  ],
+  "hints": [
+    "For each position, you need the product of everything to its left and everything to its right.",
+    "Compute left products in one forward pass, then right products in a backward pass."
+  ],
+  "lcEquivalent": "238. Product of Array Except Self"
+}

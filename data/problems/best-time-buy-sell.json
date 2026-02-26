@@ -1,0 +1,127 @@
+{
+  "id": "best-time-buy-sell",
+  "title": "Best Time to Buy and Sell Stock",
+  "difficulty": "easy",
+  "tags": ["array", "greedy"],
+  "description": "## Best Time to Buy and Sell Stock\n\nYou are tracking the daily fuel prices at a spacecraft refueling depot. You want to buy fuel on one day and sell it on a future day to maximize your profit.\n\nGiven an array `prices` where `prices[i]` is the fuel price on day `i`, return the **maximum profit** you can achieve from a single buy-sell transaction. You must buy before you sell.\n\nIf no profit is possible, return `0`.\n\n**Constraints:**\n- `1 <= prices.length <= 10^5`\n- `0 <= prices[i] <= 10^4`",
+  "examples": [
+    {
+      "input": "prices = [7, 1, 5, 3, 6, 4]",
+      "output": "5",
+      "explanation": "Buy on day 2 (price=1), sell on day 5 (price=6). Profit = 6 - 1 = 5."
+    },
+    {
+      "input": "prices = [7, 6, 4, 3, 1]",
+      "output": "0",
+      "explanation": "Prices only decrease, so no profitable transaction is possible."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"prices": [7, 1, 5, 3, 6, 4]},
+      "expected": 5,
+      "explanation": "Buy at 1, sell at 6 = profit of 5"
+    },
+    {
+      "input": {"prices": [7, 6, 4, 3, 1]},
+      "expected": 0,
+      "explanation": "Strictly decreasing, no profit possible"
+    },
+    {
+      "input": {"prices": [1, 2, 3, 4, 5]},
+      "expected": 4,
+      "explanation": "Buy at 1, sell at 5 = profit of 4"
+    },
+    {
+      "input": {"prices": [3, 1, 4, 8, 2, 5]},
+      "expected": 7,
+      "explanation": "Buy at 1, sell at 8 = profit of 7"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"prices": [1]},
+      "expected": 0,
+      "explanation": "Single element, no transaction possible"
+    },
+    {
+      "input": {"prices": [2, 2, 2, 2]},
+      "expected": 0,
+      "explanation": "All same price, no profit"
+    },
+    {
+      "input": {"prices": [1, 10000]},
+      "expected": 9999,
+      "explanation": "Two elements, maximum profit"
+    },
+    {
+      "input": {"prices": [10000, 1]},
+      "expected": 0,
+      "explanation": "Two elements, buy high sell low means 0"
+    },
+    {
+      "input": {"prices": [2, 4, 1, 7]},
+      "expected": 6,
+      "explanation": "Buy at 1, sell at 7"
+    },
+    {
+      "input": {"prices": [5, 1, 5, 1, 5]},
+      "expected": 4,
+      "explanation": "Buy at 1 (index 1), sell at 5 (index 2 or 4)"
+    },
+    {
+      "input": {"prices": [0, 0, 0, 1]},
+      "expected": 1,
+      "explanation": "Buy at 0, sell at 1"
+    },
+    {
+      "input": {"prices": [3, 3, 5, 0, 0, 3, 1, 4]},
+      "expected": 4,
+      "explanation": "Buy at 0, sell at 4"
+    },
+    {
+      "input": {"prices": [1, 2]},
+      "expected": 1,
+      "explanation": "Simple two-day profit"
+    },
+    {
+      "input": {"prices": [6, 1, 3, 2, 4, 7]},
+      "expected": 6,
+      "explanation": "Buy at 1, sell at 7"
+    },
+    {
+      "input": {"prices": [9, 8, 7, 1, 2, 3]},
+      "expected": 2,
+      "explanation": "Buy at 1, sell at 3"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    pass"
+  },
+  "functionName": "max_profit",
+  "solutions": [
+    {
+      "label": "Brute Force — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    max_p = 0\n    n = len(prices)\n    for i in range(n):\n        for j in range(i + 1, n):\n            profit = prices[j] - prices[i]\n            if profit > max_p:\n                max_p = profit\n    return max_p",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Try every possible buy/sell pair (i, j) where i < j. Track the maximum profit seen. Return 0 if no profitable pair exists."
+    },
+    {
+      "label": "Greedy — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    min_price = float('inf')\n    max_p = 0\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        elif price - min_price > max_p:\n            max_p = price - min_price\n    return max_p",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track the minimum price seen so far and the maximum profit achievable. For each price, update the minimum if it's lower, otherwise check if selling today beats the current best profit. One pass, constant space."
+    }
+  ],
+  "hints": [
+    "At each day, you want to sell at the highest price after buying at the lowest price seen so far.",
+    "Track the minimum price encountered as you iterate. The best profit at each step is current price minus that minimum."
+  ],
+  "lcEquivalent": "121. Best Time to Buy and Sell Stock"
+}

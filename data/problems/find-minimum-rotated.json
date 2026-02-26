@@ -1,0 +1,132 @@
+{
+  "id": "find-minimum-rotated",
+  "title": "Find Minimum in Rotated Sorted Array",
+  "difficulty": "medium",
+  "tags": ["binary-search", "array"],
+  "description": "## Find Minimum in Rotated Sorted Array\n\nYou are monitoring a circular conveyor belt system where packages are sorted by weight. The belt has been rotated by an unknown offset. Given the sorted weights read from the current starting point — e.g., `[3, 4, 5, 1, 2]` — you need to quickly locate the lightest package.\n\nGiven a sorted array that has been rotated between 1 and n times, return the **minimum element**.\n\nAll elements are **unique**. You must solve this in **O(log n)** time.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 5000`\n- `-5000 <= nums[i] <= 5000`\n- All integers are unique.\n- `nums` is sorted and rotated between 1 and n times.",
+  "examples": [
+    {
+      "input": "nums = [3, 4, 5, 1, 2]",
+      "output": "1",
+      "explanation": "The original array was [1,2,3,4,5] rotated 3 times. Minimum is 1."
+    },
+    {
+      "input": "nums = [4, 5, 6, 7, 0, 1, 2]",
+      "output": "0",
+      "explanation": "The minimum is 0."
+    },
+    {
+      "input": "nums = [11, 13, 15, 17]",
+      "output": "11",
+      "explanation": "Not rotated (or rotated n times). Minimum is first element."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [3, 4, 5, 1, 2]},
+      "expected": 1,
+      "explanation": "Rotated at position 3"
+    },
+    {
+      "input": {"nums": [4, 5, 6, 7, 0, 1, 2]},
+      "expected": 0,
+      "explanation": "Rotated, minimum is 0"
+    },
+    {
+      "input": {"nums": [11, 13, 15, 17]},
+      "expected": 11,
+      "explanation": "No effective rotation"
+    },
+    {
+      "input": {"nums": [2, 1]},
+      "expected": 1,
+      "explanation": "Two elements, rotated"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1]},
+      "expected": 1,
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [2, 3, 4, 5, 1]},
+      "expected": 1,
+      "explanation": "Minimum at last index"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 4, 5]},
+      "expected": 1,
+      "explanation": "Not rotated, minimum at start"
+    },
+    {
+      "input": {"nums": [5, 1, 2, 3, 4]},
+      "expected": 1,
+      "explanation": "Minimum at index 1"
+    },
+    {
+      "input": {"nums": [3, 1, 2]},
+      "expected": 1,
+      "explanation": "Three elements"
+    },
+    {
+      "input": {"nums": [-3, -2, -1]},
+      "expected": -3,
+      "explanation": "All negative, no rotation"
+    },
+    {
+      "input": {"nums": [-1, -3, -2]},
+      "expected": -3,
+      "explanation": "All negative, rotated"
+    },
+    {
+      "input": {"nums": [0, 1, 2]},
+      "expected": 0,
+      "explanation": "Zero is minimum"
+    },
+    {
+      "input": {"nums": [10, 1, 2, 3, 4, 5, 6, 7, 8, 9]},
+      "expected": 1,
+      "explanation": "Large rotation, minimum near start"
+    },
+    {
+      "input": {"nums": [2, 3, 4, 5, 6, 7, 8, 9, 10, 1]},
+      "expected": 1,
+      "explanation": "Minimum at last position"
+    },
+    {
+      "input": {"nums": [5000, -5000]},
+      "expected": -5000,
+      "explanation": "Extreme values"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    pass"
+  },
+  "functionName": "find_minimum",
+  "solutions": [
+    {
+      "label": "Linear Scan — O(n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    return min(nums)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Simply return the minimum value in the array. Correct but does not exploit the sorted structure."
+    },
+    {
+      "label": "Binary Search — O(log n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = left + (right - left) // 2\n        if nums[mid] > nums[right]:\n            # Minimum is in the right half\n            left = mid + 1\n        else:\n            # Minimum is in the left half (including mid)\n            right = mid\n    return nums[left]",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Compare the middle element to the rightmost element. If nums[mid] > nums[right], the rotation point (minimum) must be to the right of mid. Otherwise, it's at mid or to the left. Converge until left == right."
+    }
+  ],
+  "hints": [
+    "In a rotated sorted array, the minimum is the point where the sorted order 'breaks'.",
+    "Compare the middle element to the rightmost element to determine which half the minimum is in."
+  ],
+  "lcEquivalent": "153. Find Minimum in Rotated Sorted Array"
+}

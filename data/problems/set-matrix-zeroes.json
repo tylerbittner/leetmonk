@@ -1,0 +1,582 @@
+{
+  "id": "set-matrix-zeroes",
+  "title": "Set Matrix Zeroes",
+  "difficulty": "medium",
+  "tags": [
+    "matrix",
+    "hash-set"
+  ],
+  "description": "## Set Matrix Zeroes\n\nYou are processing sensor grid data for a surveillance system. When a sensor reports zero (malfunction), all sensors in the same row and column must also be set to zero to flag the entire affected axis.\n\nGiven an `m x n` integer matrix `matrix`, if an element is `0`, set its entire **row** and **column** to `0`s **in-place** and return the modified matrix.\n\n**Constraints:**\n- `m == matrix.length`\n- `n == matrix[i].length`\n- `1 <= m, n <= 200`\n- `-2^31 <= matrix[i][j] <= 2^31 - 1`",
+  "examples": [
+    {
+      "input": "matrix = [[1,1,1],[1,0,1],[1,1,1]]",
+      "output": "[[1,0,1],[0,0,0],[1,0,1]]",
+      "explanation": "The zero at [1][1] zeroes out row 1 and column 1."
+    },
+    {
+      "input": "matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]",
+      "output": "[[0,0,0,0],[3,4,5,0],[1,3,1,0]]",
+      "explanation": "Zeros at [0][0] and [0][3] zero out row 0, col 0, and col 3."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "explanation": "Single zero spreads to row and column"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0,
+            1,
+            2,
+            0
+          ],
+          [
+            3,
+            4,
+            5,
+            2
+          ],
+          [
+            1,
+            3,
+            1,
+            5
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          5,
+          0
+        ],
+        [
+          0,
+          3,
+          1,
+          0
+        ]
+      ],
+      "explanation": "Two zeros in first row"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5,
+          6
+        ],
+        [
+          7,
+          8,
+          9
+        ]
+      ],
+      "explanation": "No zeros, matrix unchanged"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "explanation": "Single zero element"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "explanation": "Single non-zero element"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "explanation": "Zero in top-left"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "explanation": "Zero in top-right"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "explanation": "All zeros already"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "explanation": "Zero in bottom-right corner"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          5,
+          0
+        ],
+        [
+          7,
+          8,
+          0
+        ]
+      ],
+      "explanation": "Zero in top row"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            0,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          8,
+          9
+        ]
+      ],
+      "explanation": "Zero in left column"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            -1,
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            0,
+            6
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "explanation": "Two zeros in same column, negative values"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            0,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1,
+          0,
+          3,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          11,
+          12
+        ]
+      ],
+      "explanation": "Zero in middle"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0,
+            2,
+            3
+          ],
+          [
+            4,
+            0,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          9
+        ]
+      ],
+      "explanation": "Two zeros spreading in diagonal"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        [
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1
+        ]
+      ],
+      "explanation": "Two adjacent zeros in same row"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef set_zeroes(matrix: List[List[int]]) -> List[List[int]]:\n    pass"
+  },
+  "functionName": "set_zeroes",
+  "solutions": [
+    {
+      "label": "Record Positions with Sets \u2014 O(m*n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef set_zeroes(matrix: List[List[int]]) -> List[List[int]]:\n    zero_rows = set()\n    zero_cols = set()\n    m, n = len(matrix), len(matrix[0])\n    for i in range(m):\n        for j in range(n):\n            if matrix[i][j] == 0:\n                zero_rows.add(i)\n                zero_cols.add(j)\n    for i in range(m):\n        for j in range(n):\n            if i in zero_rows or j in zero_cols:\n                matrix[i][j] = 0\n    return matrix",
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m+n)",
+      "explanation": "First pass: record which rows and columns contain zeros. Second pass: zero out any cell whose row or column is in the recorded sets."
+    },
+    {
+      "label": "First Row/Column as Markers \u2014 O(m*n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef set_zeroes(matrix: List[List[int]]) -> List[List[int]]:\n    m, n = len(matrix), len(matrix[0])\n    first_row_zero = any(matrix[0][j] == 0 for j in range(n))\n    first_col_zero = any(matrix[i][0] == 0 for i in range(m))\n    # Use first row and first col as markers\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][j] == 0:\n                matrix[i][0] = 0\n                matrix[0][j] = 0\n    # Zero out cells based on markers\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][0] == 0 or matrix[0][j] == 0:\n                matrix[i][j] = 0\n    # Handle first row and col separately\n    if first_row_zero:\n        for j in range(n):\n            matrix[0][j] = 0\n    if first_col_zero:\n        for i in range(m):\n            matrix[i][0] = 0\n    return matrix",
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use the first row and first column as marker arrays (O(1) extra space). First, check if the first row/column themselves contain zeros. Then mark using the first row/col. Apply zeroing based on markers. Finally, handle the first row/col based on the original flags."
+    }
+  ],
+  "hints": [
+    "You need to record which rows and columns had zeros before you start modifying the matrix.",
+    "Can you use the first row and first column of the matrix itself as markers to avoid extra space?"
+  ],
+  "lcEquivalent": "73. Set Matrix Zeroes"
+}

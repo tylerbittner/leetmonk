@@ -1,0 +1,127 @@
+{
+  "id": "permutations",
+  "title": "Permutations",
+  "difficulty": "medium",
+  "tags": ["backtracking", "array"],
+  "description": "## Permutations\n\nYou are building a combination lock testing tool for a security firm. Given a set of distinct digit codes, your tool must generate every possible ordering of those codes so testers can try all combinations systematically.\n\nGiven an array `nums` of **distinct** integers, return **all possible permutations**.\n\nReturn the answer with each permutation sorted by the outer list lexicographically for consistent comparison.\n\n**Constraints:**\n- `1 <= nums.length <= 6`\n- `-10 <= nums[i] <= 10`\n- All the integers of `nums` are unique.",
+  "examples": [
+    {
+      "input": "nums = [1, 2, 3]",
+      "output": "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]",
+      "explanation": "All 6 permutations of [1,2,3]."
+    },
+    {
+      "input": "nums = [0, 1]",
+      "output": "[[0,1],[1,0]]",
+      "explanation": "Two permutations of two elements."
+    },
+    {
+      "input": "nums = [1]",
+      "output": "[[1]]",
+      "explanation": "Only one permutation of a single element."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [1, 2, 3]},
+      "expected": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]],
+      "explanation": "All 6 permutations"
+    },
+    {
+      "input": {"nums": [0, 1]},
+      "expected": [[0, 1], [1, 0]],
+      "explanation": "Two permutations"
+    },
+    {
+      "input": {"nums": [1]},
+      "expected": [[1]],
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [1, 2]},
+      "expected": [[1, 2], [2, 1]],
+      "explanation": "Two permutations of [1,2]"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [-1, 0, 1]},
+      "expected": [[-1, 0, 1], [-1, 1, 0], [0, -1, 1], [0, 1, -1], [1, -1, 0], [1, 0, -1]],
+      "explanation": "Negative values"
+    },
+    {
+      "input": {"nums": [3]},
+      "expected": [[3]],
+      "explanation": "Single non-trivial element"
+    },
+    {
+      "input": {"nums": [2, 1]},
+      "expected": [[1, 2], [2, 1]],
+      "explanation": "Unsorted input [2,1]"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 4]},
+      "expected": [[1, 2, 3, 4], [1, 2, 4, 3], [1, 3, 2, 4], [1, 3, 4, 2], [1, 4, 2, 3], [1, 4, 3, 2], [2, 1, 3, 4], [2, 1, 4, 3], [2, 3, 1, 4], [2, 3, 4, 1], [2, 4, 1, 3], [2, 4, 3, 1], [3, 1, 2, 4], [3, 1, 4, 2], [3, 2, 1, 4], [3, 2, 4, 1], [3, 4, 1, 2], [3, 4, 2, 1], [4, 1, 2, 3], [4, 1, 3, 2], [4, 2, 1, 3], [4, 2, 3, 1], [4, 3, 1, 2], [4, 3, 2, 1]],
+      "explanation": "24 permutations of [1,2,3,4]"
+    },
+    {
+      "input": {"nums": [0]},
+      "expected": [[0]],
+      "explanation": "Single zero"
+    },
+    {
+      "input": {"nums": [-2, -1]},
+      "expected": [[-2, -1], [-1, -2]],
+      "explanation": "Two negatives"
+    },
+    {
+      "input": {"nums": [10, -10]},
+      "expected": [[-10, 10], [10, -10]],
+      "explanation": "Two extreme values"
+    },
+    {
+      "input": {"nums": [3, 2, 1]},
+      "expected": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]],
+      "explanation": "Reverse sorted input"
+    },
+    {
+      "input": {"nums": [5, 4, 6]},
+      "expected": [[4, 5, 6], [4, 6, 5], [5, 4, 6], [5, 6, 4], [6, 4, 5], [6, 5, 4]],
+      "explanation": "Arbitrary order input"
+    },
+    {
+      "input": {"nums": [-1, 1]},
+      "expected": [[-1, 1], [1, -1]],
+      "explanation": "Negative and positive"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    pass"
+  },
+  "functionName": "permutations",
+  "solutions": [
+    {
+      "label": "Backtracking — O(n * n!)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(current, remaining):\n        if not remaining:\n            result.append(list(current))\n            return\n        for i in range(len(remaining)):\n            current.append(remaining[i])\n            backtrack(current, remaining[:i] + remaining[i+1:])\n            current.pop()\n    backtrack([], nums)\n    result.sort()\n    return result",
+      "timeComplexity": "O(n * n!)",
+      "spaceComplexity": "O(n * n!)",
+      "explanation": "At each level, choose one element from the remaining options. Recurse with that element added to current and removed from remaining. When remaining is empty, we have a complete permutation."
+    },
+    {
+      "label": "Backtracking with Swap — O(n * n!)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(start):\n        if start == len(nums):\n            result.append(list(nums))\n            return\n        for i in range(start, len(nums)):\n            nums[start], nums[i] = nums[i], nums[start]\n            backtrack(start + 1)\n            nums[start], nums[i] = nums[i], nums[start]\n    backtrack(0)\n    result.sort()\n    return result",
+      "timeComplexity": "O(n * n!)",
+      "spaceComplexity": "O(n * n!)",
+      "explanation": "Use in-place swaps: at position `start`, try placing each remaining element by swapping it to position `start`. Recurse for the rest. After returning, swap back to restore state. Avoids creating new list slices."
+    }
+  ],
+  "hints": [
+    "At each position in the permutation, try placing each unused element.",
+    "Backtracking: choose an element, place it, recurse, then unchoose (backtrack)."
+  ],
+  "lcEquivalent": "46. Permutations"
+}

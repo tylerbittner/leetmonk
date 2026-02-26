@@ -1,0 +1,132 @@
+{
+  "id": "trapping-rain-water",
+  "title": "Trapping Rain Water",
+  "difficulty": "hard",
+  "tags": ["array", "two-pointers", "stack"],
+  "description": "## Trapping Rain Water\n\nYou are designing a cross-sectional terrain map for a valley flood analysis system. The terrain is represented as a series of elevation columns. After a rainstorm, water pools in the depressions between higher ground.\n\nGiven an array `heights` representing the elevation of each unit-width column, compute how many units of water can be trapped between the columns after it rains.\n\n**Constraints:**\n- `n == heights.length`\n- `1 <= n <= 2 * 10^4`\n- `0 <= heights[i] <= 10^5`",
+  "examples": [
+    {
+      "input": "heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]",
+      "output": "6",
+      "explanation": "6 units of water are trapped in the valleys."
+    },
+    {
+      "input": "heights = [4, 2, 0, 3, 2, 5]",
+      "output": "9",
+      "explanation": "9 units are trapped: 2 between columns 0-3, and 7 more in the deeper well."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"heights": [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]},
+      "expected": 6,
+      "explanation": "Classic example with 6 trapped units"
+    },
+    {
+      "input": {"heights": [4, 2, 0, 3, 2, 5]},
+      "expected": 9,
+      "explanation": "Deep valley traps 9 units"
+    },
+    {
+      "input": {"heights": [3, 0, 2, 0, 4]},
+      "expected": 7,
+      "explanation": "Two depressions"
+    },
+    {
+      "input": {"heights": [1, 0, 1]},
+      "expected": 1,
+      "explanation": "Simple one-unit trap"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"heights": [1]},
+      "expected": 0,
+      "explanation": "Single column"
+    },
+    {
+      "input": {"heights": [1, 2]},
+      "expected": 0,
+      "explanation": "Two columns, no trap"
+    },
+    {
+      "input": {"heights": [0, 0, 0]},
+      "expected": 0,
+      "explanation": "All zeros"
+    },
+    {
+      "input": {"heights": [3, 3, 3]},
+      "expected": 0,
+      "explanation": "All same height, no trap"
+    },
+    {
+      "input": {"heights": [1, 2, 3, 4, 5]},
+      "expected": 0,
+      "explanation": "Strictly increasing, no trap"
+    },
+    {
+      "input": {"heights": [5, 4, 3, 2, 1]},
+      "expected": 0,
+      "explanation": "Strictly decreasing, no trap"
+    },
+    {
+      "input": {"heights": [5, 0, 5]},
+      "expected": 5,
+      "explanation": "Deep valley between equal walls"
+    },
+    {
+      "input": {"heights": [2, 0, 2]},
+      "expected": 2,
+      "explanation": "Simple symmetric trap"
+    },
+    {
+      "input": {"heights": [0, 1, 2, 3, 4, 3, 2, 1, 0]},
+      "expected": 0,
+      "explanation": "Mountain shape, no trap"
+    },
+    {
+      "input": {"heights": [4, 2, 3]},
+      "expected": 1,
+      "explanation": "Water trapped on the right side"
+    },
+    {
+      "input": {"heights": [1, 0, 0, 0, 1]},
+      "expected": 3,
+      "explanation": "Long flat bottom"
+    },
+    {
+      "input": {"heights": [3, 1, 2, 4, 0, 1, 3, 2]},
+      "expected": 8,
+      "explanation": "Multiple trapping regions"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    pass"
+  },
+  "functionName": "trap_water",
+  "solutions": [
+    {
+      "label": "Precompute Max Left/Right — O(n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    n = len(heights)\n    if n == 0:\n        return 0\n    max_left = [0] * n\n    max_right = [0] * n\n    max_left[0] = heights[0]\n    for i in range(1, n):\n        max_left[i] = max(max_left[i - 1], heights[i])\n    max_right[n - 1] = heights[n - 1]\n    for i in range(n - 2, -1, -1):\n        max_right[i] = max(max_right[i + 1], heights[i])\n    water = 0\n    for i in range(n):\n        water += min(max_left[i], max_right[i]) - heights[i]\n    return water",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Precompute max_left[i] = max height from 0..i, and max_right[i] = max height from i..n-1. Water at position i is min(max_left[i], max_right[i]) - heights[i]. Sum over all positions."
+    },
+    {
+      "label": "Two Pointers — O(n) space O(1)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    if not heights:\n        return 0\n    left, right = 0, len(heights) - 1\n    max_left, max_right = heights[left], heights[right]\n    water = 0\n    while left < right:\n        if max_left <= max_right:\n            left += 1\n            max_left = max(max_left, heights[left])\n            water += max_left - heights[left]\n        else:\n            right -= 1\n            max_right = max(max_right, heights[right])\n            water += max_right - heights[right]\n    return water",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers move inward from both ends. The side with the smaller max boundary is processed: the water level there is determined by the smaller side's max. We know water won't overflow on that side because the other wall is at least as tall."
+    }
+  ],
+  "hints": [
+    "Water at any position is bounded by the minimum of the tallest bar to its left and to its right.",
+    "Can you compute max-left and max-right arrays in linear time, then derive the answer?"
+  ],
+  "lcEquivalent": "42. Trapping Rain Water"
+}
