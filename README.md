@@ -1,5 +1,7 @@
 # LeetMonk
 
+<img src="build/icon.iconset/icon_128x128.png" alt="LeetMonk" width="96" />
+
 **Offline LeetCode-style practice -- no account, no internet, no distractions.**
 
 LeetMonk is an Electron desktop app for offline algorithm practice. It ships with 35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress -- all without an internet connection.
@@ -37,15 +39,26 @@ LeetMonk is an independent open-source project and is **not** affiliated with, e
 - **Node.js 18+** -- `brew install node` or [nodejs.org](https://nodejs.org)
 - **Python 3.9+** -- `brew install python3` or [python.org](https://python.org)
 
-## Install from Source
+## Install on macOS
 
 ```bash
 git clone https://github.com/tylerbittner/leetmonk.git
 cd leetmonk
 npm install
-npm run dev        # run in dev mode
-npm run build      # build
-npm run dist       # package as .app / .exe / .deb
+npm run dist
+```
+
+This produces `dist/mac-arm64/LeetMonk.app` (Apple Silicon) or `dist/mac/LeetMonk.app` (Intel). Drag it to `/Applications` to install.
+
+> **Note:** The app is unsigned. On first launch, right-click → Open, then click Open in the dialog.
+
+## Run from Source
+
+```bash
+git clone https://github.com/tylerbittner/leetmonk.git
+cd leetmonk
+npm install
+npm run dev
 ```
 
 ## Testing

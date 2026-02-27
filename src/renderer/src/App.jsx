@@ -289,10 +289,10 @@ export default function App() {
         <div style={{ width: 70 }} /> {/* macOS traffic lights space */}
         <span
           onClick={() => setShowAbout(true)}
-          style={{ fontWeight: 700, fontSize: 16, color: 'var(--accent-blue)', letterSpacing: '-0.5px', WebkitAppRegion: 'no-drag', cursor: 'pointer' }}
+          style={{ fontWeight: 700, fontSize: 16, color: 'var(--accent-green)', letterSpacing: '-0.5px', WebkitAppRegion: 'no-drag', cursor: 'pointer' }}
           title="About LeetMonk"
         >
-          LeetMonk
+          LeetMonk &gt;_
         </span>
 
         <div style={{ flex: 1, WebkitAppRegion: 'no-drag' }}>
@@ -350,25 +350,39 @@ export default function App() {
       {/* Main content */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* Problem sidebar */}
-        {!sidebarCollapsed && (
-          <div style={{
-            width: 240, flexShrink: 0, borderRight: '1px solid var(--border)',
-            overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)'
-          }}>
-            <ProblemList
-              problems={filteredProblems}
-              activeProblemId={activeProblemId}
-              progress={progress}
-              onSelect={selectProblem}
-            />
-            <ReviewQueue
-              problems={problems}
-              reviewData={reviewData}
-              onSelect={selectProblem}
-              activeProblemId={activeProblemId}
-            />
-          </div>
-        )}
+        <div style={{ display: 'flex', flexShrink: 0 }}>
+          {!sidebarCollapsed && (
+            <div style={{
+              width: 240, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)'
+            }}>
+              <ProblemList
+                problems={filteredProblems}
+                activeProblemId={activeProblemId}
+                progress={progress}
+                onSelect={selectProblem}
+              />
+              <ReviewQueue
+                problems={problems}
+                reviewData={reviewData}
+                onSelect={selectProblem}
+                activeProblemId={activeProblemId}
+              />
+            </div>
+          )}
+          <button
+            onClick={() => setSidebarCollapsed(c => !c)}
+            title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}
+            style={{
+              width: 14, padding: 0, border: 'none',
+              borderRight: '1px solid var(--border)',
+              background: 'var(--bg-secondary)', color: 'var(--text-secondary)',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11, lineHeight: 1, flexShrink: 0
+            }}
+          >
+            {sidebarCollapsed ? '›' : '‹'}
+          </button>
+        </div>
 
         {/* Main panels */}
         {activeProblem ? (

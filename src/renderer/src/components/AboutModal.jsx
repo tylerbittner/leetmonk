@@ -54,7 +54,7 @@ export default function AboutModal({ onClose }) {
         </div>
 
         <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 20 }}>
-          Apache 2.0 License
+          © 2026 Tyler Bittner · Apache 2.0 License
         </div>
 
         <button

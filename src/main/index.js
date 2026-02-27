@@ -114,6 +114,7 @@ function createWindow() {
   }
 
   const win = new BrowserWindow({
+    title: 'LeetMonk',
     width: 1440,
     height: 900,
     minWidth: 1024,
@@ -140,6 +141,12 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  app.setAboutPanelOptions({
+    applicationName: 'LeetMonk',
+    copyright: 'Copyright © 2026 Tyler Bittner',
+    credits: 'github.com/tylerbittner/leetmonk'
+  })
+
   createWindow()
 
   // IPC: Load all problems
