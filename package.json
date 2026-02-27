@@ -36,14 +36,7 @@
     "productName": "LeetMonk",
     "mac": {
       "identity": null,
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "arm64"
-          ]
-        }
-      ]
+      "target": "dmg"
     },
     "directories": {
       "output": "dist"
