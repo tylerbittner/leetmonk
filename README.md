@@ -10,8 +10,6 @@
 
 Curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
 
-> **Note:** Python 3 is the only supported language at this time.
-
 ## Features
 
 - **35 curated problems** spanning 9 categories (easy / medium / hard)
@@ -20,6 +18,8 @@ Curated problems across arrays, strings, binary search, sliding window, two poin
 - **Hints and solutions** revealed on demand, per problem
 - **Timer**, **focus mode**, **review flagging**, and **session planner**
 - **Keyboard shortcuts** — `Cmd+Enter` to run, `Cmd+Shift+Enter` to submit
+
+> **Note:** Python 3 is the only supported language at this time.
 
 ## Quick Start
 
