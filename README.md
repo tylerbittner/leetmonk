@@ -49,15 +49,15 @@ npm run dev
 
 Works on macOS, Windows, and Linux. Electron and Python 3 must be available.
 
-## Adding Problems
+## Contributing
+
+### Adding Problems
 
 Drop a `.json` file into `data/problems/` following the existing schema, then restart. Validate with:
 
 ```bash
 npm run test:problems
 ```
-
-## Contributing
 
 ### Tech Stack
 
