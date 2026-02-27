@@ -318,6 +318,16 @@ export default function App() {
 
         {activeProblem && (
           <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)" style={{
+              padding: '4px 7px', borderRadius: 4, border: '1px solid var(--border)',
+              background: 'var(--bg-tertiary)', color: 'var(--text-muted)',
+              cursor: 'pointer', fontSize: 12, lineHeight: 1
+            }}>‹</button>
+            <button onClick={() => navigateProblem(1)} title="Next problem (Cmd+])" style={{
+              padding: '4px 7px', borderRadius: 4, border: '1px solid var(--border)',
+              background: 'var(--bg-tertiary)', color: 'var(--text-muted)',
+              cursor: 'pointer', fontSize: 12, lineHeight: 1
+            }}>›</button>
             <button onClick={() => setSidebarCollapsed(c => !c)} title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'} style={{
               padding: '4px 8px', borderRadius: 4, border: '1px solid var(--border)',
               background: sidebarCollapsed ? 'var(--accent-blue)' : 'var(--bg-tertiary)',

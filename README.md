@@ -43,15 +43,6 @@ npm run dev
 
 Works on macOS, Windows, and Linux. Electron and Python 3 must be available.
 
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Cmd+Enter` | Run against example cases |
-| `Cmd+Shift+Enter` | Submit against all test cases |
-| `Cmd+R` | Reset to starter code |
-| `Cmd+[` / `Cmd+]` | Previous / next problem |
-
 ## Adding Problems
 
 Drop a `.json` file into `data/problems/` following the existing schema, then restart. Validate with:
