@@ -2,7 +2,10 @@
   "id": "move-zeroes",
   "title": "Move Zeroes",
   "difficulty": "easy",
-  "tags": ["two-pointers", "array"],
+  "tags": [
+    "two-pointers",
+    "array"
+  ],
   "description": "## Move Zeroes\n\nYou are processing a data pipeline where zero values represent missing readings. To prepare the data for analysis, you need to push all the missing readings (zeros) to the end of the buffer while keeping the valid readings in their original relative order.\n\nGiven an integer array `nums`, move all `0`s to the end while maintaining the relative order of the non-zero elements. Return the modified array.\n\nDo this **in-place** without making a copy of the array.\n\n**Constraints:**\n- `1 <= nums.length <= 10^4`\n- `-2^31 <= nums[i] <= 2^31 - 1`",
   "examples": [
     {
@@ -18,80 +21,254 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [0, 1, 0, 3, 12]},
-      "expected": [1, 3, 12, 0, 0],
+      "input": {
+        "nums": [
+          0,
+          1,
+          0,
+          3,
+          12
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        12,
+        0,
+        0
+      ],
       "explanation": "Zeros moved to end, order preserved"
     },
     {
-      "input": {"nums": [0]},
-      "expected": [0],
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "expected": [
+        0
+      ],
       "explanation": "Single zero"
     },
     {
-      "input": {"nums": [1, 2, 3]},
-      "expected": [1, 2, 3],
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "No zeros, unchanged"
     },
     {
-      "input": {"nums": [0, 0, 1]},
-      "expected": [1, 0, 0],
+      "input": {
+        "nums": [
+          0,
+          0,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        0
+      ],
       "explanation": "Multiple leading zeros"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [1]},
-      "expected": [1],
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single non-zero"
     },
     {
-      "input": {"nums": [0, 0, 0]},
-      "expected": [0, 0, 0],
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ],
       "explanation": "All zeros"
     },
     {
-      "input": {"nums": [1, 0]},
-      "expected": [1, 0],
+      "input": {
+        "nums": [
+          1,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        0
+      ],
       "explanation": "Already in order"
     },
     {
-      "input": {"nums": [0, 1]},
-      "expected": [1, 0],
+      "input": {
+        "nums": [
+          0,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        0
+      ],
       "explanation": "Swap needed"
     },
     {
-      "input": {"nums": [1, 0, 2, 0, 3, 0]},
-      "expected": [1, 2, 3, 0, 0, 0],
+      "input": {
+        "nums": [
+          1,
+          0,
+          2,
+          0,
+          3,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        0,
+        0,
+        0
+      ],
       "explanation": "Alternating zeros"
     },
     {
-      "input": {"nums": [-1, 0, -2, 0, -3]},
-      "expected": [-1, -2, -3, 0, 0],
+      "input": {
+        "nums": [
+          -1,
+          0,
+          -2,
+          0,
+          -3
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -3,
+        0,
+        0
+      ],
       "explanation": "Negative values"
     },
     {
-      "input": {"nums": [0, 0, 0, 1]},
-      "expected": [1, 0, 0, 0],
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        0,
+        0
+      ],
       "explanation": "One non-zero at end"
     },
     {
-      "input": {"nums": [1, 0, 0, 0]},
-      "expected": [1, 0, 0, 0],
+      "input": {
+        "nums": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        0,
+        0
+      ],
       "explanation": "One non-zero at start"
     },
     {
-      "input": {"nums": [2, 1]},
-      "expected": [2, 1],
+      "input": {
+        "nums": [
+          2,
+          1
+        ]
+      },
+      "expected": [
+        2,
+        1
+      ],
       "explanation": "Two non-zeros, no change"
     },
     {
-      "input": {"nums": [0, 0, 1, 0, 3, 0, 12, 0]},
-      "expected": [1, 3, 12, 0, 0, 0, 0, 0],
+      "input": {
+        "nums": [
+          0,
+          0,
+          1,
+          0,
+          3,
+          0,
+          12,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
       "explanation": "Many zeros"
     },
     {
-      "input": {"nums": [5, 0, 3, 0, 0, 7, 0, 2]},
-      "expected": [5, 3, 7, 2, 0, 0, 0, 0],
+      "input": {
+        "nums": [
+          5,
+          0,
+          3,
+          0,
+          0,
+          7,
+          0,
+          2
+        ]
+      },
+      "expected": [
+        5,
+        3,
+        7,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
       "explanation": "Multiple non-zeros and zeros"
     }
   ],
@@ -101,22 +278,22 @@
   "functionName": "move_zeroes",
   "solutions": [
     {
-      "label": "Extra Array — O(n)",
+      "label": "Extra Array \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    non_zeros = [x for x in nums if x != 0]\n    zeros = [0] * (len(nums) - len(non_zeros))\n    result = non_zeros + zeros\n    for i in range(len(nums)):\n        nums[i] = result[i]\n    return nums",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Collect non-zero elements, append the appropriate number of zeros, then copy back into the original array. Uses extra space for the temporary list.\n\nTime: O(n) | Space: O(n)"
+      "explanation": "Collect non-zero elements, append the appropriate number of zeros, then copy back into the original array. Uses extra space for the temporary list."
     },
     {
-      "label": "Two Pointers In-Place — O(n)",
+      "label": "Two Pointers In-Place \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != 0:\n            nums[write] = nums[read]\n            write += 1\n    for i in range(write, len(nums)):\n        nums[i] = 0\n    return nums",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use a `write` pointer that only advances when a non-zero value is placed. Scan with `read`; whenever a non-zero is found, write it to the `write` position and advance `write`. After the scan, fill the remaining positions with zeros. This preserves relative order of non-zero elements.\n\nTime: O(n) | Space: O(1)"
+      "explanation": "Use a `write` pointer that only advances when a non-zero value is placed. Scan with `read`; whenever a non-zero is found, write it to the `write` position and advance `write`. After the scan, fill the remaining positions with zeros. This preserves relative order of non-zero elements."
     }
   ],
   "hints": [

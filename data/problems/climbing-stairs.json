@@ -2,7 +2,10 @@
   "id": "climbing-stairs",
   "title": "Climbing Stairs",
   "difficulty": "easy",
-  "tags": ["dynamic-programming", "math"],
+  "tags": [
+    "dynamic-programming",
+    "math"
+  ],
   "description": "## Climbing Stairs\n\nYou are designing a training simulator for astronauts. The simulator has a staircase with `n` steps. Each session, a trainee can climb either **1 step** or **2 steps** at a time. Your software needs to count how many distinct movement sequences lead to the top.\n\nGiven an integer `n` representing the number of steps, return the **number of distinct ways** to climb to the top.\n\n**Constraints:**\n- `1 <= n <= 45`",
   "examples": [
     {
@@ -18,79 +21,109 @@
   ],
   "exampleCases": [
     {
-      "input": {"n": 2},
+      "input": {
+        "n": 2
+      },
       "expected": 2,
       "explanation": "1+1 or 2"
     },
     {
-      "input": {"n": 3},
+      "input": {
+        "n": 3
+      },
       "expected": 3,
       "explanation": "1+1+1, 1+2, or 2+1"
     },
     {
-      "input": {"n": 5},
+      "input": {
+        "n": 5
+      },
       "expected": 8,
       "explanation": "8 distinct ways to climb 5 stairs"
     },
     {
-      "input": {"n": 10},
+      "input": {
+        "n": 10
+      },
       "expected": 89,
       "explanation": "89 ways for 10 stairs"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"n": 1},
+      "input": {
+        "n": 1
+      },
       "expected": 1,
       "explanation": "Only one way: one step"
     },
     {
-      "input": {"n": 4},
+      "input": {
+        "n": 4
+      },
       "expected": 5,
       "explanation": "5 ways"
     },
     {
-      "input": {"n": 6},
+      "input": {
+        "n": 6
+      },
       "expected": 13,
       "explanation": "13 ways"
     },
     {
-      "input": {"n": 7},
+      "input": {
+        "n": 7
+      },
       "expected": 21,
       "explanation": "21 ways"
     },
     {
-      "input": {"n": 8},
+      "input": {
+        "n": 8
+      },
       "expected": 34,
       "explanation": "34 ways"
     },
     {
-      "input": {"n": 9},
+      "input": {
+        "n": 9
+      },
       "expected": 55,
       "explanation": "55 ways"
     },
     {
-      "input": {"n": 20},
+      "input": {
+        "n": 20
+      },
       "expected": 10946,
       "explanation": "Fibonacci(22)"
     },
     {
-      "input": {"n": 30},
+      "input": {
+        "n": 30
+      },
       "expected": 1346269,
       "explanation": "Fibonacci(32)"
     },
     {
-      "input": {"n": 40},
+      "input": {
+        "n": 40
+      },
       "expected": 165580141,
       "explanation": "Fibonacci(42)"
     },
     {
-      "input": {"n": 45},
+      "input": {
+        "n": 45
+      },
       "expected": 1836311903,
       "explanation": "Maximum n"
     },
     {
-      "input": {"n": 15},
+      "input": {
+        "n": 15
+      },
       "expected": 987,
       "explanation": "Fibonacci(17)"
     }
@@ -101,22 +134,22 @@
   "functionName": "climb_stairs",
   "solutions": [
     {
-      "label": "Memoization — O(n)",
+      "label": "Memoization \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "def climb_stairs(n: int) -> int:\n    memo = {}\n    def dp(i):\n        if i <= 1:\n            return 1\n        if i in memo:\n            return memo[i]\n        memo[i] = dp(i - 1) + dp(i - 2)\n        return memo[i]\n    return dp(n)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "To reach step n, you either came from step n-1 (one step) or step n-2 (two steps). So ways(n) = ways(n-1) + ways(n-2). This recurrence is the Fibonacci sequence. Naive recursion would be exponential, but memoization ensures each subproblem is solved only once.\n\nTime: O(n) | Space: O(n)"
+      "explanation": "To reach step n, you either came from step n-1 (one step) or step n-2 (two steps). So ways(n) = ways(n-1) + ways(n-2). This recurrence is the Fibonacci sequence. Naive recursion would be exponential, but memoization ensures each subproblem is solved only once."
     },
     {
-      "label": "Iterative DP — O(n) space O(1)",
+      "label": "Iterative DP \u2014 O(n) space O(1)",
       "approach": "optimal",
       "language": "python",
       "code": "def climb_stairs(n: int) -> int:\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Since each step only depends on the previous two values, we can iterate forward with just two variables instead of a full array or recursion stack.\n\nTime: O(n) | Space: O(1)"
+      "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Since each step only depends on the previous two values, we can iterate forward with just two variables instead of a full array or recursion stack."
     }
   ],
   "hints": [

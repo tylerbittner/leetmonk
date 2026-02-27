@@ -2,7 +2,10 @@
   "id": "daily-temperatures",
   "title": "Daily Temperatures",
   "difficulty": "medium",
-  "tags": ["stack", "array"],
+  "tags": [
+    "stack",
+    "array"
+  ],
   "description": "## Daily Temperatures\n\nYou are managing an agricultural monitoring system that records daily soil temperatures. Farmers need to know how many days they'll have to wait until the next warmer day to schedule irrigation.\n\nGiven an array of integers `temperatures` where `temperatures[i]` represents the temperature on day `i`, return an array `answer` such that `answer[i]` is the number of days after day `i` until a warmer temperature. If there is no future warmer day, `answer[i] == 0`.\n\n**Constraints:**\n- `1 <= temperatures.length <= 10^5`\n- `30 <= temperatures[i] <= 100`",
   "examples": [
     {
@@ -23,80 +26,290 @@
   ],
   "exampleCases": [
     {
-      "input": {"temperatures": [73, 74, 75, 71, 69, 72, 76, 73]},
-      "expected": [1, 1, 4, 2, 1, 1, 0, 0],
+      "input": {
+        "temperatures": [
+          73,
+          74,
+          75,
+          71,
+          69,
+          72,
+          76,
+          73
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        4,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
       "explanation": "Classic example"
     },
     {
-      "input": {"temperatures": [30, 40, 50, 60]},
-      "expected": [1, 1, 1, 0],
+      "input": {
+        "temperatures": [
+          30,
+          40,
+          50,
+          60
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        1,
+        0
+      ],
       "explanation": "Increasing temperatures"
     },
     {
-      "input": {"temperatures": [30, 60, 90]},
-      "expected": [1, 1, 0],
+      "input": {
+        "temperatures": [
+          30,
+          60,
+          90
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        0
+      ],
       "explanation": "Increasing by large amounts"
     },
     {
-      "input": {"temperatures": [90, 60, 30]},
-      "expected": [0, 0, 0],
+      "input": {
+        "temperatures": [
+          90,
+          60,
+          30
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ],
       "explanation": "Decreasing temperatures"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"temperatures": [30]},
-      "expected": [0],
+      "input": {
+        "temperatures": [
+          30
+        ]
+      },
+      "expected": [
+        0
+      ],
       "explanation": "Single element"
     },
     {
-      "input": {"temperatures": [30, 30]},
-      "expected": [0, 0],
+      "input": {
+        "temperatures": [
+          30,
+          30
+        ]
+      },
+      "expected": [
+        0,
+        0
+      ],
       "explanation": "Same temperature, no warmer day"
     },
     {
-      "input": {"temperatures": [30, 31]},
-      "expected": [1, 0],
+      "input": {
+        "temperatures": [
+          30,
+          31
+        ]
+      },
+      "expected": [
+        1,
+        0
+      ],
       "explanation": "Two elements, first waits one day"
     },
     {
-      "input": {"temperatures": [100, 100, 100]},
-      "expected": [0, 0, 0],
+      "input": {
+        "temperatures": [
+          100,
+          100,
+          100
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ],
       "explanation": "All same maximum temperature"
     },
     {
-      "input": {"temperatures": [60, 50, 70]},
-      "expected": [2, 1, 0],
+      "input": {
+        "temperatures": [
+          60,
+          50,
+          70
+        ]
+      },
+      "expected": [
+        2,
+        1,
+        0
+      ],
       "explanation": "Day 0 waits 2 for 70, day 1 waits 1 for 70"
     },
     {
-      "input": {"temperatures": [55, 38, 53, 81, 61, 93, 97, 32, 43, 78]},
-      "expected": [3, 1, 1, 2, 1, 1, 0, 1, 1, 0],
+      "input": {
+        "temperatures": [
+          55,
+          38,
+          53,
+          81,
+          61,
+          93,
+          97,
+          32,
+          43,
+          78
+        ]
+      },
+      "expected": [
+        3,
+        1,
+        1,
+        2,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
       "explanation": "Complex case"
     },
     {
-      "input": {"temperatures": [70, 71, 70, 72, 70, 73]},
-      "expected": [1, 2, 1, 2, 1, 0],
+      "input": {
+        "temperatures": [
+          70,
+          71,
+          70,
+          72,
+          70,
+          73
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        1,
+        2,
+        1,
+        0
+      ],
       "explanation": "Alternating pattern"
     },
     {
-      "input": {"temperatures": [89, 62, 70, 58, 47, 47, 46, 76, 100, 70]},
-      "expected": [8, 1, 5, 4, 3, 2, 1, 1, 0, 0],
+      "input": {
+        "temperatures": [
+          89,
+          62,
+          70,
+          58,
+          47,
+          47,
+          46,
+          76,
+          100,
+          70
+        ]
+      },
+      "expected": [
+        8,
+        1,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
       "explanation": "Large distances to next warmer"
     },
     {
-      "input": {"temperatures": [30, 31, 30, 31, 30, 31]},
-      "expected": [1, 0, 1, 0, 1, 0],
+      "input": {
+        "temperatures": [
+          30,
+          31,
+          30,
+          31,
+          30,
+          31
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
       "explanation": "Alternating two values"
     },
     {
-      "input": {"temperatures": [50, 50, 50, 51]},
-      "expected": [3, 2, 1, 0],
+      "input": {
+        "temperatures": [
+          50,
+          50,
+          50,
+          51
+        ]
+      },
+      "expected": [
+        3,
+        2,
+        1,
+        0
+      ],
       "explanation": "All waiting for last warmer day"
     },
     {
-      "input": {"temperatures": [34, 80, 80, 34, 34, 80, 80, 34, 34, 34]},
-      "expected": [1, 0, 0, 2, 1, 0, 0, 0, 0, 0],
+      "input": {
+        "temperatures": [
+          34,
+          80,
+          80,
+          34,
+          34,
+          80,
+          80,
+          34,
+          34,
+          34
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
       "explanation": "Block pattern"
     }
   ],
@@ -106,22 +319,22 @@
   "functionName": "daily_temperatures",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    for i in range(n):\n        for j in range(i + 1, n):\n            if temperatures[j] > temperatures[i]:\n                answer[i] = j - i\n                break\n    return answer",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(n)",
-      "explanation": "For each day, scan forward until a warmer temperature is found and record the distance. If no warmer day exists, the answer is 0.\n\nTime: O(n\u00b2) | Space: O(n)"
+      "explanation": "For each day, scan forward until a warmer temperature is found and record the distance. If no warmer day exists, the answer is 0."
     },
     {
-      "label": "Monotonic Stack — O(n)",
+      "label": "Monotonic Stack \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # Stack of indices with unresolved 'next warmer day'\n    for i, temp in enumerate(temperatures):\n        while stack and temperatures[stack[-1]] < temp:\n            idx = stack.pop()\n            answer[idx] = i - idx\n        stack.append(i)\n    return answer",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Maintain a stack of indices in decreasing order of their temperatures. When the current temperature is warmer than the stack's top, that top index has found its next warmer day -- pop it and record the distance. Each index is pushed and popped at most once, so the total work is linear.\n\nTime: O(n) | Space: O(n)"
+      "explanation": "Maintain a stack of indices in decreasing order of their temperatures. When the current temperature is warmer than the stack's top, that top index has found its next warmer day -- pop it and record the distance. Each index is pushed and popped at most once, so the total work is linear."
     }
   ],
   "hints": [

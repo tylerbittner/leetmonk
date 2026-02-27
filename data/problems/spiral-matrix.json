@@ -2,7 +2,10 @@
   "id": "spiral-matrix",
   "title": "Spiral Matrix",
   "difficulty": "medium",
-  "tags": ["matrix", "simulation"],
+  "tags": [
+    "matrix",
+    "simulation"
+  ],
   "description": "## Spiral Matrix\n\nYou are writing firmware for a robotic arm that scans a grid of microchips. The arm starts in the top-left corner and spirals inward clockwise, reading each chip exactly once.\n\nGiven an `m x n` matrix, return all elements in **spiral order** (clockwise from top-left inward).\n\n**Constraints:**\n- `m == matrix.length`\n- `n == matrix[i].length`\n- `1 <= m, n <= 10`\n- `-100 <= matrix[i][j] <= 100`",
   "examples": [
     {
@@ -18,80 +21,404 @@
   ],
   "exampleCases": [
     {
-      "input": {"matrix": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]},
-      "expected": [1, 2, 3, 6, 9, 8, 7, 4, 5],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        8,
+        7,
+        4,
+        5
+      ],
       "explanation": "3x3 matrix spiral"
     },
     {
-      "input": {"matrix": [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]},
-      "expected": [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        11,
+        10,
+        9,
+        5,
+        6,
+        7
+      ],
       "explanation": "3x4 matrix spiral"
     },
     {
-      "input": {"matrix": [[1]]},
-      "expected": [1],
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single element"
     },
     {
-      "input": {"matrix": [[1, 2], [3, 4]]},
-      "expected": [1, 2, 4, 3],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        4,
+        3
+      ],
       "explanation": "2x2 matrix"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"matrix": [[1, 2, 3]]},
-      "expected": [1, 2, 3],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "Single row"
     },
     {
-      "input": {"matrix": [[1], [2], [3]]},
-      "expected": [1, 2, 3],
+      "input": {
+        "matrix": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "Single column"
     },
     {
-      "input": {"matrix": [[1, 2], [3, 4], [5, 6]]},
-      "expected": [1, 2, 4, 6, 5, 3],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        4,
+        6,
+        5,
+        3
+      ],
       "explanation": "2x3 matrix"
     },
     {
-      "input": {"matrix": [[1, 2, 3], [4, 5, 6]]},
-      "expected": [1, 2, 3, 6, 5, 4],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        6,
+        5,
+        4
+      ],
       "explanation": "2-row matrix"
     },
     {
-      "input": {"matrix": [[1, 2, 3, 4, 5]]},
-      "expected": [1, 2, 3, 4, 5],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "explanation": "Single wide row"
     },
     {
-      "input": {"matrix": [[1], [2], [3], [4], [5]]},
-      "expected": [1, 2, 3, 4, 5],
+      "input": {
+        "matrix": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "explanation": "Single tall column"
     },
     {
-      "input": {"matrix": [[-1, -2], [-3, -4]]},
-      "expected": [-1, -2, -4, -3],
+      "input": {
+        "matrix": [
+          [
+            -1,
+            -2
+          ],
+          [
+            -3,
+            -4
+          ]
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -4,
+        -3
+      ],
       "explanation": "Negative values"
     },
     {
-      "input": {"matrix": [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]},
-      "expected": [1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ],
+          [
+            13,
+            14,
+            15,
+            16
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        16,
+        15,
+        14,
+        13,
+        9,
+        5,
+        6,
+        7,
+        11,
+        10
+      ],
       "explanation": "4x4 matrix spiral"
     },
     {
-      "input": {"matrix": [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]},
-      "expected": [1, 2, 3, 6, 9, 12, 11, 10, 7, 4, 5, 8],
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ],
+          [
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        12,
+        11,
+        10,
+        7,
+        4,
+        5,
+        8
+      ],
       "explanation": "4x3 matrix spiral"
     },
     {
-      "input": {"matrix": [[0, 0], [0, 0]]},
-      "expected": [0, 0, 0, 0],
+      "input": {
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0,
+        0
+      ],
       "explanation": "All zeros"
     },
     {
-      "input": {"matrix": [[100, -100], [-100, 100]]},
-      "expected": [100, -100, 100, -100],
+      "input": {
+        "matrix": [
+          [
+            100,
+            -100
+          ],
+          [
+            -100,
+            100
+          ]
+        ]
+      },
+      "expected": [
+        100,
+        -100,
+        100,
+        -100
+      ],
       "explanation": "Large absolute values"
     }
   ],
@@ -101,22 +428,22 @@
   "functionName": "spiral_order",
   "solutions": [
     {
-      "label": "Boundary Simulation — O(m*n)",
+      "label": "Boundary Simulation \u2014 O(m*n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef spiral_order(matrix: List[List[int]]) -> List[int]:\n    result = []\n    top, bottom = 0, len(matrix) - 1\n    left, right = 0, len(matrix[0]) - 1\n    while top <= bottom and left <= right:\n        for col in range(left, right + 1):\n            result.append(matrix[top][col])\n        top += 1\n        for row in range(top, bottom + 1):\n            result.append(matrix[row][right])\n        right -= 1\n        if top <= bottom:\n            for col in range(right, left - 1, -1):\n                result.append(matrix[bottom][col])\n            bottom -= 1\n        if left <= right:\n            for row in range(bottom, top - 1, -1):\n                result.append(matrix[row][left])\n            left += 1\n    return result",
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Maintain four boundary pointers: top, bottom, left, right. In each iteration, traverse the top row left-to-right, right column top-to-bottom, bottom row right-to-left (if it still exists), and left column bottom-to-top (if it still exists). Then shrink the boundaries inward and repeat.\n\nTime: O(m*n) | Space: O(1)"
+      "explanation": "Maintain four boundary pointers: top, bottom, left, right. In each iteration, traverse the top row left-to-right, right column top-to-bottom, bottom row right-to-left (if it still exists), and left column bottom-to-top (if it still exists). Then shrink the boundaries inward and repeat."
     },
     {
-      "label": "Direction Array Simulation — O(m*n)",
+      "label": "Direction Array Simulation \u2014 O(m*n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef spiral_order(matrix: List[List[int]]) -> List[int]:\n    if not matrix:\n        return []\n    m, n = len(matrix), len(matrix[0])\n    result = []\n    visited = [[False] * n for _ in range(m)]\n    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n    d = 0\n    row, col = 0, 0\n    for _ in range(m * n):\n        result.append(matrix[row][col])\n        visited[row][col] = True\n        nr, nc = row + directions[d][0], col + directions[d][1]\n        if 0 <= nr < m and 0 <= nc < n and not visited[nr][nc]:\n            row, col = nr, nc\n        else:\n            d = (d + 1) % 4\n            row, col = row + directions[d][0], col + directions[d][1]\n    return result",
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(m*n)",
-      "explanation": "Simulate walking in spiral order using direction vectors [right, down, left, up]. Mark visited cells in a boolean matrix. When hitting a boundary or an already-visited cell, turn clockwise to the next direction. This approach is more intuitive but uses extra space for the visited matrix.\n\nTime: O(m*n) | Space: O(m*n)"
+      "explanation": "Simulate walking in spiral order using direction vectors [right, down, left, up]. Mark visited cells in a boolean matrix. When hitting a boundary or an already-visited cell, turn clockwise to the next direction. This approach is more intuitive but uses extra space for the visited matrix."
     }
   ],
   "hints": [

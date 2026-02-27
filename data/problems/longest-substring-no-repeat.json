@@ -2,8 +2,12 @@
   "id": "longest-substring-no-repeat",
   "title": "Longest Substring Without Repeating Characters",
   "difficulty": "medium",
-  "tags": ["sliding-window", "hash-map", "string"],
-  "description": "## Longest Substring Without Repeating Characters\n\nYou are designing a DNA sequencing analyzer. Each character in a sequence represents a nucleotide marker. You want to find the longest contiguous segment of the sequence where no marker appears twice — this represents a region of maximum genetic diversity.\n\nGiven a string `s`, return the length of the **longest substring without repeating characters**.\n\n**Constraints:**\n- `0 <= s.length <= 5 * 10^4`\n- `s` consists of English letters, digits, symbols, and spaces.",
+  "tags": [
+    "sliding-window",
+    "hash-map",
+    "string"
+  ],
+  "description": "## Longest Substring Without Repeating Characters\n\nYou are designing a DNA sequencing analyzer. Each character in a sequence represents a nucleotide marker. You want to find the longest contiguous segment of the sequence where no marker appears twice \u2014 this represents a region of maximum genetic diversity.\n\nGiven a string `s`, return the length of the **longest substring without repeating characters**.\n\n**Constraints:**\n- `0 <= s.length <= 5 * 10^4`\n- `s` consists of English letters, digits, symbols, and spaces.",
   "examples": [
     {
       "input": "s = \"abcabcbb\"",
@@ -23,79 +27,109 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "abcabcbb"},
+      "input": {
+        "s": "abcabcbb"
+      },
       "expected": 3,
       "explanation": "\"abc\" is the longest unique substring"
     },
     {
-      "input": {"s": "bbbbb"},
+      "input": {
+        "s": "bbbbb"
+      },
       "expected": 1,
       "explanation": "All same character"
     },
     {
-      "input": {"s": "pwwkew"},
+      "input": {
+        "s": "pwwkew"
+      },
       "expected": 3,
       "explanation": "\"wke\" is the longest"
     },
     {
-      "input": {"s": "abcdef"},
+      "input": {
+        "s": "abcdef"
+      },
       "expected": 6,
       "explanation": "All unique characters"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": ""},
+      "input": {
+        "s": ""
+      },
       "expected": 0,
       "explanation": "Empty string"
     },
     {
-      "input": {"s": " "},
+      "input": {
+        "s": " "
+      },
       "expected": 1,
       "explanation": "Single space"
     },
     {
-      "input": {"s": "au"},
+      "input": {
+        "s": "au"
+      },
       "expected": 2,
       "explanation": "Two different characters"
     },
     {
-      "input": {"s": "aa"},
+      "input": {
+        "s": "aa"
+      },
       "expected": 1,
       "explanation": "Two same characters"
     },
     {
-      "input": {"s": "dvdf"},
+      "input": {
+        "s": "dvdf"
+      },
       "expected": 3,
       "explanation": "\"vdf\" length 3"
     },
     {
-      "input": {"s": "anviaj"},
+      "input": {
+        "s": "anviaj"
+      },
       "expected": 5,
       "explanation": "\"nviam\" ... \"nviaj\" is 5"
     },
     {
-      "input": {"s": "abba"},
+      "input": {
+        "s": "abba"
+      },
       "expected": 2,
       "explanation": "\"ab\" or \"ba\""
     },
     {
-      "input": {"s": "tmmzuxt"},
+      "input": {
+        "s": "tmmzuxt"
+      },
       "expected": 5,
       "explanation": "\"mzuxt\" length 5"
     },
     {
-      "input": {"s": "aab"},
+      "input": {
+        "s": "aab"
+      },
       "expected": 2,
       "explanation": "\"ab\" at end"
     },
     {
-      "input": {"s": "abcdeafbcgj"},
+      "input": {
+        "s": "abcdeafbcgj"
+      },
       "expected": 8,
-      "explanation": "\"deafbcgj\" — 8 unique chars from index 3 to 10"
+      "explanation": "\"deafbcgj\" \u2014 8 unique chars from index 3 to 10"
     },
     {
-      "input": {"s": "!@#$%^&*"},
+      "input": {
+        "s": "!@#$%^&*"
+      },
       "expected": 8,
       "explanation": "All unique special characters"
     }
@@ -106,22 +140,22 @@
   "functionName": "length_of_longest_substring",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "def length_of_longest_substring(s: str) -> int:\n    n = len(s)\n    max_len = 0\n    for i in range(n):\n        seen = set()\n        for j in range(i, n):\n            if s[j] in seen:\n                break\n            seen.add(s[j])\n            max_len = max(max_len, j - i + 1)\n    return max_len",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(min(n, m))",
-      "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen. Here m is the size of the character set.\n\nTime: O(n\u00b2) | Space: O(min(n, m))"
+      "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen. Here m is the size of the character set."
     },
     {
-      "label": "Sliding Window — O(n)",
+      "label": "Sliding Window \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "def length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(min(n, m))",
-      "explanation": "Use a sliding window [left, right]. Store the most recent index of each character. When a duplicate is found within the current window, jump `left` past the previous occurrence. This ensures the window always contains unique characters. Update max_len at each step. Here m is the size of the character set.\n\nTime: O(n) | Space: O(min(n, m))"
+      "explanation": "Use a sliding window [left, right]. Store the most recent index of each character. When a duplicate is found within the current window, jump `left` past the previous occurrence. This ensures the window always contains unique characters. Update max_len at each step. Here m is the size of the character set."
     }
   ],
   "hints": [

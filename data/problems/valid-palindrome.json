@@ -2,8 +2,11 @@
   "id": "valid-palindrome",
   "title": "Valid Palindrome",
   "difficulty": "easy",
-  "tags": ["two-pointers", "string"],
-  "description": "## Valid Palindrome\n\nYou are building a text normalization tool for a message archiving system. Before checking if a message reads the same forwards and backwards, you must strip away all punctuation, spaces, and special characters — only letters and numbers matter. Case differences should also be ignored.\n\nGiven a string `s`, return `true` if it is a **palindrome** after converting all uppercase letters to lowercase and removing all non-alphanumeric characters, and `false` otherwise.\n\n**Constraints:**\n- `1 <= s.length <= 2 * 10^5`\n- `s` consists only of printable ASCII characters.",
+  "tags": [
+    "two-pointers",
+    "string"
+  ],
+  "description": "## Valid Palindrome\n\nYou are building a text normalization tool for a message archiving system. Before checking if a message reads the same forwards and backwards, you must strip away all punctuation, spaces, and special characters \u2014 only letters and numbers matter. Case differences should also be ignored.\n\nGiven a string `s`, return `true` if it is a **palindrome** after converting all uppercase letters to lowercase and removing all non-alphanumeric characters, and `false` otherwise.\n\n**Constraints:**\n- `1 <= s.length <= 2 * 10^5`\n- `s` consists only of printable ASCII characters.",
   "examples": [
     {
       "input": "s = \"A man, a plan, a canal: Panama\"",
@@ -23,79 +26,109 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "A man, a plan, a canal: Panama"},
+      "input": {
+        "s": "A man, a plan, a canal: Panama"
+      },
       "expected": true,
       "explanation": "Classic palindrome with punctuation"
     },
     {
-      "input": {"s": "race a car"},
+      "input": {
+        "s": "race a car"
+      },
       "expected": false,
       "explanation": "Not a palindrome"
     },
     {
-      "input": {"s": " "},
+      "input": {
+        "s": " "
+      },
       "expected": true,
       "explanation": "Empty after filtering"
     },
     {
-      "input": {"s": "No lemon, no melon"},
+      "input": {
+        "s": "No lemon, no melon"
+      },
       "expected": true,
       "explanation": "Another classic palindrome phrase"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "a"},
+      "input": {
+        "s": "a"
+      },
       "expected": true,
       "explanation": "Single character"
     },
     {
-      "input": {"s": "aa"},
+      "input": {
+        "s": "aa"
+      },
       "expected": true,
       "explanation": "Two same characters"
     },
     {
-      "input": {"s": "ab"},
+      "input": {
+        "s": "ab"
+      },
       "expected": false,
       "explanation": "Two different characters"
     },
     {
-      "input": {"s": "0P"},
+      "input": {
+        "s": "0P"
+      },
       "expected": false,
       "explanation": "Zero and P: '0p' != '0p' reversed 'p0'"
     },
     {
-      "input": {"s": "aba"},
+      "input": {
+        "s": "aba"
+      },
       "expected": true,
       "explanation": "Simple palindrome"
     },
     {
-      "input": {"s": "Was it a car or a cat I saw"},
+      "input": {
+        "s": "Was it a car or a cat I saw"
+      },
       "expected": true,
       "explanation": "Palindrome sentence"
     },
     {
-      "input": {"s": "Hello, World!"},
+      "input": {
+        "s": "Hello, World!"
+      },
       "expected": false,
       "explanation": "Not palindrome"
     },
     {
-      "input": {"s": "12321"},
+      "input": {
+        "s": "12321"
+      },
       "expected": true,
       "explanation": "Numeric palindrome"
     },
     {
-      "input": {"s": ".,"},
+      "input": {
+        "s": ".,"
+      },
       "expected": true,
       "explanation": "Only punctuation, empty after filter"
     },
     {
-      "input": {"s": "A1b2b1a"},
+      "input": {
+        "s": "A1b2b1a"
+      },
       "expected": true,
       "explanation": "Mixed alphanumeric palindrome"
     },
     {
-      "input": {"s": "Madam, I'm Adam"},
+      "input": {
+        "s": "Madam, I'm Adam"
+      },
       "expected": true,
       "explanation": "Another palindrome phrase"
     }
@@ -106,22 +139,22 @@
   "functionName": "is_palindrome",
   "solutions": [
     {
-      "label": "Filter then Check — O(n)",
+      "label": "Filter then Check \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "def is_palindrome(s: str) -> bool:\n    filtered = [c.lower() for c in s if c.isalnum()]\n    return filtered == filtered[::-1]",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Filter out non-alphanumeric characters, convert to lowercase, then compare the resulting list with its reverse. Simple and readable but creates extra lists.\n\nTime: O(n) | Space: O(n)"
+      "explanation": "Filter out non-alphanumeric characters, convert to lowercase, then compare the resulting list with its reverse. Simple and readable but creates extra lists."
     },
     {
-      "label": "Two Pointers — O(n)",
+      "label": "Two Pointers \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "def is_palindrome(s: str) -> bool:\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if s[left].lower() != s[right].lower():\n            return False\n        left += 1\n        right -= 1\n    return True",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use two pointers starting from each end. Skip non-alphanumeric characters from both sides. Compare the characters at the pointers case-insensitively. If they ever differ, return False. This avoids creating any extra data structures.\n\nTime: O(n) | Space: O(1)"
+      "explanation": "Use two pointers starting from each end. Skip non-alphanumeric characters from both sides. Compare the characters at the pointers case-insensitively. If they ever differ, return False. This avoids creating any extra data structures."
     }
   ],
   "hints": [

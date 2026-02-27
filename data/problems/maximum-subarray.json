@@ -2,8 +2,11 @@
   "id": "maximum-subarray",
   "title": "Maximum Subarray",
   "difficulty": "medium",
-  "tags": ["array", "dynamic-programming"],
-  "description": "## Maximum Subarray\n\nYou are analyzing voltage fluctuations recorded by an electrical grid monitoring system. The readings can be positive (surplus) or negative (deficit). You need to find the contiguous segment of readings with the highest total sum — this tells you the best sustained performance window.\n\nGiven an integer array `nums`, find the **contiguous subarray** (containing at least one number) which has the **largest sum** and return that sum.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
+  "tags": [
+    "array",
+    "dynamic-programming"
+  ],
+  "description": "## Maximum Subarray\n\nYou are analyzing voltage fluctuations recorded by an electrical grid monitoring system. The readings can be positive (surplus) or negative (deficit). You need to find the contiguous segment of readings with the highest total sum \u2014 this tells you the best sustained performance window.\n\nGiven an integer array `nums`, find the **contiguous subarray** (containing at least one number) which has the **largest sum** and return that sum.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
   "examples": [
     {
       "input": "nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]",
@@ -23,79 +26,185 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [-2, 1, -3, 4, -1, 2, 1, -5, 4]},
+      "input": {
+        "nums": [
+          -2,
+          1,
+          -3,
+          4,
+          -1,
+          2,
+          1,
+          -5,
+          4
+        ]
+      },
       "expected": 6,
       "explanation": "Subarray [4, -1, 2, 1] = 6"
     },
     {
-      "input": {"nums": [1]},
+      "input": {
+        "nums": [
+          1
+        ]
+      },
       "expected": 1,
       "explanation": "Single element"
     },
     {
-      "input": {"nums": [5, 4, -1, 7, 8]},
+      "input": {
+        "nums": [
+          5,
+          4,
+          -1,
+          7,
+          8
+        ]
+      },
       "expected": 23,
       "explanation": "Entire array"
     },
     {
-      "input": {"nums": [-2, -3, 4, -1, -2, 1, 5, -3]},
+      "input": {
+        "nums": [
+          -2,
+          -3,
+          4,
+          -1,
+          -2,
+          1,
+          5,
+          -3
+        ]
+      },
       "expected": 7,
       "explanation": "Subarray [4, -1, -2, 1, 5] = 7"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [-1]},
+      "input": {
+        "nums": [
+          -1
+        ]
+      },
       "expected": -1,
       "explanation": "Single negative element"
     },
     {
-      "input": {"nums": [-2, -1]},
+      "input": {
+        "nums": [
+          -2,
+          -1
+        ]
+      },
       "expected": -1,
       "explanation": "All negative, pick least negative"
     },
     {
-      "input": {"nums": [-1, -2, -3, -4]},
+      "input": {
+        "nums": [
+          -1,
+          -2,
+          -3,
+          -4
+        ]
+      },
       "expected": -1,
       "explanation": "All negative array"
     },
     {
-      "input": {"nums": [1, 2, 3, 4, 5]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
       "expected": 15,
       "explanation": "All positive, sum entire array"
     },
     {
-      "input": {"nums": [0, 0, 0]},
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
       "expected": 0,
       "explanation": "All zeros"
     },
     {
-      "input": {"nums": [-10000, 10000]},
+      "input": {
+        "nums": [
+          -10000,
+          10000
+        ]
+      },
       "expected": 10000,
       "explanation": "Large values"
     },
     {
-      "input": {"nums": [2, -1, 2, -1, 2]},
+      "input": {
+        "nums": [
+          2,
+          -1,
+          2,
+          -1,
+          2
+        ]
+      },
       "expected": 4,
       "explanation": "Alternating, best is full array: 2-1+2-1+2=4"
     },
     {
-      "input": {"nums": [-5, 1, 2, 3, -10, 4]},
+      "input": {
+        "nums": [
+          -5,
+          1,
+          2,
+          3,
+          -10,
+          4
+        ]
+      },
       "expected": 6,
       "explanation": "Subarray [1, 2, 3] = 6"
     },
     {
-      "input": {"nums": [10, -3, 10]},
+      "input": {
+        "nums": [
+          10,
+          -3,
+          10
+        ]
+      },
       "expected": 17,
       "explanation": "10 - 3 + 10 = 17"
     },
     {
-      "input": {"nums": [1, -1, 1, -1, 1]},
+      "input": {
+        "nums": [
+          1,
+          -1,
+          1,
+          -1,
+          1
+        ]
+      },
       "expected": 1,
       "explanation": "Best single element = 1"
     },
     {
-      "input": {"nums": [-2, 1]},
+      "input": {
+        "nums": [
+          -2,
+          1
+        ]
+      },
       "expected": 1,
       "explanation": "Pick the positive element"
     }
@@ -106,22 +215,22 @@
   "functionName": "max_subarray",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = float('-inf')\n    n = len(nums)\n    for i in range(n):\n        current_sum = 0\n        for j in range(i, n):\n            current_sum += nums[j]\n            if current_sum > max_sum:\n                max_sum = current_sum\n    return max_sum",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Try every possible starting index i and extend the subarray to the right, tracking the running sum. Update the global maximum whenever a new high is found.\n\nTime: O(n\u00b2) | Space: O(1)"
+      "explanation": "Try every possible starting index i and extend the subarray to the right, tracking the running sum. Update the global maximum whenever a new high is found."
     },
     {
-      "label": "Kadane's Algorithm — O(n)",
+      "label": "Kadane's Algorithm \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = nums[0]\n    current_sum = nums[0]\n    for i in range(1, len(nums)):\n        current_sum = max(nums[i], current_sum + nums[i])\n        max_sum = max(max_sum, current_sum)\n    return max_sum",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Kadane's Algorithm: at each position, decide whether to extend the previous subarray or start a new one from the current element. The choice is simple: current_sum = max(nums[i], current_sum + nums[i]). If the accumulated sum is negative, it can only hurt future subarrays, so we start fresh. Track the global maximum throughout.\n\nTime: O(n) | Space: O(1)"
+      "explanation": "Kadane's Algorithm: at each position, decide whether to extend the previous subarray or start a new one from the current element. The choice is simple: current_sum = max(nums[i], current_sum + nums[i]). If the accumulated sum is negative, it can only hurt future subarrays, so we start fresh. Track the global maximum throughout."
     }
   ],
   "hints": [

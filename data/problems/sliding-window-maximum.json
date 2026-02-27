@@ -2,7 +2,11 @@
   "id": "sliding-window-maximum",
   "title": "Sliding Window Maximum",
   "difficulty": "hard",
-  "tags": ["sliding-window", "deque", "array"],
+  "tags": [
+    "sliding-window",
+    "deque",
+    "array"
+  ],
   "description": "## Sliding Window Maximum\n\nYou are monitoring a real-time telemetry feed from an aircraft. A sensor window of size `k` slides across the data stream one position at a time. At each position, you need to report the peak reading within that window for anomaly detection.\n\nGiven an integer array `nums` and an integer `k`, return an array of the **maximum values** in each sliding window of size `k`.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`\n- `1 <= k <= nums.length`",
   "examples": [
     {
@@ -18,80 +22,278 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [1, 3, -1, -3, 5, 3, 6, 7], "k": 3},
-      "expected": [3, 3, 5, 5, 6, 7],
+      "input": {
+        "nums": [
+          1,
+          3,
+          -1,
+          -3,
+          5,
+          3,
+          6,
+          7
+        ],
+        "k": 3
+      },
+      "expected": [
+        3,
+        3,
+        5,
+        5,
+        6,
+        7
+      ],
       "explanation": "Classic sliding window maximum"
     },
     {
-      "input": {"nums": [1], "k": 1},
-      "expected": [1],
+      "input": {
+        "nums": [
+          1
+        ],
+        "k": 1
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single element"
     },
     {
-      "input": {"nums": [1, -1], "k": 1},
-      "expected": [1, -1],
+      "input": {
+        "nums": [
+          1,
+          -1
+        ],
+        "k": 1
+      },
+      "expected": [
+        1,
+        -1
+      ],
       "explanation": "Window size 1, each element is max"
     },
     {
-      "input": {"nums": [9, 11], "k": 2},
-      "expected": [11],
+      "input": {
+        "nums": [
+          9,
+          11
+        ],
+        "k": 2
+      },
+      "expected": [
+        11
+      ],
       "explanation": "Single window of size 2"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [1, 3, 1, 2, 0, 5], "k": 3},
-      "expected": [3, 3, 2, 5],
+      "input": {
+        "nums": [
+          1,
+          3,
+          1,
+          2,
+          0,
+          5
+        ],
+        "k": 3
+      },
+      "expected": [
+        3,
+        3,
+        2,
+        5
+      ],
       "explanation": "Multiple windows"
     },
     {
-      "input": {"nums": [1, 2, 3, 4, 5], "k": 2},
-      "expected": [2, 3, 4, 5],
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "k": 2
+      },
+      "expected": [
+        2,
+        3,
+        4,
+        5
+      ],
       "explanation": "Increasing array"
     },
     {
-      "input": {"nums": [5, 4, 3, 2, 1], "k": 2},
-      "expected": [5, 4, 3, 2],
+      "input": {
+        "nums": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "k": 2
+      },
+      "expected": [
+        5,
+        4,
+        3,
+        2
+      ],
       "explanation": "Decreasing array"
     },
     {
-      "input": {"nums": [1, 2, 3, 4, 5], "k": 5},
-      "expected": [5],
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "k": 5
+      },
+      "expected": [
+        5
+      ],
       "explanation": "Window equals array length"
     },
     {
-      "input": {"nums": [5, 5, 5, 5, 5], "k": 3},
-      "expected": [5, 5, 5],
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "k": 3
+      },
+      "expected": [
+        5,
+        5,
+        5
+      ],
       "explanation": "All same values"
     },
     {
-      "input": {"nums": [-4, -3, -2, -1, 0], "k": 3},
-      "expected": [-2, -1, 0],
+      "input": {
+        "nums": [
+          -4,
+          -3,
+          -2,
+          -1,
+          0
+        ],
+        "k": 3
+      },
+      "expected": [
+        -2,
+        -1,
+        0
+      ],
       "explanation": "All negatives"
     },
     {
-      "input": {"nums": [2, 1, 5, 3, 6, 4, 8, 7], "k": 4},
-      "expected": [5, 6, 6, 8, 8],
+      "input": {
+        "nums": [
+          2,
+          1,
+          5,
+          3,
+          6,
+          4,
+          8,
+          7
+        ],
+        "k": 4
+      },
+      "expected": [
+        5,
+        6,
+        6,
+        8,
+        8
+      ],
       "explanation": "Mixed values"
     },
     {
-      "input": {"nums": [10000, -10000, 10000, -10000], "k": 2},
-      "expected": [10000, 10000, 10000],
+      "input": {
+        "nums": [
+          10000,
+          -10000,
+          10000,
+          -10000
+        ],
+        "k": 2
+      },
+      "expected": [
+        10000,
+        10000,
+        10000
+      ],
       "explanation": "Alternating extremes"
     },
     {
-      "input": {"nums": [3, 2, 1], "k": 1},
-      "expected": [3, 2, 1],
+      "input": {
+        "nums": [
+          3,
+          2,
+          1
+        ],
+        "k": 1
+      },
+      "expected": [
+        3,
+        2,
+        1
+      ],
       "explanation": "Window size 1"
     },
     {
-      "input": {"nums": [4, 3, 5, 4, 3, 3, 6, 7], "k": 3},
-      "expected": [5, 5, 5, 4, 6, 7],
+      "input": {
+        "nums": [
+          4,
+          3,
+          5,
+          4,
+          3,
+          3,
+          6,
+          7
+        ],
+        "k": 3
+      },
+      "expected": [
+        5,
+        5,
+        5,
+        4,
+        6,
+        7
+      ],
       "explanation": "Various local maxima"
     },
     {
-      "input": {"nums": [1, 3, 2, 4, 1, 5], "k": 3},
-      "expected": [3, 4, 4, 5],
+      "input": {
+        "nums": [
+          1,
+          3,
+          2,
+          4,
+          1,
+          5
+        ],
+        "k": 3
+      },
+      "expected": [
+        3,
+        4,
+        4,
+        5
+      ],
       "explanation": "General case"
     }
   ],
@@ -101,22 +303,22 @@
   "functionName": "max_sliding_window",
   "solutions": [
     {
-      "label": "Brute Force — O(n*k)",
+      "label": "Brute Force \u2014 O(n*k)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n - k + 1):\n        result.append(max(nums[i:i + k]))\n    return result",
       "timeComplexity": "O(n*k)",
       "spaceComplexity": "O(n)",
-      "explanation": "For each window position, call max() on the window slice. Simple but recomputes the maximum from scratch each time, leading to O(k) work per window.\n\nTime: O(n*k) | Space: O(n)"
+      "explanation": "For each window position, call max() on the window slice. Simple but recomputes the maximum from scratch each time, leading to O(k) work per window."
     },
     {
-      "label": "Monotonic Deque — O(n)",
+      "label": "Monotonic Deque \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    dq = deque()  # Stores indices, decreasing order of values\n    result = []\n    for i, num in enumerate(nums):\n        # Remove elements outside the window\n        if dq and dq[0] < i - k + 1:\n            dq.popleft()\n        # Remove smaller elements from the back\n        while dq and nums[dq[-1]] < num:\n            dq.pop()\n        dq.append(i)\n        # Start recording once the first window is complete\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(k)",
-      "explanation": "Maintain a deque of indices in decreasing order of their values. The front always holds the index of the current window's maximum. Before adding a new element, remove from the back any indices whose values are smaller (they can never be a future maximum). Remove from the front any indices that have slid out of the window. Each element is pushed and popped at most once, giving amortized O(1) per element.\n\nTime: O(n) | Space: O(k)"
+      "explanation": "Maintain a deque of indices in decreasing order of their values. The front always holds the index of the current window's maximum. Before adding a new element, remove from the back any indices whose values are smaller (they can never be a future maximum). Remove from the front any indices that have slid out of the window. Each element is pushed and popped at most once, giving amortized O(1) per element."
     }
   ],
   "hints": [

@@ -2,8 +2,11 @@
   "id": "contains-duplicate",
   "title": "Contains Duplicate",
   "difficulty": "easy",
-  "tags": ["array", "hash-set"],
-  "description": "## Contains Duplicate\n\nYou are running a quality check on a shipment of uniquely-coded components. Each component has an integer identifier. Your task is to detect whether any identifier has been assigned more than once — a sign of a labeling error.\n\nGiven an integer array `nums`, return `true` if any value appears **at least twice** in the array, and `false` if every element is distinct.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^9 <= nums[i] <= 10^9`",
+  "tags": [
+    "array",
+    "hash-set"
+  ],
+  "description": "## Contains Duplicate\n\nYou are running a quality check on a shipment of uniquely-coded components. Each component has an integer identifier. Your task is to detect whether any identifier has been assigned more than once \u2014 a sign of a labeling error.\n\nGiven an integer array `nums`, return `true` if any value appears **at least twice** in the array, and `false` if every element is distinct.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^9 <= nums[i] <= 10^9`",
   "examples": [
     {
       "input": "nums = [1, 2, 3, 1]",
@@ -23,79 +26,199 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [1, 2, 3, 1]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
       "expected": true,
       "explanation": "1 appears twice"
     },
     {
-      "input": {"nums": [1, 2, 3, 4]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
       "expected": false,
       "explanation": "All distinct"
     },
     {
-      "input": {"nums": [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]},
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          3,
+          3,
+          4,
+          3,
+          2,
+          4,
+          2
+        ]
+      },
       "expected": true,
       "explanation": "Many duplicates"
     },
     {
-      "input": {"nums": [7, 8, 9, 10, 11]},
+      "input": {
+        "nums": [
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
       "expected": false,
       "explanation": "All unique"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [1]},
+      "input": {
+        "nums": [
+          1
+        ]
+      },
       "expected": false,
       "explanation": "Single element, no duplicates"
     },
     {
-      "input": {"nums": [1, 1]},
+      "input": {
+        "nums": [
+          1,
+          1
+        ]
+      },
       "expected": true,
       "explanation": "Two identical elements"
     },
     {
-      "input": {"nums": [-1, -2, -3, -1]},
+      "input": {
+        "nums": [
+          -1,
+          -2,
+          -3,
+          -1
+        ]
+      },
       "expected": true,
       "explanation": "Negative number duplicate"
     },
     {
-      "input": {"nums": [0, 0]},
+      "input": {
+        "nums": [
+          0,
+          0
+        ]
+      },
       "expected": true,
       "explanation": "Zero duplicate"
     },
     {
-      "input": {"nums": [1000000000, -1000000000, 999999999]},
+      "input": {
+        "nums": [
+          1000000000,
+          -1000000000,
+          999999999
+        ]
+      },
       "expected": false,
       "explanation": "Large distinct values"
     },
     {
-      "input": {"nums": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
       "expected": false,
       "explanation": "Ten distinct values"
     },
     {
-      "input": {"nums": [2, 2, 2, 2, 2]},
+      "input": {
+        "nums": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
       "expected": true,
       "explanation": "All same value"
     },
     {
-      "input": {"nums": [-5, 0, 5]},
+      "input": {
+        "nums": [
+          -5,
+          0,
+          5
+        ]
+      },
       "expected": false,
       "explanation": "Negative, zero, positive all distinct"
     },
     {
-      "input": {"nums": [0, 1, 2, 3, 4, 0]},
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          0
+        ]
+      },
       "expected": true,
       "explanation": "Duplicate at start and end"
     },
     {
-      "input": {"nums": [1, 2, 3, 4, 5, 6, 7, 8, 9, 9]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          9
+        ]
+      },
       "expected": true,
       "explanation": "Duplicate at the very end"
     },
     {
-      "input": {"nums": [1, 2, 4, 8, 16, 32]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32
+        ]
+      },
       "expected": false,
       "explanation": "Powers of two, all distinct"
     }
@@ -106,27 +229,27 @@
   "functionName": "contains_duplicate",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    n = len(nums)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if nums[i] == nums[j]:\n                return True\n    return False",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Compare every pair of elements. If any two are equal, return True immediately. Return False if no duplicates found after checking all pairs.\n\nTime: O(n\u00b2) | Space: O(1)"
+      "explanation": "Compare every pair of elements. If any two are equal, return True immediately. Return False if no duplicates found after checking all pairs."
     },
     {
-      "label": "Hash Set — O(n)",
+      "label": "Hash Set \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Use a hash set to track elements seen so far. For each element, check if it is already in the set (O(1) lookup). If so, we found a duplicate. Otherwise, add it to the set. One pass through the array.\n\nTime: O(n) | Space: O(n)"
+      "explanation": "Use a hash set to track elements seen so far. For each element, check if it is already in the set (O(1) lookup). If so, we found a duplicate. Otherwise, add it to the set. One pass through the array."
     }
   ],
   "hints": [
     "What data structure lets you check membership in O(1)?",
-    "You only need to know if something has been seen before — a set is perfect for this."
+    "You only need to know if something has been seen before \u2014 a set is perfect for this."
   ],
   "lcEquivalent": "217. Contains Duplicate"
 }

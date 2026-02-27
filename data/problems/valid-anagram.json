@@ -2,7 +2,11 @@
   "id": "valid-anagram",
   "title": "Valid Anagram",
   "difficulty": "easy",
-  "tags": ["string", "hash-map", "sorting"],
+  "tags": [
+    "string",
+    "hash-map",
+    "sorting"
+  ],
   "description": "## Valid Anagram\n\nYou are building a word puzzle validation system. Two words are anagrams if one is a rearrangement of the other's letters. Your system needs to verify this quickly for any pair of submitted words.\n\nGiven two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.\n\n**Constraints:**\n- `1 <= s.length, t.length <= 5 * 10^4`\n- `s` and `t` consist of lowercase English letters.",
   "examples": [
     {
@@ -18,79 +22,124 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "anagram", "t": "nagaram"},
+      "input": {
+        "s": "anagram",
+        "t": "nagaram"
+      },
       "expected": true,
       "explanation": "Valid anagram"
     },
     {
-      "input": {"s": "rat", "t": "car"},
+      "input": {
+        "s": "rat",
+        "t": "car"
+      },
       "expected": false,
       "explanation": "Not an anagram"
     },
     {
-      "input": {"s": "listen", "t": "silent"},
+      "input": {
+        "s": "listen",
+        "t": "silent"
+      },
       "expected": true,
       "explanation": "Classic anagram pair"
     },
     {
-      "input": {"s": "hello", "t": "world"},
+      "input": {
+        "s": "hello",
+        "t": "world"
+      },
       "expected": false,
       "explanation": "Different letters"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "a", "t": "a"},
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
       "expected": true,
       "explanation": "Single same character"
     },
     {
-      "input": {"s": "a", "t": "b"},
+      "input": {
+        "s": "a",
+        "t": "b"
+      },
       "expected": false,
       "explanation": "Single different character"
     },
     {
-      "input": {"s": "ab", "t": "a"},
+      "input": {
+        "s": "ab",
+        "t": "a"
+      },
       "expected": false,
       "explanation": "Different lengths"
     },
     {
-      "input": {"s": "aacc", "t": "ccac"},
+      "input": {
+        "s": "aacc",
+        "t": "ccac"
+      },
       "expected": false,
       "explanation": "Different letter counts"
     },
     {
-      "input": {"s": "aab", "t": "baa"},
+      "input": {
+        "s": "aab",
+        "t": "baa"
+      },
       "expected": true,
       "explanation": "Duplicate letters"
     },
     {
-      "input": {"s": "aabc", "t": "abca"},
+      "input": {
+        "s": "aabc",
+        "t": "abca"
+      },
       "expected": true,
       "explanation": "Rearrangement with duplicates"
     },
     {
-      "input": {"s": "abcdefghijklmnop", "t": "ponmlkjihgfedcba"},
+      "input": {
+        "s": "abcdefghijklmnop",
+        "t": "ponmlkjihgfedcba"
+      },
       "expected": true,
       "explanation": "Long reversed string"
     },
     {
-      "input": {"s": "zz", "t": "zz"},
+      "input": {
+        "s": "zz",
+        "t": "zz"
+      },
       "expected": true,
       "explanation": "Same two characters"
     },
     {
-      "input": {"s": "abc", "t": "cba"},
+      "input": {
+        "s": "abc",
+        "t": "cba"
+      },
       "expected": true,
       "explanation": "Three letters reversed"
     },
     {
-      "input": {"s": "aaaaab", "t": "baaaaa"},
+      "input": {
+        "s": "aaaaab",
+        "t": "baaaaa"
+      },
       "expected": true,
       "explanation": "Many duplicates"
     },
     {
-      "input": {"s": "aaaaab", "t": "aaaaac"},
+      "input": {
+        "s": "aaaaab",
+        "t": "aaaaac"
+      },
       "expected": false,
       "explanation": "Almost anagram but last letter differs"
     }
@@ -101,22 +150,22 @@
   "functionName": "is_anagram",
   "solutions": [
     {
-      "label": "Sorting — O(n log n)",
+      "label": "Sorting \u2014 O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "def is_anagram(s: str, t: str) -> bool:\n    return sorted(s) == sorted(t)",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Sort both strings and compare them. If they are anagrams, sorting produces identical character sequences. This is concise but the sorting step makes it slower than a counting approach.\n\nTime: O(n log n) | Space: O(n)"
+      "explanation": "Sort both strings and compare them. If they are anagrams, sorting produces identical character sequences. This is concise but the sorting step makes it slower than a counting approach."
     },
     {
-      "label": "Hash Map — O(n)",
+      "label": "Hash Map \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    return Counter(s) == Counter(t)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Two strings are anagrams if and only if they have the same character frequencies. We first check lengths (a quick early exit), then count characters using Counter and compare. Space is O(1) because the alphabet is fixed at 26 lowercase letters, so the counter never exceeds 26 entries.\n\nTime: O(n) | Space: O(1)"
+      "explanation": "Two strings are anagrams if and only if they have the same character frequencies. We first check lengths (a quick early exit), then count characters using Counter and compare. Space is O(1) because the alphabet is fixed at 26 lowercase letters, so the counter never exceeds 26 entries."
     }
   ],
   "hints": [
