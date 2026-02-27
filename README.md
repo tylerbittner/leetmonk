@@ -6,6 +6,8 @@
 
 **Offline algorithm practice — no account, no internet, no distractions.**
 
+> I was heading to Carrizo Plains for a weekend of camping — no cell service, no Wi-Fi, nothing but wildflowers and stars. I didn't want to break my algo practice streak, so I built an app that works entirely offline. 🏕️
+
 35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress — entirely offline.
 
 ## Features
