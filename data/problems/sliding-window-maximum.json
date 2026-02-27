@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n - k + 1):\n        result.append(max(nums[i:i + k]))\n    return result",
       "timeComplexity": "O(n*k)",
       "spaceComplexity": "O(n)",
-      "explanation": "For each window position, call max() on the window slice. Simple but recomputes the maximum from scratch each time."
+      "explanation": "For each window position, call max() on the window slice. Simple but recomputes the maximum from scratch each time, leading to O(k) work per window.\n\nTime: O(n*k) | Space: O(n)"
     },
     {
       "label": "Monotonic Deque — O(n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\nfrom collections import deque\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    dq = deque()  # Stores indices, decreasing order of values\n    result = []\n    for i, num in enumerate(nums):\n        # Remove elements outside the window\n        if dq and dq[0] < i - k + 1:\n            dq.popleft()\n        # Remove smaller elements from the back\n        while dq and nums[dq[-1]] < num:\n            dq.pop()\n        dq.append(i)\n        # Start recording once the first window is complete\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(k)",
-      "explanation": "Maintain a deque of indices in decreasing order of their values. The front always holds the index of the current window's maximum. Before adding a new element, remove from the back any indices whose values are smaller (they can never be a future maximum). Remove from the front any indices that have slid out of the window."
+      "explanation": "Maintain a deque of indices in decreasing order of their values. The front always holds the index of the current window's maximum. Before adding a new element, remove from the back any indices whose values are smaller (they can never be a future maximum). Remove from the front any indices that have slid out of the window. Each element is pushed and popped at most once, giving amortized O(1) per element.\n\nTime: O(n) | Space: O(k)"
     }
   ],
   "hints": [

@@ -112,7 +112,7 @@
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    return min(nums)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Simply return the minimum value in the array. Correct but does not exploit the sorted structure."
+      "explanation": "Simply return the minimum value in the array. Correct but does not exploit the sorted/rotated structure.\n\nTime: O(n) | Space: O(1)"
     },
     {
       "label": "Binary Search — O(log n)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = left + (right - left) // 2\n        if nums[mid] > nums[right]:\n            # Minimum is in the right half\n            left = mid + 1\n        else:\n            # Minimum is in the left half (including mid)\n            right = mid\n    return nums[left]",
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Compare the middle element to the rightmost element. If nums[mid] > nums[right], the rotation point (minimum) must be to the right of mid. Otherwise, it's at mid or to the left. Converge until left == right."
+      "explanation": "Compare the middle element to the rightmost element. If nums[mid] > nums[right], the rotation point (minimum) must be to the right of mid, so set left = mid + 1. Otherwise, the minimum is at mid or to the left, so set right = mid. Continue until left == right, which is the minimum.\n\nTime: O(log n) | Space: O(1)"
     }
   ],
   "hints": [

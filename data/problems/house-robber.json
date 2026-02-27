@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    memo = {}\n    def dp(i):\n        if i >= len(nums):\n            return 0\n        if i in memo:\n            return memo[i]\n        # Either skip this house or rob it (and skip next)\n        memo[i] = max(dp(i + 1), nums[i] + dp(i + 2))\n        return memo[i]\n    return dp(0)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "At each house, choose the maximum of: skipping it and considering the next, or robbing it and jumping two ahead. Memoize to avoid redundant computation."
+      "explanation": "At each house, we face a choice: skip it (move to i+1) or rob it and skip the adjacent house (move to i+2). We take the maximum of these two options. Memoization prevents recomputing overlapping subproblems, reducing exponential recursion to linear time.\n\nTime: O(n) | Space: O(n)"
     },
     {
       "label": "Iterative DP — O(n) space O(1)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    if not nums:\n        return 0\n    if len(nums) == 1:\n        return nums[0]\n    prev2, prev1 = 0, 0\n    for num in nums:\n        curr = max(prev1, prev2 + num)\n        prev2, prev1 = prev1, curr\n    return prev1",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "dp[i] = max amount obtainable from houses 0..i. dp[i] = max(dp[i-1], dp[i-2] + nums[i]). Only track the last two values. Roll forward until the end."
+      "explanation": "The recurrence dp[i] = max(dp[i-1], dp[i-2] + nums[i]) captures the rob-or-skip decision at each house. Since each state only depends on the previous two, we need just two variables (prev1 and prev2) instead of a full array.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

@@ -112,7 +112,7 @@
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        key = ''.join(sorted(s))\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",
       "timeComplexity": "O(n * k log k)",
       "spaceComplexity": "O(n * k)",
-      "explanation": "Group strings by their sorted form as the hash key. Anagrams will have the same sorted key. Sort each group and sort the outer list for deterministic output."
+      "explanation": "Group strings by their sorted form as the hash key. Anagrams produce the same sorted key because they contain the same characters. Sort each group and the outer list for deterministic output. Here n is the number of strings and k is the maximum string length.\n\nTime: O(n * k log k) | Space: O(n * k)"
     },
     {
       "label": "Character Count Key — O(n * k)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        count = [0] * 26\n        for c in s:\n            count[ord(c) - ord('a')] += 1\n        key = tuple(count)\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",
       "timeComplexity": "O(n * k)",
       "spaceComplexity": "O(n * k)",
-      "explanation": "Instead of sorting each string (O(k log k)), compute a character frequency tuple as the key (O(k)). Anagrams have identical frequency counts. Sort the output for consistency."
+      "explanation": "Instead of sorting each string (O(k log k)), compute a 26-element character frequency tuple as the hash key (O(k)). Anagrams have identical frequency counts, so they map to the same key. This avoids the sorting overhead per string. Sort the output for consistency.\n\nTime: O(n * k) | Space: O(n * k)"
     }
   ],
   "hints": [

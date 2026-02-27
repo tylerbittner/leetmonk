@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    non_zeros = [x for x in nums if x != 0]\n    zeros = [0] * (len(nums) - len(non_zeros))\n    result = non_zeros + zeros\n    for i in range(len(nums)):\n        nums[i] = result[i]\n    return nums",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Collect non-zero elements, append the appropriate number of zeros, then copy back in-place. Uses O(n) extra space."
+      "explanation": "Collect non-zero elements, append the appropriate number of zeros, then copy back into the original array. Uses extra space for the temporary list.\n\nTime: O(n) | Space: O(n)"
     },
     {
       "label": "Two Pointers In-Place — O(n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != 0:\n            nums[write] = nums[read]\n            write += 1\n    for i in range(write, len(nums)):\n        nums[i] = 0\n    return nums",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use a `write` pointer that only advances when a non-zero is placed. Scan with `read`; whenever a non-zero is found, write it to the `write` position and advance. After the scan, fill the remaining positions with zeros."
+      "explanation": "Use a `write` pointer that only advances when a non-zero value is placed. Scan with `read`; whenever a non-zero is found, write it to the `write` position and advance `write`. After the scan, fill the remaining positions with zeros. This preserves relative order of non-zero elements.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

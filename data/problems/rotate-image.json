@@ -596,7 +596,7 @@
       "code": "from typing import List\n\ndef rotate_image(matrix: List[List[int]]) -> List[List[int]]:\n    n = len(matrix)\n    # Transpose: swap matrix[i][j] and matrix[j][i]\n    for i in range(n):\n        for j in range(i + 1, n):\n            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]\n    # Reverse each row\n    for row in matrix:\n        row.reverse()\n    return matrix",
       "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "A 90\u00b0 clockwise rotation is equivalent to: (1) transpose the matrix (reflect over main diagonal), then (2) reverse each row. Both operations are in-place."
+      "explanation": "A 90\u00b0 clockwise rotation is equivalent to two steps: (1) transpose the matrix (swap matrix[i][j] with matrix[j][i]), then (2) reverse each row. Both operations are in-place and together achieve the rotation.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Layer-by-Layer \u2014 O(n\u00b2)",
@@ -605,7 +605,7 @@
       "code": "from typing import List\n\ndef rotate_image(matrix: List[List[int]]) -> List[List[int]]:\n    n = len(matrix)\n    for layer in range(n // 2):\n        first = layer\n        last = n - 1 - layer\n        for i in range(first, last):\n            offset = i - first\n            top = matrix[first][i]\n            # left -> top\n            matrix[first][i] = matrix[last - offset][first]\n            # bottom -> left\n            matrix[last - offset][first] = matrix[last][last - offset]\n            # right -> bottom\n            matrix[last][last - offset] = matrix[i][last]\n            # top -> right\n            matrix[i][last] = top\n    return matrix",
       "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Process the matrix layer by layer from outside in. For each element in a layer, perform a 4-way cyclic swap: top\u2192right, right\u2192bottom, bottom\u2192left, left\u2192top. Only a single temp variable is needed."
+      "explanation": "Process the matrix layer by layer from outside in. For each element in a layer, perform a 4-way cyclic swap: top->right, right->bottom, bottom->left, left->top. Only a single temp variable is needed per swap cycle.\n\nTime: O(n\u00b2) | Space: O(1)"
     }
   ],
   "hints": [

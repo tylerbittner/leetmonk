@@ -112,7 +112,7 @@
       "code": "from typing import List\nfrom collections import deque\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    if amount == 0:\n        return 0\n    visited = {0}\n    queue = deque([0])\n    steps = 0\n    while queue:\n        steps += 1\n        for _ in range(len(queue)):\n            curr = queue.popleft()\n            for coin in coins:\n                nxt = curr + coin\n                if nxt == amount:\n                    return steps\n                if nxt < amount and nxt not in visited:\n                    visited.add(nxt)\n                    queue.append(nxt)\n    return -1",
       "timeComplexity": "O(amount * len(coins))",
       "spaceComplexity": "O(amount)",
-      "explanation": "Model as a shortest-path problem: BFS from 0 to amount, where each edge represents adding a coin. Each BFS level = one more coin. First time we reach `amount`, we have the minimum."
+      "explanation": "Model as a shortest-path problem: BFS from 0 to the target amount, where each edge represents adding one coin. Each BFS level corresponds to using one more coin. The first time we reach the target amount, we have found the minimum number of coins.\n\nTime: O(amount * len(coins)) | Space: O(amount)"
     },
     {
       "label": "Bottom-Up DP — O(amount * len(coins))",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for coin in coins:\n            if coin <= a:\n                dp[a] = min(dp[a], dp[a - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
       "timeComplexity": "O(amount * len(coins))",
       "spaceComplexity": "O(amount)",
-      "explanation": "Build dp[i] = minimum coins needed to make amount i. For each amount from 1 to target, try each coin: dp[i] = min(dp[i], dp[i - coin] + 1). Initialize dp[0] = 0 and everything else as infinity."
+      "explanation": "Build a DP table where dp[i] = minimum coins needed to make amount i. Initialize dp[0] = 0 (zero coins for zero amount) and everything else as infinity. For each amount from 1 to the target, try subtracting each coin denomination: dp[i] = min(dp[i], dp[i - coin] + 1). If dp[amount] is still infinity, return -1.\n\nTime: O(amount * len(coins)) | Space: O(amount)"
     }
   ],
   "hints": [

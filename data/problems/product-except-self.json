@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n):\n        product = 1\n        for j in range(n):\n            if j != i:\n                product *= nums[j]\n        result.append(product)\n    return result",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(n)",
-      "explanation": "For each index i, iterate through all other indices and multiply their values. Simple but redundant computation."
+      "explanation": "For each index i, iterate through all other indices and multiply their values. Simple but performs redundant computation since many products overlap.\n\nTime: O(n\u00b2) | Space: O(n)"
     },
     {
       "label": "Prefix/Suffix Products — O(n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = [1] * n\n\n    # Build prefix products into result\n    prefix = 1\n    for i in range(n):\n        result[i] = prefix\n        prefix *= nums[i]\n\n    # Multiply by suffix products from the right\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        result[i] *= suffix\n        suffix *= nums[i]\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "First pass (left to right): store the product of all elements to the LEFT of index i. Second pass (right to left): multiply by the product of all elements to the RIGHT. No division needed. The output array itself is the only extra space used."
+      "explanation": "The product at index i equals (product of everything to the left) * (product of everything to the right). First pass (left to right): store the running prefix product for each position. Second pass (right to left): multiply by the running suffix product. No division needed. The output array is the only extra space used (not counted as auxiliary space).\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

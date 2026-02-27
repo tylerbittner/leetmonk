@@ -102,7 +102,7 @@
       "code": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    nums.sort()\n    n = len(nums)\n    result = []\n    for mask in range(1 << n):\n        subset = [nums[i] for i in range(n) if mask & (1 << i)]\n        result.append(subset)\n    result.sort()\n    return result",
       "timeComplexity": "O(n * 2^n)",
       "spaceComplexity": "O(n * 2^n)",
-      "explanation": "Each subset corresponds to a bitmask from 0 to 2^n - 1. Bit i set means nums[i] is included. Sort the output for determinism."
+      "explanation": "Each subset corresponds to a bitmask from 0 to 2^n - 1. If bit i is set, nums[i] is included in the subset. This gives a clean, iterative way to enumerate all 2^n subsets. Sort the output for deterministic comparison.\n\nTime: O(n * 2^n) | Space: O(n * 2^n)"
     },
     {
       "label": "Backtracking — O(n * 2^n)",
@@ -111,7 +111,7 @@
       "code": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    nums.sort()\n    result = []\n    def backtrack(start, current):\n        result.append(list(current))\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()\n    backtrack(0, [])\n    result.sort()\n    return result",
       "timeComplexity": "O(n * 2^n)",
       "spaceComplexity": "O(n * 2^n)",
-      "explanation": "Backtracking: at each step, record the current subset, then try adding each remaining element. After adding an element and recursing, remove it (backtrack). This generates all 2^n subsets."
+      "explanation": "Backtracking: at each step, record the current subset as a valid result. Then try adding each remaining element (starting from the current index to avoid duplicates). After adding an element and recursing, remove it (backtrack). This generates all 2^n subsets.\n\nTime: O(n * 2^n) | Space: O(n * 2^n)"
     }
   ],
   "hints": [

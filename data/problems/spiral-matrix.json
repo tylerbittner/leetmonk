@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef spiral_order(matrix: List[List[int]]) -> List[int]:\n    result = []\n    top, bottom = 0, len(matrix) - 1\n    left, right = 0, len(matrix[0]) - 1\n    while top <= bottom and left <= right:\n        for col in range(left, right + 1):\n            result.append(matrix[top][col])\n        top += 1\n        for row in range(top, bottom + 1):\n            result.append(matrix[row][right])\n        right -= 1\n        if top <= bottom:\n            for col in range(right, left - 1, -1):\n                result.append(matrix[bottom][col])\n            bottom -= 1\n        if left <= right:\n            for row in range(bottom, top - 1, -1):\n                result.append(matrix[row][left])\n            left += 1\n    return result",
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Maintain four boundary pointers: top, bottom, left, right. In each iteration, traverse the top row, right column, bottom row (if exists), and left column (if exists), then shrink the boundaries inward."
+      "explanation": "Maintain four boundary pointers: top, bottom, left, right. In each iteration, traverse the top row left-to-right, right column top-to-bottom, bottom row right-to-left (if it still exists), and left column bottom-to-top (if it still exists). Then shrink the boundaries inward and repeat.\n\nTime: O(m*n) | Space: O(1)"
     },
     {
       "label": "Direction Array Simulation — O(m*n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef spiral_order(matrix: List[List[int]]) -> List[int]:\n    if not matrix:\n        return []\n    m, n = len(matrix), len(matrix[0])\n    result = []\n    visited = [[False] * n for _ in range(m)]\n    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n    d = 0\n    row, col = 0, 0\n    for _ in range(m * n):\n        result.append(matrix[row][col])\n        visited[row][col] = True\n        nr, nc = row + directions[d][0], col + directions[d][1]\n        if 0 <= nr < m and 0 <= nc < n and not visited[nr][nc]:\n            row, col = nr, nc\n        else:\n            d = (d + 1) % 4\n            row, col = row + directions[d][0], col + directions[d][1]\n    return result",
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(m*n)",
-      "explanation": "Simulate walking in spiral order using direction vectors [right, down, left, up]. Mark visited cells. When hitting a boundary or visited cell, turn clockwise to the next direction."
+      "explanation": "Simulate walking in spiral order using direction vectors [right, down, left, up]. Mark visited cells in a boolean matrix. When hitting a boundary or an already-visited cell, turn clockwise to the next direction. This approach is more intuitive but uses extra space for the visited matrix.\n\nTime: O(m*n) | Space: O(m*n)"
     }
   ],
   "hints": [

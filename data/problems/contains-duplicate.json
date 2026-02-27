@@ -112,7 +112,7 @@
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    n = len(nums)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if nums[i] == nums[j]:\n                return True\n    return False",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
-      "explanation": "Compare every pair of elements. If any two are equal, return True immediately. Return False if no duplicates found."
+      "explanation": "Compare every pair of elements. If any two are equal, return True immediately. Return False if no duplicates found after checking all pairs.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Hash Set — O(n)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Use a hash set to track elements seen so far. For each element, if it's already in the set we found a duplicate. Otherwise add it. One pass, O(1) lookup per element."
+      "explanation": "Use a hash set to track elements seen so far. For each element, check if it is already in the set (O(1) lookup). If so, we found a duplicate. Otherwise, add it to the set. One pass through the array.\n\nTime: O(n) | Space: O(n)"
     }
   ],
   "hints": [

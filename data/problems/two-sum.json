@@ -285,7 +285,7 @@
       "code": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    n = len(nums)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []",
       "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Check every pair of indices (i, j) where i < j. For each pair, test if their sum equals the target. Return the first matching pair found. Simple but slow for large inputs."
+      "explanation": "Check every pair of indices (i, j) where i < j. For each pair, test if their sum equals the target. Return the first matching pair found. Simple but slow for large inputs.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Hash Map \u2014 O(n)",
@@ -294,7 +294,7 @@
       "code": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "As we iterate, for each number we compute its complement (target - num). If the complement is already in our hash map, we found the pair. Otherwise, store the current number and its index. One pass through the array."
+      "explanation": "The key insight is that for each number, there is exactly one other value that would complete the pair: target - num (the complement). As we iterate, we check if the complement is already in our hash map. If so, we found the answer. Otherwise, we store the current number and its index for future lookups. This single-pass approach trades space for time.\n\nTime: O(n) | Space: O(n)"
     }
   ],
   "hints": [

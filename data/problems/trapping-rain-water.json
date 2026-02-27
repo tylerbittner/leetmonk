@@ -112,7 +112,7 @@
       "code": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    n = len(heights)\n    if n == 0:\n        return 0\n    max_left = [0] * n\n    max_right = [0] * n\n    max_left[0] = heights[0]\n    for i in range(1, n):\n        max_left[i] = max(max_left[i - 1], heights[i])\n    max_right[n - 1] = heights[n - 1]\n    for i in range(n - 2, -1, -1):\n        max_right[i] = max(max_right[i + 1], heights[i])\n    water = 0\n    for i in range(n):\n        water += min(max_left[i], max_right[i]) - heights[i]\n    return water",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Precompute max_left[i] = max height from 0..i, and max_right[i] = max height from i..n-1. Water at position i is min(max_left[i], max_right[i]) - heights[i]. Sum over all positions."
+      "explanation": "The water at any position is bounded by the shorter of the tallest bars to its left and right. Precompute max_left[i] = max height from 0..i, and max_right[i] = max height from i..n-1. Water trapped at position i is min(max_left[i], max_right[i]) - heights[i]. Sum over all positions.\n\nTime: O(n) | Space: O(n)"
     },
     {
       "label": "Two Pointers — O(n) space O(1)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    if not heights:\n        return 0\n    left, right = 0, len(heights) - 1\n    max_left, max_right = heights[left], heights[right]\n    water = 0\n    while left < right:\n        if max_left <= max_right:\n            left += 1\n            max_left = max(max_left, heights[left])\n            water += max_left - heights[left]\n        else:\n            right -= 1\n            max_right = max(max_right, heights[right])\n            water += max_right - heights[right]\n    return water",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Two pointers move inward from both ends. The side with the smaller max boundary is processed: the water level there is determined by the smaller side's max. We know water won't overflow on that side because the other wall is at least as tall."
+      "explanation": "Two pointers move inward from both ends. Process the side with the smaller max boundary: the water level there is determined by that smaller max, because the other wall is at least as tall. This eliminates the need for precomputed arrays and achieves constant extra space.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

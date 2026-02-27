@@ -112,7 +112,7 @@
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = float('-inf')\n    n = len(nums)\n    for i in range(n):\n        current_sum = 0\n        for j in range(i, n):\n            current_sum += nums[j]\n            if current_sum > max_sum:\n                max_sum = current_sum\n    return max_sum",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
-      "explanation": "Try every possible starting index i and extend the subarray to the right, tracking the running sum. Update the global maximum whenever a new high is found."
+      "explanation": "Try every possible starting index i and extend the subarray to the right, tracking the running sum. Update the global maximum whenever a new high is found.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Kadane's Algorithm — O(n)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = nums[0]\n    current_sum = nums[0]\n    for i in range(1, len(nums)):\n        current_sum = max(nums[i], current_sum + nums[i])\n        max_sum = max(max_sum, current_sum)\n    return max_sum",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Kadane's Algorithm: at each position, decide whether to extend the previous subarray or start fresh. If the running sum would be worse than just starting over at the current element, restart. Track the global maximum throughout."
+      "explanation": "Kadane's Algorithm: at each position, decide whether to extend the previous subarray or start a new one from the current element. The choice is simple: current_sum = max(nums[i], current_sum + nums[i]). If the accumulated sum is negative, it can only hurt future subarrays, so we start fresh. Track the global maximum throughout.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

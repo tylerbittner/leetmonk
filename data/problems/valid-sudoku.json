@@ -1531,7 +1531,7 @@
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    rows = defaultdict(set)\n    cols = defaultdict(set)\n    boxes = defaultdict(set)\n    for r in range(9):\n        for c in range(9):\n            val = board[r][c]\n            if val == '.':\n                continue\n            box_id = (r // 3, c // 3)\n            if val in rows[r] or val in cols[c] or val in boxes[box_id]:\n                return False\n            rows[r].add(val)\n            cols[c].add(val)\n            boxes[box_id].add(val)\n    return True",
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use three dictionaries of sets: one for rows, one for columns, one for 3x3 boxes (keyed by (row//3, col//3)). For each non-empty cell, check if the digit already exists in its row, column, or box set. O(1) since board size is fixed at 9x9."
+      "explanation": "Use three dictionaries of sets: one for rows, one for columns, one for 3x3 boxes (keyed by (row//3, col//3)). For each non-empty cell, check if the digit already exists in its row, column, or box set. If so, the board is invalid. Since the board is always 9x9, time and space are constant.\n\nTime: O(1) | Space: O(1)"
     },
     {
       "label": "Bitmask Approach \u2014 O(1)",
@@ -1540,7 +1540,7 @@
       "code": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    rows = [0] * 9\n    cols = [0] * 9\n    boxes = [0] * 9\n    for r in range(9):\n        for c in range(9):\n            val = board[r][c]\n            if val == '.':\n                continue\n            bit = 1 << (int(val) - 1)\n            box_id = (r // 3) * 3 + (c // 3)\n            if rows[r] & bit or cols[c] & bit or boxes[box_id] & bit:\n                return False\n            rows[r] |= bit\n            cols[c] |= bit\n            boxes[box_id] |= bit\n    return True",
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use integer bitmasks instead of sets. Each row/col/box is a 9-bit integer where bit i represents digit (i+1). Check membership with bitwise AND, update with bitwise OR. Faster in practice due to cache efficiency."
+      "explanation": "Use integer bitmasks instead of sets for a more efficient representation. Each row, column, and box is a 9-bit integer where bit i represents digit (i+1). Check membership with bitwise AND, update with bitwise OR. Faster in practice due to better cache efficiency and no hash overhead.\n\nTime: O(1) | Space: O(1)"
     }
   ],
   "hints": [

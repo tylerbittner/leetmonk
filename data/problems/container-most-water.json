@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    max_vol = 0\n    n = len(heights)\n    for i in range(n):\n        for j in range(i + 1, n):\n            vol = min(heights[i], heights[j]) * (j - i)\n            if vol > max_vol:\n                max_vol = vol\n    return max_vol",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
-      "explanation": "Try every pair of panels (i, j). Water volume = min(heights[i], heights[j]) * (j - i). Track the maximum."
+      "explanation": "Try every pair of panels (i, j). Water volume = min(heights[i], heights[j]) * (j - i). Track the maximum volume found.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Two Pointers — O(n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    left, right = 0, len(heights) - 1\n    max_vol = 0\n    while left < right:\n        vol = min(heights[left], heights[right]) * (right - left)\n        max_vol = max(max_vol, vol)\n        if heights[left] <= heights[right]:\n            left += 1\n        else:\n            right -= 1\n    return max_vol",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Start with the widest container (left=0, right=n-1). The bottleneck is always the shorter panel. Move the shorter panel inward — any other move would only decrease width without any guaranteed height gain. This greedy choice finds the optimal pair."
+      "explanation": "Start with the widest container (left=0, right=n-1). The bottleneck is always the shorter panel. Move the shorter panel inward: any other move would only decrease width without guaranteeing a height gain. This greedy choice systematically eliminates suboptimal candidates and finds the optimal pair in one pass.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    nums.sort(reverse=True)\n    return nums[k - 1]",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Sort in descending order and return the element at index k-1. Simple but sorts the entire array."
+      "explanation": "Sort the array in descending order and return the element at index k-1. Simple and correct but sorts the entire array even though we only need one element.\n\nTime: O(n log n) | Space: O(1)"
     },
     {
       "label": "Min-Heap — O(n log k)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\nimport heapq\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    heap = []\n    for num in nums:\n        heapq.heappush(heap, num)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return heap[0]",
       "timeComplexity": "O(n log k)",
       "spaceComplexity": "O(k)",
-      "explanation": "Maintain a min-heap of size k. For each element, add it to the heap. If the heap exceeds size k, remove the smallest. After processing all elements, the heap's minimum is the kth largest overall."
+      "explanation": "Maintain a min-heap of size k. For each element, push it onto the heap. If the heap exceeds size k, pop the smallest element. This ensures only the k largest values remain. After processing all elements, the heap's root (minimum of the k largest) is the kth largest overall.\n\nTime: O(n log k) | Space: O(k)"
     }
   ],
   "hints": [

@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix:\n                return \"\"\n    return prefix",
       "timeComplexity": "O(S)",
       "spaceComplexity": "O(1)",
-      "explanation": "Start with the first string as the candidate prefix. For each subsequent string, trim the prefix from the right until it becomes a prefix of that string (or becomes empty)."
+      "explanation": "Start with the first string as the candidate prefix. For each subsequent string, trim the prefix from the right until it becomes a prefix of that string (or becomes empty). Where S is the total number of characters across all strings.\n\nTime: O(S) | Space: O(1)"
     },
     {
       "label": "Vertical Scanning — O(S)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    for i, char in enumerate(strs[0]):\n        for s in strs[1:]:\n            if i >= len(s) or s[i] != char:\n                return strs[0][:i]\n    return strs[0]",
       "timeComplexity": "O(S)",
       "spaceComplexity": "O(1)",
-      "explanation": "Compare character by character across all strings simultaneously. For each position i, check if all strings have the same character. Stop as soon as a mismatch is found or any string is exhausted."
+      "explanation": "Compare character by character across all strings simultaneously (column by column). For each position i, check if all strings have the same character. Stop as soon as a mismatch is found or any string is exhausted. This is often faster in practice because it stops early at the first mismatch. Where S is the total number of characters across all strings.\n\nTime: O(S) | Space: O(1)"
     }
   ],
   "hints": [

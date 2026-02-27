@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    max_p = 0\n    n = len(prices)\n    for i in range(n):\n        for j in range(i + 1, n):\n            profit = prices[j] - prices[i]\n            if profit > max_p:\n                max_p = profit\n    return max_p",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
-      "explanation": "Try every possible buy/sell pair (i, j) where i < j. Track the maximum profit seen. Return 0 if no profitable pair exists."
+      "explanation": "Try every possible buy/sell pair (i, j) where i < j. Track the maximum profit seen. Return 0 if no profitable pair exists.\n\nTime: O(n\u00b2) | Space: O(1)"
     },
     {
       "label": "Greedy — O(n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    min_price = float('inf')\n    max_p = 0\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        elif price - min_price > max_p:\n            max_p = price - min_price\n    return max_p",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Track the minimum price seen so far and the maximum profit achievable. For each price, update the minimum if it's lower, otherwise check if selling today beats the current best profit. One pass, constant space."
+      "explanation": "The key insight is that to maximize profit, we want to buy at the lowest price seen so far and sell at the current price. Track the minimum price as we iterate. For each new price, either update the minimum or check if selling at today's price yields a better profit than the best so far.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

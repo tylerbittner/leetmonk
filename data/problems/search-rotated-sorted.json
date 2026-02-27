@@ -112,7 +112,7 @@
       "code": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    for i, num in enumerate(nums):\n        if num == target:\n            return i\n    return -1",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Simple linear scan ignoring the sorted/rotated structure."
+      "explanation": "Simple linear scan ignoring the sorted/rotated structure. Checks each element sequentially.\n\nTime: O(n) | Space: O(1)"
     },
     {
       "label": "Modified Binary Search — O(log n)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        # Left half is sorted\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        # Right half is sorted\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    return -1",
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "At each step, determine which half is sorted by comparing nums[left] with nums[mid]. The sorted half gives a clear range check — if target is in that range, search there; otherwise search the other half."
+      "explanation": "The key insight: even in a rotated array, at least one half of any binary search split is always sorted. Determine which half is sorted by comparing nums[left] with nums[mid]. The sorted half gives a clear range check -- if the target falls within that sorted range, search there; otherwise search the other half.\n\nTime: O(log n) | Space: O(1)"
     }
   ],
   "hints": [

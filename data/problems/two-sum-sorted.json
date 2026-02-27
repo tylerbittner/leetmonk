@@ -270,7 +270,7 @@
       "code": "from typing import List\nimport bisect\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    n = len(numbers)\n    for i in range(n):\n        complement = target - numbers[i]\n        # Binary search for complement in the rest of the array\n        j = bisect.bisect_left(numbers, complement, i + 1)\n        if j < n and numbers[j] == complement:\n            return [i + 1, j + 1]\n    return []",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "For each element, binary search the remaining sorted subarray for its complement. Returns 1-indexed positions."
+      "explanation": "For each element, compute its complement (target - numbers[i]) and binary search the remaining sorted subarray for it. Returns 1-indexed positions.\n\nTime: O(n log n) | Space: O(1)"
     },
     {
       "label": "Two Pointers \u2014 O(n)",
@@ -279,7 +279,7 @@
       "code": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    left, right = 0, len(numbers) - 1\n    while left < right:\n        total = numbers[left] + numbers[right]\n        if total == target:\n            return [left + 1, right + 1]\n        elif total < target:\n            left += 1\n        else:\n            right -= 1\n    return []",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Two pointers from both ends. If sum < target, move left pointer right to increase sum. If sum > target, move right pointer left to decrease sum. The sorted order guarantees this converges to the answer."
+      "explanation": "Place two pointers at the ends of the sorted array. If their sum is less than the target, move the left pointer right to increase the sum. If greater, move the right pointer left to decrease it. The sorted order guarantees convergence to the unique solution.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

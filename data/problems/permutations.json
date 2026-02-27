@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(current, remaining):\n        if not remaining:\n            result.append(list(current))\n            return\n        for i in range(len(remaining)):\n            current.append(remaining[i])\n            backtrack(current, remaining[:i] + remaining[i+1:])\n            current.pop()\n    backtrack([], nums)\n    result.sort()\n    return result",
       "timeComplexity": "O(n * n!)",
       "spaceComplexity": "O(n * n!)",
-      "explanation": "At each level, choose one element from the remaining options. Recurse with that element added to current and removed from remaining. When remaining is empty, we have a complete permutation."
+      "explanation": "At each level of recursion, choose one element from the remaining options. Add it to the current permutation and recurse with the reduced set. When no elements remain, we have a complete permutation. The total number of permutations is n!, and building each one takes O(n) work.\n\nTime: O(n * n!) | Space: O(n * n!)"
     },
     {
       "label": "Backtracking with Swap — O(n * n!)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(start):\n        if start == len(nums):\n            result.append(list(nums))\n            return\n        for i in range(start, len(nums)):\n            nums[start], nums[i] = nums[i], nums[start]\n            backtrack(start + 1)\n            nums[start], nums[i] = nums[i], nums[start]\n    backtrack(0)\n    result.sort()\n    return result",
       "timeComplexity": "O(n * n!)",
       "spaceComplexity": "O(n * n!)",
-      "explanation": "Use in-place swaps: at position `start`, try placing each remaining element by swapping it to position `start`. Recurse for the rest. After returning, swap back to restore state. Avoids creating new list slices."
+      "explanation": "Use in-place swaps instead of creating new list slices. At position `start`, try placing each remaining element by swapping it to position `start`. Recurse for positions start+1 onward. After returning, swap back to restore state (backtrack). This is more memory-efficient during recursion.\n\nTime: O(n * n!) | Space: O(n * n!)"
     }
   ],
   "hints": [

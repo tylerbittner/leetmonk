@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef search_matrix(matrix: List[List[int]], target: int) -> bool:\n    m, n = len(matrix), len(matrix[0])\n    # Find the correct row\n    row = -1\n    for i in range(m):\n        if matrix[i][0] <= target <= matrix[i][n - 1]:\n            row = i\n            break\n    if row == -1:\n        return False\n    # Binary search in that row\n    left, right = 0, n - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if matrix[row][mid] == target:\n            return True\n        elif matrix[row][mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
       "timeComplexity": "O(m + log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Linear scan to find the row that could contain the target (by checking row boundaries), then binary search within that row."
+      "explanation": "Linear scan to find the row whose range could contain the target (by checking row boundaries), then binary search within that row. The row scan is O(m) and the column search is O(log n).\n\nTime: O(m + log n) | Space: O(1)"
     },
     {
       "label": "Full Binary Search — O(log(m*n))",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef search_matrix(matrix: List[List[int]], target: int) -> bool:\n    m, n = len(matrix), len(matrix[0])\n    left, right = 0, m * n - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        row, col = divmod(mid, n)\n        val = matrix[row][col]\n        if val == target:\n            return True\n        elif val < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
       "timeComplexity": "O(log(m*n))",
       "spaceComplexity": "O(1)",
-      "explanation": "Treat the entire m×n matrix as a flat sorted array of length m*n. Map index `mid` to (mid // n, mid % n) to get row and column. Standard binary search on this virtual 1D array."
+      "explanation": "Treat the entire m*n matrix as a flat sorted array. Map any virtual index `mid` to row and column using divmod(mid, n). This lets us apply standard binary search on the virtual 1D array without actually flattening it.\n\nTime: O(log(m*n)) | Space: O(1)"
     }
   ],
   "hints": [

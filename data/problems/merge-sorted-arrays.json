@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    temp = nums1[:m] + nums2[:n]\n    temp.sort()\n    for i in range(m + n):\n        nums1[i] = temp[i]\n    return nums1",
       "timeComplexity": "O((m+n) log(m+n))",
       "spaceComplexity": "O(m+n)",
-      "explanation": "Copy valid elements from both arrays, sort, and write back. Simple but uses extra space and doesn't exploit the pre-sorted property."
+      "explanation": "Copy valid elements from both arrays, sort, and write back. Simple but uses extra space and does not exploit the pre-sorted property.\n\nTime: O((m+n) log(m+n)) | Space: O(m+n)"
     },
     {
       "label": "Merge From End — O(m+n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    p1, p2, write = m - 1, n - 1, m + n - 1\n    while p1 >= 0 and p2 >= 0:\n        if nums1[p1] > nums2[p2]:\n            nums1[write] = nums1[p1]\n            p1 -= 1\n        else:\n            nums1[write] = nums2[p2]\n            p2 -= 1\n        write -= 1\n    # Remaining elements from nums2 (nums1 elements already in place)\n    while p2 >= 0:\n        nums1[write] = nums2[p2]\n        p2 -= 1\n        write -= 1\n    return nums1",
       "timeComplexity": "O(m+n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Merge from the end to avoid overwriting unprocessed elements. Compare the largest unplaced elements from each array and place them at the write position (the last slot). No extra space needed since we write into the trailing zeros of nums1."
+      "explanation": "The key insight is to merge from the end. By placing the largest elements first (into the trailing zeros of nums1), we avoid overwriting any unprocessed elements. Compare the largest unplaced elements from each array and place the larger one at the write position, decrementing the pointers as we go.\n\nTime: O(m+n) | Space: O(1)"
     }
   ],
   "hints": [

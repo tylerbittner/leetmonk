@@ -107,7 +107,7 @@
       "code": "def is_anagram(s: str, t: str) -> bool:\n    return sorted(s) == sorted(t)",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Sort both strings. If they're anagrams, sorting will produce identical arrays. Simple one-liner."
+      "explanation": "Sort both strings and compare them. If they are anagrams, sorting produces identical character sequences. This is concise but the sorting step makes it slower than a counting approach.\n\nTime: O(n log n) | Space: O(n)"
     },
     {
       "label": "Hash Map — O(n)",
@@ -116,7 +116,7 @@
       "code": "from collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    return Counter(s) == Counter(t)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Count the frequency of each character in both strings using a hash map (Counter). Two strings are anagrams iff they have identical character frequency maps. O(1) space since alphabet is fixed size (26 letters)."
+      "explanation": "Two strings are anagrams if and only if they have the same character frequencies. We first check lengths (a quick early exit), then count characters using Counter and compare. Space is O(1) because the alphabet is fixed at 26 lowercase letters, so the counter never exceeds 26 entries.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

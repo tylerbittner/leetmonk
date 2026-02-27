@@ -112,7 +112,7 @@
       "code": "def is_valid(s: str) -> bool:\n    stack = []\n    matching = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in '([{':\n            stack.append(char)\n        elif char in ')]}':\n            if not stack or stack[-1] != matching[char]:\n                return False\n            stack.pop()\n    return len(stack) == 0",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Push opening brackets onto a stack. When encountering a closing bracket, check if the top of the stack holds the matching opener. If not, or if the stack is empty, it's invalid. After processing all characters, the stack must be empty."
+      "explanation": "Push opening brackets onto a stack. When encountering a closing bracket, check if the top of the stack holds the matching opener. If not, or if the stack is empty, it's invalid. After processing all characters, the stack must be empty for the string to be valid.\n\nTime: O(n) | Space: O(n)"
     },
     {
       "label": "Stack with Open Set — O(n)",
@@ -121,7 +121,7 @@
       "code": "def is_valid(s: str) -> bool:\n    stack = []\n    pairs = {'(': ')', '[': ']', '{': '}'}\n    for char in s:\n        if char in pairs:\n            stack.append(pairs[char])  # Push the expected closing bracket\n        elif not stack or stack.pop() != char:\n            return False\n    return not stack",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "When we see an opener, push the expected closer onto the stack. When we see a closer, pop from the stack and verify it matches. This is slightly cleaner than the first approach — the stack holds what we expect to see next."
+      "explanation": "A neat variation: when we see an opener, push the expected closer onto the stack. When we see a closer, pop from the stack and verify it matches. The stack directly holds what we expect to see next, making the comparison simpler.\n\nTime: O(n) | Space: O(n)"
     }
   ],
   "hints": [

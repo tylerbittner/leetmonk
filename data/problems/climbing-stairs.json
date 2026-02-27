@@ -107,7 +107,7 @@
       "code": "def climb_stairs(n: int) -> int:\n    memo = {}\n    def dp(i):\n        if i <= 1:\n            return 1\n        if i in memo:\n            return memo[i]\n        memo[i] = dp(i - 1) + dp(i - 2)\n        return memo[i]\n    return dp(n)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Recursion with memoization. The number of ways to reach step n equals ways to reach step n-1 (then take 1 step) plus ways to reach step n-2 (then take 2 steps). This is the Fibonacci sequence."
+      "explanation": "To reach step n, you either came from step n-1 (one step) or step n-2 (two steps). So ways(n) = ways(n-1) + ways(n-2). This recurrence is the Fibonacci sequence. Naive recursion would be exponential, but memoization ensures each subproblem is solved only once.\n\nTime: O(n) | Space: O(n)"
     },
     {
       "label": "Iterative DP — O(n) space O(1)",
@@ -116,7 +116,7 @@
       "code": "def climb_stairs(n: int) -> int:\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Only track the previous two values as we iterate. No array or recursion needed."
+      "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Since each step only depends on the previous two values, we can iterate forward with just two variables instead of a full array or recursion stack.\n\nTime: O(n) | Space: O(1)"
     }
   ],
   "hints": [

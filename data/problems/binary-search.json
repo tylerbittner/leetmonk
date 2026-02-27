@@ -107,7 +107,7 @@
       "code": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    for i, num in enumerate(nums):\n        if num == target:\n            return i\n    return -1",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Scan through the array from left to right. Return the index of the first match, or -1 if not found. Does not use the sorted property of the array."
+      "explanation": "Scan through the array from left to right. Return the index of the first match, or -1 if not found. Does not exploit the sorted property of the array.\n\nTime: O(n) | Space: O(1)"
     },
     {
       "label": "Binary Search — O(log n)",
@@ -116,7 +116,7 @@
       "code": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Check the middle element. If it equals target, return its index. If it's less than target, the answer must be in the right half. If greater, in the left half. Each iteration eliminates half the remaining candidates."
+      "explanation": "Check the middle element. If it equals the target, return its index. If it is less than the target, the answer must be in the right half, so move left = mid + 1. If greater, search the left half with right = mid - 1. Each iteration eliminates half the remaining candidates, yielding logarithmic time.\n\nTime: O(log n) | Space: O(1)"
     }
   ],
   "hints": [

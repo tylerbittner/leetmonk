@@ -112,7 +112,7 @@
       "code": "def length_of_longest_substring(s: str) -> int:\n    n = len(s)\n    max_len = 0\n    for i in range(n):\n        seen = set()\n        for j in range(i, n):\n            if s[j] in seen:\n                break\n            seen.add(s[j])\n            max_len = max(max_len, j - i + 1)\n    return max_len",
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(min(n, m))",
-      "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen."
+      "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen. Here m is the size of the character set.\n\nTime: O(n\u00b2) | Space: O(min(n, m))"
     },
     {
       "label": "Sliding Window — O(n)",
@@ -121,7 +121,7 @@
       "code": "def length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(min(n, m))",
-      "explanation": "Use a sliding window [left, right]. For each character, if it was seen before and its last index is within the current window, move `left` past that occurrence. Store the latest index of each character. Update max_len each step."
+      "explanation": "Use a sliding window [left, right]. Store the most recent index of each character. When a duplicate is found within the current window, jump `left` past the previous occurrence. This ensures the window always contains unique characters. Update max_len at each step. Here m is the size of the character set.\n\nTime: O(n) | Space: O(min(n, m))"
     }
   ],
   "hints": [

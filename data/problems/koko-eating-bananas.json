@@ -112,7 +112,7 @@
       "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n    k = 1\n    while hours_needed(k) > h:\n        k += 1\n    return k",
       "timeComplexity": "O(max_pile * n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Try every speed from 1 upward until we find one that finishes all piles in h hours. Correct but very slow for large pile sizes."
+      "explanation": "Try every speed from 1 upward until we find one that finishes all piles within h hours. Correct but extremely slow when max pile size is large.\n\nTime: O(max_pile * n) | Space: O(1)"
     },
     {
       "label": "Binary Search — O(n log max_pile)",
@@ -121,7 +121,7 @@
       "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n\n    left, right = 1, max(piles)\n    while left < right:\n        mid = left + (right - left) // 2\n        if hours_needed(mid) <= h:\n            right = mid\n        else:\n            left = mid + 1\n    return left",
       "timeComplexity": "O(n log max_pile)",
       "spaceComplexity": "O(1)",
-      "explanation": "The answer lies in [1, max(piles)]. Use binary search on the speed. If speed `mid` allows finishing in ≤ h hours, the answer could be mid or smaller, so search left. Otherwise, search right. The monotonic property (more speed → fewer hours) makes binary search valid."
+      "explanation": "The answer lies in [1, max(piles)]. The key insight is monotonicity: a higher speed always finishes in fewer or equal hours. This means we can binary search on the speed. If speed `mid` finishes within h hours, the answer could be mid or smaller (search left). Otherwise, we need more speed (search right).\n\nTime: O(n log(max_pile)) | Space: O(1)"
     }
   ],
   "hints": [
