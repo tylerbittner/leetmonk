@@ -2,6 +2,8 @@
 
 # LeetMonk
 
+[![GitHub Release](https://img.shields.io/github/v/release/tylerbittner/leetmonk)](https://github.com/tylerbittner/leetmonk/releases/latest)
+
 **Offline algorithm practice — no account, no internet, no distractions.**
 
 35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress — entirely offline.
