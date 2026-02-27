@@ -36,7 +36,7 @@ npm run dist
 
 Opens `dist/mac-arm64/LeetMonk.app` (Apple Silicon) or `dist/mac/LeetMonk.app` (Intel). Drag to `/Applications` to install.
 
-> **Note:** The app is unsigned. On first launch, right-click → Open, then click Open.
+> **Note:** The app is unsigned. On first launch macOS will block it — click **Done**, then go to **System Settings → Privacy & Security** and click **"Open Anyway"**. On older macOS, right-click the app → Open works instead.
 
 ### All platforms (run from source)
 
