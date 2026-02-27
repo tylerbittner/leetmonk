@@ -8,7 +8,9 @@
 
 > I was heading camping for the weekend with no cell service, just wildflowers and stars. I didn't want to break my algo streak so I built an app to practice offline! 🏕️ 🤓
 
-35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress — entirely offline.
+Curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
+
+> **Note:** Python 3 is the only supported language at this time.
 
 ## Features
 
