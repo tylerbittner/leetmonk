@@ -21,7 +21,7 @@ jobs:
         run: npm ci
 
       - name: Build and package (Universal)
-        run: npx electron-vite build && npx electron-builder --mac --universal
+        run: npx electron-vite build && npx electron-builder --mac --universal --publish never
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
