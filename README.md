@@ -1,45 +1,25 @@
-# LeetMonk
-
 <img src="build/icon.iconset/icon_128x128.png" alt="LeetMonk" width="96" />
 
-**Offline LeetCode-style practice -- no account, no internet, no distractions.**
+# LeetMonk
 
-LeetMonk is an Electron desktop app for offline algorithm practice. It ships with 35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress -- all without an internet connection.
+**Offline algorithm practice — no account, no internet, no distractions.**
 
-## Disclaimer
-
-LeetMonk is an independent open-source project and is **not** affiliated with, endorsed by, or connected to LeetCode or its parent company. "LeetCode" is a trademark of LeetCode LLC. All problem content in LeetMonk is independently authored.
+35 hand-curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python solutions in a Monaco editor, run them against test cases locally, and track your progress — entirely offline.
 
 ## Features
 
 - **35 curated problems** spanning 9 categories (easy / medium / hard)
 - **Monaco editor** with Python syntax highlighting and autocompletion
-- **Local code execution** via Python 3 subprocess -- no server, no network
-- **Per-problem hints and solutions** revealed on demand
-- **Timer** with per-problem tracking
-- **Focus mode** -- collapse the sidebar to remove distractions
-- **Review flagging** with spaced-repetition scheduling
-- **Session planner** -- queue up a set of problems and work through them
-- **Submission history** -- view past attempts per problem
-- **Keyboard shortcuts** for fast workflow (`Cmd+Enter` to run, `Cmd+Shift+Enter` to submit)
+- **Local code execution** via Python 3 — no server, no network
+- **Hints and solutions** revealed on demand, per problem
+- **Timer**, **focus mode**, **review flagging**, and **session planner**
+- **Keyboard shortcuts** — `Cmd+Enter` to run, `Cmd+Shift+Enter` to submit
 
-## Tech Stack
+## Quick Start
 
-| Layer | Technology |
-|-------|------------|
-| Desktop shell | [Electron](https://www.electronjs.org/) |
-| UI | [React 18](https://react.dev/) |
-| Code editor | [Monaco Editor](https://microsoft.github.io/monaco-editor/) |
-| Build tooling | [electron-vite](https://electron-vite.org/) |
-| Code execution | Python 3 (spawned subprocess) |
-| Testing | [Jest](https://jestjs.io/), [Playwright](https://playwright.dev/) |
+**Requirements:** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org)
 
-## Prerequisites
-
-- **Node.js 18+** -- `brew install node` or [nodejs.org](https://nodejs.org)
-- **Python 3.9+** -- `brew install python3` or [python.org](https://python.org)
-
-## Install on macOS
+### macOS (packaged app)
 
 ```bash
 git clone https://github.com/tylerbittner/leetmonk.git
@@ -48,11 +28,11 @@ npm install
 npm run dist
 ```
 
-This produces `dist/mac-arm64/LeetMonk.app` (Apple Silicon) or `dist/mac/LeetMonk.app` (Intel). Drag it to `/Applications` to install.
+Opens `dist/mac-arm64/LeetMonk.app` (Apple Silicon) or `dist/mac/LeetMonk.app` (Intel). Drag to `/Applications` to install.
 
-> **Note:** The app is unsigned. On first launch, right-click → Open, then click Open in the dialog.
+> **Note:** The app is unsigned. On first launch, right-click → Open, then click Open.
 
-## Run from Source
+### All platforms (run from source)
 
 ```bash
 git clone https://github.com/tylerbittner/leetmonk.git
@@ -61,14 +41,7 @@ npm install
 npm run dev
 ```
 
-## Testing
-
-```bash
-npm test                # run all tests
-npm run test:problems   # validate problem JSON schemas
-npm run test:solutions  # verify all solutions pass all test cases
-npm run test:e2e        # end-to-end tests via Playwright
-```
+Works on macOS, Windows, and Linux. Electron and Python 3 must be available.
 
 ## Keyboard Shortcuts
 
@@ -77,10 +50,30 @@ npm run test:e2e        # end-to-end tests via Playwright
 | `Cmd+Enter` | Run against example cases |
 | `Cmd+Shift+Enter` | Submit against all test cases |
 | `Cmd+R` | Reset to starter code |
-| `Cmd+[` | Previous problem |
-| `Cmd+]` | Next problem |
+| `Cmd+[` / `Cmd+]` | Previous / next problem |
 
-## Project Structure
+## Adding Problems
+
+Drop a `.json` file into `data/problems/` following the existing schema, then restart. Validate with:
+
+```bash
+npm run test:problems
+```
+
+## Contributing
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Desktop shell | [Electron](https://www.electronjs.org/) |
+| UI | [React 18](https://react.dev/) |
+| Code editor | [Monaco Editor](https://microsoft.github.io/monaco-editor/) |
+| Build tooling | [electron-vite](https://electron-vite.org/) |
+| Code execution | Python 3 (spawned subprocess) |
+| Testing | [Jest](https://jestjs.io/) |
+
+### Project Structure
 
 ```
 leetmonk/
@@ -95,22 +88,21 @@ leetmonk/
 │       └── components/          # UI components
 ├── data/
 │   └── problems/                # 35 problem JSON files
-├── tests/
-│   ├── problems.test.js         # Schema validation
-│   ├── solutions.test.js        # Solution correctness
-│   └── executor.test.js         # Python runner integration
-├── electron.vite.config.js
-└── package.json
+└── tests/                       # Jest test suites
 ```
 
-## Adding Problems
-
-Drop a `.json` file into `data/problems/` following the existing schema (see any problem file for reference), then restart the app. Validate with:
+### Testing
 
 ```bash
-npm run test:problems
+npm test                 # all tests
+npm run test:problems    # validate problem JSON schemas
+npm run test:solutions   # verify all solutions pass
 ```
+
+## Disclaimer
+
+LeetMonk is an independent open-source project and is **not** affiliated with, endorsed by, or connected to LeetCode or its parent company. "LeetCode" is a trademark of LeetCode LLC. All problem content in LeetMonk is independently authored.
 
 ## License
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](./LICENSE) — Copyright © 2026 Tyler Bittner
