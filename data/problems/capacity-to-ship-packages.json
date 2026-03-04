@@ -1,0 +1,175 @@
+{
+  "id": "capacity-to-ship-packages",
+  "title": "Capacity to Ship Packages",
+  "difficulty": "medium",
+  "tags": [
+    "binary-search",
+    "array",
+    "binary-search-on-answer"
+  ],
+  "description": "## Capacity to Ship Packages\n\nA freight company needs to transport a batch of crates from one warehouse to another. The crates are lined up on a loading dock and **must be loaded onto trucks in the order they appear** — you cannot rearrange them.\n\nEach crate has a known weight given by the array `weights`. The company has `days` days to complete the shipment. Every day, a single truck departs and carries consecutive crates from the front of the remaining line. The truck can carry any combination of consecutive crates as long as the total weight does not exceed its weight capacity.\n\nAll trucks have the **same capacity**. Find the **minimum capacity** such that all crates can be shipped within `days` days.\n\n**Constraints:**\n- `1 <= days <= weights.length <= 5 * 10^4`\n- `1 <= weights[i] <= 500`",
+  "examples": [
+    {
+      "input": "weights = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], days = 5",
+      "output": "15",
+      "explanation": "With capacity 15, the crates can be shipped in 5 days: [1,2,3,4,5], [6,7], [8], [9], [10]."
+    },
+    {
+      "input": "weights = [3, 2, 2, 4, 1, 4], days = 3",
+      "output": "6",
+      "explanation": "With capacity 6, crates ship in 3 days: [3,2], [2,4], [1,4]."
+    },
+    {
+      "input": "weights = [1, 2, 3, 1, 1], days = 4",
+      "output": "3",
+      "explanation": "With capacity 3, crates ship in 4 days: [1,2], [3], [1], [1]."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {
+        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "days": 5
+      },
+      "expected": 15,
+      "explanation": "Ship in 5 days: [1,2,3,4,5], [6,7], [8], [9], [10]"
+    },
+    {
+      "input": {
+        "weights": [3, 2, 2, 4, 1, 4],
+        "days": 3
+      },
+      "expected": 6,
+      "explanation": "Ship in 3 days: [3,2], [2,4], [1,4]"
+    },
+    {
+      "input": {
+        "weights": [1, 2, 3, 1, 1],
+        "days": 4
+      },
+      "expected": 3,
+      "explanation": "Ship in 4 days: [1,2], [3], [1], [1]"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {
+        "weights": [10],
+        "days": 1
+      },
+      "expected": 10,
+      "explanation": "Single package, single day — capacity must equal its weight"
+    },
+    {
+      "input": {
+        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "days": 1
+      },
+      "expected": 55,
+      "explanation": "One day to ship all — capacity must equal total weight"
+    },
+    {
+      "input": {
+        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "days": 10
+      },
+      "expected": 10,
+      "explanation": "One package per day — capacity equals heaviest package"
+    },
+    {
+      "input": {
+        "weights": [5, 5, 5, 5, 5],
+        "days": 5
+      },
+      "expected": 5,
+      "explanation": "All equal weights, one per day"
+    },
+    {
+      "input": {
+        "weights": [5, 5, 5, 5, 5],
+        "days": 2
+      },
+      "expected": 15,
+      "explanation": "Equal weights split into 2 days: [5,5,5], [5,5]"
+    },
+    {
+      "input": {
+        "weights": [5, 5, 5, 5, 5],
+        "days": 1
+      },
+      "expected": 25,
+      "explanation": "All equal weights shipped in one day"
+    },
+    {
+      "input": {
+        "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "days": 5
+      },
+      "expected": 2,
+      "explanation": "Ten packages of weight 1 across 5 days — 2 per day"
+    },
+    {
+      "input": {
+        "weights": [100, 200, 150, 80, 70, 300, 50, 90],
+        "days": 3
+      },
+      "expected": 440,
+      "explanation": "Larger weights: [100,200], [150,80,70], [300,50,90] with capacity 440"
+    },
+    {
+      "input": {
+        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "days": 2
+      },
+      "expected": 28,
+      "explanation": "Two days: [1,2,3,4,5,6,7], [8,9,10] with capacity 28"
+    },
+    {
+      "input": {
+        "weights": [3, 3, 3, 3, 3, 3],
+        "days": 3
+      },
+      "expected": 6,
+      "explanation": "Six packages of weight 3 across 3 days: [3,3], [3,3], [3,3]"
+    },
+    {
+      "input": {
+        "weights": [10, 1, 1, 1, 1],
+        "days": 2
+      },
+      "expected": 10,
+      "explanation": "Heavy first package forces capacity to 10: [10], [1,1,1,1]"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef ship_within_days(weights: List[int], days: int) -> int:\n    pass"
+  },
+  "functionName": "ship_within_days",
+  "solutions": [
+    {
+      "label": "Linear Search — O(sum(weights) * n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef ship_within_days(weights: List[int], days: int) -> int:\n    def can_ship(capacity):\n        day_count = 1\n        current_load = 0\n        for w in weights:\n            if current_load + w > capacity:\n                day_count += 1\n                current_load = 0\n            current_load += w\n        return day_count <= days\n\n    capacity = max(weights)\n    while not can_ship(capacity):\n        capacity += 1\n    return capacity",
+      "timeComplexity": "O(total_weight * n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "The smallest possible capacity is `max(weights)` — the truck must at least fit the heaviest single crate. Starting from that minimum, we try each capacity value and check whether all crates can be shipped within the allowed number of days.\n\nThe `can_ship` check is a greedy simulation: walk through the crates in order, loading each onto the current day's truck. When adding the next crate would exceed capacity, start a new day. Count how many days are needed and compare against the limit.\n\nThis approach is correct but slow. In the worst case, the answer could be as large as `sum(weights)`, so we may try up to `sum(weights) - max(weights)` capacity values, each requiring a full O(n) scan. For large inputs this is far too expensive."
+    },
+    {
+      "label": "Binary Search on Answer — O(n log(sum(weights)))",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef ship_within_days(weights: List[int], days: int) -> int:\n    def can_ship(capacity):\n        day_count = 1\n        current_load = 0\n        for w in weights:\n            if current_load + w > capacity:\n                day_count += 1\n                current_load = 0\n            current_load += w\n        return day_count <= days\n\n    lo, hi = max(weights), sum(weights)\n    while lo < hi:\n        mid = lo + (hi - lo) // 2\n        if can_ship(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo",
+      "timeComplexity": "O(n log(sum(weights)))",
+      "spaceComplexity": "O(1)",
+      "explanation": "Instead of testing every capacity one by one, we observe a critical property: if a capacity C is large enough to ship all crates within `days` days, then any capacity greater than C also works. Conversely, if C is too small, so is every value below it. This **monotonicity** means the answer space has a clean boundary — all values below the answer fail, and all values at or above the answer succeed. Whenever a problem has this structure, we can binary search for the boundary.\n\n**Setting the bounds:** The lower bound is `max(weights)` because the truck must fit at least the heaviest crate. The upper bound is `sum(weights)` because loading everything onto a single truck always works in one day.\n\n**Binary search loop:** We pick the midpoint capacity and run the greedy `can_ship` check. If mid works (packages fit in `days` days or fewer), the answer might be mid or something smaller, so we set `hi = mid`. If mid fails, we need more capacity, so `lo = mid + 1`. When `lo == hi`, we have found the exact minimum capacity.\n\n**The greedy check:** Walk through packages in order, accumulating weight on the current day's truck. When the next package would exceed capacity, start a new day and reset the load. Count total days used. This greedy packing is optimal because shipping fewer crates on an earlier day never helps — it only pushes more weight to later days.\n\nThis pattern — binary searching over a numeric answer using a feasibility check — is called **Binary Search on Answer** (or Parametric Binary Search). It applies whenever you can phrase the problem as \"find the smallest value X such that f(X) is true\" and f is monotone."
+    }
+  ],
+  "hints": [
+    "The answer lies between max(weights) and sum(weights). Why?",
+    "If capacity C is enough to ship everything in time, then capacity C+1 is also enough. What search technique exploits this monotone property?",
+    "Write a helper function that checks whether a given capacity lets you ship all packages within the day limit using a greedy left-to-right scan.",
+    "Binary search for the smallest capacity where your helper returns true."
+  ],
+  "lcEquivalent": "1011. Capacity to Ship Packages Within D Days"
+}

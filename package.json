@@ -1,6 +1,6 @@
 {
   "name": "leetmonk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Offline LeetCode practice app",
   "main": "out/main/index.js",
   "scripts": {

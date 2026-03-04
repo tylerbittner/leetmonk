@@ -8,11 +8,11 @@
 
 > I was heading camping for the weekend with no cell service, just wildflowers and stars. I didn't want to break my algo streak so I built an app to practice offline! 🏕️ 🤓
 
-Curated problems across arrays, strings, binary search, sliding window, two pointers, stack, heap, dynamic programming, and backtracking. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
+38 curated problems across arrays, strings, binary search, binary search on answer, sliding window, two pointers, matrix, stack, heap, dynamic programming, and backtracking. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
 
 ## Features
 
-- **35 curated problems** spanning 9 categories (easy / medium / hard)
+- **38 curated problems** spanning 11 categories (easy / medium / hard)
 - **Monaco editor** with Python syntax highlighting and autocompletion
 - **Local code execution** via Python 3 — no server, no network
 - **Hints and solutions** revealed on demand, per problem
@@ -84,7 +84,7 @@ leetmonk/
 │       ├── App.jsx              # Root React component
 │       └── components/          # UI components
 ├── data/
-│   └── problems/                # 35 problem JSON files
+│   └── problems/                # 38 problem JSON files
 └── tests/                       # Jest test suites
 ```
 

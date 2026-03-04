@@ -1,0 +1,132 @@
+{
+  "id": "cutting-ribbons",
+  "title": "Cutting Ribbons",
+  "difficulty": "medium",
+  "tags": [
+    "binary-search",
+    "array",
+    "binary-search-on-answer"
+  ],
+  "description": "## Cutting Ribbons\n\nYou work at a craft supply shop preparing ribbon bundles for customers. You have several spools of ribbon, each with a different remaining length. A customer wants to buy exactly `k` pieces of ribbon, all the same integer length.\n\nYou can cut any spool into as many pieces as you like (each piece must be a positive integer length), and leftover ribbon from a spool is discarded. You want to maximize the length of each piece so the customer gets the best value.\n\nGiven an array `ribbons` where `ribbons[i]` is the length of the i-th spool, and an integer `k` representing the number of pieces the customer needs, return the **maximum possible integer length** of ribbon you can achieve for all `k` pieces. If it is impossible to obtain `k` pieces of any positive length, return `0`.\n\n**Constraints:**\n- `1 <= ribbons.length <= 10^5`\n- `1 <= ribbons[i] <= 10^5`\n- `1 <= k <= 10^9`",
+  "examples": [
+    {
+      "input": "ribbons = [9, 7, 5], k = 3",
+      "output": "5",
+      "explanation": "Cut the spool of length 9 into a piece of 5 (discard 4). The spool of length 7 gives one piece of 5 (discard 2). The spool of length 5 gives one piece of 5. That yields 3 pieces of length 5."
+    },
+    {
+      "input": "ribbons = [7, 5, 9], k = 4",
+      "output": "4",
+      "explanation": "At length 4: spool 7 gives 1 piece, spool 5 gives 1 piece, spool 9 gives 2 pieces. Total = 4 pieces."
+    },
+    {
+      "input": "ribbons = [5, 7, 9], k = 22",
+      "output": "0",
+      "explanation": "Even at length 1, we only get 5 + 7 + 9 = 21 pieces, which is less than 22."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": { "ribbons": [9, 7, 5], "k": 3 },
+      "expected": 5,
+      "explanation": "At length 5: 9//5=1, 7//5=1, 5//5=1. Total=3 pieces."
+    },
+    {
+      "input": { "ribbons": [7, 5, 9], "k": 4 },
+      "expected": 4,
+      "explanation": "At length 4: 7//4=1, 5//4=1, 9//4=2. Total=4 pieces."
+    },
+    {
+      "input": { "ribbons": [5, 7, 9], "k": 22 },
+      "expected": 0,
+      "explanation": "Max pieces at length 1 = 5+7+9 = 21 < 22, impossible."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": { "ribbons": [10], "k": 1 },
+      "expected": 10,
+      "explanation": "Single spool, one piece needed: take the whole spool."
+    },
+    {
+      "input": { "ribbons": [10], "k": 3 },
+      "expected": 3,
+      "explanation": "Single spool of 10, need 3 pieces: 10//3=3, so max length is 3."
+    },
+    {
+      "input": { "ribbons": [5, 5, 5, 5], "k": 4 },
+      "expected": 5,
+      "explanation": "All equal ribbons, one piece each at full length."
+    },
+    {
+      "input": { "ribbons": [5, 5, 5, 5], "k": 8 },
+      "expected": 2,
+      "explanation": "All length 5, need 8 pieces: at length 2, each gives 2 pieces = 8 total."
+    },
+    {
+      "input": { "ribbons": [1, 2, 3], "k": 7 },
+      "expected": 0,
+      "explanation": "At length 1: 1+2+3=6 < 7. Impossible."
+    },
+    {
+      "input": { "ribbons": [100000], "k": 1 },
+      "expected": 100000,
+      "explanation": "Large single spool, one piece: take all of it."
+    },
+    {
+      "input": { "ribbons": [1, 1, 1, 1, 1], "k": 5 },
+      "expected": 1,
+      "explanation": "Each spool gives exactly one piece of length 1."
+    },
+    {
+      "input": { "ribbons": [1, 1, 1, 1, 1], "k": 6 },
+      "expected": 0,
+      "explanation": "Five spools of length 1, need 6 pieces: impossible."
+    },
+    {
+      "input": { "ribbons": [3, 5, 8, 12], "k": 7 },
+      "expected": 3,
+      "explanation": "At length 3: 3//3=1, 5//3=1, 8//3=2, 12//3=4. Total=8>=7. At length 4: 0+1+2+3=6<7. Answer is 3."
+    },
+    {
+      "input": { "ribbons": [100, 200, 300], "k": 12 },
+      "expected": 50,
+      "explanation": "At length 50: 2+4+6=12 pieces. At length 51: 1+3+5=9<12."
+    },
+    {
+      "input": { "ribbons": [7, 3, 1], "k": 2 },
+      "expected": 3,
+      "explanation": "At length 3: 7//3=2, 3//3=1, 1//3=0. Total=3>=2. At length 4: 7//4=1, 3//4=0, 1//4=0. Total=1<2. Answer is 3."
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    pass"
+  },
+  "functionName": "max_ribbon_length",
+  "solutions": [
+    {
+      "label": "Linear Search — O(max_ribbon * n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    for length in range(max(ribbons), 0, -1):\n        total = sum(r // length for r in ribbons)\n        if total >= k:\n            return length\n    return 0",
+      "timeComplexity": "O(max_ribbon * n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "The simplest approach is to try every possible piece length from the largest (max of ribbons) down to 1. For each candidate length, count how many pieces we get by dividing each ribbon by that length and summing the results. The first length that yields at least k pieces is our answer, since we are searching from largest to smallest.\n\nThis works because the relationship between piece length and piece count is monotone: shorter pieces always yield at least as many total pieces as longer ones. By starting from the top, the first feasible length is automatically the maximum.\n\nThe downside is performance. If the longest ribbon is 100,000, we might check up to 100,000 candidate lengths, and each check scans all n ribbons. This makes the approach impractical for large inputs."
+    },
+    {
+      "label": "Binary Search on Answer — O(n log max_ribbon)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    lo, hi = 1, max(ribbons)\n    result = 0\n    while lo <= hi:\n        mid = lo + (hi - lo) // 2\n        total = sum(r // mid for r in ribbons)\n        if total >= k:\n            result = mid\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return result",
+      "timeComplexity": "O(n log max_ribbon)",
+      "spaceComplexity": "O(1)",
+      "explanation": "This problem is a textbook example of the **Binary Search on Answer** pattern (also called parametric binary search). Instead of searching for a value inside an array, we binary search over the space of possible answers.\n\nThe key insight is **monotonicity of the feasibility function**. Define `can_cut(m)` as whether we can obtain at least k pieces of length m. If we can cut k pieces of length m, we can certainly cut k pieces of any shorter length (each ribbon yields at least as many pieces). Conversely, if we cannot get k pieces of length m, we cannot get k pieces of any longer length either. This means there is a threshold: all lengths up to some value are feasible, and all lengths above it are not.\n\nThis monotone structure is exactly what binary search exploits. We search the range [1, max(ribbons)] for the largest feasible length:\n\n1. Pick the midpoint `mid`.\n2. Count pieces: `sum(r // mid for r in ribbons)`.\n3. If count >= k, this length works — record it and search higher (`lo = mid + 1`).\n4. If count < k, this length is too long — search lower (`hi = mid - 1`).\n\nEach binary search step takes O(n) to count pieces across all ribbons, and we perform O(log max_ribbon) steps, giving O(n log max_ribbon) total — a massive improvement over the linear scan."
+    }
+  ],
+  "hints": [
+    "Think about what happens to the total number of pieces as you increase the piece length. Does the count go up or down?",
+    "If you can get k pieces at length m, can you always get k pieces at length m-1? This monotone property means binary search applies.",
+    "Binary search over the answer: search for the largest length m in [1, max(ribbons)] where sum(r // m for r in ribbons) >= k."
+  ],
+  "lcEquivalent": "1891. Cutting Ribbons"
+}
