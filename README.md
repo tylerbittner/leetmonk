@@ -8,7 +8,7 @@
 
 > I was heading camping for the weekend with no cell service, just wildflowers and stars. I didn't want to break my algo streak so I built an app to practice offline! 🏕️ 🤓
 
-Curated problems across arrays, strings, binary search, binary search on answer, sliding window, two pointers, matrix, stack, heap, dynamic programming, and backtracking. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
+Curated problems covering arrays, dynamic programming, binary search, sliding window, two pointers, and many more. Write Python 3 solutions in a Monaco editor, run them against test cases locally, and track your progress.
 
 ## Features
 
