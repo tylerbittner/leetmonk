@@ -101,7 +101,7 @@
     },
     {
       "label": "Recursive — O(m+n)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_two_lists(list1: List[int], list2: List[int]) -> List[int]:\n    l1 = build_list(list1)\n    l2 = build_list(list2)\n\n    def merge(a, b):\n        if not a:\n            return b\n        if not b:\n            return a\n        if a.val <= b.val:\n            a.next = merge(a.next, b)\n            return a\n        else:\n            b.next = merge(a, b.next)\n            return b\n\n    return list_to_arr(merge(l1, l2))",
       "timeComplexity": "O(m+n)",

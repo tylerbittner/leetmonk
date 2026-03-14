@@ -156,7 +156,7 @@
       "language": "python",
       "code": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    m = len(matrix)\n    n = len(matrix[0])\n    min_avg = float('inf')\n    for col in range(n):\n        col_sum = 0\n        for row in range(m):\n            col_sum += matrix[row][col]\n        avg = col_sum / m\n        if avg < min_avg:\n            min_avg = avg\n    return round(min_avg, 5)",
       "timeComplexity": "O(m*n)",
-      "spaceComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
       "explanation": "Iterate over each column index 0 through n-1. For each column, sum all m values by walking down the rows, then divide by m to get the column average. Track the running minimum across all column averages. Return the minimum rounded to 5 decimal places."
     },
     {

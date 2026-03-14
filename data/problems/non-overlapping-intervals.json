@@ -101,7 +101,7 @@
     },
     {
       "label": "Greedy (Sort by Start) — O(n log n)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef erase_overlap_intervals(intervals: List[List[int]]) -> int:\n    intervals.sort(key=lambda x: x[0])\n    count = 0\n    prev_end = intervals[0][1]\n\n    for start, end in intervals[1:]:\n        if start < prev_end:\n            # Overlap: remove the one that ends later\n            count += 1\n            prev_end = min(prev_end, end)\n        else:\n            prev_end = end\n\n    return count",
       "timeComplexity": "O(n log n)",

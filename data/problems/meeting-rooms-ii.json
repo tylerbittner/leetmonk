@@ -96,7 +96,7 @@
     },
     {
       "label": "Chronological Events — O(n log n)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    starts = sorted(s for s, e in intervals)\n    ends = sorted(e for s, e in intervals)\n\n    rooms = 0\n    max_rooms = 0\n    i, j = 0, 0\n\n    while i < len(starts):\n        if starts[i] < ends[j]:\n            rooms += 1\n            max_rooms = max(max_rooms, rooms)\n            i += 1\n        else:\n            rooms -= 1\n            j += 1\n\n    return max_rooms",
       "timeComplexity": "O(n log n)",

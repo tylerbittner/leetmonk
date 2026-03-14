@@ -86,7 +86,7 @@
   "functionName": "character_replacement",
   "solutions": [
     {
-      "label": "Brute Force — O(26·n²)",
+      "label": "Brute Force — O(26·n)",
       "approach": "obvious",
       "language": "python",
       "code": "def character_replacement(s: str, k: int) -> int:\n    result = 0\n    for c in set(s):\n        count = 0\n        left = 0\n        for right in range(len(s)):\n            if s[right] == c:\n                count += 1\n            while (right - left + 1) - count > k:\n                if s[left] == c:\n                    count -= 1\n                left += 1\n            result = max(result, right - left + 1)\n    return result",

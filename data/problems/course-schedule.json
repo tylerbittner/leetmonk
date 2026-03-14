@@ -96,7 +96,7 @@
     },
     {
       "label": "Topological Sort (Kahn's BFS) — O(V+E)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    in_degree = [0] * numCourses\n    graph = [[] for _ in range(numCourses)]\n    for course, prereq in prerequisites:\n        graph[prereq].append(course)\n        in_degree[course] += 1\n\n    # Start with all courses that have no prerequisites\n    queue = deque(i for i in range(numCourses) if in_degree[i] == 0)\n    completed = 0\n\n    while queue:\n        node = queue.popleft()\n        completed += 1\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n\n    return completed == numCourses",
       "timeComplexity": "O(V+E)",

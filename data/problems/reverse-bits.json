@@ -96,7 +96,7 @@
     },
     {
       "label": "String Reversal — O(1)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "def reverse_bits(n: int) -> int:\n    return int(bin(n)[2:].zfill(32)[::-1], 2)",
       "timeComplexity": "O(1)",

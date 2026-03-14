@@ -96,7 +96,7 @@
     },
     {
       "label": "Array Approach — O(n)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    node = build_list(head)\n    if not node:\n        return []\n\n    # Collect all nodes into an array\n    nodes = []\n    curr = node\n    while curr:\n        nodes.append(curr)\n        curr = curr.next\n\n    # Use two pointers to reorder in-place\n    left, right = 0, len(nodes) - 1\n    while left < right:\n        nodes[left].next = nodes[right]\n        left += 1\n        if left == right:\n            break\n        nodes[right].next = nodes[left]\n        right -= 1\n    nodes[left].next = None\n\n    return list_to_arr(node)",
       "timeComplexity": "O(n)",

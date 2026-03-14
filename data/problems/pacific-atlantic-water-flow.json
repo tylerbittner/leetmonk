@@ -96,7 +96,7 @@
     },
     {
       "label": "DFS from Borders — O(m·n)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    m, n = len(heights), len(heights[0])\n    pacific = set()\n    atlantic = set()\n\n    def dfs(r, c, visited, prev_height):\n        if (r < 0 or r >= m or c < 0 or c >= n or\n                (r, c) in visited or heights[r][c] < prev_height):\n            return\n        visited.add((r, c))\n        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n            dfs(r + dr, c + dc, visited, heights[r][c])\n\n    for r in range(m):\n        dfs(r, 0, pacific, heights[r][0])\n        dfs(r, n - 1, atlantic, heights[r][n - 1])\n    for c in range(n):\n        dfs(0, c, pacific, heights[0][c])\n        dfs(m - 1, c, atlantic, heights[m - 1][c])\n\n    result = sorted([r, c] for r, c in pacific & atlantic)\n    return result",
       "timeComplexity": "O(m·n)",

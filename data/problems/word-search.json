@@ -101,7 +101,7 @@
     },
     {
       "label": "Backtracking with Visited Set — O(m·n·4^L)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    m, n = len(board), len(board[0])\n\n    def dfs(r, c, idx, visited):\n        if idx == len(word):\n            return True\n        if (r < 0 or r >= m or c < 0 or c >= n or\n                (r, c) in visited or board[r][c] != word[idx]):\n            return False\n        visited.add((r, c))\n        found = (dfs(r + 1, c, idx + 1, visited) or\n                 dfs(r - 1, c, idx + 1, visited) or\n                 dfs(r, c + 1, idx + 1, visited) or\n                 dfs(r, c - 1, idx + 1, visited))\n        visited.remove((r, c))\n        return found\n\n    for r in range(m):\n        for c in range(n):\n            if dfs(r, c, 0, set()):\n                return True\n    return False",
       "timeComplexity": "O(m·n·4^L)",

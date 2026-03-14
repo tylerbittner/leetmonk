@@ -101,7 +101,7 @@
     },
     {
       "label": "Two-Pass — O(L)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    node = build_list(head)\n    dummy = ListNode(0)\n    dummy.next = node\n\n    # First pass: count the length\n    length = 0\n    curr = node\n    while curr:\n        length += 1\n        curr = curr.next\n\n    # Find the node just before the target\n    target_pos = length - n  # 0-indexed from head\n    curr = dummy\n    for _ in range(target_pos):\n        curr = curr.next\n\n    curr.next = curr.next.next\n    return list_to_arr(dummy.next)",
       "timeComplexity": "O(L)",

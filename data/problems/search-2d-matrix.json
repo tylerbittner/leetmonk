@@ -341,7 +341,7 @@
   "functionName": "search_matrix",
   "solutions": [
     {
-      "label": "Row-then-Column Search \u2014 O(m + n)",
+      "label": "Row-then-Column Search \u2014 O(m + log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef search_matrix(matrix: List[List[int]], target: int) -> bool:\n    m, n = len(matrix), len(matrix[0])\n    # Find the correct row\n    row = -1\n    for i in range(m):\n        if matrix[i][0] <= target <= matrix[i][n - 1]:\n            row = i\n            break\n    if row == -1:\n        return False\n    # Binary search in that row\n    left, right = 0, n - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if matrix[row][mid] == target:\n            return True\n        elif matrix[row][mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",

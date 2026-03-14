@@ -101,7 +101,7 @@
     },
     {
       "label": "DP — O(n²)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "def longest_palindrome(s: str) -> str:\n    n = len(s)\n    dp = [[False] * n for _ in range(n)]\n    start, max_len = 0, 1\n\n    # All single characters are palindromes\n    for i in range(n):\n        dp[i][i] = True\n\n    # Two-character palindromes\n    for i in range(n - 1):\n        if s[i] == s[i + 1]:\n            dp[i][i + 1] = True\n            start, max_len = i, 2\n\n    # Longer substrings\n    for length in range(3, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            if s[i] == s[j] and dp[i + 1][j - 1]:\n                dp[i][j] = True\n                if length > max_len:\n                    start, max_len = i, length\n\n    return s[start:start + max_len]",
       "timeComplexity": "O(n²)",

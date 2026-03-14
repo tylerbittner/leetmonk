@@ -101,7 +101,7 @@
     },
     {
       "label": "Recursive with Memoization — O(n² · m)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom functools import lru_cache\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    word_set = frozenset(wordDict)\n\n    @lru_cache(maxsize=None)\n    def can_segment(start: int) -> bool:\n        if start == len(s):\n            return True\n        for end in range(start + 1, len(s) + 1):\n            if s[start:end] in word_set and can_segment(end):\n                return True\n        return False\n\n    return can_segment(0)",
       "timeComplexity": "O(n² · m)",

@@ -96,7 +96,7 @@
     },
     {
       "label": "Recursive Bit Manipulation — O(1)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "def get_sum(a: int, b: int) -> int:\n    MASK = 0xFFFFFFFF\n    MAX_INT = 0x7FFFFFFF\n\n    def add(x, y):\n        if y == 0:\n            return x\n        carry = ((x & y) << 1) & MASK\n        no_carry = (x ^ y) & MASK\n        return add(no_carry, carry)\n\n    result = add(a & MASK, b & MASK)\n    if result > MAX_INT:\n        result = ~(result ^ MASK)\n    return result",
       "timeComplexity": "O(1)",

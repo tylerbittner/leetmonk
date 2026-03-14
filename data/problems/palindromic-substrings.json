@@ -96,7 +96,7 @@
     },
     {
       "label": "DP — O(n²)",
-      "approach": "brute-force",
+      "approach": "obvious",
       "language": "python",
       "code": "def count_palindromes(s: str) -> int:\n    n = len(s)\n    dp = [[False] * n for _ in range(n)]\n    count = 0\n\n    for i in range(n):\n        dp[i][i] = True\n        count += 1\n\n    for i in range(n - 1):\n        if s[i] == s[i + 1]:\n            dp[i][i + 1] = True\n            count += 1\n\n    for length in range(3, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            if s[i] == s[j] and dp[i + 1][j - 1]:\n                dp[i][j] = True\n                count += 1\n\n    return count",
       "timeComplexity": "O(n²)",
