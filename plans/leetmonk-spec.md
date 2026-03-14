@@ -26,7 +26,7 @@ A desktop Electron app that replicates the core LeetCode problem-solving experie
 
 #### Content Generation
 
-Since LeetCode problems are copyrighted, **generate equivalent problems with original descriptions** that test the same concepts. Each problem should have:
+Each problem should have:
 
 - A unique, thematic framing (e.g., "sensor network" instead of "array continuous")
 - The same algorithmic core as the LC equivalent
@@ -415,7 +415,7 @@ npm run build
 
 3. **Use Monaco Editor** (`@monaco-editor/react`) for the code editor — it's battle-tested in Electron and gives you syntax highlighting, autocomplete, and keybindings for free.
 
-4. **For problem generation:** Each problem needs original descriptions (not copied from LC), but should test the same algorithm. Include the `lcEquivalent` field so the user knows what LC problem it maps to.
+4. **For problem generation:** Each problem needs a clear, original description that tests the target algorithm. Include the `lcEquivalent` field so the user knows what LC problem it maps to.
 
 5. **Test case design:** Each problem must include **10-20 test cases** that comprehensively cover edge cases expected in an interview setting. Use this checklist per problem:
 
