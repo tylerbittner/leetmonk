@@ -1,12 +1,12 @@
-# LeetMonk — Offline LeetCode Practice App
+# LeetMonk — Offline Algorithms Practice App
 
 ## Product Spec v1.0
 
 ### Overview
 
-A desktop Electron app that replicates the core LeetCode problem-solving experience for fully offline use. Users can browse, filter, and solve algorithm problems with real code execution, test case validation, a timer, and solution explanations — all without internet access.
+A desktop Electron app similar to the core LeetCode problem-solving experience for fully offline use. Users can browse, filter, and solve algorithm problems with real code execution, test case validation, a timer, and solution explanations — all without internet access.
 
-**Target user:** Software engineer preparing for technical interviews, specifically needing offline practice during travel/camping.
+**Target users:** Software engineers preparing for technical interviews, specifically needing offline practice in remote areas or to go into deep focus zen mode.
 
 **Tech stack:** Electron + React frontend, Node.js backend process for code execution. All problem data stored locally as JSON.
 
