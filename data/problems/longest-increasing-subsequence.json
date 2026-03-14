@@ -1,0 +1,117 @@
+{
+  "id": "longest-increasing-subsequence",
+  "title": "Longest Increasing Subsequence",
+  "difficulty": "medium",
+  "tags": ["array", "dynamic-programming", "binary-search"],
+  "description": "## Longest Increasing Subsequence\n\nGiven an integer array `nums`, return the length of the longest strictly increasing subsequence.\n\nA subsequence is derived from an array by deleting some (or no) elements without changing the order of the remaining elements.\n\n**Constraints:**\n- `1 <= nums.length <= 2500`\n- `-10^4 <= nums[i] <= 10^4`",
+  "examples": [
+    {
+      "input": "nums = [10,9,2,5,3,7,101,18]",
+      "output": "4",
+      "explanation": "The longest increasing subsequence is [2,3,7,101] or [2,5,7,101], length 4."
+    },
+    {
+      "input": "nums = [0,1,0,3,2,3]",
+      "output": "4",
+      "explanation": "[0,1,2,3] is the longest increasing subsequence."
+    },
+    {
+      "input": "nums = [7,7,7,7,7,7,7]",
+      "output": "1",
+      "explanation": "No two elements are strictly increasing."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [10, 9, 2, 5, 3, 7, 101, 18]},
+      "expected": 4,
+      "explanation": "[2,3,7,101] length 4"
+    },
+    {
+      "input": {"nums": [0, 1, 0, 3, 2, 3]},
+      "expected": 4,
+      "explanation": "[0,1,2,3]"
+    },
+    {
+      "input": {"nums": [7, 7, 7, 7, 7, 7, 7]},
+      "expected": 1,
+      "explanation": "All duplicates"
+    },
+    {
+      "input": {"nums": [1, 3, 6, 7, 9, 4, 10, 5, 6]},
+      "expected": 6,
+      "explanation": "[1,3,6,7,9,10] length 6"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1]},
+      "expected": 1,
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [1, 2]},
+      "expected": 2,
+      "explanation": "[1,2]"
+    },
+    {
+      "input": {"nums": [2, 1]},
+      "expected": 1,
+      "explanation": "Decreasing"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 4, 5]},
+      "expected": 5,
+      "explanation": "Entire array"
+    },
+    {
+      "input": {"nums": [5, 4, 3, 2, 1]},
+      "expected": 1,
+      "explanation": "Strictly decreasing"
+    },
+    {
+      "input": {"nums": [3, 5, 6, 2, 5, 4, 19, 5, 6, 7, 12]},
+      "expected": 6,
+      "explanation": "[3,5,6,19] or similar length 6 exists: [2,4,5,6,7,12]"
+    },
+    {
+      "input": {"nums": [1, 3, 2, 4]},
+      "expected": 3,
+      "explanation": "[1,3,4] or [1,2,4]"
+    },
+    {
+      "input": {"nums": [4, 10, 4, 3, 8, 9]},
+      "expected": 3,
+      "explanation": "[4,8,9] or [3,8,9]"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    pass"
+  },
+  "functionName": "length_of_lis",
+  "solutions": [
+    {
+      "label": "Dynamic Programming — O(n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    n = len(nums)\n    dp = [1] * n  # dp[i] = LIS length ending at index i\n\n    for i in range(1, n):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n\n    return max(dp)",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "explanation": "`dp[i]` stores the length of the longest increasing subsequence ending at index `i`. For each `i`, look back at all previous indices `j` where `nums[j] < nums[i]` and extend that subsequence. The answer is the maximum value in the dp array."
+    },
+    {
+      "label": "Binary Search (Patience Sorting) — O(n log n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nimport bisect\n\ndef length_of_lis(nums: List[int]) -> int:\n    # tails[i] = smallest tail element of all IS of length i+1\n    tails = []\n\n    for num in nums:\n        pos = bisect.bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n\n    return len(tails)",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Maintain a `tails` array where `tails[i]` is the smallest possible tail of any increasing subsequence of length `i+1`. For each number, binary search for its position in `tails`: if it's larger than all tails, extend; otherwise replace the first tail that is ≥ num. The length of `tails` at the end is the LIS length. Note: `tails` itself may not be a valid subsequence, but its length is always correct."
+    }
+  ],
+  "hints": [
+    "Define dp[i] as the length of the LIS ending at index i. For each i, look back at all j < i where nums[j] < nums[i].",
+    "For O(n log n): maintain an array of the smallest possible tail values for subsequences of each length, and use binary search to update it."
+  ],
+  "lcEquivalent": "300. Longest Increasing Subsequence"
+}

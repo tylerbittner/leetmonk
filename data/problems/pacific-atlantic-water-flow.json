@@ -1,0 +1,112 @@
+{
+  "id": "pacific-atlantic-water-flow",
+  "title": "Pacific Atlantic Water Flow",
+  "difficulty": "medium",
+  "tags": ["array", "depth-first-search", "breadth-first-search", "graph"],
+  "description": "## Pacific Atlantic Water Flow\n\nYou have an island represented as an `m x n` grid of heights. Rain water can flow from a cell to any adjacent cell (up, down, left, right) that has an equal or lower height.\n\n- The **Pacific Ocean** borders the top and left edges.\n- The **Atlantic Ocean** borders the bottom and right edges.\n\nReturn a list of all cells `[r, c]` from which water can flow to **both** oceans. Return the list sorted by row, then column.\n\n**Constraints:**\n- `m == heights.length`\n- `n == heights[r].length`\n- `1 <= m, n <= 200`\n- `0 <= heights[r][c] <= 10^5`",
+  "examples": [
+    {
+      "input": "heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]",
+      "output": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]",
+      "explanation": "These cells can flow to both the Pacific and Atlantic oceans."
+    },
+    {
+      "input": "heights = [[1]]",
+      "output": "[[0,0]]",
+      "explanation": "The single cell borders both oceans."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"heights": [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]},
+      "expected": [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]],
+      "explanation": "Seven cells reachable from both oceans"
+    },
+    {
+      "input": {"heights": [[1]]},
+      "expected": [[0, 0]],
+      "explanation": "Single cell borders both oceans"
+    },
+    {
+      "input": {"heights": [[1, 1], [1, 1], [1, 1]]},
+      "expected": [[0,0],[0,1],[1,0],[1,1],[2,0],[2,1]],
+      "explanation": "All same height — all cells reachable from both"
+    },
+    {
+      "input": {"heights": [[3, 3, 3], [3, 1, 3], [3, 3, 3]]},
+      "expected": [[0,0],[0,1],[0,2],[1,0],[1,2],[2,0],[2,1],[2,2]],
+      "explanation": "Outer ring can reach both; center (lower height) cannot flow out to both"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"heights": [[1, 2, 3], [8, 9, 4], [7, 6, 5]]},
+      "expected": [[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],
+      "explanation": "Spiral pattern"
+    },
+    {
+      "input": {"heights": [[1, 2], [4, 3]]},
+      "expected": [[0,1],[1,0],[1,1]],
+      "explanation": "2x2 grid"
+    },
+    {
+      "input": {"heights": [[10, 10, 10], [10, 1, 10], [10, 10, 10]]},
+      "expected": [[0,0],[0,1],[0,2],[1,0],[1,2],[2,0],[2,1],[2,2]],
+      "explanation": "High border, low center — center can't flow up to ocean borders"
+    },
+    {
+      "input": {"heights": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]},
+      "expected": [[0,2],[1,2],[2,0],[2,1],[2,2]],
+      "explanation": "Increasing grid — only right column and bottom row reach Atlantic"
+    },
+    {
+      "input": {"heights": [[2, 2, 2], [2, 2, 2]]},
+      "expected": [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2]],
+      "explanation": "All equal — all cells reach both oceans"
+    },
+    {
+      "input": {"heights": [[1], [2], [3]]},
+      "expected": [[0,0],[1,0],[2,0]],
+      "explanation": "Single column — all cells border both oceans"
+    },
+    {
+      "input": {"heights": [[1, 2], [3, 4]]},
+      "expected": [[0,1],[1,0],[1,1]],
+      "explanation": "2x2 grid — three cells reach both"
+    },
+    {
+      "input": {"heights": [[3, 3, 3, 3, 3], [3, 0, 3, 0, 3], [3, 3, 3, 3, 3]]},
+      "expected": [[0,0],[0,1],[0,2],[0,3],[0,4],[1,0],[1,2],[1,4],[2,0],[2,1],[2,2],[2,3],[2,4]],
+      "explanation": "Border cells and cells connecting them; low interior cells blocked"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    pass"
+  },
+  "functionName": "pacific_atlantic",
+  "solutions": [
+    {
+      "label": "Reverse BFS from Borders — O(m·n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import deque\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    m, n = len(heights), len(heights[0])\n\n    def bfs(starts):\n        visited = set(starts)\n        queue = deque(starts)\n        while queue:\n            r, c = queue.popleft()\n            for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n                nr, nc = r + dr, c + dc\n                if (0 <= nr < m and 0 <= nc < n and\n                        (nr, nc) not in visited and\n                        heights[nr][nc] >= heights[r][c]):\n                    visited.add((nr, nc))\n                    queue.append((nr, nc))\n        return visited\n\n    pacific_starts = [(r, 0) for r in range(m)] + [(0, c) for c in range(n)]\n    atlantic_starts = [(r, n-1) for r in range(m)] + [(m-1, c) for c in range(n)]\n\n    pacific = bfs(pacific_starts)\n    atlantic = bfs(atlantic_starts)\n\n    result = sorted([r, c] for r, c in pacific & atlantic)\n    return result",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(m·n)",
+      "explanation": "Instead of simulating forward water flow from every cell, work backwards: start BFS from each ocean's border cells and expand to any neighbor with equal or greater height (water can flow there). Cells reachable from the Pacific are those that can drain to it; similarly for the Atlantic. Cells in both sets are the answer. Start BFS from all Pacific border cells at once (top row + left column) and all Atlantic border cells (bottom row + right column)."
+    },
+    {
+      "label": "DFS from Borders — O(m·n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    m, n = len(heights), len(heights[0])\n    pacific = set()\n    atlantic = set()\n\n    def dfs(r, c, visited, prev_height):\n        if (r < 0 or r >= m or c < 0 or c >= n or\n                (r, c) in visited or heights[r][c] < prev_height):\n            return\n        visited.add((r, c))\n        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n            dfs(r + dr, c + dc, visited, heights[r][c])\n\n    for r in range(m):\n        dfs(r, 0, pacific, heights[r][0])\n        dfs(r, n - 1, atlantic, heights[r][n - 1])\n    for c in range(n):\n        dfs(0, c, pacific, heights[0][c])\n        dfs(m - 1, c, atlantic, heights[m - 1][c])\n\n    result = sorted([r, c] for r, c in pacific & atlantic)\n    return result",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(m·n)",
+      "explanation": "Same reverse-flood idea but using recursive DFS instead of BFS. For each border cell of each ocean, run DFS that only advances to neighbors with height >= current (water flows downhill, so going backwards means going uphill or flat). Collect all reachable cells per ocean and return their intersection."
+    }
+  ],
+  "hints": [
+    "Instead of simulating water flowing forward (from cell to ocean), work backwards: start from each ocean's border and flood inward to cells from which water could reach that ocean.",
+    "A cell can flow to an ocean if it's reachable going uphill from the ocean border. Find cells reachable from both Pacific and Atlantic borders."
+  ],
+  "lcEquivalent": "417. Pacific Atlantic Water Flow"
+}

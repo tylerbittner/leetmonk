@@ -1,0 +1,117 @@
+{
+  "id": "reverse-linked-list",
+  "title": "Reverse Linked List",
+  "difficulty": "easy",
+  "tags": ["linked-list"],
+  "description": "## Reverse Linked List\n\nGiven the head of a singly linked list (as a plain integer list), reverse the list and return it as a plain integer list.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 5000]`.\n- `-5000 <= Node.val <= 5000`",
+  "examples": [
+    {
+      "input": "head = [1,2,3,4,5]",
+      "output": "[5,4,3,2,1]",
+      "explanation": "The list is reversed in-place."
+    },
+    {
+      "input": "head = [1,2]",
+      "output": "[2,1]",
+      "explanation": "Two nodes swapped."
+    },
+    {
+      "input": "head = []",
+      "output": "[]",
+      "explanation": "Empty list."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"head": [1, 2, 3, 4, 5]},
+      "expected": [5, 4, 3, 2, 1],
+      "explanation": "Full reversal"
+    },
+    {
+      "input": {"head": [1, 2]},
+      "expected": [2, 1],
+      "explanation": "Two nodes"
+    },
+    {
+      "input": {"head": []},
+      "expected": [],
+      "explanation": "Empty list"
+    },
+    {
+      "input": {"head": [1]},
+      "expected": [1],
+      "explanation": "Single node"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"head": [1, 2, 3]},
+      "expected": [3, 2, 1],
+      "explanation": "Three nodes"
+    },
+    {
+      "input": {"head": [5, 4, 3, 2, 1]},
+      "expected": [1, 2, 3, 4, 5],
+      "explanation": "Already reversed"
+    },
+    {
+      "input": {"head": [0]},
+      "expected": [0],
+      "explanation": "Single zero"
+    },
+    {
+      "input": {"head": [-1, 0, 1]},
+      "expected": [1, 0, -1],
+      "explanation": "Negative values"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4]},
+      "expected": [4, 3, 2, 1],
+      "explanation": "Even length"
+    },
+    {
+      "input": {"head": [-5, 4, 0, -3]},
+      "expected": [-3, 0, 4, -5],
+      "explanation": "Mixed signs"
+    },
+    {
+      "input": {"head": [1, 1, 1]},
+      "expected": [1, 1, 1],
+      "explanation": "All same values"
+    },
+    {
+      "input": {"head": [100]},
+      "expected": [100],
+      "explanation": "Large single value"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reverse_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n    pass"
+  },
+  "functionName": "reverse_list",
+  "solutions": [
+    {
+      "label": "Iterative — O(n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reverse_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n    prev = None\n    curr = head\n    while curr:\n        next_node = curr.next\n        curr.next = prev\n        prev = curr\n        curr = next_node\n    return list_to_arr(prev)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use two pointers: `prev` (starts as None) and `curr` (starts at head). In each step: save `curr.next`, point `curr.next` to `prev` (reversing the link), advance `prev` to `curr`, advance `curr` to the saved next. When `curr` is None, `prev` is the new head of the reversed list."
+    },
+    {
+      "label": "Recursive — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reverse_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n\n    def reverse(node):\n        if not node or not node.next:\n            return node\n        new_head = reverse(node.next)\n        node.next.next = node\n        node.next = None\n        return new_head\n\n    return list_to_arr(reverse(head))",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Recursively reverse the rest of the list. The last node becomes the new head. After the recursive call returns, `node.next` still points to the next node (now the tail of the reversed suffix). Set `node.next.next = node` to reverse that link, and `node.next = None` to avoid a cycle."
+    }
+  ],
+  "hints": [
+    "Use three pointers: prev (None initially), curr (head), and next_node (to save curr.next before overwriting it).",
+    "At each step, reverse the link: curr.next = prev, then advance both pointers."
+  ],
+  "lcEquivalent": "206. Reverse Linked List"
+}

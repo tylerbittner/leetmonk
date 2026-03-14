@@ -1,0 +1,112 @@
+{
+  "id": "top-k-frequent-elements",
+  "title": "Top K Frequent Elements",
+  "difficulty": "medium",
+  "tags": ["array", "hash-map", "heap", "sorting"],
+  "description": "## Top K Frequent Elements\n\nGiven an integer array `nums` and an integer `k`, return the `k` most frequent elements. The answer must be returned sorted in ascending order.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`\n- `k` is in the range `[1, number of unique elements]`\n- The answer is guaranteed to be unique.",
+  "examples": [
+    {
+      "input": "nums = [1,1,1,2,2,3], k = 2",
+      "output": "[1,2]",
+      "explanation": "1 appears 3 times, 2 appears 2 times — the top 2."
+    },
+    {
+      "input": "nums = [1], k = 1",
+      "output": "[1]",
+      "explanation": "Only one element."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [1, 1, 1, 2, 2, 3], "k": 2},
+      "expected": [1, 2],
+      "explanation": "1 and 2 are most frequent (sorted)"
+    },
+    {
+      "input": {"nums": [1], "k": 1},
+      "expected": [1],
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [4, 1, -1, 2, -1, 2, 3], "k": 2},
+      "expected": [-1, 2],
+      "explanation": "-1 and 2 each appear twice"
+    },
+    {
+      "input": {"nums": [1, 1, 1, 2, 2, 3], "k": 2},
+      "expected": [1, 2],
+      "explanation": "1 appears 3x, 2 appears 2x — clear top 2"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1, 1, 2, 2, 3, 3, 4], "k": 3},
+      "expected": [1, 2, 3],
+      "explanation": "Top 3 tied at frequency 2"
+    },
+    {
+      "input": {"nums": [5, 5, 5, 4, 4, 3], "k": 1},
+      "expected": [5],
+      "explanation": "5 is most frequent"
+    },
+    {
+      "input": {"nums": [1, 1, 1, 1], "k": 1},
+      "expected": [1],
+      "explanation": "All same"
+    },
+    {
+      "input": {"nums": [3, 0, 1, 0], "k": 1},
+      "expected": [0],
+      "explanation": "0 appears twice"
+    },
+    {
+      "input": {"nums": [-1, -1], "k": 1},
+      "expected": [-1],
+      "explanation": "Negative number"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 1, 2, 1], "k": 3},
+      "expected": [1, 2, 3],
+      "explanation": "All unique elements returned sorted"
+    },
+    {
+      "input": {"nums": [5, 3, 1, 1, 1, 3, 73, 1], "k": 2},
+      "expected": [1, 3],
+      "explanation": "1 appears 4 times, 3 twice"
+    },
+    {
+      "input": {"nums": [1, 2], "k": 2},
+      "expected": [1, 2],
+      "explanation": "Equal frequency, return both sorted"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    pass"
+  },
+  "functionName": "top_k_frequent",
+  "solutions": [
+    {
+      "label": "Sort by Frequency — O(n log n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import Counter\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    count = Counter(nums)\n    return sorted(sorted(count.keys(), key=lambda x: -count[x])[:k])",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Count frequencies with a hash map. Sort all unique elements by frequency descending, take the top k, then sort the result ascending for deterministic output."
+    },
+    {
+      "label": "Min-Heap — O(n log k)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nfrom collections import Counter\nimport heapq\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    count = Counter(nums)\n    # Use a min-heap of size k (keep the k most frequent)\n    heap = []\n    for num, freq in count.items():\n        heapq.heappush(heap, (freq, num))\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return sorted(num for freq, num in heap)",
+      "timeComplexity": "O(n log k)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Count frequencies. Maintain a min-heap of size k: push each element's (frequency, value) pair, and if the heap grows beyond k, pop the minimum (least frequent). The remaining k elements are the most frequent. Sort before returning for consistent output."
+    }
+  ],
+  "hints": [
+    "Count element frequencies with a hash map, then pick the top k by frequency.",
+    "A min-heap of size k gives O(n log k) — push elements by frequency and evict the minimum when size exceeds k."
+  ],
+  "lcEquivalent": "347. Top K Frequent Elements"
+}

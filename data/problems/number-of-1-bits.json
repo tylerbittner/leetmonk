@@ -1,0 +1,117 @@
+{
+  "id": "number-of-1-bits",
+  "title": "Number of 1 Bits",
+  "difficulty": "easy",
+  "tags": ["bit-manipulation"],
+  "description": "## Number of 1 Bits\n\nGiven a positive integer `n`, return the number of set bits (bits equal to 1) in its binary representation. This is also known as the **Hamming weight**.\n\n**Constraints:**\n- `1 <= n <= 2^31 - 1`",
+  "examples": [
+    {
+      "input": "n = 11",
+      "output": "3",
+      "explanation": "11 in binary is 1011, which has three '1' bits."
+    },
+    {
+      "input": "n = 128",
+      "output": "1",
+      "explanation": "128 = 10000000 in binary — one '1' bit."
+    },
+    {
+      "input": "n = 2147483645",
+      "output": "30",
+      "explanation": "Binary has 30 set bits."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"n": 11},
+      "expected": 3,
+      "explanation": "1011 has three 1s"
+    },
+    {
+      "input": {"n": 128},
+      "expected": 1,
+      "explanation": "10000000"
+    },
+    {
+      "input": {"n": 2147483645},
+      "expected": 30,
+      "explanation": "30 set bits"
+    },
+    {
+      "input": {"n": 1},
+      "expected": 1,
+      "explanation": "Single bit"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"n": 2147483647},
+      "expected": 31,
+      "explanation": "All 31 bits set"
+    },
+    {
+      "input": {"n": 4},
+      "expected": 1,
+      "explanation": "100"
+    },
+    {
+      "input": {"n": 7},
+      "expected": 3,
+      "explanation": "111"
+    },
+    {
+      "input": {"n": 15},
+      "expected": 4,
+      "explanation": "1111"
+    },
+    {
+      "input": {"n": 16},
+      "expected": 1,
+      "explanation": "10000"
+    },
+    {
+      "input": {"n": 255},
+      "expected": 8,
+      "explanation": "11111111"
+    },
+    {
+      "input": {"n": 5},
+      "expected": 2,
+      "explanation": "101 has two 1s"
+    },
+    {
+      "input": {"n": 6},
+      "expected": 2,
+      "explanation": "110 has two 1s"
+    }
+  ],
+  "starterCode": {
+    "python": "def hamming_weight(n: int) -> int:\n    pass"
+  },
+  "functionName": "hamming_weight",
+  "solutions": [
+    {
+      "label": "Bit Check Loop — O(32)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "def hamming_weight(n: int) -> int:\n    count = 0\n    while n:\n        count += n & 1\n        n >>= 1\n    return count",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Check the least significant bit with `n & 1`, then right-shift n to examine the next bit. Repeat until n is 0."
+    },
+    {
+      "label": "Brian Kernighan's Algorithm — O(k)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def hamming_weight(n: int) -> int:\n    count = 0\n    while n:\n        n &= n - 1  # clear the lowest set bit\n        count += 1\n    return count",
+      "timeComplexity": "O(k)",
+      "spaceComplexity": "O(1)",
+      "explanation": "The trick `n &= n - 1` clears exactly the lowest set bit of n. Subtracting 1 from n flips the trailing 0s to 1s and the lowest 1 to 0, so ANDing with n clears that lowest 1 bit. Repeating this k times (where k is the number of set bits) is faster than checking all 32 bits when k is small."
+    }
+  ],
+  "hints": [
+    "Use `n & 1` to check the least significant bit, then right-shift with `n >>= 1` to check the next.",
+    "Optimization: `n & (n-1)` clears the lowest set bit. Count how many times you can do this before n reaches 0."
+  ],
+  "lcEquivalent": "191. Number of 1 Bits"
+}

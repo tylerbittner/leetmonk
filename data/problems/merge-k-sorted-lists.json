@@ -1,0 +1,117 @@
+{
+  "id": "merge-k-sorted-lists",
+  "title": "Merge K Sorted Lists",
+  "difficulty": "hard",
+  "tags": ["linked-list", "heap", "divide-and-conquer"],
+  "description": "## Merge K Sorted Lists\n\nYou are given a list of `k` sorted linked lists (each as a plain integer list). Merge all lists into one sorted linked list and return it as a plain integer list.\n\n**Constraints:**\n- `k == lists.length`\n- `0 <= k <= 10^4`\n- `0 <= lists[i].length <= 500`\n- `-10^4 <= lists[i][j] <= 10^4`\n- Each list is sorted in non-decreasing order.",
+  "examples": [
+    {
+      "input": "lists = [[1,4,5],[1,3,4],[2,6]]",
+      "output": "[1,1,2,3,4,4,5,6]",
+      "explanation": "Merge three sorted lists into one."
+    },
+    {
+      "input": "lists = []",
+      "output": "[]",
+      "explanation": "No lists to merge."
+    },
+    {
+      "input": "lists = [[]]",
+      "output": "[]",
+      "explanation": "One empty list."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"lists": [[1, 4, 5], [1, 3, 4], [2, 6]]},
+      "expected": [1, 1, 2, 3, 4, 4, 5, 6],
+      "explanation": "Merge three sorted lists"
+    },
+    {
+      "input": {"lists": []},
+      "expected": [],
+      "explanation": "No lists"
+    },
+    {
+      "input": {"lists": [[]]},
+      "expected": [],
+      "explanation": "Single empty list"
+    },
+    {
+      "input": {"lists": [[1], [2], [3]]},
+      "expected": [1, 2, 3],
+      "explanation": "Three single-element lists"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"lists": [[1, 2, 3]]},
+      "expected": [1, 2, 3],
+      "explanation": "Single list"
+    },
+    {
+      "input": {"lists": [[1, 3, 5], [2, 4, 6]]},
+      "expected": [1, 2, 3, 4, 5, 6],
+      "explanation": "Two interleaved lists"
+    },
+    {
+      "input": {"lists": [[], [1], []]},
+      "expected": [1],
+      "explanation": "Empty lists mixed with non-empty"
+    },
+    {
+      "input": {"lists": [[-1, 0], [-3, -2, -1]]},
+      "expected": [-3, -2, -1, -1, 0],
+      "explanation": "Negative values"
+    },
+    {
+      "input": {"lists": [[1, 1, 1], [1, 1, 1]]},
+      "expected": [1, 1, 1, 1, 1, 1],
+      "explanation": "All duplicates"
+    },
+    {
+      "input": {"lists": [[1, 10, 100], [2, 20, 200], [3, 30, 300]]},
+      "expected": [1, 2, 3, 10, 20, 30, 100, 200, 300],
+      "explanation": "Three lists with large gaps"
+    },
+    {
+      "input": {"lists": [[-1, 0, 1], [-2, 2]]},
+      "expected": [-2, -1, 0, 1, 2],
+      "explanation": "Negative and positive values"
+    },
+    {
+      "input": {"lists": [[1, 3, 5, 7], [2, 4, 6, 8]]},
+      "expected": [1, 2, 3, 4, 5, 6, 7, 8],
+      "explanation": "Two interleaved lists"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    pass"
+  },
+  "functionName": "merge_k_sorted",
+  "solutions": [
+    {
+      "label": "Min-Heap — O(N log k)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nimport heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    # Convert all lists to linked lists and initialize heap\n    heap = []  # (val, counter, node)\n    counter = 0\n    for lst in lists:\n        node = build_list(lst)\n        if node:\n            heapq.heappush(heap, (node.val, counter, node))\n            counter += 1\n\n    dummy = ListNode(0)\n    curr = dummy\n\n    while heap:\n        val, _, node = heapq.heappop(heap)\n        curr.next = node\n        curr = curr.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, counter, node.next))\n            counter += 1\n\n    return list_to_arr(dummy.next)",
+      "timeComplexity": "O(N log k)",
+      "spaceComplexity": "O(k)",
+      "explanation": "Use a min-heap of size k to always extract the globally smallest remaining node. Initialize the heap with the head of each non-empty list. After extracting a node, push its successor (if any) into the heap. The counter breaks ties in the heap since ListNode objects aren't comparable. N is the total number of nodes, k is the number of lists."
+    },
+    {
+      "label": "Divide and Conquer — O(N log k)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nimport heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    nodes = [build_list(lst) for lst in lists]\n\n    def merge_two(l1, l2):\n        dummy = ListNode(0)\n        curr = dummy\n        while l1 and l2:\n            if l1.val <= l2.val:\n                curr.next, l1 = l1, l1.next\n            else:\n                curr.next, l2 = l2, l2.next\n            curr = curr.next\n        curr.next = l1 or l2\n        return dummy.next\n\n    def divide_conquer(lists):\n        if not lists:\n            return None\n        if len(lists) == 1:\n            return lists[0]\n        mid = len(lists) // 2\n        left = divide_conquer(lists[:mid])\n        right = divide_conquer(lists[mid:])\n        return merge_two(left, right)\n\n    return list_to_arr(divide_conquer(nodes))",
+      "timeComplexity": "O(N log k)",
+      "spaceComplexity": "O(log k)",
+      "explanation": "Repeatedly merge pairs of lists in a tournament-style bracket. In each round, merge adjacent pairs — this halves the number of lists. After log(k) rounds, all lists are merged. Each merge pass touches O(N) nodes total, giving O(N log k) overall. The recursion depth is O(log k)."
+    }
+  ],
+  "hints": [
+    "A min-heap lets you efficiently find the smallest element among the current front nodes of all k lists.",
+    "Push the head of each list into the heap. After popping the minimum, push that node's next (if it exists). Use a counter as tiebreaker since ListNode isn't comparable."
+  ],
+  "lcEquivalent": "23. Merge k Sorted Lists"
+}

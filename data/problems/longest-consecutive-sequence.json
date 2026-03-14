@@ -1,0 +1,112 @@
+{
+  "id": "longest-consecutive-sequence",
+  "title": "Longest Consecutive Sequence",
+  "difficulty": "medium",
+  "tags": ["array", "hash-set"],
+  "description": "## Longest Consecutive Sequence\n\nGiven an unsorted array of integers `nums`, return the length of the longest sequence of consecutive integers (e.g., `[1,2,3,4]`).\n\nThe algorithm must run in O(n) time.\n\n**Constraints:**\n- `0 <= nums.length <= 10^5`\n- `-10^9 <= nums[i] <= 10^9`",
+  "examples": [
+    {
+      "input": "nums = [100,4,200,1,3,2]",
+      "output": "4",
+      "explanation": "The consecutive sequence [1,2,3,4] has length 4."
+    },
+    {
+      "input": "nums = [0,3,7,2,5,8,4,6,0,1]",
+      "output": "9",
+      "explanation": "[0,1,2,3,4,5,6,7,8] has length 9."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [100, 4, 200, 1, 3, 2]},
+      "expected": 4,
+      "explanation": "[1,2,3,4]"
+    },
+    {
+      "input": {"nums": [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]},
+      "expected": 9,
+      "explanation": "[0..8]"
+    },
+    {
+      "input": {"nums": []},
+      "expected": 0,
+      "explanation": "Empty array"
+    },
+    {
+      "input": {"nums": [1, 2, 0, 1]},
+      "expected": 3,
+      "explanation": "[0,1,2] with duplicates"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1]},
+      "expected": 1,
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [1, 2, 3, 4, 5]},
+      "expected": 5,
+      "explanation": "Already consecutive"
+    },
+    {
+      "input": {"nums": [5, 4, 3, 2, 1]},
+      "expected": 5,
+      "explanation": "Reverse order"
+    },
+    {
+      "input": {"nums": [1, 3, 5, 7]},
+      "expected": 1,
+      "explanation": "No consecutive"
+    },
+    {
+      "input": {"nums": [1, 1, 1, 1]},
+      "expected": 1,
+      "explanation": "All duplicates"
+    },
+    {
+      "input": {"nums": [-1, 0, 1, 2]},
+      "expected": 4,
+      "explanation": "Negative to positive"
+    },
+    {
+      "input": {"nums": [9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6]},
+      "expected": 7,
+      "explanation": "[3,4,5,6,7,8,9]"
+    },
+    {
+      "input": {"nums": [0, 0]},
+      "expected": 1,
+      "explanation": "Duplicate zeros"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    pass"
+  },
+  "functionName": "longest_consecutive",
+  "solutions": [
+    {
+      "label": "Sorting — O(n log n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    if not nums:\n        return 0\n    nums = sorted(set(nums))\n    best = 1\n    cur = 1\n    for i in range(1, len(nums)):\n        if nums[i] == nums[i - 1] + 1:\n            cur += 1\n            best = max(best, cur)\n        else:\n            cur = 1\n    return best",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Remove duplicates and sort. Then scan linearly: if each number is one more than the previous, extend the current streak; otherwise reset. Simple but not O(n)."
+    },
+    {
+      "label": "Hash Set — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    num_set = set(nums)\n    best = 0\n\n    for num in num_set:\n        # Only start counting from the beginning of a sequence\n        if num - 1 not in num_set:\n            cur = 1\n            while num + cur in num_set:\n                cur += 1\n            best = max(best, cur)\n\n    return best",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Put all numbers in a hash set for O(1) lookup. The key insight: only start counting a sequence from its actual beginning — a number `n` is a sequence start if `n-1` is not in the set. From each start, count forward as long as consecutive numbers exist. Even though there's a nested loop, each number is visited at most twice total across all sequences, giving O(n) overall."
+    }
+  ],
+  "hints": [
+    "Put all numbers in a hash set. For each number, check if it's the start of a sequence (num-1 is not in the set).",
+    "Only count sequences from their start — this ensures each element is visited at most once, giving O(n) time."
+  ],
+  "lcEquivalent": "128. Longest Consecutive Sequence"
+}

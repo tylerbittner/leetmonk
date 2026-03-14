@@ -1,0 +1,112 @@
+{
+  "id": "reverse-bits",
+  "title": "Reverse Bits",
+  "difficulty": "easy",
+  "tags": ["bit-manipulation"],
+  "description": "## Reverse Bits\n\nGiven a 32-bit unsigned integer `n`, return the integer obtained by reversing its bits.\n\nFor example, `n = 43261596` (binary `00000010100101000001111010011100`) reversed is `00111001011110000010100101000000` = `964176192`.\n\n**Constraints:**\n- The input must be a **32-bit unsigned integer**.",
+  "examples": [
+    {
+      "input": "n = 43261596",
+      "output": "964176192",
+      "explanation": "00000010100101000001111010011100 reversed is 00111001011110000010100101000000."
+    },
+    {
+      "input": "n = 4294967293",
+      "output": "3221225471",
+      "explanation": "11111111111111111111111111111101 reversed is 10111111111111111111111111111111."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"n": 43261596},
+      "expected": 964176192,
+      "explanation": "Classic example"
+    },
+    {
+      "input": {"n": 4294967293},
+      "expected": 3221225471,
+      "explanation": "High bit example"
+    },
+    {
+      "input": {"n": 0},
+      "expected": 0,
+      "explanation": "All zeros reversed is still zero"
+    },
+    {
+      "input": {"n": 1},
+      "expected": 2147483648,
+      "explanation": "00000000000000000000000000000001 reversed is 10000000000000000000000000000000"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"n": 2147483648},
+      "expected": 1,
+      "explanation": "10000000000000000000000000000000 reversed is 00000000000000000000000000000001"
+    },
+    {
+      "input": {"n": 4294967295},
+      "expected": 4294967295,
+      "explanation": "All 1s reversed is still all 1s"
+    },
+    {
+      "input": {"n": 2},
+      "expected": 1073741824,
+      "explanation": "Bit 1 moved to bit 30"
+    },
+    {
+      "input": {"n": 3},
+      "expected": 3221225472,
+      "explanation": "Bits 0 and 1 reversed to bits 31 and 30"
+    },
+    {
+      "input": {"n": 2147483647},
+      "expected": 4294967294,
+      "explanation": "01111111111111111111111111111111 → 11111111111111111111111111111110"
+    },
+    {
+      "input": {"n": 4},
+      "expected": 536870912,
+      "explanation": "Bit 2 moved to bit 29"
+    },
+    {
+      "input": {"n": 8},
+      "expected": 268435456,
+      "explanation": "Bit 3 moved to bit 28"
+    },
+    {
+      "input": {"n": 16},
+      "expected": 134217728,
+      "explanation": "Bit 4 moved to bit 27"
+    }
+  ],
+  "starterCode": {
+    "python": "def reverse_bits(n: int) -> int:\n    pass"
+  },
+  "functionName": "reverse_bits",
+  "solutions": [
+    {
+      "label": "Bit-by-Bit Reversal — O(32)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def reverse_bits(n: int) -> int:\n    result = 0\n    for _ in range(32):\n        result = (result << 1) | (n & 1)\n        n >>= 1\n    return result",
+      "timeComplexity": "O(32) = O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Build the reversed number bit by bit. In each iteration: extract the least significant bit of n (`n & 1`), shift result left to make room, OR in the extracted bit, then shift n right to process the next bit. After 32 iterations, all bits have been reversed."
+    },
+    {
+      "label": "String Reversal — O(1)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "def reverse_bits(n: int) -> int:\n    return int(bin(n)[2:].zfill(32)[::-1], 2)",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Convert n to a 32-character binary string (zero-padded with zfill), reverse it, then convert back to an integer. `bin(n)[2:]` removes the '0b' prefix. `zfill(32)` pads to exactly 32 bits. `[::-1]` reverses the string. `int(..., 2)` converts the reversed binary string back to an integer."
+    }
+  ],
+  "hints": [
+    "Process one bit at a time. In each step, take the LSB of n and append it to the result, then shift both.",
+    "Remember to do exactly 32 iterations even if n becomes 0 early — trailing zeros in n become leading zeros in the reversed result."
+  ],
+  "lcEquivalent": "190. Reverse Bits"
+}

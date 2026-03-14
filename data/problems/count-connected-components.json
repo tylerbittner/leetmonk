@@ -1,0 +1,112 @@
+{
+  "id": "count-connected-components",
+  "title": "Count Connected Components",
+  "difficulty": "medium",
+  "tags": ["graph", "depth-first-search", "union-find"],
+  "description": "## Count Connected Components\n\nYou have `n` nodes labeled from `0` to `n - 1` and a list of undirected edges. Return the number of connected components in the graph.\n\nA connected component is a group of nodes where every node can reach every other node through a path of edges.\n\n**Constraints:**\n- `1 <= n <= 2000`\n- `0 <= edges.length <= 5000`\n- `edges[i].length == 2`\n- `0 <= a_i, b_i < n`\n- `a_i != b_i`\n- There are no repeated edges.",
+  "examples": [
+    {
+      "input": "n = 5, edges = [[0,1],[1,2],[3,4]]",
+      "output": "2",
+      "explanation": "Nodes {0,1,2} and {3,4} form two components."
+    },
+    {
+      "input": "n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]",
+      "output": "1",
+      "explanation": "All nodes are connected in one component."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"n": 5, "edges": [[0, 1], [1, 2], [3, 4]]},
+      "expected": 2,
+      "explanation": "Two components"
+    },
+    {
+      "input": {"n": 5, "edges": [[0, 1], [1, 2], [2, 3], [3, 4]]},
+      "expected": 1,
+      "explanation": "All connected"
+    },
+    {
+      "input": {"n": 3, "edges": []},
+      "expected": 3,
+      "explanation": "No edges — each node is its own component"
+    },
+    {
+      "input": {"n": 4, "edges": [[0, 1], [2, 3]]},
+      "expected": 2,
+      "explanation": "Two pairs"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"n": 1, "edges": []},
+      "expected": 1,
+      "explanation": "Single node"
+    },
+    {
+      "input": {"n": 2, "edges": [[0, 1]]},
+      "expected": 1,
+      "explanation": "Two nodes connected"
+    },
+    {
+      "input": {"n": 2, "edges": []},
+      "expected": 2,
+      "explanation": "Two isolated nodes"
+    },
+    {
+      "input": {"n": 6, "edges": [[0, 1], [2, 3], [4, 5]]},
+      "expected": 3,
+      "explanation": "Three pairs"
+    },
+    {
+      "input": {"n": 6, "edges": [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]]},
+      "expected": 1,
+      "explanation": "Linear chain"
+    },
+    {
+      "input": {"n": 7, "edges": [[0, 1], [0, 2], [3, 4], [5, 6]]},
+      "expected": 3,
+      "explanation": "Three components"
+    },
+    {
+      "input": {"n": 4, "edges": [[0, 1], [1, 2], [2, 3], [0, 3]]},
+      "expected": 1,
+      "explanation": "Cycle — all connected"
+    },
+    {
+      "input": {"n": 5, "edges": [[0, 1], [0, 2], [0, 3], [0, 4]]},
+      "expected": 1,
+      "explanation": "Star graph"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    pass"
+  },
+  "functionName": "count_components",
+  "solutions": [
+    {
+      "label": "DFS — O(V+E)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    graph = [[] for _ in range(n)]\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n\n    visited = set()\n    count = 0\n\n    def dfs(node):\n        visited.add(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                dfs(neighbor)\n\n    for node in range(n):\n        if node not in visited:\n            count += 1\n            dfs(node)\n\n    return count",
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "Build an adjacency list for the undirected graph. For each unvisited node, start a DFS that marks all reachable nodes as visited, and increment the component count. The number of DFS invocations from the outer loop equals the number of connected components."
+    },
+    {
+      "label": "Union-Find — O(V+E·α(V))",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    parent = list(range(n))\n    rank = [0] * n\n\n    def find(x):\n        if parent[x] != x:\n            parent[x] = find(parent[x])  # path compression\n        return parent[x]\n\n    def union(x, y):\n        px, py = find(x), find(y)\n        if px == py:\n            return 0  # already same component\n        if rank[px] < rank[py]:\n            px, py = py, px\n        parent[py] = px\n        if rank[px] == rank[py]:\n            rank[px] += 1\n        return 1  # merged two components\n\n    components = n\n    for u, v in edges:\n        components -= union(u, v)\n\n    return components",
+      "timeComplexity": "O(V + E·α(V))",
+      "spaceComplexity": "O(V)",
+      "explanation": "Union-Find (Disjoint Set Union) efficiently tracks components. Start with n components (each node its own). For each edge, union the two nodes — if they were in different components, decrement the count. With path compression and union by rank, each operation is nearly O(1) (amortized O(α(V)), where α is the inverse Ackermann function)."
+    }
+  ],
+  "hints": [
+    "Use DFS or BFS to explore each connected component. Count how many times you start a new exploration from an unvisited node.",
+    "Union-Find is an elegant alternative: start with n components and reduce the count each time you merge two different components."
+  ],
+  "lcEquivalent": "323. Number of Connected Components in an Undirected Graph"
+}

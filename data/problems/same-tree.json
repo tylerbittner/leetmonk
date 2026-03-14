@@ -1,0 +1,117 @@
+{
+  "id": "same-tree",
+  "title": "Same Tree",
+  "difficulty": "easy",
+  "tags": ["tree", "depth-first-search"],
+  "description": "## Same Tree\n\nGiven two binary trees `p` and `q` (as level-order lists), return `true` if they are identical — same structure and same node values at every position.\n\n**Constraints:**\n- The number of nodes in both trees is in the range `[0, 100]`.\n- `-10^4 <= Node.val <= 10^4`",
+  "examples": [
+    {
+      "input": "p = [1,2,3], q = [1,2,3]",
+      "output": "true",
+      "explanation": "Both trees are identical."
+    },
+    {
+      "input": "p = [1,2], q = [1,null,2]",
+      "output": "false",
+      "explanation": "Different structure: 2 is left child vs right child."
+    },
+    {
+      "input": "p = [1,2,1], q = [1,1,2]",
+      "output": "false",
+      "explanation": "Different values at the leaf level."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"p": [1, 2, 3], "q": [1, 2, 3]},
+      "expected": true,
+      "explanation": "Identical trees"
+    },
+    {
+      "input": {"p": [1, 2], "q": [1, null, 2]},
+      "expected": false,
+      "explanation": "Different structure"
+    },
+    {
+      "input": {"p": [1, 2, 1], "q": [1, 1, 2]},
+      "expected": false,
+      "explanation": "Different values"
+    },
+    {
+      "input": {"p": [], "q": []},
+      "expected": true,
+      "explanation": "Both empty"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"p": [1], "q": [1]},
+      "expected": true,
+      "explanation": "Single nodes match"
+    },
+    {
+      "input": {"p": [1], "q": [2]},
+      "expected": false,
+      "explanation": "Different root values"
+    },
+    {
+      "input": {"p": [], "q": [1]},
+      "expected": false,
+      "explanation": "One empty, one not"
+    },
+    {
+      "input": {"p": [1, 2, 3, 4, 5], "q": [1, 2, 3, 4, 5]},
+      "expected": true,
+      "explanation": "Larger identical trees"
+    },
+    {
+      "input": {"p": [1, 2, 3, 4, 5], "q": [1, 2, 3, 4, 6]},
+      "expected": false,
+      "explanation": "Differ only at leaf"
+    },
+    {
+      "input": {"p": [1, 2, 3], "q": [1, 2]},
+      "expected": false,
+      "explanation": "Different size"
+    },
+    {
+      "input": {"p": [-1, -2, -3], "q": [-1, -2, -3]},
+      "expected": true,
+      "explanation": "Identical with negative values"
+    },
+    {
+      "input": {"p": [1, 2, null, 3], "q": [1, 2, null, 3]},
+      "expected": true,
+      "explanation": "Same unbalanced trees"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_same_tree(p: List[Optional[int]], q: List[Optional[int]]) -> bool:\n    p = build_tree(p)\n    q = build_tree(q)\n    pass"
+  },
+  "functionName": "is_same_tree",
+  "solutions": [
+    {
+      "label": "Recursive DFS — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_same_tree(p: List[Optional[int]], q: List[Optional[int]]) -> bool:\n    p = build_tree(p)\n    q = build_tree(q)\n\n    def same(a, b):\n        if not a and not b:\n            return True\n        if not a or not b:\n            return False\n        return a.val == b.val and same(a.left, b.left) and same(a.right, b.right)\n\n    return same(p, q)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Recursively compare nodes: two trees are identical if both are None (base case), or both are non-None with equal values and identical left and right subtrees. Any mismatch in structure or value returns False immediately."
+    },
+    {
+      "label": "Iterative BFS — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_same_tree(p: List[Optional[int]], q: List[Optional[int]]) -> bool:\n    p = build_tree(p)\n    q = build_tree(q)\n\n    queue = deque([(p, q)])\n    while queue:\n        a, b = queue.popleft()\n        if not a and not b:\n            continue\n        if not a or not b or a.val != b.val:\n            return False\n        queue.append((a.left, b.left))\n        queue.append((a.right, b.right))\n\n    return True",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Iterative BFS comparing both trees node-by-node in parallel. Enqueue pairs of corresponding nodes. For each pair: if both are None, continue; if one is None or values differ, return False; otherwise enqueue their children as pairs. This is equivalent to the recursive approach but avoids the call stack."
+    }
+  ],
+  "hints": [
+    "Two trees are the same if both nodes are None, or both are non-None with equal values and identical left and right subtrees.",
+    "Use recursion: check root values match, then recursively check left and right subtrees."
+  ],
+  "lcEquivalent": "100. Same Tree"
+}

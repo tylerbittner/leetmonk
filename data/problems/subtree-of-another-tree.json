@@ -1,0 +1,112 @@
+{
+  "id": "subtree-of-another-tree",
+  "title": "Subtree of Another Tree",
+  "difficulty": "easy",
+  "tags": ["tree", "depth-first-search"],
+  "description": "## Subtree of Another Tree\n\nGiven two binary trees `root` and `subRoot` (as level-order lists), return `true` if there is a node in `root` whose subtree is identical to `subRoot`.\n\nA subtree of a binary tree `tree` is a tree that consists of a node in `tree` and all of this node's descendants.\n\n**Constraints:**\n- The number of nodes in `root` is in the range `[1, 2000]`.\n- The number of nodes in `subRoot` is in the range `[1, 1000]`.\n- `-10^4 <= root.val, subRoot.val <= 10^4`",
+  "examples": [
+    {
+      "input": "root = [3,4,5,1,2], subRoot = [4,1,2]",
+      "output": "true",
+      "explanation": "The subtree rooted at node 4 (with children 1 and 2) is identical to subRoot."
+    },
+    {
+      "input": "root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]",
+      "output": "false",
+      "explanation": "The node 4 has an extra leaf 0, so it doesn't match subRoot."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [4, 1, 2]},
+      "expected": true,
+      "explanation": "Subtree found at node 4"
+    },
+    {
+      "input": {"root": [3, 4, 5, 1, 2, null, null, null, null, 0], "subRoot": [4, 1, 2]},
+      "expected": false,
+      "explanation": "Extra node makes it not match"
+    },
+    {
+      "input": {"root": [1, 1], "subRoot": [1]},
+      "expected": true,
+      "explanation": "Both leaf nodes match"
+    },
+    {
+      "input": {"root": [1, 2, 3], "subRoot": [1, 2]},
+      "expected": false,
+      "explanation": "subRoot doesn't match any subtree"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"root": [1], "subRoot": [1]},
+      "expected": true,
+      "explanation": "Identical single nodes"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [2, 4, 5]},
+      "expected": true,
+      "explanation": "Left subtree matches"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [3]},
+      "expected": true,
+      "explanation": "Leaf node as subRoot"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [2, 3, 4]},
+      "expected": false,
+      "explanation": "No matching subtree"
+    },
+    {
+      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [4]},
+      "expected": false,
+      "explanation": "Node 4 has children 1 and 2, so doesn't match single-node subRoot"
+    },
+    {
+      "input": {"root": [1, 2, 3], "subRoot": [2]},
+      "expected": true,
+      "explanation": "Leaf node matches"
+    },
+    {
+      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [5]},
+      "expected": true,
+      "explanation": "Right leaf subtree matches"
+    },
+    {
+      "input": {"root": [10, 5, 15, 3, 7], "subRoot": [5, 3, 7]},
+      "expected": true,
+      "explanation": "Left subtree matches exactly"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n    pass"
+  },
+  "functionName": "is_subtree",
+  "solutions": [
+    {
+      "label": "DFS — O(m·n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n\n    def same(a, b):\n        if not a and not b:\n            return True\n        if not a or not b:\n            return False\n        return a.val == b.val and same(a.left, b.left) and same(a.right, b.right)\n\n    def check(node):\n        if not node:\n            return False\n        if same(node, subRoot):\n            return True\n        return check(node.left) or check(node.right)\n\n    return check(root)",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "For each node in `root`, check if the subtree rooted there is identical to `subRoot` using a `same()` helper. `same()` compares two trees recursively. If either node is a match, return True. The outer `check()` traverses all n nodes of root, and `same()` runs in O(m) per call, giving O(m·n) overall."
+    },
+    {
+      "label": "Serialization — O(m·n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n\n    def serialize(node):\n        if not node:\n            return \"#\"\n        return f\"|{node.val}|{serialize(node.left)}|{serialize(node.right)}\"\n\n    return serialize(subRoot) in serialize(root)",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(m+n)",
+      "explanation": "Serialize both trees into unique strings representing their structure (using delimiters and # for null). A tree T is a subtree of S iff the serialized form of T appears as a substring in the serialized form of S. The delimiters ensure values like '1' don't accidentally match '10'. Uses Python's built-in string `in` operator for substring search."
+    }
+  ],
+  "hints": [
+    "At each node in root, check if the subtree rooted there is identical to subRoot.",
+    "Use a helper `is_same(a, b)` that recursively checks if two trees are identical, then call it from every node in root."
+  ],
+  "lcEquivalent": "572. Subtree of Another Tree"
+}

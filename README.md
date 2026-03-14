@@ -12,7 +12,7 @@ Curated problems covering arrays, dynamic programming, binary search, sliding wi
 
 ## Features
 
-- **39 curated problems** spanning 11 categories (easy / medium / hard)
+- **86 curated problems** spanning 11 categories (easy / medium / hard)
 - **Monaco editor** with Python syntax highlighting and autocompletion
 - **Local code execution** via Python 3 — no server, no network
 - **Hints and solutions** revealed on demand, per problem
@@ -84,7 +84,7 @@ leetmonk/
 │       ├── App.jsx              # Root React component
 │       └── components/          # UI components
 ├── data/
-│   └── problems/                # 39 problem JSON files
+│   └── problems/                # 86 problem JSON files
 └── tests/                       # Jest test suites
 ```
 

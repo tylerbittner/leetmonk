@@ -1,0 +1,112 @@
+{
+  "id": "graph-valid-tree",
+  "title": "Graph Valid Tree",
+  "difficulty": "medium",
+  "tags": ["graph", "depth-first-search", "union-find"],
+  "description": "## Graph Valid Tree\n\nGiven `n` nodes labeled from `0` to `n - 1` and a list of undirected edges, determine whether the graph forms a valid tree.\n\nA valid tree must be:\n- **Connected**: every node is reachable from any other node.\n- **Acyclic**: there are no cycles.\n\nEquivalently, a valid tree with `n` nodes has exactly `n - 1` edges.\n\n**Constraints:**\n- `1 <= n <= 2000`\n- `0 <= edges.length <= 5000`\n- `edges[i].length == 2`\n- `0 <= a_i, b_i < n`\n- `a_i != b_i`\n- There are no repeated edges.",
+  "examples": [
+    {
+      "input": "n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]",
+      "output": "true",
+      "explanation": "All 5 nodes connected with exactly 4 edges and no cycles."
+    },
+    {
+      "input": "n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]",
+      "output": "false",
+      "explanation": "Node 1, 2, 3 form a cycle."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"n": 5, "edges": [[0, 1], [0, 2], [0, 3], [1, 4]]},
+      "expected": true,
+      "explanation": "Valid tree"
+    },
+    {
+      "input": {"n": 5, "edges": [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]},
+      "expected": false,
+      "explanation": "Cycle exists"
+    },
+    {
+      "input": {"n": 1, "edges": []},
+      "expected": true,
+      "explanation": "Single node, trivially a tree"
+    },
+    {
+      "input": {"n": 2, "edges": [[0, 1]]},
+      "expected": true,
+      "explanation": "Two nodes, one edge"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"n": 2, "edges": []},
+      "expected": false,
+      "explanation": "Not connected"
+    },
+    {
+      "input": {"n": 3, "edges": [[0, 1], [1, 2], [0, 2]]},
+      "expected": false,
+      "explanation": "Cycle in triangle"
+    },
+    {
+      "input": {"n": 3, "edges": [[0, 1], [1, 2]]},
+      "expected": true,
+      "explanation": "Linear tree"
+    },
+    {
+      "input": {"n": 4, "edges": [[0, 1], [2, 3]]},
+      "expected": false,
+      "explanation": "Not connected — two components"
+    },
+    {
+      "input": {"n": 4, "edges": [[0, 1], [1, 2], [2, 3]]},
+      "expected": true,
+      "explanation": "Linear chain — valid tree"
+    },
+    {
+      "input": {"n": 5, "edges": [[0, 1], [1, 2], [3, 4]]},
+      "expected": false,
+      "explanation": "Not connected"
+    },
+    {
+      "input": {"n": 4, "edges": [[0, 1], [1, 2], [2, 3], [3, 0]]},
+      "expected": false,
+      "explanation": "Cycle"
+    },
+    {
+      "input": {"n": 6, "edges": [[0, 1], [0, 2], [0, 3], [3, 4], [4, 5]]},
+      "expected": true,
+      "explanation": "Valid tree with 6 nodes, 5 edges"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    pass"
+  },
+  "functionName": "valid_tree",
+  "solutions": [
+    {
+      "label": "DFS Cycle Detection — O(V+E)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    if len(edges) != n - 1:\n        return False\n\n    graph = [[] for _ in range(n)]\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n\n    visited = set()\n\n    def dfs(node, parent):\n        visited.add(node)\n        for neighbor in graph[node]:\n            if neighbor == parent:\n                continue\n            if neighbor in visited:\n                return False\n            if not dfs(neighbor, node):\n                return False\n        return True\n\n    return dfs(0, -1) and len(visited) == n",
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "A valid tree has exactly n-1 edges — check this first as a quick filter. Then DFS from node 0, tracking the parent to avoid treating the edge we came from as a cycle. If any neighbor is already visited (and isn't the parent), there's a cycle. After DFS, verify all n nodes were visited (ensures connectivity)."
+    },
+    {
+      "label": "Union-Find — O(V+E·α(V))",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    if len(edges) != n - 1:\n        return False\n\n    parent = list(range(n))\n\n    def find(x):\n        while parent[x] != x:\n            parent[x] = parent[parent[x]]  # path compression\n            x = parent[x]\n        return x\n\n    def union(x, y):\n        px, py = find(x), find(y)\n        if px == py:\n            return False  # cycle\n        parent[px] = py\n        return True\n\n    for u, v in edges:\n        if not union(u, v):\n            return False\n\n    return True",
+      "timeComplexity": "O(V + E·α(V))",
+      "spaceComplexity": "O(V)",
+      "explanation": "First check that |edges| == n-1 (necessary condition). Then use Union-Find: for each edge, attempt to union the two nodes. If they're already in the same set (find(u) == find(v)), adding this edge would create a cycle — return False. If all edges are processed without a cycle and the edge count condition holds, the graph is a valid tree."
+    }
+  ],
+  "hints": [
+    "A valid tree must be connected AND have no cycles. A tree with n nodes always has exactly n-1 edges — check this first.",
+    "Then verify no cycles using DFS (track parent to skip the edge you came from) or Union-Find."
+  ],
+  "lcEquivalent": "261. Graph Valid Tree"
+}

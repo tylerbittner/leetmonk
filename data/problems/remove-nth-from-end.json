@@ -1,0 +1,117 @@
+{
+  "id": "remove-nth-from-end",
+  "title": "Remove Nth Node From End of List",
+  "difficulty": "medium",
+  "tags": ["linked-list", "two-pointers"],
+  "description": "## Remove Nth Node From End of List\n\nGiven the head of a linked list (as a plain integer list) and an integer `n`, remove the `n`-th node from the end of the list and return the modified list.\n\n`n` is guaranteed to be valid (1 ≤ n ≤ length of list).\n\n**Constraints:**\n- The number of nodes is `sz`.\n- `1 <= sz <= 30`\n- `0 <= Node.val <= 100`\n- `1 <= n <= sz`",
+  "examples": [
+    {
+      "input": "head = [1,2,3,4,5], n = 2",
+      "output": "[1,2,3,5]",
+      "explanation": "Remove the 2nd node from the end (value 4)."
+    },
+    {
+      "input": "head = [1], n = 1",
+      "output": "[]",
+      "explanation": "Remove the only node."
+    },
+    {
+      "input": "head = [1,2], n = 1",
+      "output": "[1]",
+      "explanation": "Remove the last node."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"head": [1, 2, 3, 4, 5], "n": 2},
+      "expected": [1, 2, 3, 5],
+      "explanation": "Remove 4th node (2nd from end)"
+    },
+    {
+      "input": {"head": [1], "n": 1},
+      "expected": [],
+      "explanation": "Remove only node"
+    },
+    {
+      "input": {"head": [1, 2], "n": 1},
+      "expected": [1],
+      "explanation": "Remove last"
+    },
+    {
+      "input": {"head": [1, 2], "n": 2},
+      "expected": [2],
+      "explanation": "Remove first (head)"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"head": [1, 2, 3], "n": 1},
+      "expected": [1, 2],
+      "explanation": "Remove tail"
+    },
+    {
+      "input": {"head": [1, 2, 3], "n": 2},
+      "expected": [1, 3],
+      "explanation": "Remove middle"
+    },
+    {
+      "input": {"head": [1, 2, 3], "n": 3},
+      "expected": [2, 3],
+      "explanation": "Remove head"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5], "n": 5},
+      "expected": [2, 3, 4, 5],
+      "explanation": "Remove head of longer list"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5], "n": 3},
+      "expected": [1, 2, 4, 5],
+      "explanation": "Remove middle of longer list"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4], "n": 1},
+      "expected": [1, 2, 3],
+      "explanation": "Remove last of 4"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4], "n": 4},
+      "expected": [2, 3, 4],
+      "explanation": "Remove head of 4"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5, 6], "n": 2},
+      "expected": [1, 2, 3, 4, 6],
+      "explanation": "Remove 2nd from end"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    head = build_list(head)\n    pass"
+  },
+  "functionName": "remove_nth_from_end",
+  "solutions": [
+    {
+      "label": "Two-Pointer (One Pass) — O(L)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    node = build_list(head)\n    dummy = ListNode(0)\n    dummy.next = node\n    fast = dummy\n    slow = dummy\n\n    # Advance fast by n+1 steps\n    for _ in range(n + 1):\n        fast = fast.next\n\n    # Move both until fast reaches end\n    while fast:\n        fast = fast.next\n        slow = slow.next\n\n    # slow is now the node before the target\n    slow.next = slow.next.next\n\n    return list_to_arr(dummy.next)",
+      "timeComplexity": "O(L)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use a dummy node before head (to handle removing the head cleanly). Advance `fast` n+1 steps ahead of `slow`. Then advance both together until `fast` reaches None. At this point, `slow` is the node just before the target — set `slow.next = slow.next.next` to skip it."
+    },
+    {
+      "label": "Two-Pass — O(L)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    node = build_list(head)\n    dummy = ListNode(0)\n    dummy.next = node\n\n    # First pass: count the length\n    length = 0\n    curr = node\n    while curr:\n        length += 1\n        curr = curr.next\n\n    # Find the node just before the target\n    target_pos = length - n  # 0-indexed from head\n    curr = dummy\n    for _ in range(target_pos):\n        curr = curr.next\n\n    curr.next = curr.next.next\n    return list_to_arr(dummy.next)",
+      "timeComplexity": "O(L)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two passes: first count the list length L, then find and skip the (L-n)-th node from the front (0-indexed). Uses two traversals of the list instead of one, but same O(L) time complexity. The one-pass two-pointer approach is preferred as it only traverses the list once."
+    }
+  ],
+  "hints": [
+    "Use two pointers with a gap of n between them. When the leading pointer reaches the end, the trailing pointer is just before the node to delete.",
+    "A dummy node before the head simplifies handling the case where you need to remove the head."
+  ],
+  "lcEquivalent": "19. Remove Nth Node From End of List"
+}

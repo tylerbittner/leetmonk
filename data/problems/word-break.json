@@ -1,0 +1,117 @@
+{
+  "id": "word-break",
+  "title": "Word Break",
+  "difficulty": "medium",
+  "tags": ["string", "dynamic-programming", "hash-set"],
+  "description": "## Word Break\n\nYou are given a string `s` and a list of strings `wordDict`. Return `true` if `s` can be segmented into a space-separated sequence of one or more words from `wordDict`.\n\nNote that the same word from `wordDict` may be reused multiple times in the segmentation.\n\n**Constraints:**\n- `1 <= s.length <= 300`\n- `1 <= wordDict.length <= 1000`\n- `1 <= wordDict[i].length <= 20`\n- `s` and `wordDict[i]` consist of only lowercase English letters.\n- All strings in `wordDict` are unique.",
+  "examples": [
+    {
+      "input": "s = \"leetcode\", wordDict = [\"leet\",\"code\"]",
+      "output": "true",
+      "explanation": "\"leetcode\" = \"leet\" + \"code\"."
+    },
+    {
+      "input": "s = \"applepenapple\", wordDict = [\"apple\",\"pen\"]",
+      "output": "true",
+      "explanation": "\"applepenapple\" = \"apple\" + \"pen\" + \"apple\"."
+    },
+    {
+      "input": "s = \"catsandog\", wordDict = [\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]",
+      "output": "false",
+      "explanation": "Cannot segment \"catsandog\" using the given words."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "leetcode", "wordDict": ["leet", "code"]},
+      "expected": true,
+      "explanation": "leet + code"
+    },
+    {
+      "input": {"s": "applepenapple", "wordDict": ["apple", "pen"]},
+      "expected": true,
+      "explanation": "apple + pen + apple"
+    },
+    {
+      "input": {"s": "catsandog", "wordDict": ["cats", "dog", "sand", "and", "cat"]},
+      "expected": false,
+      "explanation": "Cannot complete segmentation"
+    },
+    {
+      "input": {"s": "cars", "wordDict": ["car", "ca", "rs"]},
+      "expected": true,
+      "explanation": "ca + rs or car + s? car + s won't work (s not in dict), but ca + rs works"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "a", "wordDict": ["a"]},
+      "expected": true,
+      "explanation": "Single character"
+    },
+    {
+      "input": {"s": "a", "wordDict": ["b"]},
+      "expected": false,
+      "explanation": "No match"
+    },
+    {
+      "input": {"s": "aaaaaaa", "wordDict": ["aaaa", "aaa"]},
+      "expected": true,
+      "explanation": "aaaa + aaa"
+    },
+    {
+      "input": {"s": "aaaaaaa", "wordDict": ["aaaa", "aa"]},
+      "expected": false,
+      "explanation": "7 = 4+3 but aaa not in dict; 4+2+1 but a not in dict"
+    },
+    {
+      "input": {"s": "bb", "wordDict": ["a", "b", "bbb", "bbbb"]},
+      "expected": true,
+      "explanation": "b + b"
+    },
+    {
+      "input": {"s": "goalspecial", "wordDict": ["go", "goal", "goals", "special"]},
+      "expected": true,
+      "explanation": "goal + special"
+    },
+    {
+      "input": {"s": "abcd", "wordDict": ["a", "abc", "b", "cd"]},
+      "expected": true,
+      "explanation": "a + bc? No. ab + cd? ab not in dict. a + b + cd = true"
+    },
+    {
+      "input": {"s": "foobarbaz", "wordDict": ["foo", "bar", "baz"]},
+      "expected": true,
+      "explanation": "foo + bar + baz"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    pass"
+  },
+  "functionName": "word_break",
+  "solutions": [
+    {
+      "label": "Dynamic Programming — O(n² · m)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    word_set = set(wordDict)\n    n = len(s)\n    # dp[i] = True if s[:i] can be segmented\n    dp = [False] * (n + 1)\n    dp[0] = True  # empty string\n\n    for i in range(1, n + 1):\n        for j in range(i):\n            if dp[j] and s[j:i] in word_set:\n                dp[i] = True\n                break\n\n    return dp[n]",
+      "timeComplexity": "O(n² · m)",
+      "spaceComplexity": "O(n + k)",
+      "explanation": "`dp[i]` is True if the substring `s[:i]` can be segmented using the word dictionary. For each position `i`, try every split point `j < i`: if `dp[j]` is True (prefix is valid) and `s[j:i]` is in the word set (suffix is a valid word), then `dp[i] = True`. The answer is `dp[n]`. We use a set for O(m) word lookups where m is the word length."
+    },
+    {
+      "label": "Recursive with Memoization — O(n² · m)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\nfrom functools import lru_cache\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    word_set = frozenset(wordDict)\n\n    @lru_cache(maxsize=None)\n    def can_segment(start: int) -> bool:\n        if start == len(s):\n            return True\n        for end in range(start + 1, len(s) + 1):\n            if s[start:end] in word_set and can_segment(end):\n                return True\n        return False\n\n    return can_segment(0)",
+      "timeComplexity": "O(n² · m)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Top-down DP with memoization. `can_segment(start)` returns True if `s[start:]` can be segmented. At each position, try every prefix `s[start:end]` — if it's in the dictionary and the remainder `s[end:]` can also be segmented, return True. `lru_cache` ensures each start position is computed only once. Equivalent to bottom-up DP but written recursively."
+    }
+  ],
+  "hints": [
+    "Define dp[i] as whether s[:i] can be segmented into dictionary words.",
+    "For each position i, try all split points j: if dp[j] is True and s[j:i] is in the dictionary, then dp[i] is True."
+  ],
+  "lcEquivalent": "139. Word Break"
+}

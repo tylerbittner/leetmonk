@@ -1,0 +1,117 @@
+{
+  "id": "word-search",
+  "title": "Word Search",
+  "difficulty": "medium",
+  "tags": ["array", "backtracking", "depth-first-search"],
+  "description": "## Word Search\n\nYou are given an `m x n` grid of characters and a string `word`. Return `true` if `word` exists in the grid, or `false` otherwise.\n\nThe word can be constructed by sequentially adjacent cells — horizontally or vertically neighboring. The same cell cannot be used more than once in a single path.\n\n**Constraints:**\n- `m == board.length`\n- `n == board[i].length`\n- `1 <= m, n <= 6`\n- `1 <= word.length <= 15`\n- `board` and `word` consist of only lowercase and uppercase English letters.",
+  "examples": [
+    {
+      "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"",
+      "output": "true",
+      "explanation": "Path: A(0,0)→B(0,1)→C(0,2)→C(1,2)→E(2,2)→D(2,1)."
+    },
+    {
+      "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"SEE\"",
+      "output": "true",
+      "explanation": "Path: S(1,3)→E(2,3)→E(2,2)."
+    },
+    {
+      "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCB\"",
+      "output": "false",
+      "explanation": "Cannot reuse the same cell for B."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"board": [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "word": "ABCCED"},
+      "expected": true,
+      "explanation": "Valid path exists"
+    },
+    {
+      "input": {"board": [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "word": "SEE"},
+      "expected": true,
+      "explanation": "Valid path exists"
+    },
+    {
+      "input": {"board": [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "word": "ABCB"},
+      "expected": false,
+      "explanation": "Cannot reuse B cell"
+    },
+    {
+      "input": {"board": [["a"]], "word": "a"},
+      "expected": true,
+      "explanation": "Single cell match"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"board": [["a"]], "word": "b"},
+      "expected": false,
+      "explanation": "No match"
+    },
+    {
+      "input": {"board": [["A","B"],["C","D"]], "word": "ABDC"},
+      "expected": true,
+      "explanation": "A→B→D→C"
+    },
+    {
+      "input": {"board": [["A","B"],["C","D"]], "word": "ABCD"},
+      "expected": false,
+      "explanation": "B and C are not adjacent"
+    },
+    {
+      "input": {"board": [["a","a"]], "word": "aaa"},
+      "expected": false,
+      "explanation": "Only 2 cells, word length 3"
+    },
+    {
+      "input": {"board": [["C","A","A"],["A","A","A"],["B","C","D"]], "word": "AAB"},
+      "expected": true,
+      "explanation": "Path exists through adjacent A's to B"
+    },
+    {
+      "input": {"board": [["a","b","c"],["d","e","f"],["g","h","i"]], "word": "abcfih"},
+      "expected": true,
+      "explanation": "a→b→c→f→i→h"
+    },
+    {
+      "input": {"board": [["a","b","c"],["d","e","f"],["g","h","i"]], "word": "aei"},
+      "expected": false,
+      "explanation": "Diagonal moves not allowed"
+    },
+    {
+      "input": {"board": [["A","B","C","E"],["S","F","E","S"],["A","D","E","E"]], "word": "ABCESEEEFS"},
+      "expected": true,
+      "explanation": "Path: A(0,0)→B(0,1)→C(0,2)→E(0,3)→S(1,3)→E(2,3)→E(2,2)→E(1,2)→F(1,1)→S(1,0)"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    pass"
+  },
+  "functionName": "word_search",
+  "solutions": [
+    {
+      "label": "Backtracking DFS — O(m·n·4^L)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    m, n = len(board), len(board[0])\n\n    def dfs(r: int, c: int, idx: int) -> bool:\n        if idx == len(word):\n            return True\n        if r < 0 or r >= m or c < 0 or c >= n:\n            return False\n        if board[r][c] != word[idx]:\n            return False\n\n        tmp = board[r][c]\n        board[r][c] = '#'  # mark visited\n\n        found = (dfs(r + 1, c, idx + 1) or\n                 dfs(r - 1, c, idx + 1) or\n                 dfs(r, c + 1, idx + 1) or\n                 dfs(r, c - 1, idx + 1))\n\n        board[r][c] = tmp  # restore\n        return found\n\n    for r in range(m):\n        for c in range(n):\n            if dfs(r, c, 0):\n                return True\n    return False",
+      "timeComplexity": "O(m·n·4^L)",
+      "spaceComplexity": "O(L)",
+      "explanation": "Try starting a DFS from every cell. At each step, if the current cell matches the next letter, mark it visited (temporarily replace with '#'), recurse in all four directions, then restore it. This backtracking ensures each cell is used at most once per path. L is the word length, giving 4^L paths from each starting cell."
+    },
+    {
+      "label": "Backtracking with Visited Set — O(m·n·4^L)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    m, n = len(board), len(board[0])\n\n    def dfs(r, c, idx, visited):\n        if idx == len(word):\n            return True\n        if (r < 0 or r >= m or c < 0 or c >= n or\n                (r, c) in visited or board[r][c] != word[idx]):\n            return False\n        visited.add((r, c))\n        found = (dfs(r + 1, c, idx + 1, visited) or\n                 dfs(r - 1, c, idx + 1, visited) or\n                 dfs(r, c + 1, idx + 1, visited) or\n                 dfs(r, c - 1, idx + 1, visited))\n        visited.remove((r, c))\n        return found\n\n    for r in range(m):\n        for c in range(n):\n            if dfs(r, c, 0, set()):\n                return True\n    return False",
+      "timeComplexity": "O(m·n·4^L)",
+      "spaceComplexity": "O(L)",
+      "explanation": "Same backtracking DFS but uses an explicit `visited` set instead of modifying the board in-place. Adds the current cell before recursing and removes it on backtrack. Slightly more overhead per call (hash set operations) but doesn't mutate the input. The in-place approach is preferred when mutation is acceptable."
+    }
+  ],
+  "hints": [
+    "Try starting from every cell that matches the first letter. Use DFS to explore all 4 directions.",
+    "Mark cells as visited before recursing (to avoid reuse) and restore them on backtrack."
+  ],
+  "lcEquivalent": "79. Word Search"
+}

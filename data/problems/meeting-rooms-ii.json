@@ -1,0 +1,112 @@
+{
+  "id": "meeting-rooms-ii",
+  "title": "Meeting Rooms II",
+  "difficulty": "medium",
+  "tags": ["array", "intervals", "heap", "sorting"],
+  "description": "## Meeting Rooms II\n\nGiven an array of meeting time intervals where `intervals[i] = [start_i, end_i]`, return the minimum number of conference rooms required to hold all meetings simultaneously.\n\n**Constraints:**\n- `1 <= intervals.length <= 10^4`\n- `0 <= start_i < end_i <= 10^6`",
+  "examples": [
+    {
+      "input": "intervals = [[0,30],[5,10],[15,20]]",
+      "output": "2",
+      "explanation": "Room 1: [0,30]. Room 2: [5,10] then [15,20]."
+    },
+    {
+      "input": "intervals = [[7,10],[2,4]]",
+      "output": "1",
+      "explanation": "[2,4] ends before [7,10] starts — one room suffices."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"intervals": [[0, 30], [5, 10], [15, 20]]},
+      "expected": 2,
+      "explanation": "Two rooms needed"
+    },
+    {
+      "input": {"intervals": [[7, 10], [2, 4]]},
+      "expected": 1,
+      "explanation": "Sequential — one room"
+    },
+    {
+      "input": {"intervals": [[1, 5], [2, 6], [3, 7]]},
+      "expected": 3,
+      "explanation": "All three overlap"
+    },
+    {
+      "input": {"intervals": [[9, 10], [4, 9], [4, 17]]},
+      "expected": 2,
+      "explanation": "Two rooms at peak"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"intervals": [[1, 2]]},
+      "expected": 1,
+      "explanation": "Single meeting"
+    },
+    {
+      "input": {"intervals": [[1, 5], [5, 10]]},
+      "expected": 1,
+      "explanation": "Sequential rooms"
+    },
+    {
+      "input": {"intervals": [[1, 10], [2, 3], [4, 5], [6, 7]]},
+      "expected": 2,
+      "explanation": "One long meeting plus shorter concurrent ones"
+    },
+    {
+      "input": {"intervals": [[1, 2], [2, 3], [3, 4]]},
+      "expected": 1,
+      "explanation": "Sequential"
+    },
+    {
+      "input": {"intervals": [[1, 4], [2, 5], [3, 6], [4, 7]]},
+      "expected": 3,
+      "explanation": "Three simultaneous at peak"
+    },
+    {
+      "input": {"intervals": [[0, 10], [1, 9], [2, 8], [3, 7], [4, 6]]},
+      "expected": 5,
+      "explanation": "All overlap simultaneously"
+    },
+    {
+      "input": {"intervals": [[5, 6], [4, 7], [3, 8], [1, 4], [2, 5]]},
+      "expected": 3,
+      "explanation": "Max concurrent is 3"
+    },
+    {
+      "input": {"intervals": [[1, 3], [5, 7], [9, 11], [13, 15]]},
+      "expected": 1,
+      "explanation": "All sequential"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    pass"
+  },
+  "functionName": "min_meeting_rooms",
+  "solutions": [
+    {
+      "label": "Min-Heap — O(n log n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\nimport heapq\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    if not intervals:\n        return 0\n\n    intervals.sort(key=lambda x: x[0])\n    # Min-heap stores end times of ongoing meetings\n    heap = []\n\n    for start, end in intervals:\n        if heap and heap[0] <= start:\n            # Reuse the room that frees up earliest\n            heapq.heappop(heap)\n        heapq.heappush(heap, end)\n\n    return len(heap)",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort meetings by start time. Use a min-heap to track when each occupied room becomes free (storing end times). For each new meeting, check if the earliest-ending room is free by start time — if so, reuse it (pop and push new end time). Otherwise, open a new room (just push). The heap size at the end equals the number of rooms needed. This works because we always reuse the room that frees up soonest."
+    },
+    {
+      "label": "Chronological Events — O(n log n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    starts = sorted(s for s, e in intervals)\n    ends = sorted(e for s, e in intervals)\n\n    rooms = 0\n    max_rooms = 0\n    i, j = 0, 0\n\n    while i < len(starts):\n        if starts[i] < ends[j]:\n            rooms += 1\n            max_rooms = max(max_rooms, rooms)\n            i += 1\n        else:\n            rooms -= 1\n            j += 1\n\n    return max_rooms",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort start times and end times separately. Use two pointers to merge these sorted events chronologically. When a start event is processed before the next end event, a new room is needed (rooms++). When an end event comes first, a room is freed (rooms--). Track the maximum concurrent rooms. This is equivalent to finding the maximum overlap at any point in time."
+    }
+  ],
+  "hints": [
+    "Sort by start time. Use a min-heap to track when each room becomes free.",
+    "For each new meeting, if the earliest-ending room frees up before this meeting starts, reuse it. Otherwise, open a new room."
+  ],
+  "lcEquivalent": "253. Meeting Rooms II"
+}

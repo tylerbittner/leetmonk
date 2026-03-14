@@ -1,0 +1,112 @@
+{
+  "id": "kth-smallest-in-bst",
+  "title": "Kth Smallest Element in a BST",
+  "difficulty": "medium",
+  "tags": ["tree", "depth-first-search", "binary-search-tree"],
+  "description": "## Kth Smallest Element in a BST\n\nGiven the root of a binary search tree (as a level-order list) and an integer `k`, return the `k`-th smallest value (1-indexed) in the BST.\n\n**Constraints:**\n- The number of nodes in the tree is `n`.\n- `1 <= k <= n <= 10^4`\n- `0 <= Node.val <= 10^4`",
+  "examples": [
+    {
+      "input": "root = [3,1,4,null,2], k = 1",
+      "output": "1",
+      "explanation": "Inorder traversal: [1,2,3,4]. The 1st smallest is 1."
+    },
+    {
+      "input": "root = [5,3,6,2,4,null,null,1], k = 3",
+      "output": "3",
+      "explanation": "Inorder traversal: [1,2,3,4,5,6]. The 3rd smallest is 3."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"root": [3, 1, 4, null, 2], "k": 1},
+      "expected": 1,
+      "explanation": "1st smallest"
+    },
+    {
+      "input": {"root": [5, 3, 6, 2, 4, null, null, 1], "k": 3},
+      "expected": 3,
+      "explanation": "3rd smallest"
+    },
+    {
+      "input": {"root": [1], "k": 1},
+      "expected": 1,
+      "explanation": "Single node"
+    },
+    {
+      "input": {"root": [5, 3, 7, 1, 4, 6, 8], "k": 4},
+      "expected": 5,
+      "explanation": "Inorder: [1,3,4,5,6,7,8], 4th is 5"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"root": [2, 1, 3], "k": 1},
+      "expected": 1,
+      "explanation": "Smallest"
+    },
+    {
+      "input": {"root": [2, 1, 3], "k": 2},
+      "expected": 2,
+      "explanation": "Root"
+    },
+    {
+      "input": {"root": [2, 1, 3], "k": 3},
+      "expected": 3,
+      "explanation": "Largest"
+    },
+    {
+      "input": {"root": [10, 5, 15, 3, 7, null, null, 1], "k": 2},
+      "expected": 3,
+      "explanation": "2nd smallest is 3"
+    },
+    {
+      "input": {"root": [4, 2, 6, 1, 3, 5, 7], "k": 5},
+      "expected": 5,
+      "explanation": "Inorder: [1,2,3,4,5,6,7], 5th is 5"
+    },
+    {
+      "input": {"root": [1, null, 2], "k": 2},
+      "expected": 2,
+      "explanation": "Inorder: [1,2], 2nd is 2"
+    },
+    {
+      "input": {"root": [5, 3, 7, 2, 4, 6, 8], "k": 7},
+      "expected": 8,
+      "explanation": "Largest element"
+    },
+    {
+      "input": {"root": [3, 1, 4, null, 2], "k": 4},
+      "expected": 4,
+      "explanation": "Inorder: [1,2,3,4], 4th is 4"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    pass"
+  },
+  "functionName": "kth_smallest",
+  "solutions": [
+    {
+      "label": "Inorder Traversal — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    stack = []\n    count = 0\n    curr = root\n\n    while stack or curr:\n        while curr:\n            stack.append(curr)\n            curr = curr.left\n        curr = stack.pop()\n        count += 1\n        if count == k:\n            return curr.val\n        curr = curr.right\n\n    return -1  # unreachable if k is valid",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "The inorder traversal of a BST yields all values in sorted order. Use an iterative inorder traversal with a stack: push nodes going left, then pop and visit, then go right. Count each visited node; when count reaches k, return the current value. Early termination is possible once k is reached."
+    },
+    {
+      "label": "Collect All + Index — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    sorted_vals = []\n\n    def inorder(node):\n        if not node:\n            return\n        inorder(node.left)\n        sorted_vals.append(node.val)\n        inorder(node.right)\n\n    inorder(root)\n    return sorted_vals[k - 1]",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Run a recursive inorder traversal to collect all node values in sorted order, then return the (k-1)-th element (0-indexed). Simple but always traverses the entire tree — no early exit. The optimal iterative approach stops as soon as it finds the k-th element."
+    }
+  ],
+  "hints": [
+    "Inorder traversal of a BST visits nodes in ascending order.",
+    "Use an iterative inorder traversal with a stack and stop as soon as you've visited the kth node."
+  ],
+  "lcEquivalent": "230. Kth Smallest Element in a BST"
+}

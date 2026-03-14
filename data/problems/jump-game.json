@@ -1,0 +1,112 @@
+{
+  "id": "jump-game",
+  "title": "Jump Game",
+  "difficulty": "medium",
+  "tags": ["array", "greedy", "dynamic-programming"],
+  "description": "## Jump Game\n\nYou are given an integer array `nums` where `nums[i]` represents the maximum number of steps you can jump forward from position `i`. Starting at index 0, determine if you can reach the last index.\n\n**Constraints:**\n- `1 <= nums.length <= 10^4`\n- `0 <= nums[i] <= 10^5`",
+  "examples": [
+    {
+      "input": "nums = [2,3,1,1,4]",
+      "output": "true",
+      "explanation": "Jump 1 from index 0 to 1, then 3 from index 1 to reach index 4."
+    },
+    {
+      "input": "nums = [3,2,1,0,4]",
+      "output": "false",
+      "explanation": "You always reach index 3 with 0 jumps remaining and can't proceed."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"nums": [2, 3, 1, 1, 4]},
+      "expected": true,
+      "explanation": "Can reach last index"
+    },
+    {
+      "input": {"nums": [3, 2, 1, 0, 4]},
+      "expected": false,
+      "explanation": "Stuck at index 3"
+    },
+    {
+      "input": {"nums": [0]},
+      "expected": true,
+      "explanation": "Already at last index"
+    },
+    {
+      "input": {"nums": [2, 0, 0]},
+      "expected": true,
+      "explanation": "Jump 2 from index 0"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"nums": [1, 0, 0]},
+      "expected": false,
+      "explanation": "Jump to index 1, stuck"
+    },
+    {
+      "input": {"nums": [1, 1, 0, 1]},
+      "expected": false,
+      "explanation": "0 at index 2 blocks progress"
+    },
+    {
+      "input": {"nums": [5, 0, 0, 0, 0]},
+      "expected": true,
+      "explanation": "Single jump of 5"
+    },
+    {
+      "input": {"nums": [1]},
+      "expected": true,
+      "explanation": "Single element"
+    },
+    {
+      "input": {"nums": [1, 2, 3]},
+      "expected": true,
+      "explanation": "Multiple valid paths"
+    },
+    {
+      "input": {"nums": [0, 2, 3]},
+      "expected": false,
+      "explanation": "Starts with 0"
+    },
+    {
+      "input": {"nums": [1, 0, 1, 0]},
+      "expected": false,
+      "explanation": "Can only reach index 1, which has 0"
+    },
+    {
+      "input": {"nums": [2, 0, 6, 9, 8, 4, 5, 0, 8, 9, 1, 2, 9, 6, 8, 8, 0, 6, 3, 1, 2, 2, 1, 2, 6, 5, 3, 1, 2, 2, 6, 4, 2, 4, 3, 0, 0, 0, 3, 8, 2, 4, 0, 1, 2, 0, 1, 4, 6, 5, 8, 0, 7, 9, 3, 4, 6, 6, 5, 8, 9, 3, 4, 3, 7, 0, 8, 0, 3, 7, 7, 1, 9, 9, 7, 6, 3, 3, 5, 4, 7, 9, 9, 5, 6, 5, 4, 9, 8, 5, 6, 4, 7, 9, 9, 3, 9, 6, 0, 4]},
+      "expected": false,
+      "explanation": "Three consecutive zeros at indices 35-37 block the path"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    pass"
+  },
+  "functionName": "can_jump",
+  "solutions": [
+    {
+      "label": "Greedy — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    max_reach = 0\n\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n\n    return True",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track `max_reach` — the farthest index reachable so far. At each position `i`, if `i > max_reach` we're stuck and return False. Otherwise, update `max_reach` with `i + nums[i]`. If we finish the loop, we can reach the end. The key insight: if we can reach index `i`, we can reach any index up to `i + nums[i]`."
+    },
+    {
+      "label": "DP — O(n²)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    n = len(nums)\n    reachable = [False] * n\n    reachable[0] = True\n\n    for i in range(1, n):\n        for j in range(i):\n            if reachable[j] and j + nums[j] >= i:\n                reachable[i] = True\n                break\n\n    return reachable[n - 1]",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Mark each index as reachable or not. Index 0 is always reachable. For each index i, check all previous indices j: if j is reachable AND j + nums[j] >= i, then i is reachable. O(n²) because we check all previous indices for each position. The greedy approach reduces this to O(n) by tracking only the maximum reach."
+    }
+  ],
+  "hints": [
+    "Track the maximum index you can reach from positions visited so far.",
+    "If at any point your current index exceeds the max reachable index, you're stuck and return False."
+  ],
+  "lcEquivalent": "55. Jump Game"
+}

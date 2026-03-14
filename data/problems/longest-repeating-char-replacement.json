@@ -1,0 +1,112 @@
+{
+  "id": "longest-repeating-char-replacement",
+  "title": "Longest Repeating Character Replacement",
+  "difficulty": "medium",
+  "tags": ["string", "sliding-window", "hash-map"],
+  "description": "## Longest Repeating Character Replacement\n\nYou are given a string `s` consisting of uppercase English letters, and an integer `k`. You may choose any character in the string and replace it with any other uppercase letter, and you can do this at most `k` times.\n\nReturn the length of the longest substring that can be made to contain only one distinct character after performing at most `k` replacements.\n\n**Constraints:**\n- `1 <= s.length <= 10^5`\n- `s` consists of only uppercase English letters.\n- `0 <= k <= s.length`",
+  "examples": [
+    {
+      "input": "s = \"ABAB\", k = 2",
+      "output": "4",
+      "explanation": "Replace both A's with B's or both B's with A's to get \"BBBB\" or \"AAAA\"."
+    },
+    {
+      "input": "s = \"AABABBA\", k = 1",
+      "output": "4",
+      "explanation": "Replace the one A in \"AABA\" → \"AAAA\", or the one A in \"ABBA\" → \"BBBB\" — both give length 4."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "ABAB", "k": 2},
+      "expected": 4,
+      "explanation": "Entire string can be made uniform"
+    },
+    {
+      "input": {"s": "AABABBA", "k": 1},
+      "expected": 4,
+      "explanation": "Best window of length 4"
+    },
+    {
+      "input": {"s": "AAAA", "k": 0},
+      "expected": 4,
+      "explanation": "Already uniform"
+    },
+    {
+      "input": {"s": "ABCD", "k": 0},
+      "expected": 1,
+      "explanation": "No replacements; best is single char"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "A", "k": 0},
+      "expected": 1,
+      "explanation": "Single character"
+    },
+    {
+      "input": {"s": "ABCDE", "k": 4},
+      "expected": 5,
+      "explanation": "Replace 4 chars to match the 5th"
+    },
+    {
+      "input": {"s": "AABABBA", "k": 0},
+      "expected": 2,
+      "explanation": "No replacements; longest run of same char is AA"
+    },
+    {
+      "input": {"s": "BAAA", "k": 1},
+      "expected": 4,
+      "explanation": "Replace B to get AAAA"
+    },
+    {
+      "input": {"s": "KRSCDCSONAJNHLBMDQGIFAS", "k": 4},
+      "expected": 6,
+      "explanation": "Longest window achievable with 4 swaps"
+    },
+    {
+      "input": {"s": "AAABBBBB", "k": 2},
+      "expected": 7,
+      "explanation": "Replace 2 A's: BBBBBBB length 7"
+    },
+    {
+      "input": {"s": "ABBB", "k": 2},
+      "expected": 4,
+      "explanation": "Replace A and have BBBB"
+    },
+    {
+      "input": {"s": "EOEMQONLY", "k": 1},
+      "expected": 3,
+      "explanation": "Window EOE: max_freq=2, replacements=1 — length 3"
+    }
+  ],
+  "starterCode": {
+    "python": "def character_replacement(s: str, k: int) -> int:\n    pass"
+  },
+  "functionName": "character_replacement",
+  "solutions": [
+    {
+      "label": "Brute Force — O(26·n²)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "def character_replacement(s: str, k: int) -> int:\n    result = 0\n    for c in set(s):\n        count = 0\n        left = 0\n        for right in range(len(s)):\n            if s[right] == c:\n                count += 1\n            while (right - left + 1) - count > k:\n                if s[left] == c:\n                    count -= 1\n                left += 1\n            result = max(result, right - left + 1)\n    return result",
+      "timeComplexity": "O(26·n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "For each possible target character, use a sliding window to find the longest window where the number of non-target characters is at most k. Run this for all 26 letters and take the maximum."
+    },
+    {
+      "label": "Sliding Window — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def character_replacement(s: str, k: int) -> int:\n    counts = {}\n    left = 0\n    max_freq = 0\n    result = 0\n\n    for right in range(len(s)):\n        counts[s[right]] = counts.get(s[right], 0) + 1\n        max_freq = max(max_freq, counts[s[right]])\n\n        # window_size - max_freq = characters that need replacing\n        while (right - left + 1) - max_freq > k:\n            counts[s[left]] -= 1\n            left += 1\n\n        result = max(result, right - left + 1)\n\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Maintain a sliding window and track the frequency of the most common character in the window (`max_freq`). The number of replacements needed equals `window_size - max_freq`. If this exceeds k, shrink the window from the left. A key insight: `max_freq` is never decremented — we only need the window to grow, and any smaller window we've already considered."
+    }
+  ],
+  "hints": [
+    "The number of characters you need to replace in a window equals window_size minus the count of the most frequent character.",
+    "Use a sliding window: if replacements needed exceed k, shrink from the left. The window only needs to grow to find a longer valid substring."
+  ],
+  "lcEquivalent": "424. Longest Repeating Character Replacement"
+}

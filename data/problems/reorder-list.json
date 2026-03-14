@@ -1,0 +1,112 @@
+{
+  "id": "reorder-list",
+  "title": "Reorder List",
+  "difficulty": "medium",
+  "tags": ["linked-list", "two-pointers", "stack"],
+  "description": "## Reorder List\n\nGiven a linked list as a plain integer list `head` with nodes `L0 → L1 → … → Ln-1 → Ln`, reorder it to: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → …`\n\nReturn the reordered list as a plain integer list.\n\n**Constraints:**\n- The number of nodes is in the range `[1, 5 * 10^4]`.\n- `1 <= Node.val <= 1000`",
+  "examples": [
+    {
+      "input": "head = [1,2,3,4]",
+      "output": "[1,4,2,3]",
+      "explanation": "1→4→2→3: first, last, second, second-to-last."
+    },
+    {
+      "input": "head = [1,2,3,4,5]",
+      "output": "[1,5,2,4,3]",
+      "explanation": "1→5→2→4→3."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"head": [1, 2, 3, 4]},
+      "expected": [1, 4, 2, 3],
+      "explanation": "Even length"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5]},
+      "expected": [1, 5, 2, 4, 3],
+      "explanation": "Odd length"
+    },
+    {
+      "input": {"head": [1]},
+      "expected": [1],
+      "explanation": "Single node"
+    },
+    {
+      "input": {"head": [1, 2]},
+      "expected": [1, 2],
+      "explanation": "Two nodes unchanged"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"head": [1, 2, 3]},
+      "expected": [1, 3, 2],
+      "explanation": "Three nodes"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5, 6]},
+      "expected": [1, 6, 2, 5, 3, 4],
+      "explanation": "Even length 6"
+    },
+    {
+      "input": {"head": [1, 1, 1, 1]},
+      "expected": [1, 1, 1, 1],
+      "explanation": "All same values"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5, 6, 7]},
+      "expected": [1, 7, 2, 6, 3, 5, 4],
+      "explanation": "Odd length 7"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5, 6]},
+      "expected": [1, 6, 2, 5, 3, 4],
+      "explanation": "Even length 6"
+    },
+    {
+      "input": {"head": [1, 2]},
+      "expected": [1, 2],
+      "explanation": "Two nodes unchanged"
+    },
+    {
+      "input": {"head": [1, 2, 3]},
+      "expected": [1, 3, 2],
+      "explanation": "Three nodes"
+    },
+    {
+      "input": {"head": [1, 2, 3, 4, 5, 6, 7, 8]},
+      "expected": [1, 8, 2, 7, 3, 6, 4, 5],
+      "explanation": "Even length 8"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n    pass"
+  },
+  "functionName": "reorder_list",
+  "solutions": [
+    {
+      "label": "Find Middle + Reverse + Merge — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    node = build_list(head)\n    if not node or not node.next:\n        return list_to_arr(node)\n\n    # Step 1: Find middle using slow/fast pointers\n    slow, fast = node, node\n    while fast.next and fast.next.next:\n        slow = slow.next\n        fast = fast.next.next\n\n    # Step 2: Reverse the second half\n    second = slow.next\n    slow.next = None  # cut the list in half\n    prev = None\n    while second:\n        tmp = second.next\n        second.next = prev\n        prev = second\n        second = tmp\n    second = prev\n\n    # Step 3: Merge the two halves\n    first = node\n    while second:\n        tmp1 = first.next\n        tmp2 = second.next\n        first.next = second\n        second.next = tmp1\n        first = tmp1\n        second = tmp2\n\n    return list_to_arr(node)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Three steps: (1) Find the middle using slow/fast pointers — slow lands on the midpoint. (2) Reverse the second half of the list in place. (3) Interleave the first half and the reversed second half by alternating nodes. Each step takes O(n) time and O(1) space."
+    },
+    {
+      "label": "Array Approach — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    node = build_list(head)\n    if not node:\n        return []\n\n    # Collect all nodes into an array\n    nodes = []\n    curr = node\n    while curr:\n        nodes.append(curr)\n        curr = curr.next\n\n    # Use two pointers to reorder in-place\n    left, right = 0, len(nodes) - 1\n    while left < right:\n        nodes[left].next = nodes[right]\n        left += 1\n        if left == right:\n            break\n        nodes[right].next = nodes[left]\n        right -= 1\n    nodes[left].next = None\n\n    return list_to_arr(node)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Collect all nodes into an array (O(n) space), then use two pointers from both ends to rewire the links in the reordered pattern. Simpler to implement than the in-place approach but uses O(n) extra space for the array."
+    }
+  ],
+  "hints": [
+    "Split the list at its midpoint. Reverse the second half. Then interleave the two halves.",
+    "Use slow/fast pointers to find the middle in O(n). Reversing and merging also take O(n) — no extra space needed."
+  ],
+  "lcEquivalent": "143. Reorder List"
+}

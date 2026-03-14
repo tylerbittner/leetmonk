@@ -1,0 +1,117 @@
+{
+  "id": "decode-ways",
+  "title": "Decode Ways",
+  "difficulty": "medium",
+  "tags": ["string", "dynamic-programming"],
+  "description": "## Decode Ways\n\nA message was encoded by mapping letters to numbers: 'A' → \"1\", 'B' → \"2\", ..., 'Z' → \"26\".\n\nGiven a string `s` of digits, return the number of ways to decode it back into letters. If no valid decoding exists, return 0.\n\nNote that `s` may contain leading zeros which make certain decodings invalid (e.g., \"06\" cannot decode to \"F\" because \"06\" ≠ \"6\").\n\n**Constraints:**\n- `1 <= s.length <= 100`\n- `s` contains only digits.\n- `s` does not contain a leading zero (but may contain zeros within it).",
+  "examples": [
+    {
+      "input": "s = \"12\"",
+      "output": "2",
+      "explanation": "\"12\" can be decoded as \"AB\" (1,2) or \"L\" (12)."
+    },
+    {
+      "input": "s = \"226\"",
+      "output": "3",
+      "explanation": "\"226\" → \"BZ\" (2,26), \"VF\" (22,6), or \"BBF\" (2,2,6)."
+    },
+    {
+      "input": "s = \"06\"",
+      "output": "0",
+      "explanation": "\"06\" has a leading zero so no valid decoding."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "12"},
+      "expected": 2,
+      "explanation": "AB or L"
+    },
+    {
+      "input": {"s": "226"},
+      "expected": 3,
+      "explanation": "BZ, VF, or BBF"
+    },
+    {
+      "input": {"s": "06"},
+      "expected": 0,
+      "explanation": "Leading zero"
+    },
+    {
+      "input": {"s": "10"},
+      "expected": 1,
+      "explanation": "Only J (10)"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "1"},
+      "expected": 1,
+      "explanation": "Single digit"
+    },
+    {
+      "input": {"s": "27"},
+      "expected": 1,
+      "explanation": "Only 2,7=BG (27 > 26 so not valid as single)"
+    },
+    {
+      "input": {"s": "20"},
+      "expected": 1,
+      "explanation": "Only T (20)"
+    },
+    {
+      "input": {"s": "30"},
+      "expected": 0,
+      "explanation": "30 > 26 and 0 alone invalid"
+    },
+    {
+      "input": {"s": "11106"},
+      "expected": 2,
+      "explanation": "1,1,10,6 or 11,10,6"
+    },
+    {
+      "input": {"s": "111"},
+      "expected": 3,
+      "explanation": "1,1,1 or 1,11 or 11,1"
+    },
+    {
+      "input": {"s": "2611055971756562"},
+      "expected": 4,
+      "explanation": "Complex case"
+    },
+    {
+      "input": {"s": "100"},
+      "expected": 0,
+      "explanation": "10,0 invalid; 1,0,0 invalid; 100 invalid"
+    }
+  ],
+  "starterCode": {
+    "python": "def num_decodings(s: str) -> int:\n    pass"
+  },
+  "functionName": "num_decodings",
+  "solutions": [
+    {
+      "label": "Dynamic Programming — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def num_decodings(s: str) -> int:\n    n = len(s)\n    # dp[i] = number of ways to decode s[:i]\n    dp = [0] * (n + 1)\n    dp[0] = 1  # empty string has one way\n    dp[1] = 1 if s[0] != '0' else 0\n\n    for i in range(2, n + 1):\n        # Single digit decode\n        one = int(s[i - 1])\n        if one != 0:\n            dp[i] += dp[i - 1]\n\n        # Two digit decode\n        two = int(s[i - 2:i])\n        if 10 <= two <= 26:\n            dp[i] += dp[i - 2]\n\n    return dp[n]",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "`dp[i]` stores the number of ways to decode `s[:i]`. At each position, there are two choices: decode the last digit alone (valid if it's not '0'), or decode the last two digits together (valid if they form a number between 10 and 26). Each valid choice adds the number of ways from the earlier position. We use `dp[0] = 1` as a base case (one way to decode the empty string)."
+    },
+    {
+      "label": "Space-Optimized DP — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "def num_decodings(s: str) -> int:\n    if not s or s[0] == '0':\n        return 0\n\n    prev2, prev1 = 1, 1  # dp[0], dp[1]\n\n    for i in range(1, len(s)):\n        curr = 0\n        if s[i] != '0':\n            curr += prev1\n        two = int(s[i - 1:i + 1])\n        if 10 <= two <= 26:\n            curr += prev2\n        prev2, prev1 = prev1, curr\n\n    return prev1",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Same DP recurrence as the O(n) space version, but only track the previous two dp values instead of the full array. At each step, `prev1` = dp[i] and `prev2` = dp[i-1]. After the loop, `prev1` holds the answer. Reduces space from O(n) to O(1)."
+    }
+  ],
+  "hints": [
+    "At each position, you can decode one digit (must be 1-9) or two digits (must be 10-26).",
+    "Define dp[i] = number of ways to decode s[:i]. Combine the one-digit and two-digit cases from previous positions."
+  ],
+  "lcEquivalent": "91. Decode Ways"
+}

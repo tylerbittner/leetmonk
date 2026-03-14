@@ -1,0 +1,117 @@
+{
+  "id": "binary-tree-right-side-view",
+  "title": "Binary Tree Right Side View",
+  "difficulty": "medium",
+  "tags": ["tree", "breadth-first-search", "depth-first-search"],
+  "description": "## Binary Tree Right Side View\n\nGiven a binary tree (as a level-order list), imagine standing on the right side and looking at the tree. Return the values of the nodes you can see, ordered from top to bottom.\n\nThe rightmost node at each level is visible.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 100]`.\n- `-100 <= Node.val <= 100`",
+  "examples": [
+    {
+      "input": "root = [1,2,3,null,5,null,4]",
+      "output": "[1,3,4]",
+      "explanation": "Level 0: see 1. Level 1: see 3 (rightmost). Level 2: see 4."
+    },
+    {
+      "input": "root = [1,null,3]",
+      "output": "[1,3]",
+      "explanation": "Right side: 1, then 3."
+    },
+    {
+      "input": "root = []",
+      "output": "[]",
+      "explanation": "Empty tree."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"root": [1, 2, 3, null, 5, null, 4]},
+      "expected": [1, 3, 4],
+      "explanation": "Rightmost at each level"
+    },
+    {
+      "input": {"root": [1, null, 3]},
+      "expected": [1, 3],
+      "explanation": "Right side"
+    },
+    {
+      "input": {"root": []},
+      "expected": [],
+      "explanation": "Empty tree"
+    },
+    {
+      "input": {"root": [1]},
+      "expected": [1],
+      "explanation": "Single node"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"root": [1, 2, 3, 4]},
+      "expected": [1, 3, 4],
+      "explanation": "4 is rightmost at level 2 (left child of 2)"
+    },
+    {
+      "input": {"root": [1, 2]},
+      "expected": [1, 2],
+      "explanation": "Left-only — still visible from right"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5, 6, 7]},
+      "expected": [1, 3, 7],
+      "explanation": "Perfect tree — rightmost at each level"
+    },
+    {
+      "input": {"root": [1, 2, null, 3, null, 4]},
+      "expected": [1, 2, 3, 4],
+      "explanation": "Left-skewed — each level has one node"
+    },
+    {
+      "input": {"root": [1, 2, 3, null, null, 4, 5]},
+      "expected": [1, 3, 5],
+      "explanation": "Right side at each level"
+    },
+    {
+      "input": {"root": [1, 2, 3, null, 5]},
+      "expected": [1, 3, 5],
+      "explanation": "Level 2 visible through left subtree"
+    },
+    {
+      "input": {"root": [1, null, 2, null, 3]},
+      "expected": [1, 2, 3],
+      "explanation": "Right-skewed"
+    },
+    {
+      "input": {"root": [-1, -2, -3]},
+      "expected": [-1, -3],
+      "explanation": "Negative values"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    pass"
+  },
+  "functionName": "right_side_view",
+  "solutions": [
+    {
+      "label": "BFS — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    if not root:\n        return []\n\n    result = []\n    queue = deque([root])\n\n    while queue:\n        level_size = len(queue)\n        for i in range(level_size):\n            node = queue.popleft()\n            if i == level_size - 1:\n                result.append(node.val)  # last node in level\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "BFS level-by-level. At each level, the last node dequeued is the rightmost — record its value. This captures exactly what's visible from the right side at each depth."
+    },
+    {
+      "label": "DFS — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    result = []\n\n    def dfs(node, depth):\n        if not node:\n            return\n        if depth == len(result):\n            result.append(node.val)\n        else:\n            result[depth] = node.val  # overwrite with rightmost seen so far\n        dfs(node.left, depth + 1)\n        dfs(node.right, depth + 1)\n\n    dfs(root, 0)\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "DFS with a depth counter. If this is the first node at this depth, append it. Otherwise overwrite it — since we visit left before right, the last write at each depth comes from the rightmost node at that level. Equivalent result to BFS but uses the call stack instead of an explicit queue."
+    }
+  ],
+  "hints": [
+    "Use BFS. At each level, the rightmost node is the last one dequeued.",
+    "Process all nodes at each level in order; record the value of the last node at each level."
+  ],
+  "lcEquivalent": "199. Binary Tree Right Side View"
+}

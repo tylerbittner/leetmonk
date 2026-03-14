@@ -1,0 +1,112 @@
+{
+  "id": "palindromic-substrings",
+  "title": "Palindromic Substrings",
+  "difficulty": "medium",
+  "tags": ["string", "dynamic-programming", "two-pointers"],
+  "description": "## Palindromic Substrings\n\nGiven a string `s`, return the number of substrings that are palindromes. A palindrome reads the same forwards and backwards. Single characters always count as palindromes.\n\n**Constraints:**\n- `1 <= s.length <= 1000`\n- `s` consists of lowercase English letters.",
+  "examples": [
+    {
+      "input": "s = \"abc\"",
+      "output": "3",
+      "explanation": "\"a\", \"b\", \"c\" are the 3 palindromic substrings."
+    },
+    {
+      "input": "s = \"aaa\"",
+      "output": "6",
+      "explanation": "\"a\", \"a\", \"a\", \"aa\", \"aa\", \"aaa\" — 6 palindromic substrings."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"s": "abc"},
+      "expected": 3,
+      "explanation": "Only single characters"
+    },
+    {
+      "input": {"s": "aaa"},
+      "expected": 6,
+      "explanation": "3 singles + 2 pairs + 1 triple"
+    },
+    {
+      "input": {"s": "a"},
+      "expected": 1,
+      "explanation": "Single character"
+    },
+    {
+      "input": {"s": "abba"},
+      "expected": 6,
+      "explanation": "a, b, b, a, bb, abba"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"s": "aa"},
+      "expected": 3,
+      "explanation": "a, a, aa"
+    },
+    {
+      "input": {"s": "aba"},
+      "expected": 4,
+      "explanation": "a, b, a, aba"
+    },
+    {
+      "input": {"s": "abcd"},
+      "expected": 4,
+      "explanation": "Only single characters are palindromes"
+    },
+    {
+      "input": {"s": "racecar"},
+      "expected": 10,
+      "explanation": "r,a,c,e,c,a,r + aca(×1) + aceca + racecar = 7 singles + cec,aceca,racecar = 10"
+    },
+    {
+      "input": {"s": "aaaa"},
+      "expected": 10,
+      "explanation": "C(5,2) = 10 — all substrings of all same chars are palindromes"
+    },
+    {
+      "input": {"s": "ab"},
+      "expected": 2,
+      "explanation": "a, b"
+    },
+    {
+      "input": {"s": "aab"},
+      "expected": 4,
+      "explanation": "a, a, b, aa"
+    },
+    {
+      "input": {"s": "fdsklf"},
+      "expected": 6,
+      "explanation": "Only single characters"
+    }
+  ],
+  "starterCode": {
+    "python": "def count_palindromes(s: str) -> int:\n    pass"
+  },
+  "functionName": "count_palindromes",
+  "solutions": [
+    {
+      "label": "Expand Around Center — O(n²)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def count_palindromes(s: str) -> int:\n    count = 0\n\n    def expand(left: int, right: int):\n        nonlocal count\n        while left >= 0 and right < len(s) and s[left] == s[right]:\n            count += 1\n            left -= 1\n            right += 1\n\n    for i in range(len(s)):\n        expand(i, i)      # odd-length\n        expand(i, i + 1)  # even-length\n\n    return count",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Every palindrome expands from a center. For each index, expand outward for both odd-length palindromes (single center) and even-length palindromes (pair center), counting every valid expansion. This visits each palindrome exactly once."
+    },
+    {
+      "label": "DP — O(n²)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "def count_palindromes(s: str) -> int:\n    n = len(s)\n    dp = [[False] * n for _ in range(n)]\n    count = 0\n\n    for i in range(n):\n        dp[i][i] = True\n        count += 1\n\n    for i in range(n - 1):\n        if s[i] == s[i + 1]:\n            dp[i][i + 1] = True\n            count += 1\n\n    for length in range(3, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            if s[i] == s[j] and dp[i + 1][j - 1]:\n                dp[i][j] = True\n                count += 1\n\n    return count",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n²)",
+      "explanation": "Build a 2D DP table: `dp[i][j]` is True iff `s[i..j]` is a palindrome. Base cases: every single character and every matching adjacent pair. For lengths ≥ 3: `dp[i][j]` is True if outer characters match and `dp[i+1][j-1]` is True. Count every True entry. Uses O(n²) space vs O(1) for the expand-around-center approach."
+    }
+  ],
+  "hints": [
+    "Every palindrome has a center — a single character for odd-length or a matching pair for even-length.",
+    "Try expanding outward from each center: every successful expansion is a new palindromic substring to count."
+  ],
+  "lcEquivalent": "647. Palindromic Substrings"
+}

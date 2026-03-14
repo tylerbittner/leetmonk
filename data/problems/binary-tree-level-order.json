@@ -1,0 +1,117 @@
+{
+  "id": "binary-tree-level-order",
+  "title": "Binary Tree Level Order Traversal",
+  "difficulty": "medium",
+  "tags": ["tree", "breadth-first-search"],
+  "description": "## Binary Tree Level Order Traversal\n\nGiven a binary tree (as a level-order list), return the level-order traversal of its values as a list of lists — each inner list contains the values at one level, from left to right.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 2000]`.\n- `-1000 <= Node.val <= 1000`",
+  "examples": [
+    {
+      "input": "root = [3,9,20,null,null,15,7]",
+      "output": "[[3],[9,20],[15,7]]",
+      "explanation": "Level 0: [3]. Level 1: [9,20]. Level 2: [15,7]."
+    },
+    {
+      "input": "root = [1]",
+      "output": "[[1]]",
+      "explanation": "Single node — one level."
+    },
+    {
+      "input": "root = []",
+      "output": "[]",
+      "explanation": "Empty tree."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"root": [3, 9, 20, null, null, 15, 7]},
+      "expected": [[3], [9, 20], [15, 7]],
+      "explanation": "Three levels"
+    },
+    {
+      "input": {"root": [1]},
+      "expected": [[1]],
+      "explanation": "Single node"
+    },
+    {
+      "input": {"root": []},
+      "expected": [],
+      "explanation": "Empty tree"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5]},
+      "expected": [[1], [2, 3], [4, 5]],
+      "explanation": "Three levels"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"root": [1, 2]},
+      "expected": [[1], [2]],
+      "explanation": "Left child only"
+    },
+    {
+      "input": {"root": [1, null, 2]},
+      "expected": [[1], [2]],
+      "explanation": "Right child only"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, 5, 6, 7]},
+      "expected": [[1], [2, 3], [4, 5, 6, 7]],
+      "explanation": "Perfect binary tree"
+    },
+    {
+      "input": {"root": [1, 2, null, 3, null, 4]},
+      "expected": [[1], [2], [3], [4]],
+      "explanation": "Left-skewed"
+    },
+    {
+      "input": {"root": [-1, -2, -3]},
+      "expected": [[-1], [-2, -3]],
+      "explanation": "Negative values"
+    },
+    {
+      "input": {"root": [1, 2, 3, null, 4, 5]},
+      "expected": [[1], [2, 3], [4, 5]],
+      "explanation": "Mixed null children"
+    },
+    {
+      "input": {"root": [1, 2, 3, 4, null, null, 5]},
+      "expected": [[1], [2, 3], [4, 5]],
+      "explanation": "Children on opposite sides"
+    },
+    {
+      "input": {"root": [10, 5, 15, 3, 7, null, 20]},
+      "expected": [[10], [5, 15], [3, 7, 20]],
+      "explanation": "BST-like structure"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef level_order(root: List[Optional[int]]) -> List[List[int]]:\n    root = build_tree(root)\n    pass"
+  },
+  "functionName": "level_order",
+  "solutions": [
+    {
+      "label": "BFS — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef level_order(root: List[Optional[int]]) -> List[List[int]]:\n    root = build_tree(root)\n    if not root:\n        return []\n\n    result = []\n    queue = deque([root])\n\n    while queue:\n        level_size = len(queue)\n        level = []\n        for _ in range(level_size):\n            node = queue.popleft()\n            level.append(node.val)\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        result.append(level)\n\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use BFS with a queue. At the start of each iteration, the queue contains exactly all nodes at the current level. Record the current queue size, then dequeue that many nodes to collect the level's values, enqueuing their children for the next iteration. Repeat until the queue is empty."
+    },
+    {
+      "label": "DFS — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef level_order(root: List[Optional[int]]) -> List[List[int]]:\n    root = build_tree(root)\n    result = []\n\n    def dfs(node, depth):\n        if not node:\n            return\n        if depth == len(result):\n            result.append([])\n        result[depth].append(node.val)\n        dfs(node.left, depth + 1)\n        dfs(node.right, depth + 1)\n\n    dfs(root, 0)\n    return result",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Use DFS with a depth parameter. When we first visit a depth, append a new empty list to result. Then append the node's value to result[depth]. Recurse left then right. This naturally populates levels in left-to-right order since we visit left subtree first."
+    }
+  ],
+  "hints": [
+    "Use BFS (a queue). At each step, process all nodes currently in the queue — that's one complete level.",
+    "Record len(queue) before processing each level to know exactly how many nodes belong to that level."
+  ],
+  "lcEquivalent": "102. Binary Tree Level Order Traversal"
+}

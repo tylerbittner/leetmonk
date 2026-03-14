@@ -1,0 +1,112 @@
+{
+  "id": "sum-of-two-integers",
+  "title": "Sum of Two Integers",
+  "difficulty": "medium",
+  "tags": ["bit-manipulation", "math"],
+  "description": "## Sum of Two Integers\n\nCalculate the sum of two integers `a` and `b` without using the `+` or `-` operators.\n\n**Constraints:**\n- `-1000 <= a, b <= 1000`",
+  "examples": [
+    {
+      "input": "a = 1, b = 2",
+      "output": "3",
+      "explanation": "1 + 2 = 3 without using the + operator."
+    },
+    {
+      "input": "a = 2, b = 3",
+      "output": "5",
+      "explanation": "2 + 3 = 5."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"a": 1, "b": 2},
+      "expected": 3,
+      "explanation": "Basic addition"
+    },
+    {
+      "input": {"a": 2, "b": 3},
+      "expected": 5,
+      "explanation": "Basic addition"
+    },
+    {
+      "input": {"a": 1, "b": -1},
+      "expected": 0,
+      "explanation": "Positive and negative"
+    },
+    {
+      "input": {"a": -1, "b": -1},
+      "expected": -2,
+      "explanation": "Both negative"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"a": 0, "b": 0},
+      "expected": 0,
+      "explanation": "Both zero"
+    },
+    {
+      "input": {"a": 5, "b": 0},
+      "expected": 5,
+      "explanation": "Add zero"
+    },
+    {
+      "input": {"a": -5, "b": 5},
+      "expected": 0,
+      "explanation": "Cancel out"
+    },
+    {
+      "input": {"a": -7, "b": 3},
+      "expected": -4,
+      "explanation": "Negative result"
+    },
+    {
+      "input": {"a": 100, "b": 200},
+      "expected": 300,
+      "explanation": "Larger numbers"
+    },
+    {
+      "input": {"a": -100, "b": -200},
+      "expected": -300,
+      "explanation": "Both large negatives"
+    },
+    {
+      "input": {"a": 1000, "b": -1000},
+      "expected": 0,
+      "explanation": "Cancel to zero"
+    },
+    {
+      "input": {"a": -3, "b": 7},
+      "expected": 4,
+      "explanation": "Mixed signs"
+    }
+  ],
+  "starterCode": {
+    "python": "def get_sum(a: int, b: int) -> int:\n    pass"
+  },
+  "functionName": "get_sum",
+  "solutions": [
+    {
+      "label": "Bit Manipulation — O(1)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "def get_sum(a: int, b: int) -> int:\n    MASK = 0xFFFFFFFF      # 32-bit mask\n    MAX_INT = 0x7FFFFFFF   # max positive 32-bit int\n\n    while b != 0:\n        carry = (a & b) & MASK\n        a = (a ^ b) & MASK\n        b = (carry << 1) & MASK\n\n    # If a > MAX_INT, it's a negative number in 32-bit two's complement\n    if a > MAX_INT:\n        a = ~(a ^ MASK)\n    return a",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary addition: XOR gives the sum without carry, AND-then-shift gives the carry. Repeat until carry is zero. Python integers have arbitrary precision, so we mask to 32 bits with `& 0xFFFFFFFF` after each operation. If the result exceeds 0x7FFFFFFF, it represents a negative 32-bit number — convert it using `~(a ^ MASK)` (flip the bits of the 32-bit complement)."
+    },
+    {
+      "label": "Recursive Bit Manipulation — O(1)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "def get_sum(a: int, b: int) -> int:\n    MASK = 0xFFFFFFFF\n    MAX_INT = 0x7FFFFFFF\n\n    def add(x, y):\n        if y == 0:\n            return x\n        carry = ((x & y) << 1) & MASK\n        no_carry = (x ^ y) & MASK\n        return add(no_carry, carry)\n\n    result = add(a & MASK, b & MASK)\n    if result > MAX_INT:\n        result = ~(result ^ MASK)\n    return result",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Same bit manipulation logic as the iterative version, expressed recursively. Base case: when carry (y) reaches 0, return the accumulated sum (x). Otherwise recurse with the XOR sum (no carry) and the left-shifted AND (carry). 32-bit masking is still needed for Python's arbitrary-precision integers."
+    }
+  ],
+  "hints": [
+    "XOR gives addition without carry. AND gives the carry positions. Shift carry left by 1 and repeat.",
+    "Python integers are arbitrary precision, so mask to 32 bits with `& 0xFFFFFFFF`. Handle negative results separately."
+  ],
+  "lcEquivalent": "371. Sum of Two Integers"
+}

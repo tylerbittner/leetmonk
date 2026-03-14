@@ -1,0 +1,112 @@
+{
+  "id": "merge-intervals",
+  "title": "Merge Intervals",
+  "difficulty": "medium",
+  "tags": ["array", "intervals", "sorting"],
+  "description": "## Merge Intervals\n\nGiven an array of intervals where `intervals[i] = [start_i, end_i]`, merge all overlapping intervals and return an array of the non-overlapping intervals that cover all the intervals in the input.\n\n**Constraints:**\n- `1 <= intervals.length <= 10^4`\n- `intervals[i].length == 2`\n- `0 <= start_i <= end_i <= 10^4`",
+  "examples": [
+    {
+      "input": "intervals = [[1,3],[2,6],[8,10],[15,18]]",
+      "output": "[[1,6],[8,10],[15,18]]",
+      "explanation": "[1,3] and [2,6] overlap → merge to [1,6]. Others don't overlap."
+    },
+    {
+      "input": "intervals = [[1,4],[4,5]]",
+      "output": "[[1,5]]",
+      "explanation": "[1,4] and [4,5] are considered overlapping (touch at 4)."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"intervals": [[1, 3], [2, 6], [8, 10], [15, 18]]},
+      "expected": [[1, 6], [8, 10], [15, 18]],
+      "explanation": "Merge first two"
+    },
+    {
+      "input": {"intervals": [[1, 4], [4, 5]]},
+      "expected": [[1, 5]],
+      "explanation": "Touch at endpoint"
+    },
+    {
+      "input": {"intervals": [[1, 4], [0, 4]]},
+      "expected": [[0, 4]],
+      "explanation": "Fully overlapping"
+    },
+    {
+      "input": {"intervals": [[1, 4], [2, 3]]},
+      "expected": [[1, 4]],
+      "explanation": "Second contained in first"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"intervals": [[1, 2]]},
+      "expected": [[1, 2]],
+      "explanation": "Single interval"
+    },
+    {
+      "input": {"intervals": [[1, 4], [5, 6]]},
+      "expected": [[1, 4], [5, 6]],
+      "explanation": "No overlap"
+    },
+    {
+      "input": {"intervals": [[1, 10], [2, 3], [4, 5], [6, 7]]},
+      "expected": [[1, 10]],
+      "explanation": "All contained in first"
+    },
+    {
+      "input": {"intervals": [[2, 3], [4, 5], [6, 7], [8, 9], [1, 10]]},
+      "expected": [[1, 10]],
+      "explanation": "Unsorted input — merge all"
+    },
+    {
+      "input": {"intervals": [[1, 3], [4, 6], [7, 9]]},
+      "expected": [[1, 3], [4, 6], [7, 9]],
+      "explanation": "No overlaps"
+    },
+    {
+      "input": {"intervals": [[0, 0], [1, 1]]},
+      "expected": [[0, 0], [1, 1]],
+      "explanation": "Point intervals, no overlap"
+    },
+    {
+      "input": {"intervals": [[0, 3], [1, 5], [4, 8], [6, 10]]},
+      "expected": [[0, 10]],
+      "explanation": "Chain of overlapping intervals"
+    },
+    {
+      "input": {"intervals": [[5, 10], [1, 3], [8, 12], [15, 18]]},
+      "expected": [[1, 3], [5, 12], [15, 18]],
+      "explanation": "Sort then merge"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    pass"
+  },
+  "functionName": "merge_intervals",
+  "solutions": [
+    {
+      "label": "Sort and Merge — O(n log n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n\n    for start, end in intervals[1:]:\n        if start <= merged[-1][1]:  # overlaps with last merged\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n\n    return merged",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort intervals by start time. Then scan linearly: if the current interval's start is ≤ the last merged interval's end, they overlap — extend the last interval's end. Otherwise, add the current interval as a new non-overlapping segment. Sorting ensures we only ever need to compare with the last merged interval."
+    },
+    {
+      "label": "Brute Force — O(n² log n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    intervals = sorted(intervals, key=lambda x: x[0])\n    changed = True\n    while changed:\n        changed = False\n        result = [intervals[0]]\n        for i in range(1, len(intervals)):\n            if intervals[i][0] <= result[-1][1]:\n                result[-1][1] = max(result[-1][1], intervals[i][1])\n                changed = True\n            else:\n                result.append(intervals[i][:])\n        intervals = result\n    return intervals",
+      "timeComplexity": "O(n² log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Repeatedly pass through the sorted list until no more merges happen. In each pass, merge any overlapping consecutive intervals. This is inefficient since one pass is always enough after sorting — but it illustrates the concept of iteratively reducing overlaps. The optimal solution does it in a single pass."
+    }
+  ],
+  "hints": [
+    "Sort intervals by start time. Then scan left to right: if the next interval overlaps with the last one, merge them.",
+    "Two intervals [a,b] and [c,d] overlap if c <= b (c starts before b ends). Merge by extending end to max(b, d)."
+  ],
+  "lcEquivalent": "56. Merge Intervals"
+}

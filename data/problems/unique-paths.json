@@ -1,0 +1,112 @@
+{
+  "id": "unique-paths",
+  "title": "Unique Paths",
+  "difficulty": "medium",
+  "tags": ["dynamic-programming", "math"],
+  "description": "## Unique Paths\n\nA robot is located in the top-left corner of an `m x n` grid. The robot can only move either right or down at each step. The robot is trying to reach the bottom-right corner of the grid.\n\nHow many unique paths are there from the top-left to the bottom-right?\n\n**Constraints:**\n- `1 <= m, n <= 100`",
+  "examples": [
+    {
+      "input": "m = 3, n = 7",
+      "output": "28",
+      "explanation": "There are 28 unique paths in a 3×7 grid."
+    },
+    {
+      "input": "m = 3, n = 2",
+      "output": "3",
+      "explanation": "Paths: Right→Down→Down, Down→Right→Down, Down→Down→Right."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"m": 3, "n": 7},
+      "expected": 28,
+      "explanation": "3×7 grid"
+    },
+    {
+      "input": {"m": 3, "n": 2},
+      "expected": 3,
+      "explanation": "3×2 grid"
+    },
+    {
+      "input": {"m": 1, "n": 1},
+      "expected": 1,
+      "explanation": "Already at destination"
+    },
+    {
+      "input": {"m": 2, "n": 2},
+      "expected": 2,
+      "explanation": "Right→Down or Down→Right"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"m": 1, "n": 10},
+      "expected": 1,
+      "explanation": "Single row, only one path"
+    },
+    {
+      "input": {"m": 10, "n": 1},
+      "expected": 1,
+      "explanation": "Single column, only one path"
+    },
+    {
+      "input": {"m": 5, "n": 5},
+      "expected": 70,
+      "explanation": "5×5 grid"
+    },
+    {
+      "input": {"m": 4, "n": 4},
+      "expected": 20,
+      "explanation": "4×4 grid"
+    },
+    {
+      "input": {"m": 7, "n": 3},
+      "expected": 28,
+      "explanation": "Same as 3×7 by symmetry"
+    },
+    {
+      "input": {"m": 10, "n": 10},
+      "expected": 48620,
+      "explanation": "C(18,8) = 48620"
+    },
+    {
+      "input": {"m": 3, "n": 3},
+      "expected": 6,
+      "explanation": "3×3 grid"
+    },
+    {
+      "input": {"m": 2, "n": 10},
+      "expected": 10,
+      "explanation": "2×10 grid"
+    }
+  ],
+  "starterCode": {
+    "python": "def unique_paths(m: int, n: int) -> int:\n    pass"
+  },
+  "functionName": "unique_paths",
+  "solutions": [
+    {
+      "label": "Dynamic Programming — O(m·n)",
+      "approach": "obvious",
+      "language": "python",
+      "code": "def unique_paths(m: int, n: int) -> int:\n    dp = [[1] * n for _ in range(m)]\n\n    for r in range(1, m):\n        for c in range(1, n):\n            dp[r][c] = dp[r - 1][c] + dp[r][c - 1]\n\n    return dp[m - 1][n - 1]",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(m·n)",
+      "explanation": "The number of paths to any cell equals the number of paths from above plus the number of paths from the left. Initialize all border cells to 1 (only one way to reach them). Fill in the rest using this recurrence. The answer is in the bottom-right cell."
+    },
+    {
+      "label": "Combinatorics — O(min(m,n))",
+      "approach": "optimal",
+      "language": "python",
+      "code": "import math\n\ndef unique_paths(m: int, n: int) -> int:\n    # Must take exactly (m-1) down moves and (n-1) right moves\n    # Total moves = m+n-2, choose m-1 of them to be down\n    return math.comb(m + n - 2, m - 1)",
+      "timeComplexity": "O(min(m,n))",
+      "spaceComplexity": "O(1)",
+      "explanation": "To reach the bottom-right, the robot must make exactly `m-1` down moves and `n-1` right moves, for a total of `m+n-2` moves. The number of unique orderings of these moves is `C(m+n-2, m-1)` — choosing which of the total moves will be 'down'. This gives a closed-form O(1) formula."
+    }
+  ],
+  "hints": [
+    "The number of paths to reach a cell equals paths from above plus paths from the left.",
+    "Alternatively, the robot always makes exactly (m-1) down and (n-1) right moves — count the arrangements using combinatorics."
+  ],
+  "lcEquivalent": "62. Unique Paths"
+}

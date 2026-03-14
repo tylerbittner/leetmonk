@@ -1,0 +1,112 @@
+{
+  "id": "validate-binary-search-tree",
+  "title": "Validate Binary Search Tree",
+  "difficulty": "medium",
+  "tags": ["tree", "depth-first-search", "binary-search-tree"],
+  "description": "## Validate Binary Search Tree\n\nGiven a binary tree (as a level-order list), determine if it is a valid binary search tree (BST).\n\nA valid BST requires:\n- Every value in the **left** subtree is **strictly less** than the node's value.\n- Every value in the **right** subtree is **strictly greater** than the node's value.\n- Both left and right subtrees must also be valid BSTs.\n\n**Constraints:**\n- The number of nodes is in the range `[1, 10^4]`.\n- `-2^31 <= Node.val <= 2^31 - 1`",
+  "examples": [
+    {
+      "input": "root = [2,1,3]",
+      "output": "true",
+      "explanation": "1 < 2 < 3 — valid BST."
+    },
+    {
+      "input": "root = [5,1,4,null,null,3,6]",
+      "output": "false",
+      "explanation": "Node 4 is in the right subtree of 5, but 4 < 5."
+    }
+  ],
+  "exampleCases": [
+    {
+      "input": {"root": [2, 1, 3]},
+      "expected": true,
+      "explanation": "Valid BST"
+    },
+    {
+      "input": {"root": [5, 1, 4, null, null, 3, 6]},
+      "expected": false,
+      "explanation": "4 < 5 in right subtree"
+    },
+    {
+      "input": {"root": [1]},
+      "expected": true,
+      "explanation": "Single node"
+    },
+    {
+      "input": {"root": [5, 4, 6, null, null, 3, 7]},
+      "expected": false,
+      "explanation": "3 < 5 but is in right subtree of 5"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "input": {"root": [2, 2, 2]},
+      "expected": false,
+      "explanation": "Duplicate values — not strictly ordered"
+    },
+    {
+      "input": {"root": [1, null, 2]},
+      "expected": true,
+      "explanation": "Right child larger"
+    },
+    {
+      "input": {"root": [2, 1]},
+      "expected": true,
+      "explanation": "Left child smaller"
+    },
+    {
+      "input": {"root": [10, 5, 15, null, null, 6, 20]},
+      "expected": false,
+      "explanation": "6 < 10 but in right subtree"
+    },
+    {
+      "input": {"root": [5, 3, 7, 1, 4, 6, 8]},
+      "expected": true,
+      "explanation": "Valid complete BST"
+    },
+    {
+      "input": {"root": [5, 3, 7, 1, 6, null, 8]},
+      "expected": false,
+      "explanation": "6 > 5 but in left subtree of 5"
+    },
+    {
+      "input": {"root": [3, 1, 5, null, 2]},
+      "expected": true,
+      "explanation": "2 is in left subtree and < 3"
+    },
+    {
+      "input": {"root": [3, 1, 5, null, 4]},
+      "expected": false,
+      "explanation": "4 is right child of 1 but 4 > 3 (root), violating BST"
+    }
+  ],
+  "starterCode": {
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    pass"
+  },
+  "functionName": "is_valid_bst",
+  "solutions": [
+    {
+      "label": "DFS with Bounds — O(n)",
+      "approach": "optimal",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n\n    def validate(node, low, high):\n        if not node:\n            return True\n        if node.val <= low or node.val >= high:\n            return False\n        return (validate(node.left, low, node.val) and\n                validate(node.right, node.val, high))\n\n    return validate(root, float('-inf'), float('inf'))",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Propagate valid value bounds down the tree. Each node must have a value strictly between `low` and `high`. When going left, the upper bound becomes the current node's value. When going right, the lower bound becomes the current node's value. Initialize with (-∞, +∞) at the root. This correctly handles cases where a value in a subtree violates an ancestor's constraint."
+    },
+    {
+      "label": "Inorder Traversal — O(n)",
+      "approach": "brute-force",
+      "language": "python",
+      "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    prev = [float('-inf')]\n\n    def inorder(node):\n        if not node:\n            return True\n        if not inorder(node.left):\n            return False\n        if node.val <= prev[0]:\n            return False\n        prev[0] = node.val\n        return inorder(node.right)\n\n    return inorder(root)",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "A BST's inorder traversal produces a strictly increasing sequence. Perform inorder traversal while tracking the previously visited value. If the current value is not strictly greater than the previous, the tree is not a valid BST. This catches violations using the natural ordering property of BSTs."
+    }
+  ],
+  "hints": [
+    "Simply checking left < node < right is not enough — a node deep in the left subtree must also be less than all of its ancestors.",
+    "Pass down valid bounds: when going left, update the upper bound to the current node's value; when going right, update the lower bound."
+  ],
+  "lcEquivalent": "98. Validate Binary Search Tree"
+}
