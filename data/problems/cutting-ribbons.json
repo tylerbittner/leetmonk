@@ -203,12 +203,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} ribbons\n * @param {number} k\n * @return {number}\n */\nfunction maxRibbonLength(ribbons, k) {\n    \n}"
   },
   "functionName": "max_ribbon_length",
   "solutions": [
     {
-      "label": "Linear Search — O(max_ribbon * n)",
+      "label": "Linear Search \u2014 O(max_ribbon * n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    for length in range(max(ribbons), 0, -1):\n        total = sum(r // length for r in ribbons)\n        if total >= k:\n            return length\n    return 0",
@@ -217,13 +218,22 @@
       "explanation": "The simplest approach is to try every possible piece length from the largest (max of ribbons) down to 1. For each candidate length, count how many pieces we get by dividing each ribbon by that length and summing the results. The first length that yields at least k pieces is our answer, since we are searching from largest to smallest.\n\nThis works because the relationship between piece length and piece count is monotone: shorter pieces always yield at least as many total pieces as longer ones. By starting from the top, the first feasible length is automatically the maximum.\n\nThe downside is performance. If the longest ribbon is 100,000, we might check up to 100,000 candidate lengths, and each check scans all n ribbons. This makes the approach impractical for large inputs."
     },
     {
-      "label": "Binary Search on Answer — O(n log max_ribbon)",
+      "label": "Binary Search on Answer \u2014 O(n log max_ribbon)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    lo, hi = 1, max(ribbons)\n    result = 0\n    while lo <= hi:\n        mid = lo + (hi - lo) // 2\n        total = sum(r // mid for r in ribbons)\n        if total >= k:\n            result = mid\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return result",
       "timeComplexity": "O(n log max_ribbon)",
       "spaceComplexity": "O(1)",
-      "explanation": "This problem is a textbook example of the **Binary Search on Answer** pattern (also called parametric binary search). Instead of searching for a value inside an array, we binary search over the space of possible answers.\n\nThe key insight is **monotonicity of the feasibility function**. Define `can_cut(m)` as whether we can obtain at least k pieces of length m. If we can cut k pieces of length m, we can certainly cut k pieces of any shorter length (each ribbon yields at least as many pieces). Conversely, if we cannot get k pieces of length m, we cannot get k pieces of any longer length either. This means there is a threshold: all lengths up to some value are feasible, and all lengths above it are not.\n\nThis monotone structure is exactly what binary search exploits. We search the range [1, max(ribbons)] for the largest feasible length:\n\n1. Pick the midpoint `mid`.\n2. Count pieces: `sum(r // mid for r in ribbons)`.\n3. If count >= k, this length works — record it and search higher (`lo = mid + 1`).\n4. If count < k, this length is too long — search lower (`hi = mid - 1`).\n\nEach binary search step takes O(n) to count pieces across all ribbons, and we perform O(log max_ribbon) steps, giving O(n log max_ribbon) total — a massive improvement over the linear scan."
+      "explanation": "This problem is a textbook example of the **Binary Search on Answer** pattern (also called parametric binary search). Instead of searching for a value inside an array, we binary search over the space of possible answers.\n\nThe key insight is **monotonicity of the feasibility function**. Define `can_cut(m)` as whether we can obtain at least k pieces of length m. If we can cut k pieces of length m, we can certainly cut k pieces of any shorter length (each ribbon yields at least as many pieces). Conversely, if we cannot get k pieces of length m, we cannot get k pieces of any longer length either. This means there is a threshold: all lengths up to some value are feasible, and all lengths above it are not.\n\nThis monotone structure is exactly what binary search exploits. We search the range [1, max(ribbons)] for the largest feasible length:\n\n1. Pick the midpoint `mid`.\n2. Count pieces: `sum(r // mid for r in ribbons)`.\n3. If count >= k, this length works \u2014 record it and search higher (`lo = mid + 1`).\n4. If count < k, this length is too long \u2014 search lower (`hi = mid - 1`).\n\nEach binary search step takes O(n) to count pieces across all ribbons, and we perform O(log max_ribbon) steps, giving O(n log max_ribbon) total \u2014 a massive improvement over the linear scan."
+    },
+    {
+      "label": "Binary Search on Answer \u2014 O(n log max_ribbon)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxRibbonLength(ribbons, k) {\n    let lo = 1, hi = Math.max(...ribbons);\n    let result = 0;\n    while (lo <= hi) {\n        const mid = lo + Math.floor((hi - lo) / 2);\n        const total = ribbons.reduce((sum, r) => sum + Math.floor(r / mid), 0);\n        if (total >= k) { result = mid; lo = mid + 1; }\n        else hi = mid - 1;\n    }\n    return result;\n}",
+      "timeComplexity": "O(n log max_ribbon)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on the answer: find the largest piece length in [1, max(ribbons)] where the total number of pieces is at least k."
     }
   ],
   "hints": [

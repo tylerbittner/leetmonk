@@ -85,7 +85,7 @@
         "n": 2147483647
       },
       "expected": 4294967294,
-      "explanation": "01111111111111111111111111111111 → 11111111111111111111111111111110"
+      "explanation": "01111111111111111111111111111111 \u2192 11111111111111111111111111111110"
     },
     {
       "input": {
@@ -110,12 +110,13 @@
     }
   ],
   "starterCode": {
-    "python": "def reverse_bits(n: int) -> int:\n    pass"
+    "python": "def reverse_bits(n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @return {number}\n */\nfunction reverseBits(n) {\n    \n}"
   },
   "functionName": "reverse_bits",
   "solutions": [
     {
-      "label": "Bit-by-Bit Reversal — O(32)",
+      "label": "Bit-by-Bit Reversal \u2014 O(32)",
       "approach": "optimal",
       "language": "python",
       "code": "def reverse_bits(n: int) -> int:\n    result = 0\n    for _ in range(32):\n        result = (result << 1) | (n & 1)\n        n >>= 1\n    return result",
@@ -124,18 +125,27 @@
       "explanation": "Build the reversed number bit by bit. In each iteration: extract the least significant bit of n (`n & 1`), shift result left to make room, OR in the extracted bit, then shift n right to process the next bit. After 32 iterations, all bits have been reversed."
     },
     {
-      "label": "String Reversal — O(1)",
+      "label": "String Reversal \u2014 O(1)",
       "approach": "obvious",
       "language": "python",
       "code": "def reverse_bits(n: int) -> int:\n    return int(bin(n)[2:].zfill(32)[::-1], 2)",
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
       "explanation": "Convert n to a 32-character binary string (zero-padded with zfill), reverse it, then convert back to an integer. `bin(n)[2:]` removes the '0b' prefix. `zfill(32)` pads to exactly 32 bits. `[::-1]` reverses the string. `int(..., 2)` converts the reversed binary string back to an integer."
+    },
+    {
+      "label": "Bit-by-Bit Reversal \u2014 O(32)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function reverseBits(n) {\n    let result = 0;\n    for (let i = 0; i < 32; i++) {\n        result = (result * 2) + (n & 1);\n        n >>>= 1;\n    }\n    return result >>> 0;\n}",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Extract the LSB of n each iteration, shift result left (multiply by 2), OR in the bit. Use >>> 0 to ensure unsigned 32-bit result."
     }
   ],
   "hints": [
     "Process one bit at a time. In each step, take the LSB of n and append it to the result, then shift both.",
-    "Remember to do exactly 32 iterations even if n becomes 0 early — trailing zeros in n become leading zeros in the reversed result."
+    "Remember to do exactly 32 iterations even if n becomes 0 early \u2014 trailing zeros in n become leading zeros in the reversed result."
   ],
   "lcEquivalent": "190. Reverse Bits"
 }

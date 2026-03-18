@@ -225,27 +225,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @param {(number|null)[]} subRoot\n * @return {boolean}\n */\nfunction isSubtree(root, subRoot) {\n    root = buildTree(root);\n    subRoot = buildTree(subRoot);\n    \n}"
   },
   "functionName": "is_subtree",
   "solutions": [
     {
-      "label": "DFS — O(m·n)",
+      "label": "DFS \u2014 O(m\u00b7n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n\n    def same(a, b):\n        if not a and not b:\n            return True\n        if not a or not b:\n            return False\n        return a.val == b.val and same(a.left, b.left) and same(a.right, b.right)\n\n    def check(node):\n        if not node:\n            return False\n        if same(node, subRoot):\n            return True\n        return check(node.left) or check(node.right)\n\n    return check(root)",
-      "timeComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
       "spaceComplexity": "O(h)",
-      "explanation": "For each node in `root`, check if the subtree rooted there is identical to `subRoot` using a `same()` helper. `same()` compares two trees recursively. If either node is a match, return True. The outer `check()` traverses all n nodes of root, and `same()` runs in O(m) per call, giving O(m·n) overall."
+      "explanation": "For each node in `root`, check if the subtree rooted there is identical to `subRoot` using a `same()` helper. `same()` compares two trees recursively. If either node is a match, return True. The outer `check()` traverses all n nodes of root, and `same()` runs in O(m) per call, giving O(m\u00b7n) overall."
     },
     {
-      "label": "Serialization — O(m·n)",
+      "label": "Serialization \u2014 O(m\u00b7n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_subtree(root: List[Optional[int]], subRoot: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    subRoot = build_tree(subRoot)\n\n    def serialize(node):\n        if not node:\n            return \"#\"\n        return f\"|{node.val}|{serialize(node.left)}|{serialize(node.right)}\"\n\n    return serialize(subRoot) in serialize(root)",
-      "timeComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
       "spaceComplexity": "O(m+n)",
       "explanation": "Serialize both trees into unique strings representing their structure (using delimiters and # for null). A tree T is a subtree of S iff the serialized form of T appears as a substring in the serialized form of S. The delimiters ensure values like '1' don't accidentally match '10'. Uses Python's built-in string `in` operator for substring search."
+    },
+    {
+      "label": "DFS \u2014 O(m\u00b7n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction isSubtree(root, subRoot) {\n    root = buildTree(root);\n    subRoot = buildTree(subRoot);\n    function same(a, b) {\n        if (!a && !b) return true;\n        if (!a || !b) return false;\n        return a.val === b.val && same(a.left, b.left) && same(a.right, b.right);\n    }\n    function check(node) {\n        if (!node) return false;\n        if (same(node, subRoot)) return true;\n        return check(node.left) || check(node.right);\n    }\n    return check(root);\n}",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "For each node in root, check if the subtree rooted there is identical to subRoot using a same() helper. If any node matches, return true."
     }
   ],
   "hints": [

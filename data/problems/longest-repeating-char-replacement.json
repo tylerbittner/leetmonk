@@ -22,7 +22,7 @@
     {
       "input": "s = \"AABABBA\", k = 1",
       "output": "4",
-      "explanation": "Replace the one A in \"AABA\" → \"AAAA\", or the one A in \"ABBA\" → \"BBBB\" — both give length 4."
+      "explanation": "Replace the one A in \"AABA\" \u2192 \"AAAA\", or the one A in \"ABBA\" \u2192 \"BBBB\" \u2014 both give length 4."
     }
   ],
   "exampleCases": [
@@ -122,31 +122,41 @@
         "k": 1
       },
       "expected": 3,
-      "explanation": "Window EOE: max_freq=2, replacements=1 — length 3"
+      "explanation": "Window EOE: max_freq=2, replacements=1 \u2014 length 3"
     }
   ],
   "starterCode": {
-    "python": "def character_replacement(s: str, k: int) -> int:\n    pass"
+    "python": "def character_replacement(s: str, k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @param {number} k\n * @return {number}\n */\nfunction characterReplacement(s, k) {\n    \n}"
   },
   "functionName": "character_replacement",
   "solutions": [
     {
-      "label": "Brute Force — O(26·n)",
+      "label": "Brute Force \u2014 O(26\u00b7n)",
       "approach": "obvious",
       "language": "python",
       "code": "def character_replacement(s: str, k: int) -> int:\n    result = 0\n    for c in set(s):\n        count = 0\n        left = 0\n        for right in range(len(s)):\n            if s[right] == c:\n                count += 1\n            while (right - left + 1) - count > k:\n                if s[left] == c:\n                    count -= 1\n                left += 1\n            result = max(result, right - left + 1)\n    return result",
-      "timeComplexity": "O(26·n)",
+      "timeComplexity": "O(26\u00b7n)",
       "spaceComplexity": "O(1)",
       "explanation": "For each possible target character, use a sliding window to find the longest window where the number of non-target characters is at most k. Run this for all 26 letters and take the maximum."
     },
     {
-      "label": "Sliding Window — O(n)",
+      "label": "Sliding Window \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "def character_replacement(s: str, k: int) -> int:\n    counts = {}\n    left = 0\n    max_freq = 0\n    result = 0\n\n    for right in range(len(s)):\n        counts[s[right]] = counts.get(s[right], 0) + 1\n        max_freq = max(max_freq, counts[s[right]])\n\n        # window_size - max_freq = characters that need replacing\n        while (right - left + 1) - max_freq > k:\n            counts[s[left]] -= 1\n            left += 1\n\n        result = max(result, right - left + 1)\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Maintain a sliding window and track the frequency of the most common character in the window (`max_freq`). The number of replacements needed equals `window_size - max_freq`. If this exceeds k, shrink the window from the left. A key insight: `max_freq` is never decremented — we only need the window to grow, and any smaller window we've already considered."
+      "explanation": "Maintain a sliding window and track the frequency of the most common character in the window (`max_freq`). The number of replacements needed equals `window_size - max_freq`. If this exceeds k, shrink the window from the left. A key insight: `max_freq` is never decremented \u2014 we only need the window to grow, and any smaller window we've already considered."
+    },
+    {
+      "label": "Sliding Window \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function characterReplacement(s, k) {\n    const count = new Array(26).fill(0);\n    let left = 0, maxCount = 0, result = 0;\n    for (let right = 0; right < s.length; right++) {\n        const idx = s.charCodeAt(right) - 65;\n        count[idx]++;\n        maxCount = Math.max(maxCount, count[idx]);\n        while ((right - left + 1) - maxCount > k) {\n            count[s.charCodeAt(left) - 65]--;\n            left++;\n        }\n        result = Math.max(result, right - left + 1);\n    }\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sliding window: window is valid if (size - max_freq) <= k. Expand right, shrink left when invalid."
     }
   ],
   "hints": [

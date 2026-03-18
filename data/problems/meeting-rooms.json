@@ -11,7 +11,7 @@
     "intervals",
     "array"
   ],
-  "description": "## Meeting Rooms\n\nGiven an array of meeting time intervals where `intervals[i] = [start_i, end_i]`, determine if a person could attend all meetings — i.e., no two meetings overlap.\n\nTwo meetings overlap if one starts before the other ends (touching end-to-start is allowed).\n\n**Constraints:**\n- `0 <= intervals.length <= 10^4`\n- `intervals[i].length == 2`\n- `0 <= start_i < end_i <= 10^6`",
+  "description": "## Meeting Rooms\n\nGiven an array of meeting time intervals where `intervals[i] = [start_i, end_i]`, determine if a person could attend all meetings \u2014 i.e., no two meetings overlap.\n\nTwo meetings overlap if one starts before the other ends (touching end-to-start is allowed).\n\n**Constraints:**\n- `0 <= intervals.length <= 10^4`\n- `intervals[i].length == 2`\n- `0 <= start_i < end_i <= 10^6`",
   "examples": [
     {
       "input": "intervals = [[0,30],[5,10],[15,20]]",
@@ -21,7 +21,7 @@
     {
       "input": "intervals = [[7,10],[2,4]]",
       "output": "true",
-      "explanation": "[2,4] ends before [7,10] starts — no overlap."
+      "explanation": "[2,4] ends before [7,10] starts \u2014 no overlap."
     }
   ],
   "exampleCases": [
@@ -66,7 +66,7 @@
         "intervals": []
       },
       "expected": true,
-      "explanation": "No meetings — trivially true"
+      "explanation": "No meetings \u2014 trivially true"
     },
     {
       "input": {
@@ -82,7 +82,7 @@
         ]
       },
       "expected": true,
-      "explanation": "Touch at 5 — not overlapping"
+      "explanation": "Touch at 5 \u2014 not overlapping"
     }
   ],
   "hiddenCases": [
@@ -148,7 +148,7 @@
         ]
       },
       "expected": true,
-      "explanation": "Touch at 13 — allowed"
+      "explanation": "Touch at 13 \u2014 allowed"
     },
     {
       "input": {
@@ -224,12 +224,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef can_attend_meetings(intervals: List[List[int]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef can_attend_meetings(intervals: List[List[int]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number[][]} intervals\n * @return {boolean}\n */\nfunction canAttendMeetings(intervals) {\n    \n}"
   },
   "functionName": "can_attend_meetings",
   "solutions": [
     {
-      "label": "Sort and Check — O(n log n)",
+      "label": "Sort and Check \u2014 O(n log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef can_attend_meetings(intervals: List[List[int]]) -> bool:\n    intervals.sort(key=lambda x: x[0])\n\n    for i in range(1, len(intervals)):\n        if intervals[i][0] < intervals[i - 1][1]:\n            return False\n\n    return True",
@@ -238,13 +239,22 @@
       "explanation": "Sort meetings by start time. Then check each consecutive pair: if the next meeting starts before the current one ends, there's an overlap and we return False. Touching (start of next == end of current) is fine."
     },
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List\n\ndef can_attend_meetings(intervals: List[List[int]]) -> bool:\n    for i in range(len(intervals)):\n        for j in range(i + 1, len(intervals)):\n            a_start, a_end = intervals[i]\n            b_start, b_end = intervals[j]\n            # Two intervals overlap if one starts before the other ends\n            if a_start < b_end and b_start < a_end:\n                return False\n    return True",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Check every pair of intervals for overlap. Two intervals [a_start, a_end] and [b_start, b_end] overlap if a_start < b_end AND b_start < a_end (they truly intersect, not just touch). O(n²) time since we check all pairs — much slower than the O(n log n) sort approach."
+      "explanation": "Check every pair of intervals for overlap. Two intervals [a_start, a_end] and [b_start, b_end] overlap if a_start < b_end AND b_start < a_end (they truly intersect, not just touch). O(n\u00b2) time since we check all pairs \u2014 much slower than the O(n log n) sort approach."
+    },
+    {
+      "label": "Sort and Check \u2014 O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function canAttendMeetings(intervals) {\n    intervals.sort((a, b) => a[0] - b[0]);\n    for (let i = 1; i < intervals.length; i++) {\n        if (intervals[i][0] < intervals[i - 1][1]) return false;\n    }\n    return true;\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sort by start time. If any meeting starts before the previous one ends, return false."
     }
   ],
   "hints": [

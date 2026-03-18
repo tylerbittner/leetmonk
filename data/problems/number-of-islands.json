@@ -14,12 +14,12 @@
     "matrix",
     "graph"
   ],
-  "description": "## Number of Islands\n\nYou are given an `m x n` grid of characters where `'1'` represents land and `'0'` represents water. Count the number of islands — groups of horizontally or vertically connected land cells surrounded by water.\n\n**Constraints:**\n- `m == grid.length`\n- `n == grid[i].length`\n- `1 <= m, n <= 300`\n- `grid[i][j]` is `'0'` or `'1'`.",
+  "description": "## Number of Islands\n\nYou are given an `m x n` grid of characters where `'1'` represents land and `'0'` represents water. Count the number of islands \u2014 groups of horizontally or vertically connected land cells surrounded by water.\n\n**Constraints:**\n- `m == grid.length`\n- `n == grid[i].length`\n- `1 <= m, n <= 300`\n- `grid[i][j]` is `'0'` or `'1'`.",
   "examples": [
     {
       "input": "grid = [[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]",
       "output": "1",
-      "explanation": "All land cells are connected — one island."
+      "explanation": "All land cells are connected \u2014 one island."
     },
     {
       "input": "grid = [[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]",
@@ -326,27 +326,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef num_islands(grid: List[List[str]]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef num_islands(grid: List[List[str]]) -> int:\n    pass",
+    "javascript": "/**\n * @param {string[][]} grid\n * @return {number}\n */\nfunction numIslands(grid) {\n    \n}"
   },
   "functionName": "num_islands",
   "solutions": [
     {
-      "label": "DFS — O(m·n)",
+      "label": "DFS \u2014 O(m\u00b7n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nimport copy\n\ndef num_islands(grid: List[List[str]]) -> int:\n    grid = [row[:] for row in grid]  # work on a copy\n    m, n = len(grid), len(grid[0])\n    count = 0\n\n    def dfs(r, c):\n        if r < 0 or r >= m or c < 0 or c >= n or grid[r][c] != '1':\n            return\n        grid[r][c] = '0'  # mark visited\n        dfs(r + 1, c)\n        dfs(r - 1, c)\n        dfs(r, c + 1)\n        dfs(r, c - 1)\n\n    for r in range(m):\n        for c in range(n):\n            if grid[r][c] == '1':\n                count += 1\n                dfs(r, c)\n\n    return count",
-      "timeComplexity": "O(m·n)",
-      "spaceComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
       "explanation": "Scan the grid for unvisited land cells. When one is found, increment the island count and use DFS to mark all connected land as visited (by replacing '1' with '0'). This way each land cell is processed exactly once. The number of DFS calls from the outer loop equals the number of islands."
     },
     {
-      "label": "BFS — O(m·n)",
+      "label": "BFS \u2014 O(m\u00b7n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef num_islands(grid: List[List[str]]) -> int:\n    grid = [row[:] for row in grid]\n    m, n = len(grid), len(grid[0])\n    count = 0\n\n    for r in range(m):\n        for c in range(n):\n            if grid[r][c] == '1':\n                count += 1\n                queue = deque([(r, c)])\n                grid[r][c] = '0'\n                while queue:\n                    row, col = queue.popleft()\n                    for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n                        nr, nc = row + dr, col + dc\n                        if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == '1':\n                            grid[nr][nc] = '0'\n                            queue.append((nr, nc))\n\n    return count",
-      "timeComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
       "spaceComplexity": "O(min(m,n))",
       "explanation": "Same approach as DFS but uses BFS (a queue) instead of recursion. When a new island is found, BFS explores all connected land cells, marking them visited as it goes. BFS avoids potential recursion stack overflow for very large grids. Space is O(min(m,n)) for the queue in the worst case (a diagonal island)."
+    },
+    {
+      "label": "DFS \u2014 O(m\u00b7n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function numIslands(grid) {\n    if (!grid || grid.length === 0) return 0;\n    grid = grid.map(row => [...row]);\n    const m = grid.length, n = grid[0].length;\n    let count = 0;\n    function dfs(r, c) {\n        if (r < 0 || r >= m || c < 0 || c >= n || grid[r][c] === '0') return;\n        grid[r][c] = '0';\n        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1);\n    }\n    for (let r = 0; r < m; r++) {\n        for (let c = 0; c < n; c++) {\n            if (grid[r][c] === '1') { dfs(r, c); count++; }\n        }\n    }\n    return count;\n}",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
+      "explanation": "When a '1' is found, increment island count and DFS to mark all connected land as '0'. Each cell is processed exactly once."
     }
   ],
   "hints": [

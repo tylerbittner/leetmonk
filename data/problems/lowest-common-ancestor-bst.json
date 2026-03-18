@@ -164,7 +164,7 @@
         "q": 9
       },
       "expected": 6,
-      "explanation": "Far apart — LCA is root"
+      "explanation": "Far apart \u2014 LCA is root"
     },
     {
       "input": {
@@ -238,32 +238,42 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef lca_bst(root: List[Optional[int]], p: int, q: int) -> int:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef lca_bst(root: List[Optional[int]], p: int, q: int) -> int:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @param {number} p\n * @param {number} q\n * @return {number}\n */\nfunction lcaBST(root, p, q) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "lca_bst",
   "solutions": [
     {
-      "label": "BST Property — O(h)",
+      "label": "BST Property \u2014 O(h)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef lca_bst(root: List[Optional[int]], p: int, q: int) -> int:\n    root = build_tree(root)\n    curr = root\n\n    while curr:\n        if p < curr.val and q < curr.val:\n            curr = curr.left\n        elif p > curr.val and q > curr.val:\n            curr = curr.right\n        else:\n            return curr.val\n\n    return -1  # unreachable",
       "timeComplexity": "O(h)",
       "spaceComplexity": "O(1)",
-      "explanation": "Exploit the BST property: if both p and q are less than the current node, the LCA must be in the left subtree. If both are greater, go right. Otherwise (one is less, one is greater, or one equals the current node), the current node is the LCA — it's the split point. This iterative approach runs in O(h) time with O(1) space."
+      "explanation": "Exploit the BST property: if both p and q are less than the current node, the LCA must be in the left subtree. If both are greater, go right. Otherwise (one is less, one is greater, or one equals the current node), the current node is the LCA \u2014 it's the split point. This iterative approach runs in O(h) time with O(1) space."
     },
     {
-      "label": "Recursive BST Property — O(h)",
+      "label": "Recursive BST Property \u2014 O(h)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef lca_bst(root: List[Optional[int]], p: int, q: int) -> int:\n    root = build_tree(root)\n\n    def find_lca(node):\n        if not node:\n            return -1\n        if p < node.val and q < node.val:\n            return find_lca(node.left)\n        if p > node.val and q > node.val:\n            return find_lca(node.right)\n        return node.val\n\n    return find_lca(root)",
       "timeComplexity": "O(h)",
       "spaceComplexity": "O(h)",
       "explanation": "Same logic as the iterative approach but expressed recursively. If both p and q are less than the current node, recurse left; if both are greater, recurse right; otherwise return the current node's value as the LCA. Uses O(h) call stack space vs O(1) for the iterative version."
+    },
+    {
+      "label": "BST Property \u2014 O(h)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction lcaBST(root, p, q) {\n  root = buildTree(root);\n  let node = root;\n  while (node) {\n    if (p < node.val && q < node.val) node = node.left;\n    else if (p > node.val && q > node.val) node = node.right;\n    else return node.val;\n  }\n  return -1;\n}",
+      "timeComplexity": "O(h)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use BST property: if both p and q are less than node, LCA is in left subtree; if both greater, in right. Otherwise current node is LCA."
     }
   ],
   "hints": [
     "Use the BST property: if both p and q are smaller than the current node, go left; if both are larger, go right.",
-    "The LCA is the first node where p and q 'split' — one goes left and one goes right, or one equals the current node."
+    "The LCA is the first node where p and q 'split' \u2014 one goes left and one goes right, or one equals the current node."
   ],
   "lcEquivalent": "235. Lowest Common Ancestor of a Binary Search Tree"
 }

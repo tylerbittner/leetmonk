@@ -198,12 +198,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @param {number} k\n * @return {number}\n */\nfunction kthSmallest(root, k) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "kth_smallest",
   "solutions": [
     {
-      "label": "Inorder Traversal — O(n)",
+      "label": "Inorder Traversal \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    stack = []\n    count = 0\n    curr = root\n\n    while stack or curr:\n        while curr:\n            stack.append(curr)\n            curr = curr.left\n        curr = stack.pop()\n        count += 1\n        if count == k:\n            return curr.val\n        curr = curr.right\n\n    return -1  # unreachable if k is valid",
@@ -212,13 +213,22 @@
       "explanation": "The inorder traversal of a BST yields all values in sorted order. Use an iterative inorder traversal with a stack: push nodes going left, then pop and visit, then go right. Count each visited node; when count reaches k, return the current value. Early termination is possible once k is reached."
     },
     {
-      "label": "Collect All + Index — O(n)",
+      "label": "Collect All + Index \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef kth_smallest(root: List[Optional[int]], k: int) -> int:\n    root = build_tree(root)\n    sorted_vals = []\n\n    def inorder(node):\n        if not node:\n            return\n        inorder(node.left)\n        sorted_vals.append(node.val)\n        inorder(node.right)\n\n    inorder(root)\n    return sorted_vals[k - 1]",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Run a recursive inorder traversal to collect all node values in sorted order, then return the (k-1)-th element (0-indexed). Simple but always traverses the entire tree — no early exit. The optimal iterative approach stops as soon as it finds the k-th element."
+      "explanation": "Run a recursive inorder traversal to collect all node values in sorted order, then return the (k-1)-th element (0-indexed). Simple but always traverses the entire tree \u2014 no early exit. The optimal iterative approach stops as soon as it finds the k-th element."
+    },
+    {
+      "label": "Inorder Traversal \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction kthSmallest(root, k) {\n  root = buildTree(root);\n  let count = 0, result = 0;\n  function inorder(node) {\n    if (!node) return;\n    inorder(node.left);\n    count++;\n    if (count === k) { result = node.val; return; }\n    inorder(node.right);\n  }\n  inorder(root);\n  return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Inorder traversal of a BST yields values in sorted order. Count nodes visited; the k-th is the answer."
     }
   ],
   "hints": [

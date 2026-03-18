@@ -176,12 +176,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef missing_number(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef missing_number(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction missingNumber(nums) {\n    \n}"
   },
   "functionName": "missing_number",
   "solutions": [
     {
-      "label": "Math (Gauss Formula) — O(n)",
+      "label": "Math (Gauss Formula) \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef missing_number(nums: List[int]) -> int:\n    n = len(nums)\n    expected = n * (n + 1) // 2\n    return expected - sum(nums)",
@@ -190,18 +191,27 @@
       "explanation": "The sum of integers from 0 to n is n*(n+1)/2 (Gauss's formula). The missing number equals this expected sum minus the actual sum of the array."
     },
     {
-      "label": "XOR — O(n)",
+      "label": "XOR \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef missing_number(nums: List[int]) -> int:\n    n = len(nums)\n    result = n  # start with n\n    for i, num in enumerate(nums):\n        result ^= i ^ num\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "XOR all indices (0 to n) with all array values. Every number that appears in both cancels out (x ^ x = 0), leaving only the missing number. Start with result = n (since we XOR indices 0..n-1 with values, and n doesn't appear as an index)."
+    },
+    {
+      "label": "Math (Gauss Formula) \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function missingNumber(nums) {\n    const n = nums.length;\n    const expected = n * (n + 1) / 2;\n    return expected - nums.reduce((a, b) => a + b, 0);\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "The sum of integers from 0 to n is n*(n+1)/2. The missing number equals this expected sum minus the actual sum of the array."
     }
   ],
   "hints": [
     "The expected sum of 0 through n is n*(n+1)/2. The missing number is the difference between expected and actual sum.",
-    "XOR trick: x ^ x = 0 and x ^ 0 = x. XOR all indices and all values — everything cancels except the missing number."
+    "XOR trick: x ^ x = 0 and x ^ 0 = x. XOR all indices and all values \u2014 everything cancels except the missing number."
   ],
   "lcEquivalent": "268. Missing Number"
 }

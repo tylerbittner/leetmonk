@@ -179,12 +179,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction longestConsecutive(nums) {\n    \n}"
   },
   "functionName": "longest_consecutive",
   "solutions": [
     {
-      "label": "Sorting — O(n log n)",
+      "label": "Sorting \u2014 O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    if not nums:\n        return 0\n    nums = sorted(set(nums))\n    best = 1\n    cur = 1\n    for i in range(1, len(nums)):\n        if nums[i] == nums[i - 1] + 1:\n            cur += 1\n            best = max(best, cur)\n        else:\n            cur = 1\n    return best",
@@ -193,18 +194,27 @@
       "explanation": "Remove duplicates and sort. Then scan linearly: if each number is one more than the previous, extend the current streak; otherwise reset. Simple but not O(n)."
     },
     {
-      "label": "Hash Set — O(n)",
+      "label": "Hash Set \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef longest_consecutive(nums: List[int]) -> int:\n    num_set = set(nums)\n    best = 0\n\n    for num in num_set:\n        # Only start counting from the beginning of a sequence\n        if num - 1 not in num_set:\n            cur = 1\n            while num + cur in num_set:\n                cur += 1\n            best = max(best, cur)\n\n    return best",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Put all numbers in a hash set for O(1) lookup. The key insight: only start counting a sequence from its actual beginning — a number `n` is a sequence start if `n-1` is not in the set. From each start, count forward as long as consecutive numbers exist. Even though there's a nested loop, each number is visited at most twice total across all sequences, giving O(n) overall."
+      "explanation": "Put all numbers in a hash set for O(1) lookup. The key insight: only start counting a sequence from its actual beginning \u2014 a number `n` is a sequence start if `n-1` is not in the set. From each start, count forward as long as consecutive numbers exist. Even though there's a nested loop, each number is visited at most twice total across all sequences, giving O(n) overall."
+    },
+    {
+      "label": "Hash Set \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function longestConsecutive(nums) {\n    const numSet = new Set(nums);\n    let best = 0;\n    for (const n of numSet) {\n        if (!numSet.has(n - 1)) {\n            let current = n, streak = 1;\n            while (numSet.has(current + 1)) { current++; streak++; }\n            best = Math.max(best, streak);\n        }\n    }\n    return best;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Only start counting from the beginning of a sequence (n-1 not in set). Each element is visited at most twice."
     }
   ],
   "hints": [
     "Put all numbers in a hash set. For each number, check if it's the start of a sequence (num-1 is not in the set).",
-    "Only count sequences from their start — this ensures each element is visited at most once, giving O(n) time."
+    "Only count sequences from their start \u2014 this ensures each element is visited at most once, giving O(n) time."
   ],
   "lcEquivalent": "128. Longest Consecutive Sequence"
 }

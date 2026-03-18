@@ -17,7 +17,7 @@
     {
       "input": "root = [2,1,3]",
       "output": "true",
-      "explanation": "1 < 2 < 3 — valid BST."
+      "explanation": "1 < 2 < 3 \u2014 valid BST."
     },
     {
       "input": "root = [5,1,4,null,null,3,6]",
@@ -87,7 +87,7 @@
         ]
       },
       "expected": false,
-      "explanation": "Duplicate values — not strictly ordered"
+      "explanation": "Duplicate values \u2014 not strictly ordered"
     },
     {
       "input": {
@@ -183,31 +183,41 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n    constructor(val = 0, left = null, right = null) {\n        this.val = val;\n        this.left = left;\n        this.right = right;\n    }\n}\n\nfunction buildTree(nodes) {\n    if (!nodes || nodes[0] == null) return null;\n    const root = new TreeNode(nodes[0]);\n    const queue = [root];\n    let i = 1;\n    while (queue.length && i < nodes.length) {\n        const node = queue.shift();\n        if (i < nodes.length && nodes[i] != null) {\n            node.left = new TreeNode(nodes[i]);\n            queue.push(node.left);\n        }\n        i++;\n        if (i < nodes.length && nodes[i] != null) {\n            node.right = new TreeNode(nodes[i]);\n            queue.push(node.right);\n        }\n        i++;\n    }\n    return root;\n}\n\n/**\n * @param {Array} root\n * @return {boolean}\n */\nfunction isValidBST(root) {\n    root = buildTree(root);\n    \n}"
   },
   "functionName": "is_valid_bst",
   "solutions": [
     {
-      "label": "DFS with Bounds — O(n)",
+      "label": "DFS with Bounds \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n\n    def validate(node, low, high):\n        if not node:\n            return True\n        if node.val <= low or node.val >= high:\n            return False\n        return (validate(node.left, low, node.val) and\n                validate(node.right, node.val, high))\n\n    return validate(root, float('-inf'), float('inf'))",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(h)",
-      "explanation": "Propagate valid value bounds down the tree. Each node must have a value strictly between `low` and `high`. When going left, the upper bound becomes the current node's value. When going right, the lower bound becomes the current node's value. Initialize with (-∞, +∞) at the root. This correctly handles cases where a value in a subtree violates an ancestor's constraint."
+      "explanation": "Propagate valid value bounds down the tree. Each node must have a value strictly between `low` and `high`. When going left, the upper bound becomes the current node's value. When going right, the lower bound becomes the current node's value. Initialize with (-\u221e, +\u221e) at the root. This correctly handles cases where a value in a subtree violates an ancestor's constraint."
     },
     {
-      "label": "Inorder Traversal — O(n)",
+      "label": "Inorder Traversal \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef is_valid_bst(root: List[Optional[int]]) -> bool:\n    root = build_tree(root)\n    prev = [float('-inf')]\n\n    def inorder(node):\n        if not node:\n            return True\n        if not inorder(node.left):\n            return False\n        if node.val <= prev[0]:\n            return False\n        prev[0] = node.val\n        return inorder(node.right)\n\n    return inorder(root)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(h)",
       "explanation": "A BST's inorder traversal produces a strictly increasing sequence. Perform inorder traversal while tracking the previously visited value. If the current value is not strictly greater than the previous, the tree is not a valid BST. This catches violations using the natural ordering property of BSTs."
+    },
+    {
+      "label": "DFS with Bounds \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n    constructor(val = 0, left = null, right = null) {\n        this.val = val;\n        this.left = left;\n        this.right = right;\n    }\n}\n\nfunction buildTree(nodes) {\n    if (!nodes || nodes[0] == null) return null;\n    const root = new TreeNode(nodes[0]);\n    const queue = [root];\n    let i = 1;\n    while (queue.length && i < nodes.length) {\n        const node = queue.shift();\n        if (i < nodes.length && nodes[i] != null) {\n            node.left = new TreeNode(nodes[i]);\n            queue.push(node.left);\n        }\n        i++;\n        if (i < nodes.length && nodes[i] != null) {\n            node.right = new TreeNode(nodes[i]);\n            queue.push(node.right);\n        }\n        i++;\n    }\n    return root;\n}\n\nfunction isValidBST(root) {\n    root = buildTree(root);\n    function validate(node, low, high) {\n        if (!node) return true;\n        if (node.val <= low || node.val >= high) return false;\n        return validate(node.left, low, node.val) && validate(node.right, node.val, high);\n    }\n    return validate(root, -Infinity, Infinity);\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Propagate valid value bounds down the tree. Each node must be strictly between `low` and `high`. Going left narrows the upper bound to the current value; going right raises the lower bound. Start with (-Infinity, Infinity) at the root."
     }
   ],
   "hints": [
-    "Simply checking left < node < right is not enough — a node deep in the left subtree must also be less than all of its ancestors.",
+    "Simply checking left < node < right is not enough \u2014 a node deep in the left subtree must also be less than all of its ancestors.",
     "Pass down valid bounds: when going left, update the upper bound to the current node's value; when going right, update the lower bound."
   ],
   "lcEquivalent": "98. Validate Binary Search Tree"

@@ -13,7 +13,7 @@
     "tree",
     "hash-map"
   ],
-  "description": "## Construct Binary Tree from Preorder and Inorder\n\nGiven two integer arrays:\n- `preorder` — the preorder traversal of a binary tree (root, left, right)\n- `inorder` — the inorder traversal of the same tree (left, root, right)\n\nConstruct and return the binary tree as a level-order list.\n\nAll values in the tree are unique.\n\n**Constraints:**\n- `1 <= preorder.length <= 3000`\n- `preorder.length == inorder.length`\n- `-3000 <= preorder[i], inorder[i] <= 3000`\n- `preorder` and `inorder` consist of unique values.\n- Each value of `inorder` also appears in `preorder`.",
+  "description": "## Construct Binary Tree from Preorder and Inorder\n\nGiven two integer arrays:\n- `preorder` \u2014 the preorder traversal of a binary tree (root, left, right)\n- `inorder` \u2014 the inorder traversal of the same tree (left, root, right)\n\nConstruct and return the binary tree as a level-order list.\n\nAll values in the tree are unique.\n\n**Constraints:**\n- `1 <= preorder.length <= 3000`\n- `preorder.length == inorder.length`\n- `-3000 <= preorder[i], inorder[i] <= 3000`\n- `preorder` and `inorder` consist of unique values.\n- Each value of `inorder` also appears in `preorder`.",
   "examples": [
     {
       "input": "preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]",
@@ -319,31 +319,41 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef tree_to_list(root: Optional[TreeNode]) -> List[Optional[int]]:\n    if not root:\n        return []\n    result = []\n    queue = deque([root])\n    while queue:\n        node = queue.popleft()\n        if node:\n            result.append(node.val)\n            queue.append(node.left)\n            queue.append(node.right)\n        else:\n            result.append(None)\n    while result and result[-1] is None:\n        result.pop()\n    return result\n\ndef build_tree_from_preorder_inorder(preorder: List[int], inorder: List[int]) -> List[Optional[int]]:\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef tree_to_list(root: Optional[TreeNode]) -> List[Optional[int]]:\n    if not root:\n        return []\n    result = []\n    queue = deque([root])\n    while queue:\n        node = queue.popleft()\n        if node:\n            result.append(node.val)\n            queue.append(node.left)\n            queue.append(node.right)\n        else:\n            result.append(None)\n    while result and result[-1] is None:\n        result.pop()\n    return result\n\ndef build_tree_from_preorder_inorder(preorder: List[int], inorder: List[int]) -> List[Optional[int]]:\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction treeToList(root) {\n  if (!root) return [];\n  const result = []; const queue = [root];\n  while (queue.length > 0) {\n    const node = queue.shift();\n    if (node) { result.push(node.val); queue.push(node.left); queue.push(node.right); }\n    else result.push(null);\n  }\n  while (result.length > 0 && result[result.length - 1] === null) result.pop();\n  return result;\n}\n/**\n * @param {number[]} preorder\n * @param {number[]} inorder\n * @return {(number|null)[]}\n */\nfunction buildTreeFromPreorderInorder(preorder, inorder) {\n    \n}"
   },
   "functionName": "build_tree_from_preorder_inorder",
   "solutions": [
     {
-      "label": "Recursive with Hash Map — O(n)",
+      "label": "Recursive with Hash Map \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef tree_to_list(root: Optional[TreeNode]) -> List[Optional[int]]:\n    if not root:\n        return []\n    result = []\n    queue = deque([root])\n    while queue:\n        node = queue.popleft()\n        if node:\n            result.append(node.val)\n            queue.append(node.left)\n            queue.append(node.right)\n        else:\n            result.append(None)\n    while result and result[-1] is None:\n        result.pop()\n    return result\n\ndef build_tree_from_preorder_inorder(preorder: List[int], inorder: List[int]) -> List[Optional[int]]:\n    inorder_map = {val: i for i, val in enumerate(inorder)}\n    pre_idx = [0]\n\n    def build(left, right):\n        if left > right:\n            return None\n        root_val = preorder[pre_idx[0]]\n        pre_idx[0] += 1\n        root = TreeNode(root_val)\n        mid = inorder_map[root_val]\n        root.left = build(left, mid - 1)\n        root.right = build(mid + 1, right)\n        return root\n\n    root = build(0, len(inorder) - 1)\n    return tree_to_list(root)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "The first element of preorder is always the root. Find it in inorder — everything to its left forms the left subtree, everything to its right forms the right subtree. Use a hash map for O(1) lookups in inorder. Recursively build left and right subtrees using the corresponding slices of preorder and inorder. A shared pointer `pre_idx` advances through preorder as nodes are consumed."
+      "explanation": "The first element of preorder is always the root. Find it in inorder \u2014 everything to its left forms the left subtree, everything to its right forms the right subtree. Use a hash map for O(1) lookups in inorder. Recursively build left and right subtrees using the corresponding slices of preorder and inorder. A shared pointer `pre_idx` advances through preorder as nodes are consumed."
     },
     {
-      "label": "Recursive with Slices — O(n²)",
+      "label": "Recursive with Slices \u2014 O(n\u00b2)",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef tree_to_list(root: Optional[TreeNode]) -> List[Optional[int]]:\n    if not root:\n        return []\n    result = []\n    queue = deque([root])\n    while queue:\n        node = queue.popleft()\n        if node:\n            result.append(node.val)\n            queue.append(node.left)\n            queue.append(node.right)\n        else:\n            result.append(None)\n    while result and result[-1] is None:\n        result.pop()\n    return result\n\ndef build_tree_from_preorder_inorder(preorder: List[int], inorder: List[int]) -> List[Optional[int]]:\n    def build(pre, ino):\n        if not pre or not ino:\n            return None\n        root_val = pre[0]\n        root = TreeNode(root_val)\n        mid = ino.index(root_val)\n        root.left = build(pre[1:mid + 1], ino[:mid])\n        root.right = build(pre[mid + 1:], ino[mid + 1:])\n        return root\n\n    root = build(preorder, inorder)\n    return tree_to_list(root)",
-      "timeComplexity": "O(n²)",
-      "spaceComplexity": "O(n²)",
-      "explanation": "Same recursive idea but uses list slicing and linear search (`.index()`) instead of a hash map. Each call creates new sub-lists, leading to O(n²) time and space in the worst case (skewed tree). The optimal solution replaces `.index()` with a hash map for O(1) lookup and uses index boundaries instead of slices to avoid copying."
+      "timeComplexity": "O(n\u00b2)",
+      "spaceComplexity": "O(n\u00b2)",
+      "explanation": "Same recursive idea but uses list slicing and linear search (`.index()`) instead of a hash map. Each call creates new sub-lists, leading to O(n\u00b2) time and space in the worst case (skewed tree). The optimal solution replaces `.index()` with a hash map for O(1) lookup and uses index boundaries instead of slices to avoid copying."
+    },
+    {
+      "label": "Recursive with Hash Map \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction treeToList(root) {\n  if (!root) return [];\n  const result = []; const queue = [root];\n  while (queue.length > 0) {\n    const node = queue.shift();\n    if (node) { result.push(node.val); queue.push(node.left); queue.push(node.right); }\n    else result.push(null);\n  }\n  while (result.length > 0 && result[result.length - 1] === null) result.pop();\n  return result;\n}\nfunction buildTreeFromPreorderInorder(preorder, inorder) {\n  const inorderMap = new Map();\n  inorder.forEach((val, i) => inorderMap.set(val, i));\n  let preIdx = 0;\n  function build(left, right) {\n    if (left > right) return null;\n    const rootVal = preorder[preIdx++];\n    const root = new TreeNode(rootVal);\n    const mid = inorderMap.get(rootVal);\n    root.left = build(left, mid - 1);\n    root.right = build(mid + 1, right);\n    return root;\n  }\n  return treeToList(build(0, inorder.length - 1));\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "The first preorder element is the root. Use a hash map for O(1) inorder lookups. Recursively build left and right subtrees using index boundaries. Convert the resulting tree back to a level-order list."
     }
   ],
   "hints": [
-    "The first element in preorder is the root. Find it in inorder — elements to its left form the left subtree, to its right the right subtree.",
+    "The first element in preorder is the root. Find it in inorder \u2014 elements to its left form the left subtree, to its right the right subtree.",
     "Use a hash map to find the root's position in inorder in O(1). Recursively build left and right subtrees."
   ],
   "lcEquivalent": "105. Construct Binary Tree from Preorder and Inorder Traversal"

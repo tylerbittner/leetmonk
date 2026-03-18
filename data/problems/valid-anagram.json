@@ -149,12 +149,13 @@
     }
   ],
   "starterCode": {
-    "python": "def is_anagram(s: str, t: str) -> bool:\n    pass"
+    "python": "def is_anagram(s: str, t: str) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @param {string} t\n * @return {boolean}\n */\nfunction isAnagram(s, t) {\n    \n}"
   },
   "functionName": "is_anagram",
   "solutions": [
     {
-      "label": "Sorting — O(n log n)",
+      "label": "Sorting \u2014 O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "def is_anagram(s: str, t: str) -> bool:\n    return sorted(s) == sorted(t)",
@@ -163,13 +164,22 @@
       "explanation": "Sort both strings and compare them. If they are anagrams, sorting produces identical character sequences. This is concise but the sorting step makes it slower than a counting approach."
     },
     {
-      "label": "Hash Map — O(n)",
+      "label": "Hash Map \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    return Counter(s) == Counter(t)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Two strings are anagrams if and only if they have the same character frequencies. We first check lengths (a quick early exit), then count characters using Counter and compare. Space is O(1) because the alphabet is fixed at 26 lowercase letters, so the counter never exceeds 26 entries."
+    },
+    {
+      "label": "Hash Map \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function isAnagram(s, t) {\n    if (s.length !== t.length) return false;\n    const count = new Map();\n    for (const c of s) count.set(c, (count.get(c) || 0) + 1);\n    for (const c of t) {\n        if (!count.get(c)) return false;\n        count.set(c, count.get(c) - 1);\n    }\n    return true;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Check lengths first. Count character frequencies from s into a Map, then decrement for each character in t. If a count would go below zero (or a key is missing), the strings are not anagrams. Space is O(1) since the alphabet is fixed at 26 letters."
     }
   ],
   "hints": [

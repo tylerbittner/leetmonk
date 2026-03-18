@@ -26,7 +26,7 @@
     {
       "input": "matrix = [[3,1,4,1,5]]",
       "output": "1.0",
-      "explanation": "Single row — each column average equals its only value. The minimum is 1.0."
+      "explanation": "Single row \u2014 each column average equals its only value. The minimum is 1.0."
     }
   ],
   "exampleCases": [
@@ -86,7 +86,7 @@
         ]
       },
       "expected": 1,
-      "explanation": "Single row — column averages equal the values themselves. Minimum is 1.0."
+      "explanation": "Single row \u2014 column averages equal the values themselves. Minimum is 1.0."
     }
   ],
   "hiddenCases": [
@@ -108,7 +108,7 @@
         ]
       },
       "expected": 5,
-      "explanation": "Single column — average of all values (2+7+3+8)/4=5.0."
+      "explanation": "Single column \u2014 average of all values (2+7+3+8)/4=5.0."
     },
     {
       "input": {
@@ -119,7 +119,7 @@
         ]
       },
       "expected": 42,
-      "explanation": "Single cell matrix — minimum column average is 42.0."
+      "explanation": "Single cell matrix \u2014 minimum column average is 42.0."
     },
     {
       "input": {
@@ -139,7 +139,7 @@
         ]
       },
       "expected": 5,
-      "explanation": "All values identical — every column average is 5.0."
+      "explanation": "All values identical \u2014 every column average is 5.0."
     },
     {
       "input": {
@@ -224,7 +224,7 @@
         ]
       },
       "expected": 1.66667,
-      "explanation": "Column averages: (10+3-7)/3=2.0 and (-5+2+8)/3≈1.66667. Minimum is 1.66667."
+      "explanation": "Column averages: (10+3-7)/3=2.0 and (-5+2+8)/3\u22481.66667. Minimum is 1.66667."
     },
     {
       "input": {
@@ -244,12 +244,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    pass"
+    "python": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    pass",
+    "javascript": "/**\n * @param {number[][]} matrix\n * @return {number}\n */\nfunction minColumnAverage(matrix) {\n    \n}"
   },
   "functionName": "min_column_average",
   "solutions": [
     {
-      "label": "Column Iteration — O(m*n)",
+      "label": "Column Iteration \u2014 O(m*n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    m = len(matrix)\n    n = len(matrix[0])\n    min_avg = float('inf')\n    for col in range(n):\n        col_sum = 0\n        for row in range(m):\n            col_sum += matrix[row][col]\n        avg = col_sum / m\n        if avg < min_avg:\n            min_avg = avg\n    return round(min_avg, 5)",
@@ -258,18 +259,27 @@
       "explanation": "Iterate over each column index 0 through n-1. For each column, sum all m values by walking down the rows, then divide by m to get the column average. Track the running minimum across all column averages. Return the minimum rounded to 5 decimal places."
     },
     {
-      "label": "Zip Transpose — O(m*n)",
+      "label": "Zip Transpose \u2014 O(m*n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    return round(min(sum(col) / len(col) for col in zip(*matrix)), 5)",
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use `zip(*matrix)` to lazily transpose the matrix — each element yielded by zip is a tuple of all values in one column. For each column tuple, compute its average with `sum(col) / len(col)`. Pass a generator expression directly to `min` to find the smallest average without allocating any intermediate list. The overall work is still O(m*n) since every cell is visited once, but auxiliary space is O(1) because zip and the generator are both lazy."
+      "explanation": "Use `zip(*matrix)` to lazily transpose the matrix \u2014 each element yielded by zip is a tuple of all values in one column. For each column tuple, compute its average with `sum(col) / len(col)`. Pass a generator expression directly to `min` to find the smallest average without allocating any intermediate list. The overall work is still O(m*n) since every cell is visited once, but auxiliary space is O(1) because zip and the generator are both lazy."
+    },
+    {
+      "label": "Column Iteration \u2014 O(m*n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function minColumnAverage(matrix) {\n    const m = matrix.length;\n    const n = matrix[0].length;\n    let minAvg = Infinity;\n    for (let col = 0; col < n; col++) {\n        let sum = 0;\n        for (let row = 0; row < m; row++) {\n            sum += matrix[row][col];\n        }\n        const avg = sum / m;\n        if (avg < minAvg) minAvg = avg;\n    }\n    return parseFloat(minAvg.toFixed(5));\n}",
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Iterate over each column, sum all values in that column, compute the average, and track the minimum. Return the minimum rounded to 5 decimal places."
     }
   ],
   "hints": [
     "Think column by column: for each column index j, sum matrix[0][j], matrix[1][j], ..., matrix[m-1][j] and divide by m.",
-    "Python's zip(*matrix) transposes the matrix lazily — each tuple it yields contains all values from one column, so you can iterate columns without any extra indexing."
+    "Python's zip(*matrix) transposes the matrix lazily \u2014 each tuple it yields contains all values from one column, so you can iterate columns without any extra indexing."
   ],
   "lcEquivalent": null
 }

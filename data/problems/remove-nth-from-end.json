@@ -10,7 +10,7 @@
     "two-pointers",
     "linked-list"
   ],
-  "description": "## Remove Nth Node From End of List\n\nGiven the head of a linked list (as a plain integer list) and an integer `n`, remove the `n`-th node from the end of the list and return the modified list.\n\n`n` is guaranteed to be valid (1 ≤ n ≤ length of list).\n\n**Constraints:**\n- The number of nodes is `sz`.\n- `1 <= sz <= 30`\n- `0 <= Node.val <= 100`\n- `1 <= n <= sz`",
+  "description": "## Remove Nth Node From End of List\n\nGiven the head of a linked list (as a plain integer list) and an integer `n`, remove the `n`-th node from the end of the list and return the modified list.\n\n`n` is guaranteed to be valid (1 \u2264 n \u2264 length of list).\n\n**Constraints:**\n- The number of nodes is `sz`.\n- `1 <= sz <= 30`\n- `0 <= Node.val <= 100`\n- `1 <= n <= sz`",
   "examples": [
     {
       "input": "head = [1,2,3,4,5], n = 2",
@@ -226,27 +226,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    head = build_list(head)\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    head = build_list(head)\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[]} head\n * @param {number} n\n * @return {number[]}\n */\nfunction removeNthFromEnd(head, n) {\n    head = buildList(head);\n    \n}"
   },
   "functionName": "remove_nth_from_end",
   "solutions": [
     {
-      "label": "Two-Pointer (One Pass) — O(L)",
+      "label": "Two-Pointer (One Pass) \u2014 O(L)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    node = build_list(head)\n    dummy = ListNode(0)\n    dummy.next = node\n    fast = dummy\n    slow = dummy\n\n    # Advance fast by n+1 steps\n    for _ in range(n + 1):\n        fast = fast.next\n\n    # Move both until fast reaches end\n    while fast:\n        fast = fast.next\n        slow = slow.next\n\n    # slow is now the node before the target\n    slow.next = slow.next.next\n\n    return list_to_arr(dummy.next)",
       "timeComplexity": "O(L)",
       "spaceComplexity": "O(1)",
-      "explanation": "Use a dummy node before head (to handle removing the head cleanly). Advance `fast` n+1 steps ahead of `slow`. Then advance both together until `fast` reaches None. At this point, `slow` is the node just before the target — set `slow.next = slow.next.next` to skip it."
+      "explanation": "Use a dummy node before head (to handle removing the head cleanly). Advance `fast` n+1 steps ahead of `slow`. Then advance both together until `fast` reaches None. At this point, `slow` is the node just before the target \u2014 set `slow.next = slow.next.next` to skip it."
     },
     {
-      "label": "Two-Pass — O(L)",
+      "label": "Two-Pass \u2014 O(L)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    node = build_list(head)\n    dummy = ListNode(0)\n    dummy.next = node\n\n    # First pass: count the length\n    length = 0\n    curr = node\n    while curr:\n        length += 1\n        curr = curr.next\n\n    # Find the node just before the target\n    target_pos = length - n  # 0-indexed from head\n    curr = dummy\n    for _ in range(target_pos):\n        curr = curr.next\n\n    curr.next = curr.next.next\n    return list_to_arr(dummy.next)",
       "timeComplexity": "O(L)",
       "spaceComplexity": "O(1)",
       "explanation": "Two passes: first count the list length L, then find and skip the (L-n)-th node from the front (0-indexed). Uses two traversals of the list instead of one, but same O(L) time complexity. The one-pass two-pointer approach is preferred as it only traverses the list once."
+    },
+    {
+      "label": "Two-Pointer (One Pass) \u2014 O(L)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction removeNthFromEnd(head, n) {\n    const node = buildList(head);\n    const dummy = new ListNode(0);\n    dummy.next = node;\n    let fast = dummy, slow = dummy;\n    for (let i = 0; i <= n; i++) fast = fast.next;\n    while (fast) { fast = fast.next; slow = slow.next; }\n    slow.next = slow.next.next;\n    return listToArr(dummy.next);\n}",
+      "timeComplexity": "O(L)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Advance fast n+1 steps ahead of slow. Then move both until fast reaches null. Slow is now just before the target node \u2014 skip it with slow.next = slow.next.next."
     }
   ],
   "hints": [

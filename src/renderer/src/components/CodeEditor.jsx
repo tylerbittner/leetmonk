@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import Editor from '@monaco-editor/react'
 
-export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running, settings }) {
+export default function CodeEditor({ problem, code, language, onChange, onLanguageChange, onRun, onSubmit, onReset, running, settings, canDiff, onOpenDiff }) {
   const editorRef = useRef(null)
   const vimModeRef = useRef(null)
   const vimStatusRef = useRef(null)
@@ -11,11 +11,9 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor
-
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => onRun())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => onSubmit())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => onReset())
-
     editor.focus()
 
     if (vimEnabled) {
@@ -56,6 +54,9 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
     }
   }, [])
 
+  const monacoLang = language === 'javascript' ? 'javascript' : 'python'
+  const tabSize = language === 'javascript' ? 2 : 4
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
       {/* Toolbar */}
@@ -63,12 +64,20 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
         display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px',
         borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', flexShrink: 0
       }}>
-        <span style={{ fontSize: 12, color: 'var(--text-muted)', marginRight: 4 }}>Python 3</span>
+        <select
+          value={language}
+          onChange={(e) => onLanguageChange(e.target.value)}
+          style={{
+            fontSize: 12, background: 'var(--bg-tertiary)', color: 'var(--text-primary)',
+            border: '1px solid var(--border)', borderRadius: 4, padding: '3px 6px',
+            cursor: 'pointer', outline: 'none'
+          }}
+        >
+          <option value="python">Python 3</option>
+          <option value="javascript">JavaScript</option>
+        </select>
         {vimEnabled && (
-          <span style={{
-            fontSize: 10, color: 'var(--accent-purple)', background: 'rgba(168,85,247,0.12)',
-            border: '1px solid rgba(168,85,247,0.3)', borderRadius: 4, padding: '1px 6px', fontWeight: 600
-          }}>VIM</span>
+          <span style={{ fontSize: 10, color: 'var(--accent-green)', marginLeft: 4, opacity: 0.8 }}>VIM</span>
         )}
 
         <div style={{ flex: 1 }} />
@@ -106,7 +115,7 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
       <div style={{ flex: 1, overflow: 'hidden' }}>
         <Editor
           height="100%"
-          language="python"
+          language={monacoLang}
           value={code}
           onChange={(val) => onChange(val ?? '')}
           onMount={handleEditorDidMount}
@@ -119,7 +128,7 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             wordWrap: 'on',
-            tabSize: 4,
+            tabSize,
             insertSpaces: true,
             automaticLayout: true,
             padding: { top: 12, bottom: 12 },

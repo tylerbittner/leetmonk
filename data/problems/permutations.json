@@ -511,12 +511,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[][]}\n */\nfunction permutations(nums) {\n    \n}"
   },
   "functionName": "permutations",
   "solutions": [
     {
-      "label": "Backtracking — O(n * n!)",
+      "label": "Backtracking \u2014 O(n * n!)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(current, remaining):\n        if not remaining:\n            result.append(list(current))\n            return\n        for i in range(len(remaining)):\n            current.append(remaining[i])\n            backtrack(current, remaining[:i] + remaining[i+1:])\n            current.pop()\n    backtrack([], nums)\n    result.sort()\n    return result",
@@ -525,13 +526,22 @@
       "explanation": "At each level of recursion, choose one element from the remaining options. Add it to the current permutation and recurse with the reduced set. When no elements remain, we have a complete permutation. The total number of permutations is n!, and building each one takes O(n) work."
     },
     {
-      "label": "Backtracking with Swap — O(n * n!)",
+      "label": "Backtracking with Swap \u2014 O(n * n!)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(start):\n        if start == len(nums):\n            result.append(list(nums))\n            return\n        for i in range(start, len(nums)):\n            nums[start], nums[i] = nums[i], nums[start]\n            backtrack(start + 1)\n            nums[start], nums[i] = nums[i], nums[start]\n    backtrack(0)\n    result.sort()\n    return result",
       "timeComplexity": "O(n * n!)",
       "spaceComplexity": "O(n * n!)",
       "explanation": "Use in-place swaps instead of creating new list slices. At position `start`, try placing each remaining element by swapping it to position `start`. Recurse for positions start+1 onward. After returning, swap back to restore state (backtrack). This is more memory-efficient during recursion."
+    },
+    {
+      "label": "Backtracking \u2014 O(n * n!)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function permutations(nums) {\n    const result = [];\n    function backtrack(start) {\n        if (start === nums.length) {\n            result.push([...nums]);\n            return;\n        }\n        for (let i = start; i < nums.length; i++) {\n            [nums[start], nums[i]] = [nums[i], nums[start]];\n            backtrack(start + 1);\n            [nums[start], nums[i]] = [nums[i], nums[start]];\n        }\n    }\n    backtrack(0);\n    result.sort((a, b) => {\n        for (let i = 0; i < a.length; i++) {\n            if (a[i] !== b[i]) return a[i] - b[i];\n        }\n        return 0;\n    });\n    return result;\n}",
+      "timeComplexity": "O(n * n!)",
+      "spaceComplexity": "O(n * n!)",
+      "explanation": "Use in-place swaps to generate all permutations. At each position, swap the current element with each subsequent element, recurse, then swap back to restore state. Sort result for consistent ordering."
     }
   ],
   "hints": [

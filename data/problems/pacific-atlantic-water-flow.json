@@ -159,7 +159,7 @@
           1
         ]
       ],
-      "explanation": "All same height — all cells reachable from both"
+      "explanation": "All same height \u2014 all cells reachable from both"
     },
     {
       "input": {
@@ -354,7 +354,7 @@
           2
         ]
       ],
-      "explanation": "High border, low center — center can't flow up to ocean borders"
+      "explanation": "High border, low center \u2014 center can't flow up to ocean borders"
     },
     {
       "input": {
@@ -398,7 +398,7 @@
           2
         ]
       ],
-      "explanation": "Increasing grid — only right column and bottom row reach Atlantic"
+      "explanation": "Increasing grid \u2014 only right column and bottom row reach Atlantic"
     },
     {
       "input": {
@@ -441,7 +441,7 @@
           2
         ]
       ],
-      "explanation": "All equal — all cells reach both oceans"
+      "explanation": "All equal \u2014 all cells reach both oceans"
     },
     {
       "input": {
@@ -471,7 +471,7 @@
           0
         ]
       ],
-      "explanation": "Single column — all cells border both oceans"
+      "explanation": "Single column \u2014 all cells border both oceans"
     },
     {
       "input": {
@@ -500,7 +500,7 @@
           1
         ]
       ],
-      "explanation": "2x2 grid — three cells reach both"
+      "explanation": "2x2 grid \u2014 three cells reach both"
     },
     {
       "input": {
@@ -586,27 +586,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} heights\n * @return {number[][]}\n */\nfunction pacificAtlantic(heights) {\n    \n}"
   },
   "functionName": "pacific_atlantic",
   "solutions": [
     {
-      "label": "Reverse BFS from Borders — O(m·n)",
+      "label": "Reverse BFS from Borders \u2014 O(m\u00b7n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    m, n = len(heights), len(heights[0])\n\n    def bfs(starts):\n        visited = set(starts)\n        queue = deque(starts)\n        while queue:\n            r, c = queue.popleft()\n            for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n                nr, nc = r + dr, c + dc\n                if (0 <= nr < m and 0 <= nc < n and\n                        (nr, nc) not in visited and\n                        heights[nr][nc] >= heights[r][c]):\n                    visited.add((nr, nc))\n                    queue.append((nr, nc))\n        return visited\n\n    pacific_starts = [(r, 0) for r in range(m)] + [(0, c) for c in range(n)]\n    atlantic_starts = [(r, n-1) for r in range(m)] + [(m-1, c) for c in range(n)]\n\n    pacific = bfs(pacific_starts)\n    atlantic = bfs(atlantic_starts)\n\n    result = sorted([r, c] for r, c in pacific & atlantic)\n    return result",
-      "timeComplexity": "O(m·n)",
-      "spaceComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
       "explanation": "Instead of simulating forward water flow from every cell, work backwards: start BFS from each ocean's border cells and expand to any neighbor with equal or greater height (water can flow there). Cells reachable from the Pacific are those that can drain to it; similarly for the Atlantic. Cells in both sets are the answer. Start BFS from all Pacific border cells at once (top row + left column) and all Atlantic border cells (bottom row + right column)."
     },
     {
-      "label": "DFS from Borders — O(m·n)",
+      "label": "DFS from Borders \u2014 O(m\u00b7n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    m, n = len(heights), len(heights[0])\n    pacific = set()\n    atlantic = set()\n\n    def dfs(r, c, visited, prev_height):\n        if (r < 0 or r >= m or c < 0 or c >= n or\n                (r, c) in visited or heights[r][c] < prev_height):\n            return\n        visited.add((r, c))\n        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n            dfs(r + dr, c + dc, visited, heights[r][c])\n\n    for r in range(m):\n        dfs(r, 0, pacific, heights[r][0])\n        dfs(r, n - 1, atlantic, heights[r][n - 1])\n    for c in range(n):\n        dfs(0, c, pacific, heights[0][c])\n        dfs(m - 1, c, atlantic, heights[m - 1][c])\n\n    result = sorted([r, c] for r, c in pacific & atlantic)\n    return result",
-      "timeComplexity": "O(m·n)",
-      "spaceComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
       "explanation": "Same reverse-flood idea but using recursive DFS instead of BFS. For each border cell of each ocean, run DFS that only advances to neighbors with height >= current (water flows downhill, so going backwards means going uphill or flat). Collect all reachable cells per ocean and return their intersection."
+    },
+    {
+      "label": "BFS from Borders \u2014 O(m\u00b7n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function pacificAtlantic(heights) {\n    const m = heights.length, n = heights[0].length;\n    function bfs(starts) {\n        const visited = new Set(starts.map(([r, c]) => r * n + c));\n        const queue = [...starts];\n        let i = 0;\n        while (i < queue.length) {\n            const [r, c] = queue[i++];\n            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {\n                const nr = r + dr, nc = c + dc;\n                if (nr >= 0 && nr < m && nc >= 0 && nc < n &&\n                    !visited.has(nr * n + nc) && heights[nr][nc] >= heights[r][c]) {\n                    visited.add(nr * n + nc);\n                    queue.push([nr, nc]);\n                }\n            }\n        }\n        return visited;\n    }\n    const pacStarts = [], atlStarts = [];\n    for (let r = 0; r < m; r++) {\n        pacStarts.push([r, 0]); atlStarts.push([r, n - 1]);\n    }\n    for (let c = 0; c < n; c++) {\n        pacStarts.push([0, c]); atlStarts.push([m - 1, c]);\n    }\n    const pac = bfs(pacStarts), atl = bfs(atlStarts);\n    const result = [];\n    for (let r = 0; r < m; r++) {\n        for (let c = 0; c < n; c++) {\n            if (pac.has(r * n + c) && atl.has(r * n + c)) result.push([r, c]);\n        }\n    }\n    return result;\n}",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
+      "explanation": "Reverse BFS from each ocean's border cells, expanding to neighbors with equal or greater height. Cells reachable from both Pacific and Atlantic borders are the answer."
     }
   ],
   "hints": [

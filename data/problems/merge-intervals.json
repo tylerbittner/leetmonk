@@ -16,7 +16,7 @@
     {
       "input": "intervals = [[1,3],[2,6],[8,10],[15,18]]",
       "output": "[[1,6],[8,10],[15,18]]",
-      "explanation": "[1,3] and [2,6] overlap → merge to [1,6]. Others don't overlap."
+      "explanation": "[1,3] and [2,6] overlap \u2192 merge to [1,6]. Others don't overlap."
     },
     {
       "input": "intervals = [[1,4],[4,5]]",
@@ -229,7 +229,7 @@
           10
         ]
       ],
-      "explanation": "Unsorted input — merge all"
+      "explanation": "Unsorted input \u2014 merge all"
     },
     {
       "input": {
@@ -357,27 +357,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} intervals\n * @return {number[][]}\n */\nfunction mergeIntervals(intervals) {\n    \n}"
   },
   "functionName": "merge_intervals",
   "solutions": [
     {
-      "label": "Sort and Merge — O(n log n)",
+      "label": "Sort and Merge \u2014 O(n log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n\n    for start, end in intervals[1:]:\n        if start <= merged[-1][1]:  # overlaps with last merged\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n\n    return merged",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Sort intervals by start time. Then scan linearly: if the current interval's start is ≤ the last merged interval's end, they overlap — extend the last interval's end. Otherwise, add the current interval as a new non-overlapping segment. Sorting ensures we only ever need to compare with the last merged interval."
+      "explanation": "Sort intervals by start time. Then scan linearly: if the current interval's start is \u2264 the last merged interval's end, they overlap \u2014 extend the last interval's end. Otherwise, add the current interval as a new non-overlapping segment. Sorting ensures we only ever need to compare with the last merged interval."
     },
     {
-      "label": "Brute Force — O(n² log n)",
+      "label": "Brute Force \u2014 O(n\u00b2 log n)",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    intervals = sorted(intervals, key=lambda x: x[0])\n    changed = True\n    while changed:\n        changed = False\n        result = [intervals[0]]\n        for i in range(1, len(intervals)):\n            if intervals[i][0] <= result[-1][1]:\n                result[-1][1] = max(result[-1][1], intervals[i][1])\n                changed = True\n            else:\n                result.append(intervals[i][:])\n        intervals = result\n    return intervals",
-      "timeComplexity": "O(n² log n)",
+      "timeComplexity": "O(n\u00b2 log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Repeatedly pass through the sorted list until no more merges happen. In each pass, merge any overlapping consecutive intervals. This is inefficient since one pass is always enough after sorting — but it illustrates the concept of iteratively reducing overlaps. The optimal solution does it in a single pass."
+      "explanation": "Repeatedly pass through the sorted list until no more merges happen. In each pass, merge any overlapping consecutive intervals. This is inefficient since one pass is always enough after sorting \u2014 but it illustrates the concept of iteratively reducing overlaps. The optimal solution does it in a single pass."
+    },
+    {
+      "label": "Sort and Merge \u2014 O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function mergeIntervals(intervals) {\n    intervals.sort((a, b) => a[0] - b[0]);\n    const merged = [intervals[0]];\n    for (let i = 1; i < intervals.length; i++) {\n        const [start, end] = intervals[i];\n        if (start <= merged[merged.length - 1][1]) {\n            merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], end);\n        } else {\n            merged.push([start, end]);\n        }\n    }\n    return merged;\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort intervals by start time. Then scan linearly: if the current interval's start is <= the last merged interval's end, they overlap \u2014 extend the end. Otherwise, add as a new segment."
     }
   ],
   "hints": [

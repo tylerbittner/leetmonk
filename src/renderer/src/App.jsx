@@ -83,8 +83,10 @@ export default function App() {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
   const [srData, setSrData] = useState({})
   const [pendingRating, setPendingRating] = useState(null)
+  const [languageMap, setLanguageMap] = useState({})
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
+  const currentLanguage = activeProblemId ? (languageMap[activeProblemId] ?? 'python') : 'python'
 
   // Load everything on startup
   useEffect(() => {
@@ -163,14 +165,21 @@ export default function App() {
     setShowPatterns(false)
   }, [])
 
-  const getCode = (problemId) => {
+  const getCode = (problemId, lang) => {
     const p = problems.find(x => x.id === problemId)
-    return editorState[problemId] ?? p?.starterCode?.python ?? ''
+    const language = lang ?? languageMap[problemId] ?? 'python'
+    const key = `${problemId}:${language}`
+    const starter = language === 'javascript'
+      ? (p?.starterCode?.javascript ?? '')
+      : (p?.starterCode?.python ?? '')
+    return editorState[key] ?? starter
   }
 
   const handleCodeChange = useCallback((problemId, code) => {
-    setEditorStateMap(prev => ({ ...prev, [problemId]: code }))
-    window.api.setEditorState({ problemId, code })
+    const language = languageMap[problemId] ?? 'python'
+    const key = `${problemId}:${language}`
+    setEditorStateMap(prev => ({ ...prev, [key]: code }))
+    window.api.setEditorState({ problemId: key, code })
 
     setProgress(prev => {
       const cur = prev[problemId] || {}
@@ -181,6 +190,11 @@ export default function App() {
       }
       return prev
     })
+  }, [languageMap])
+
+  const handleLanguageChange = useCallback((problemId, language) => {
+    setLanguageMap(prev => ({ ...prev, [problemId]: language }))
+    setResults(null)
   }, [])
 
   const markSessionProblemSolved = useCallback((problemId) => {
@@ -206,7 +220,7 @@ export default function App() {
     const code = getCode(activeProblem.id)
 
     try {
-      const result = await window.api.runCode({ code, problem: activeProblem, mode })
+      const result = await window.api.runCode({ code, problem: activeProblem, mode, language: currentLanguage })
       setResults(result)
 
       const passed = result.results?.filter(r => r.passed).length ?? 0
@@ -267,11 +281,15 @@ export default function App() {
   const handleReset = useCallback(() => {
     if (!activeProblem) return
     if (!confirm('Reset to starter code? Your current code will be lost.')) return
-    const starter = activeProblem.starterCode?.python ?? ''
-    setEditorStateMap(prev => ({ ...prev, [activeProblem.id]: starter }))
-    window.api.setEditorState({ problemId: activeProblem.id, code: starter })
+    const language = languageMap[activeProblem.id] ?? 'python'
+    const starter = language === 'javascript'
+      ? (activeProblem.starterCode?.javascript ?? '')
+      : (activeProblem.starterCode?.python ?? '')
+    const key = `${activeProblem.id}:${language}`
+    setEditorStateMap(prev => ({ ...prev, [key]: starter }))
+    window.api.setEditorState({ problemId: key, code: starter })
     setResults(null)
-  }, [activeProblem])
+  }, [activeProblem, languageMap])
 
   function triggerCelebration() {
     const effect = settings.celebrationEffect ?? 'lotus'
@@ -586,19 +604,18 @@ export default function App() {
                       onClose={() => setDiffViewOpen(false)}
                     />
                   ) : (
-                    <CodeEditor
-                      key={activeProblem.id}
-                      problem={activeProblem}
-                      code={getCode(activeProblem.id)}
-                      onChange={(code) => handleCodeChange(activeProblem.id, code)}
-                      onRun={() => handleRun('run')}
-                      onSubmit={() => handleRun('submit')}
-                      onReset={handleReset}
-                      running={running}
-                      settings={settings}
-                      canDiff={!!solutionsViewed[activeProblem.id] && (activeProblem.solutions?.length > 0)}
-                      onOpenDiff={(idx) => { setDiffSolutionIndex(idx ?? 0); setDiffViewOpen(true) }}
-                    />
+                  <CodeEditor
+                    key={`${activeProblem.id}:${currentLanguage}`}
+                    problem={activeProblem}
+                    code={getCode(activeProblem.id)}
+                    language={currentLanguage}
+                    onChange={(code) => handleCodeChange(activeProblem.id, code)}
+                    onLanguageChange={(lang) => handleLanguageChange(activeProblem.id, lang)}
+                    onRun={() => handleRun('run')}
+                    onSubmit={() => handleRun('submit')}
+                    onReset={handleReset}
+                    running={running}
+                  />
                   )}
                 </Panel>
 

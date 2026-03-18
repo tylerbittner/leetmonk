@@ -11,17 +11,17 @@
     "depth-first-search",
     "tree"
   ],
-  "description": "## Maximum Depth of Binary Tree\n\nGiven a binary tree, return its maximum depth — the number of nodes along the longest path from the root down to the farthest leaf node.\n\nThe tree is given as a level-order list where `null` represents a missing node.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 10^4]`.\n- `-100 <= Node.val <= 100`",
+  "description": "## Maximum Depth of Binary Tree\n\nGiven a binary tree, return its maximum depth \u2014 the number of nodes along the longest path from the root down to the farthest leaf node.\n\nThe tree is given as a level-order list where `null` represents a missing node.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 10^4]`.\n- `-100 <= Node.val <= 100`",
   "examples": [
     {
       "input": "root = [3,9,20,null,null,15,7]",
       "output": "3",
-      "explanation": "The deepest path is 3→20→15 or 3→20→7, both length 3."
+      "explanation": "The deepest path is 3\u219220\u219215 or 3\u219220\u21927, both length 3."
     },
     {
       "input": "root = [1,null,2]",
       "output": "2",
-      "explanation": "Path is 1→2."
+      "explanation": "Path is 1\u21922."
     }
   ],
   "exampleCases": [
@@ -170,12 +170,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_depth(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_depth(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @return {number}\n */\nfunction maxDepth(root) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "max_depth",
   "solutions": [
     {
-      "label": "Recursive DFS — O(n)",
+      "label": "Recursive DFS \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_depth(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n\n    def dfs(node):\n        if not node:\n            return 0\n        return 1 + max(dfs(node.left), dfs(node.right))\n\n    return dfs(root)",
@@ -184,13 +185,22 @@
       "explanation": "Recursively compute the depth: an empty tree has depth 0; otherwise depth = 1 + max(depth of left subtree, depth of right subtree). The recursion visits each node once. Space is O(h) for the call stack where h is the tree height (O(log n) balanced, O(n) worst case)."
     },
     {
-      "label": "Iterative BFS — O(n)",
+      "label": "Iterative BFS \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_depth(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n    if not root:\n        return 0\n\n    depth = 0\n    queue = deque([root])\n\n    while queue:\n        depth += 1\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n\n    return depth",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "BFS level-by-level: increment a depth counter for each level processed. When the queue is empty, all levels have been counted. Uses O(n) space for the queue (at most n/2 nodes at the widest level) vs O(h) for the recursive approach."
+    },
+    {
+      "label": "Recursive DFS \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction maxDepth(root) {\n  root = buildTree(root);\n  function dfs(node) {\n    if (!node) return 0;\n    return 1 + Math.max(dfs(node.left), dfs(node.right));\n  }\n  return dfs(root);\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Recursively compute the depth of each subtree. Max depth = 1 + max(left depth, right depth)."
     }
   ],
   "hints": [

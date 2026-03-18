@@ -15,12 +15,12 @@
     {
       "input": "m = 3, n = 7",
       "output": "28",
-      "explanation": "There are 28 unique paths in a 3×7 grid."
+      "explanation": "There are 28 unique paths in a 3\u00d77 grid."
     },
     {
       "input": "m = 3, n = 2",
       "output": "3",
-      "explanation": "Paths: Right→Down→Down, Down→Right→Down, Down→Down→Right."
+      "explanation": "Paths: Right\u2192Down\u2192Down, Down\u2192Right\u2192Down, Down\u2192Down\u2192Right."
     }
   ],
   "exampleCases": [
@@ -30,7 +30,7 @@
         "n": 7
       },
       "expected": 28,
-      "explanation": "3×7 grid"
+      "explanation": "3\u00d77 grid"
     },
     {
       "input": {
@@ -38,7 +38,7 @@
         "n": 2
       },
       "expected": 3,
-      "explanation": "3×2 grid"
+      "explanation": "3\u00d72 grid"
     },
     {
       "input": {
@@ -54,7 +54,7 @@
         "n": 2
       },
       "expected": 2,
-      "explanation": "Right→Down or Down→Right"
+      "explanation": "Right\u2192Down or Down\u2192Right"
     }
   ],
   "hiddenCases": [
@@ -80,7 +80,7 @@
         "n": 5
       },
       "expected": 70,
-      "explanation": "5×5 grid"
+      "explanation": "5\u00d75 grid"
     },
     {
       "input": {
@@ -88,7 +88,7 @@
         "n": 4
       },
       "expected": 20,
-      "explanation": "4×4 grid"
+      "explanation": "4\u00d74 grid"
     },
     {
       "input": {
@@ -96,7 +96,7 @@
         "n": 3
       },
       "expected": 28,
-      "explanation": "Same as 3×7 by symmetry"
+      "explanation": "Same as 3\u00d77 by symmetry"
     },
     {
       "input": {
@@ -112,7 +112,7 @@
         "n": 3
       },
       "expected": 6,
-      "explanation": "3×3 grid"
+      "explanation": "3\u00d73 grid"
     },
     {
       "input": {
@@ -120,36 +120,46 @@
         "n": 10
       },
       "expected": 10,
-      "explanation": "2×10 grid"
+      "explanation": "2\u00d710 grid"
     }
   ],
   "starterCode": {
-    "python": "def unique_paths(m: int, n: int) -> int:\n    pass"
+    "python": "def unique_paths(m: int, n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} m\n * @param {number} n\n * @return {number}\n */\nfunction uniquePaths(m, n) {\n    \n}"
   },
   "functionName": "unique_paths",
   "solutions": [
     {
-      "label": "Dynamic Programming — O(m·n)",
+      "label": "Dynamic Programming \u2014 O(m\u00b7n)",
       "approach": "obvious",
       "language": "python",
       "code": "def unique_paths(m: int, n: int) -> int:\n    dp = [[1] * n for _ in range(m)]\n\n    for r in range(1, m):\n        for c in range(1, n):\n            dp[r][c] = dp[r - 1][c] + dp[r][c - 1]\n\n    return dp[m - 1][n - 1]",
-      "timeComplexity": "O(m·n)",
-      "spaceComplexity": "O(m·n)",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
       "explanation": "The number of paths to any cell equals the number of paths from above plus the number of paths from the left. Initialize all border cells to 1 (only one way to reach them). Fill in the rest using this recurrence. The answer is in the bottom-right cell."
     },
     {
-      "label": "Combinatorics — O(min(m,n))",
+      "label": "Combinatorics \u2014 O(min(m,n))",
       "approach": "optimal",
       "language": "python",
       "code": "import math\n\ndef unique_paths(m: int, n: int) -> int:\n    # Must take exactly (m-1) down moves and (n-1) right moves\n    # Total moves = m+n-2, choose m-1 of them to be down\n    return math.comb(m + n - 2, m - 1)",
       "timeComplexity": "O(min(m,n))",
       "spaceComplexity": "O(1)",
-      "explanation": "To reach the bottom-right, the robot must make exactly `m-1` down moves and `n-1` right moves, for a total of `m+n-2` moves. The number of unique orderings of these moves is `C(m+n-2, m-1)` — choosing which of the total moves will be 'down'. This gives a closed-form O(1) formula."
+      "explanation": "To reach the bottom-right, the robot must make exactly `m-1` down moves and `n-1` right moves, for a total of `m+n-2` moves. The number of unique orderings of these moves is `C(m+n-2, m-1)` \u2014 choosing which of the total moves will be 'down'. This gives a closed-form O(1) formula."
+    },
+    {
+      "label": "Dynamic Programming \u2014 O(m\u00b7n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function uniquePaths(m, n) {\n    const dp = Array.from({length: m}, () => new Array(n).fill(1));\n    for (let r = 1; r < m; r++) {\n        for (let c = 1; c < n; c++) {\n            dp[r][c] = dp[r - 1][c] + dp[r][c - 1];\n        }\n    }\n    return dp[m - 1][n - 1];\n}",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
+      "explanation": "Initialize a grid where all border cells are 1 (only one path along any edge). Fill interior cells with the sum of the cell above and the cell to the left. The bottom-right cell holds the answer."
     }
   ],
   "hints": [
     "The number of paths to reach a cell equals paths from above plus paths from the left.",
-    "Alternatively, the robot always makes exactly (m-1) down and (n-1) right moves — count the arrangements using combinatorics."
+    "Alternatively, the robot always makes exactly (m-1) down and (n-1) right moves \u2014 count the arrangements using combinatorics."
   ],
   "lcEquivalent": "62. Unique Paths"
 }

@@ -189,31 +189,41 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_product(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef max_product(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction maxProduct(nums) {\n    \n}"
   },
   "functionName": "max_product",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_product(nums: List[int]) -> int:\n    n = len(nums)\n    result = nums[0]\n    for i in range(n):\n        product = 1\n        for j in range(i, n):\n            product *= nums[j]\n            result = max(result, product)\n    return result",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
       "explanation": "Try every possible subarray by iterating over all start and end indices, computing the running product. Track the global maximum."
     },
     {
-      "label": "Dynamic Programming — O(n)",
+      "label": "Dynamic Programming \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_product(nums: List[int]) -> int:\n    result = nums[0]\n    cur_min = nums[0]\n    cur_max = nums[0]\n\n    for num in nums[1:]:\n        candidates = (num, cur_max * num, cur_min * num)\n        cur_max = max(candidates)\n        cur_min = min(candidates)\n        result = max(result, cur_max)\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Negative numbers can flip the sign, so a very negative running product can become very positive when multiplied by another negative. At each step, track both the current maximum AND minimum product ending here. The new max is the largest of: the element alone (start fresh), max*num, or min*num (min could flip sign). Update the global result at each step."
+    },
+    {
+      "label": "Dynamic Programming \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxProduct(nums) {\n    let maxProd = nums[0], minProd = nums[0], result = nums[0];\n    for (let i = 1; i < nums.length; i++) {\n        const candidates = [nums[i], maxProd * nums[i], minProd * nums[i]];\n        maxProd = Math.max(...candidates);\n        minProd = Math.min(...candidates);\n        result = Math.max(result, maxProd);\n    }\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track both max and min products ending at each position (negatives can flip). Result is the running max."
     }
   ],
   "hints": [
-    "A negative number times a negative number is positive — so tracking the minimum product is just as important as tracking the maximum.",
+    "A negative number times a negative number is positive \u2014 so tracking the minimum product is just as important as tracking the maximum.",
     "At each position, the max product ending here is the maximum of: starting fresh at this element, extending the previous max, or extending the previous min (which could flip sign)."
   ],
   "lcEquivalent": "152. Maximum Product Subarray"

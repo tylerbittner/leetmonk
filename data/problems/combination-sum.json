@@ -282,12 +282,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} candidates\n * @param {number} target\n * @return {number[][]}\n */\nfunction combinationSum(candidates, target) {\n    \n}"
   },
   "functionName": "combination_sum",
   "solutions": [
     {
-      "label": "Backtracking — O(2^(t/m))",
+      "label": "Backtracking \u2014 O(2^(t/m))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    candidates.sort()\n    result = []\n\n    def backtrack(start: int, current: List[int], remaining: int):\n        if remaining == 0:\n            result.append(current[:])\n            return\n        for i in range(start, len(candidates)):\n            if candidates[i] > remaining:\n                break\n            current.append(candidates[i])\n            backtrack(i, current, remaining - candidates[i])\n            current.pop()\n\n    backtrack(0, [], target)\n    result.sort()\n    return result",
@@ -296,13 +297,22 @@
       "explanation": "Sort candidates first to allow early termination. Use backtracking: at each step, try adding each candidate from the current start index (allowing reuse by passing `i` not `i+1`). If the remaining target drops to 0, record the combination. If a candidate exceeds the remaining target, prune (break since candidates are sorted). Sort the result before returning to ensure deterministic ordering. t is the target value, m is the minimum candidate."
     },
     {
-      "label": "Backtracking without Sort Pruning — O(2^(t/m))",
+      "label": "Backtracking without Sort Pruning \u2014 O(2^(t/m))",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List\n\ndef combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    result = set()\n\n    def backtrack(remaining, current):\n        if remaining == 0:\n            result.add(tuple(sorted(current)))\n            return\n        if remaining < 0:\n            return\n        for c in candidates:\n            current.append(c)\n            backtrack(remaining - c, current)\n            current.pop()\n\n    backtrack(target, [])\n    return sorted([list(t) for t in result])",
       "timeComplexity": "O(target^len(candidates))",
       "spaceComplexity": "O(target/min_candidate)",
       "explanation": "Brute force: try every candidate at every step without any start-index restriction. This allows duplicates, so we deduplicate by storing sorted tuples in a set. Much slower than the optimal because it revisits orderings (e.g., [2,3] and [3,2] are both explored), but correct. The optimal avoids duplicates by only moving forward in the candidates array."
+    },
+    {
+      "label": "Backtracking \u2014 O(2^(t/m))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function combinationSum(candidates, target) {\n    candidates.sort((a, b) => a - b);\n    const result = [];\n    function backtrack(start, current, remaining) {\n        if (remaining === 0) { result.push([...current]); return; }\n        for (let i = start; i < candidates.length; i++) {\n            if (candidates[i] > remaining) break;\n            current.push(candidates[i]);\n            backtrack(i, current, remaining - candidates[i]);\n            current.pop();\n        }\n    }\n    backtrack(0, [], target);\n    return result;\n}",
+      "timeComplexity": "O(2^(t/m))",
+      "spaceComplexity": "O(t/m)",
+      "explanation": "Sort candidates to enable early pruning. Backtrack with a start index to avoid duplicate combinations (reuse allowed by passing i not i+1). Break early when a candidate exceeds remaining target."
     }
   ],
   "hints": [

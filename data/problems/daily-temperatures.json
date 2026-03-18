@@ -319,27 +319,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} temperatures\n * @return {number[]}\n */\nfunction dailyTemperatures(temperatures) {\n    \n}"
   },
   "functionName": "daily_temperatures",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    for i in range(n):\n        for j in range(i + 1, n):\n            if temperatures[j] > temperatures[i]:\n                answer[i] = j - i\n                break\n    return answer",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(n)",
       "explanation": "For each day, scan forward until a warmer temperature is found and record the distance. If no warmer day exists, the answer is 0."
     },
     {
-      "label": "Monotonic Stack — O(n)",
+      "label": "Monotonic Stack \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # Stack of indices with unresolved 'next warmer day'\n    for i, temp in enumerate(temperatures):\n        while stack and temperatures[stack[-1]] < temp:\n            idx = stack.pop()\n            answer[idx] = i - idx\n        stack.append(i)\n    return answer",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "Maintain a stack of indices in decreasing order of their temperatures. When the current temperature is warmer than the stack's top, that top index has found its next warmer day -- pop it and record the distance. Each index is pushed and popped at most once, so the total work is linear."
+    },
+    {
+      "label": "Monotonic Stack \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function dailyTemperatures(temperatures) {\n    const n = temperatures.length;\n    const answer = new Array(n).fill(0);\n    const stack = [];\n    for (let i = 0; i < n; i++) {\n        while (stack.length > 0 && temperatures[stack[stack.length - 1]] < temperatures[i]) {\n            const idx = stack.pop();\n            answer[idx] = i - idx;\n        }\n        stack.push(i);\n    }\n    return answer;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Monotonic stack: maintain a stack of indices with unresolved next warmer day. When a warmer temperature is found, pop and record distances."
     }
   ],
   "hints": [

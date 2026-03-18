@@ -10,7 +10,7 @@
     "binary-search",
     "array"
   ],
-  "description": "## Find Minimum in Rotated Sorted Array\n\nYou are monitoring a circular conveyor belt system where packages are sorted by weight. The belt has been rotated by an unknown offset. Given the sorted weights read from the current starting point — e.g., `[3, 4, 5, 1, 2]` — you need to quickly locate the lightest package.\n\nGiven a sorted array that has been rotated between 1 and n times, return the **minimum element**.\n\nAll elements are **unique**. You must solve this in **O(log n)** time.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 5000`\n- `-5000 <= nums[i] <= 5000`\n- All integers are unique.\n- `nums` is sorted and rotated between 1 and n times.",
+  "description": "## Find Minimum in Rotated Sorted Array\n\nYou are monitoring a circular conveyor belt system where packages are sorted by weight. The belt has been rotated by an unknown offset. Given the sorted weights read from the current starting point \u2014 e.g., `[3, 4, 5, 1, 2]` \u2014 you need to quickly locate the lightest package.\n\nGiven a sorted array that has been rotated between 1 and n times, return the **minimum element**.\n\nAll elements are **unique**. You must solve this in **O(log n)** time.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 5000`\n- `-5000 <= nums[i] <= 5000`\n- All integers are unique.\n- `nums` is sorted and rotated between 1 and n times.",
   "examples": [
     {
       "input": "nums = [3, 4, 5, 1, 2]",
@@ -221,12 +221,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction findMin(nums) {\n    \n}"
   },
   "functionName": "find_minimum",
   "solutions": [
     {
-      "label": "Linear Scan — O(n)",
+      "label": "Linear Scan \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    return min(nums)",
@@ -235,13 +236,22 @@
       "explanation": "Simply return the minimum value in the array. Correct but does not exploit the sorted/rotated structure."
     },
     {
-      "label": "Binary Search — O(log n)",
+      "label": "Binary Search \u2014 O(log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = left + (right - left) // 2\n        if nums[mid] > nums[right]:\n            # Minimum is in the right half\n            left = mid + 1\n        else:\n            # Minimum is in the left half (including mid)\n            right = mid\n    return nums[left]",
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
       "explanation": "Compare the middle element to the rightmost element. If nums[mid] > nums[right], the rotation point (minimum) must be to the right of mid, so set left = mid + 1. Otherwise, the minimum is at mid or to the left, so set right = mid. Continue until left == right, which is the minimum."
+    },
+    {
+      "label": "Binary Search \u2014 O(log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function findMin(nums) {\n    let left = 0, right = nums.length - 1;\n    while (left < right) {\n        const mid = left + Math.floor((right - left) / 2);\n        if (nums[mid] > nums[right]) left = mid + 1;\n        else right = mid;\n    }\n    return nums[left];\n}",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "If nums[mid] > nums[right], the minimum is to the right of mid. Otherwise it's at mid or to the left. Converges to the minimum."
     }
   ],
   "hints": [

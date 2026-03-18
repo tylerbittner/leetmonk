@@ -23,7 +23,7 @@
     {
       "input": "intervals = [[7,10],[2,4]]",
       "output": "1",
-      "explanation": "[2,4] ends before [7,10] starts — one room suffices."
+      "explanation": "[2,4] ends before [7,10] starts \u2014 one room suffices."
     }
   ],
   "exampleCases": [
@@ -61,7 +61,7 @@
         ]
       },
       "expected": 1,
-      "explanation": "Sequential — one room"
+      "explanation": "Sequential \u2014 one room"
     },
     {
       "input": {
@@ -283,27 +283,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[][]} intervals\n * @return {number}\n */\nfunction minMeetingRooms(intervals) {\n    \n}"
   },
   "functionName": "min_meeting_rooms",
   "solutions": [
     {
-      "label": "Min-Heap — O(n log n)",
+      "label": "Min-Heap \u2014 O(n log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nimport heapq\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    if not intervals:\n        return 0\n\n    intervals.sort(key=lambda x: x[0])\n    # Min-heap stores end times of ongoing meetings\n    heap = []\n\n    for start, end in intervals:\n        if heap and heap[0] <= start:\n            # Reuse the room that frees up earliest\n            heapq.heappop(heap)\n        heapq.heappush(heap, end)\n\n    return len(heap)",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Sort meetings by start time. Use a min-heap to track when each occupied room becomes free (storing end times). For each new meeting, check if the earliest-ending room is free by start time — if so, reuse it (pop and push new end time). Otherwise, open a new room (just push). The heap size at the end equals the number of rooms needed. This works because we always reuse the room that frees up soonest."
+      "explanation": "Sort meetings by start time. Use a min-heap to track when each occupied room becomes free (storing end times). For each new meeting, check if the earliest-ending room is free by start time \u2014 if so, reuse it (pop and push new end time). Otherwise, open a new room (just push). The heap size at the end equals the number of rooms needed. This works because we always reuse the room that frees up soonest."
     },
     {
-      "label": "Chronological Events — O(n log n)",
+      "label": "Chronological Events \u2014 O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef min_meeting_rooms(intervals: List[List[int]]) -> int:\n    starts = sorted(s for s, e in intervals)\n    ends = sorted(e for s, e in intervals)\n\n    rooms = 0\n    max_rooms = 0\n    i, j = 0, 0\n\n    while i < len(starts):\n        if starts[i] < ends[j]:\n            rooms += 1\n            max_rooms = max(max_rooms, rooms)\n            i += 1\n        else:\n            rooms -= 1\n            j += 1\n\n    return max_rooms",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
       "explanation": "Sort start times and end times separately. Use two pointers to merge these sorted events chronologically. When a start event is processed before the next end event, a new room is needed (rooms++). When an end event comes first, a room is freed (rooms--). Track the maximum concurrent rooms. This is equivalent to finding the maximum overlap at any point in time."
+    },
+    {
+      "label": "Min-Heap \u2014 O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function minMeetingRooms(intervals) {\n    if (!intervals.length) return 0;\n    intervals.sort((a, b) => a[0] - b[0]);\n    const heap = [];\n    function heapPush(v) { heap.push(v); heap.sort((a, b) => a - b); }\n    function heapPop() { return heap.shift(); }\n    for (const [start, end] of intervals) {\n        if (heap.length > 0 && heap[0] <= start) heapPop();\n        heapPush(end);\n    }\n    return heap.length;\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort by start time. Use a min-heap of end times. Reuse a room if the earliest-ending meeting finishes before the new one starts."
     }
   ],
   "hints": [

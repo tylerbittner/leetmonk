@@ -258,12 +258,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_two_lists(list1: List[int], list2: List[int]) -> List[int]:\n    list1 = build_list(list1)\n    list2 = build_list(list2)\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_two_lists(list1: List[int], list2: List[int]) -> List[int]:\n    list1 = build_list(list1)\n    list2 = build_list(list2)\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[]} list1\n * @param {number[]} list2\n * @return {number[]}\n */\nfunction mergeTwoLists(list1, list2) {\n    list1 = buildList(list1);\n    list2 = buildList(list2);\n    \n}"
   },
   "functionName": "merge_two_lists",
   "solutions": [
     {
-      "label": "Iterative with Dummy Head — O(m+n)",
+      "label": "Iterative with Dummy Head \u2014 O(m+n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_two_lists(list1: List[int], list2: List[int]) -> List[int]:\n    l1 = build_list(list1)\n    l2 = build_list(list2)\n\n    dummy = ListNode(0)\n    curr = dummy\n\n    while l1 and l2:\n        if l1.val <= l2.val:\n            curr.next = l1\n            l1 = l1.next\n        else:\n            curr.next = l2\n            l2 = l2.next\n        curr = curr.next\n\n    curr.next = l1 or l2\n    return list_to_arr(dummy.next)",
@@ -272,17 +273,26 @@
       "explanation": "Use a dummy head to simplify the logic of building the merged list. At each step, compare the front nodes of both lists and append the smaller one. After one list is exhausted, attach the remaining nodes of the other (they're already sorted). The dummy node avoids special-casing the head."
     },
     {
-      "label": "Recursive — O(m+n)",
+      "label": "Recursive \u2014 O(m+n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_two_lists(list1: List[int], list2: List[int]) -> List[int]:\n    l1 = build_list(list1)\n    l2 = build_list(list2)\n\n    def merge(a, b):\n        if not a:\n            return b\n        if not b:\n            return a\n        if a.val <= b.val:\n            a.next = merge(a.next, b)\n            return a\n        else:\n            b.next = merge(a, b.next)\n            return b\n\n    return list_to_arr(merge(l1, l2))",
       "timeComplexity": "O(m+n)",
       "spaceComplexity": "O(m+n)",
       "explanation": "Recursive merge: if either list is empty, return the other. Otherwise, the smaller head becomes the result; its next is the merge of the remaining lists. Elegant but uses O(m+n) call stack space vs O(1) for the iterative approach."
+    },
+    {
+      "label": "Iterative with Dummy Head \u2014 O(m+n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction mergeTwoLists(list1, list2) {\n    let l1 = buildList(list1);\n    let l2 = buildList(list2);\n    const dummy = new ListNode(0);\n    let curr = dummy;\n    while (l1 && l2) {\n        if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }\n        else { curr.next = l2; l2 = l2.next; }\n        curr = curr.next;\n    }\n    curr.next = l1 || l2;\n    return listToArr(dummy.next);\n}",
+      "timeComplexity": "O(m+n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use a dummy head to simplify building the merged list. At each step compare the front nodes and append the smaller one. After one list is exhausted, attach the remaining nodes."
     }
   ],
   "hints": [
-    "Use a dummy head node to simplify building the result — avoids special-casing the first node.",
+    "Use a dummy head node to simplify building the result \u2014 avoids special-casing the first node.",
     "At each step, take the smaller of the two front nodes. When one list runs out, append the rest of the other."
   ],
   "lcEquivalent": "21. Merge Two Sorted Lists"

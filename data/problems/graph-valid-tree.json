@@ -164,7 +164,7 @@
         ]
       },
       "expected": false,
-      "explanation": "Not connected — two components"
+      "explanation": "Not connected \u2014 two components"
     },
     {
       "input": {
@@ -185,7 +185,7 @@
         ]
       },
       "expected": true,
-      "explanation": "Linear chain — valid tree"
+      "explanation": "Linear chain \u2014 valid tree"
     },
     {
       "input": {
@@ -264,31 +264,41 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @param {number[][]} edges\n * @return {boolean}\n */\nfunction validTree(n, edges) {\n    \n}"
   },
   "functionName": "valid_tree",
   "solutions": [
     {
-      "label": "DFS Cycle Detection — O(V+E)",
+      "label": "DFS Cycle Detection \u2014 O(V+E)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    if len(edges) != n - 1:\n        return False\n\n    graph = [[] for _ in range(n)]\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n\n    visited = set()\n\n    def dfs(node, parent):\n        visited.add(node)\n        for neighbor in graph[node]:\n            if neighbor == parent:\n                continue\n            if neighbor in visited:\n                return False\n            if not dfs(neighbor, node):\n                return False\n        return True\n\n    return dfs(0, -1) and len(visited) == n",
       "timeComplexity": "O(V+E)",
       "spaceComplexity": "O(V+E)",
-      "explanation": "A valid tree has exactly n-1 edges — check this first as a quick filter. Then DFS from node 0, tracking the parent to avoid treating the edge we came from as a cycle. If any neighbor is already visited (and isn't the parent), there's a cycle. After DFS, verify all n nodes were visited (ensures connectivity)."
+      "explanation": "A valid tree has exactly n-1 edges \u2014 check this first as a quick filter. Then DFS from node 0, tracking the parent to avoid treating the edge we came from as a cycle. If any neighbor is already visited (and isn't the parent), there's a cycle. After DFS, verify all n nodes were visited (ensures connectivity)."
     },
     {
-      "label": "Union-Find — O(V+E·α(V))",
+      "label": "Union-Find \u2014 O(V+E\u00b7\u03b1(V))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    if len(edges) != n - 1:\n        return False\n\n    parent = list(range(n))\n\n    def find(x):\n        while parent[x] != x:\n            parent[x] = parent[parent[x]]  # path compression\n            x = parent[x]\n        return x\n\n    def union(x, y):\n        px, py = find(x), find(y)\n        if px == py:\n            return False  # cycle\n        parent[px] = py\n        return True\n\n    for u, v in edges:\n        if not union(u, v):\n            return False\n\n    return True",
-      "timeComplexity": "O(V + E·α(V))",
+      "timeComplexity": "O(V + E\u00b7\u03b1(V))",
       "spaceComplexity": "O(V)",
-      "explanation": "First check that |edges| == n-1 (necessary condition). Then use Union-Find: for each edge, attempt to union the two nodes. If they're already in the same set (find(u) == find(v)), adding this edge would create a cycle — return False. If all edges are processed without a cycle and the edge count condition holds, the graph is a valid tree."
+      "explanation": "First check that |edges| == n-1 (necessary condition). Then use Union-Find: for each edge, attempt to union the two nodes. If they're already in the same set (find(u) == find(v)), adding this edge would create a cycle \u2014 return False. If all edges are processed without a cycle and the edge count condition holds, the graph is a valid tree."
+    },
+    {
+      "label": "Union-Find \u2014 O(V+E\u00b7\u03b1(V))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function validTree(n, edges) {\n    if (edges.length !== n - 1) return false;\n    const parent = Array.from({length: n}, (_, i) => i);\n    function find(x) {\n        while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }\n        return x;\n    }\n    for (const [u, v] of edges) {\n        const pu = find(u), pv = find(v);\n        if (pu === pv) return false;\n        parent[pu] = pv;\n    }\n    return true;\n}",
+      "timeComplexity": "O(V + E\u00b7\u03b1(V))",
+      "spaceComplexity": "O(V)",
+      "explanation": "Check n-1 edges (necessary). Use Union-Find: if two nodes share a root, adding the edge creates a cycle. Path compression ensures near-constant per operation."
     }
   ],
   "hints": [
-    "A valid tree must be connected AND have no cycles. A tree with n nodes always has exactly n-1 edges — check this first.",
+    "A valid tree must be connected AND have no cycles. A tree with n nodes always has exactly n-1 edges \u2014 check this first.",
     "Then verify no cycles using DFS (track parent to skip the edge you came from) or Union-Find."
   ],
   "lcEquivalent": "261. Graph Valid Tree"

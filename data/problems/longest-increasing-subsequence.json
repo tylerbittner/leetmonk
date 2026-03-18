@@ -197,27 +197,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction lengthOfLIS(nums) {\n    \n}"
   },
   "functionName": "length_of_lis",
   "solutions": [
     {
-      "label": "Dynamic Programming — O(n²)",
+      "label": "Dynamic Programming \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    n = len(nums)\n    dp = [1] * n  # dp[i] = LIS length ending at index i\n\n    for i in range(1, n):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n\n    return max(dp)",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(n)",
       "explanation": "`dp[i]` stores the length of the longest increasing subsequence ending at index `i`. For each `i`, look back at all previous indices `j` where `nums[j] < nums[i]` and extend that subsequence. The answer is the maximum value in the dp array."
     },
     {
-      "label": "Binary Search (Patience Sorting) — O(n log n)",
+      "label": "Binary Search (Patience Sorting) \u2014 O(n log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nimport bisect\n\ndef length_of_lis(nums: List[int]) -> int:\n    # tails[i] = smallest tail element of all IS of length i+1\n    tails = []\n\n    for num in nums:\n        pos = bisect.bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n\n    return len(tails)",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Maintain a `tails` array where `tails[i]` is the smallest possible tail of any increasing subsequence of length `i+1`. For each number, binary search for its position in `tails`: if it's larger than all tails, extend; otherwise replace the first tail that is ≥ num. The length of `tails` at the end is the LIS length. Note: `tails` itself may not be a valid subsequence, but its length is always correct."
+      "explanation": "Maintain a `tails` array where `tails[i]` is the smallest possible tail of any increasing subsequence of length `i+1`. For each number, binary search for its position in `tails`: if it's larger than all tails, extend; otherwise replace the first tail that is \u2265 num. The length of `tails` at the end is the LIS length. Note: `tails` itself may not be a valid subsequence, but its length is always correct."
+    },
+    {
+      "label": "Binary Search (Patience Sorting) \u2014 O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function lengthOfLIS(nums) {\n    const tails = [];\n    for (const n of nums) {\n        let lo = 0, hi = tails.length;\n        while (lo < hi) {\n            const mid = lo + Math.floor((hi - lo) / 2);\n            if (tails[mid] < n) lo = mid + 1;\n            else hi = mid;\n        }\n        tails[lo] = n;\n    }\n    return tails.length;\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Maintain a list of smallest tail elements for increasing subsequences of each length. Binary search to find insertion position."
     }
   ],
   "hints": [

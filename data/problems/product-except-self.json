@@ -10,7 +10,7 @@
     "prefix-sum",
     "array"
   ],
-  "description": "## Product of Array Except Self\n\nYou are calibrating sensors in a research laboratory. Each sensor's calibration factor must be set to the product of all other sensors' readings — but never its own. Division is unreliable in this environment and must not be used.\n\nGiven an integer array `nums`, return an array `answer` where `answer[i]` equals the product of all elements in `nums` except `nums[i]`.\n\nYou must solve this **without using division** and in O(n) time.\n\n**Constraints:**\n- `2 <= nums.length <= 10^5`\n- `-30 <= nums[i] <= 30`\n- The product of any prefix or suffix fits in a 32-bit integer.",
+  "description": "## Product of Array Except Self\n\nYou are calibrating sensors in a research laboratory. Each sensor's calibration factor must be set to the product of all other sensors' readings \u2014 but never its own. Division is unreliable in this environment and must not be used.\n\nGiven an integer array `nums`, return an array `answer` where `answer[i]` equals the product of all elements in `nums` except `nums[i]`.\n\nYou must solve this **without using division** and in O(n) time.\n\n**Constraints:**\n- `2 <= nums.length <= 10^5`\n- `-30 <= nums[i] <= 30`\n- The product of any prefix or suffix fits in a 32-bit integer.",
   "examples": [
     {
       "input": "nums = [1, 2, 3, 4]",
@@ -269,27 +269,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[]}\n */\nfunction productExceptSelf(nums) {\n    \n}"
   },
   "functionName": "product_except_self",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n):\n        product = 1\n        for j in range(n):\n            if j != i:\n                product *= nums[j]\n        result.append(product)\n    return result",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(n)",
       "explanation": "For each index i, iterate through all other indices and multiply their values. Simple but performs redundant computation since many products overlap."
     },
     {
-      "label": "Prefix/Suffix Products — O(n)",
+      "label": "Prefix/Suffix Products \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    n = len(nums)\n    result = [1] * n\n\n    # Build prefix products into result\n    prefix = 1\n    for i in range(n):\n        result[i] = prefix\n        prefix *= nums[i]\n\n    # Multiply by suffix products from the right\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        result[i] *= suffix\n        suffix *= nums[i]\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "The product at index i equals (product of everything to the left) * (product of everything to the right). First pass (left to right): store the running prefix product for each position. Second pass (right to left): multiply by the running suffix product. No division needed. The output array is the only extra space used (not counted as auxiliary space)."
+    },
+    {
+      "label": "Prefix/Suffix Products \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function productExceptSelf(nums) {\n    const n = nums.length;\n    const result = new Array(n).fill(1);\n    let prefix = 1;\n    for (let i = 0; i < n; i++) {\n        result[i] = prefix;\n        prefix *= nums[i];\n    }\n    let suffix = 1;\n    for (let i = n - 1; i >= 0; i--) {\n        result[i] *= suffix;\n        suffix *= nums[i];\n    }\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "First pass builds prefix products into result. Second pass multiplies by suffix products from the right. No division needed."
     }
   ],
   "hints": [

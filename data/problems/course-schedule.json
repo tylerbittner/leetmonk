@@ -22,7 +22,7 @@
     {
       "input": "numCourses = 2, prerequisites = [[1,0],[0,1]]",
       "output": "false",
-      "explanation": "Course 0 requires 1 and course 1 requires 0 — impossible cycle."
+      "explanation": "Course 0 requires 1 and course 1 requires 0 \u2014 impossible cycle."
     }
   ],
   "exampleCases": [
@@ -87,7 +87,7 @@
         ]
       },
       "expected": true,
-      "explanation": "DAG — all courses completable"
+      "explanation": "DAG \u2014 all courses completable"
     }
   ],
   "hiddenCases": [
@@ -135,7 +135,7 @@
         ]
       },
       "expected": true,
-      "explanation": "0 is prerequisite for both 1 and 2 — no cycle"
+      "explanation": "0 is prerequisite for both 1 and 2 \u2014 no cycle"
     },
     {
       "input": {
@@ -156,7 +156,7 @@
         ]
       },
       "expected": true,
-      "explanation": "No cycle: 3→0→1→2"
+      "explanation": "No cycle: 3\u21920\u21921\u21922"
     },
     {
       "input": {
@@ -210,7 +210,7 @@
         ]
       },
       "expected": true,
-      "explanation": "Linear chain — no cycle"
+      "explanation": "Linear chain \u2014 no cycle"
     },
     {
       "input": {
@@ -264,27 +264,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number} numCourses\n * @param {number[][]} prerequisites\n * @return {boolean}\n */\nfunction canFinish(numCourses, prerequisites) {\n    \n}"
   },
   "functionName": "can_finish",
   "solutions": [
     {
-      "label": "DFS Cycle Detection — O(V+E)",
+      "label": "DFS Cycle Detection \u2014 O(V+E)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    graph = [[] for _ in range(numCourses)]\n    for course, prereq in prerequisites:\n        graph[course].append(prereq)\n\n    # 0 = unvisited, 1 = in current path, 2 = fully processed\n    state = [0] * numCourses\n\n    def dfs(node):\n        if state[node] == 1:\n            return False  # cycle detected\n        if state[node] == 2:\n            return True   # already verified\n\n        state[node] = 1\n        for neighbor in graph[node]:\n            if not dfs(neighbor):\n                return False\n        state[node] = 2\n        return True\n\n    for course in range(numCourses):\n        if not dfs(course):\n            return False\n    return True",
       "timeComplexity": "O(V+E)",
       "spaceComplexity": "O(V+E)",
-      "explanation": "Build a directed adjacency list (course → its prerequisites). Use DFS with three-color marking to detect cycles: unvisited (0), currently in the DFS stack (1), and fully processed (2). If we encounter a node with state 1, we've found a cycle. State 2 means no cycle was found from that node. If any DFS returns False, all courses cannot be completed."
+      "explanation": "Build a directed adjacency list (course \u2192 its prerequisites). Use DFS with three-color marking to detect cycles: unvisited (0), currently in the DFS stack (1), and fully processed (2). If we encounter a node with state 1, we've found a cycle. State 2 means no cycle was found from that node. If any DFS returns False, all courses cannot be completed."
     },
     {
-      "label": "Topological Sort (Kahn's BFS) — O(V+E)",
+      "label": "Topological Sort (Kahn's BFS) \u2014 O(V+E)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    in_degree = [0] * numCourses\n    graph = [[] for _ in range(numCourses)]\n    for course, prereq in prerequisites:\n        graph[prereq].append(course)\n        in_degree[course] += 1\n\n    # Start with all courses that have no prerequisites\n    queue = deque(i for i in range(numCourses) if in_degree[i] == 0)\n    completed = 0\n\n    while queue:\n        node = queue.popleft()\n        completed += 1\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n\n    return completed == numCourses",
       "timeComplexity": "O(V+E)",
       "spaceComplexity": "O(V+E)",
       "explanation": "Kahn's BFS topological sort: build a graph where edges go from prerequisite to course (reversed direction), track in-degrees. Start with all nodes whose in-degree is 0 (no prerequisites). Process them: for each, reduce the in-degree of its dependents. When a dependent's in-degree reaches 0, add it to the queue. If we process all numCourses nodes, there's no cycle. Otherwise, some nodes remain in a cycle."
+    },
+    {
+      "label": "DFS Cycle Detection \u2014 O(V+E)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function canFinish(numCourses, prerequisites) {\n    const graph = Array.from({length: numCourses}, () => []);\n    for (const [course, prereq] of prerequisites) graph[course].push(prereq);\n    const state = new Array(numCourses).fill(0); // 0=unvisited, 1=in-path, 2=done\n    function dfs(node) {\n        if (state[node] === 1) return false;\n        if (state[node] === 2) return true;\n        state[node] = 1;\n        for (const neighbor of graph[node]) {\n            if (!dfs(neighbor)) return false;\n        }\n        state[node] = 2;\n        return true;\n    }\n    for (let i = 0; i < numCourses; i++) {\n        if (!dfs(i)) return false;\n    }\n    return true;\n}",
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "DFS with three-color marking detects cycles. State 1 means a node is on the current DFS path \u2014 if we revisit it, a cycle exists. State 2 means the node and all its dependencies are cycle-free."
     }
   ],
   "hints": [

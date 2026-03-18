@@ -155,27 +155,37 @@
     }
   ],
   "starterCode": {
-    "python": "def min_window(s: str, t: str) -> str:\n    pass"
+    "python": "def min_window(s: str, t: str) -> str:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @param {string} t\n * @return {string}\n */\nfunction minWindow(s, t) {\n    \n}"
   },
   "functionName": "min_window",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from collections import Counter\n\ndef min_window(s: str, t: str) -> str:\n    if not t or not s:\n        return \"\"\n    need = Counter(t)\n    n = len(s)\n    best = \"\"\n    for i in range(n):\n        window = Counter()\n        for j in range(i, n):\n            window[s[j]] += 1\n            valid = all(window[c] >= need[c] for c in need)\n            if valid:\n                if not best or j - i + 1 < len(best):\n                    best = s[i:j+1]\n                break\n    return best",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(m+n)",
       "explanation": "Try every starting index. Extend the window rightward until it contains all required characters (including duplicates). Record the shortest valid window found. Where m is the length of s and n is the length of t."
     },
     {
-      "label": "Sliding Window — O(n)",
+      "label": "Sliding Window \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from collections import Counter\n\ndef min_window(s: str, t: str) -> str:\n    if not t or not s:\n        return \"\"\n    need = Counter(t)\n    missing = len(t)\n    best_start, best_len = 0, float('inf')\n    left = 0\n    for right, char in enumerate(s):\n        if need[char] > 0:\n            missing -= 1\n        need[char] -= 1\n        if missing == 0:\n            # Shrink from the left\n            while need[s[left]] < 0:\n                need[s[left]] += 1\n                left += 1\n            if right - left + 1 < best_len:\n                best_len = right - left + 1\n                best_start = left\n            # Move left to try finding a shorter window\n            need[s[left]] += 1\n            missing += 1\n            left += 1\n    return s[best_start:best_start + best_len] if best_len != float('inf') else \"\"",
       "timeComplexity": "O(m+n)",
       "spaceComplexity": "O(m+n)",
       "explanation": "Expand the right pointer to include characters. Track `missing` -- the count of required characters still needed. When `missing` reaches 0, the window is valid; shrink from the left to find the minimum valid window, then pop one required character to resume searching. The counter tracks excess characters so we know which left-side characters are safe to remove."
+    },
+    {
+      "label": "Sliding Window \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function minWindow(s, t) {\n    if (!t || !s) return '';\n    const need = new Map();\n    for (const c of t) need.set(c, (need.get(c) || 0) + 1);\n    let missing = t.length;\n    let bestStart = 0, bestLen = Infinity;\n    let left = 0;\n    for (let right = 0; right < s.length; right++) {\n        const c = s[right];\n        if ((need.get(c) || 0) > 0) missing--;\n        need.set(c, (need.get(c) || 0) - 1);\n        if (missing === 0) {\n            while ((need.get(s[left]) || 0) < 0) {\n                need.set(s[left], (need.get(s[left]) || 0) + 1);\n                left++;\n            }\n            if (right - left + 1 < bestLen) {\n                bestLen = right - left + 1;\n                bestStart = left;\n            }\n            need.set(s[left], (need.get(s[left]) || 0) + 1);\n            missing++;\n            left++;\n        }\n    }\n    return bestLen === Infinity ? '' : s.slice(bestStart, bestStart + bestLen);\n}",
+      "timeComplexity": "O(m+n)",
+      "spaceComplexity": "O(m+n)",
+      "explanation": "Expand right pointer adding characters. Track missing count of required chars. When missing hits 0, shrink from left to find minimum valid window, then advance left to resume search."
     }
   ],
   "hints": [

@@ -111,7 +111,7 @@
         1,
         2
       ],
-      "explanation": "Left-only — still visible from right"
+      "explanation": "Left-only \u2014 still visible from right"
     },
     {
       "input": {
@@ -130,7 +130,7 @@
         3,
         7
       ],
-      "explanation": "Perfect tree — rightmost at each level"
+      "explanation": "Perfect tree \u2014 rightmost at each level"
     },
     {
       "input": {
@@ -149,7 +149,7 @@
         3,
         4
       ],
-      "explanation": "Left-skewed — each level has one node"
+      "explanation": "Left-skewed \u2014 each level has one node"
     },
     {
       "input": {
@@ -220,27 +220,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @return {number[]}\n */\nfunction rightSideView(root) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "right_side_view",
   "solutions": [
     {
-      "label": "BFS — O(n)",
+      "label": "BFS \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    if not root:\n        return []\n\n    result = []\n    queue = deque([root])\n\n    while queue:\n        level_size = len(queue)\n        for i in range(level_size):\n            node = queue.popleft()\n            if i == level_size - 1:\n                result.append(node.val)  # last node in level\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "BFS level-by-level. At each level, the last node dequeued is the rightmost — record its value. This captures exactly what's visible from the right side at each depth."
+      "explanation": "BFS level-by-level. At each level, the last node dequeued is the rightmost \u2014 record its value. This captures exactly what's visible from the right side at each depth."
     },
     {
-      "label": "DFS — O(n)",
+      "label": "DFS \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef right_side_view(root: List[Optional[int]]) -> List[int]:\n    root = build_tree(root)\n    result = []\n\n    def dfs(node, depth):\n        if not node:\n            return\n        if depth == len(result):\n            result.append(node.val)\n        else:\n            result[depth] = node.val  # overwrite with rightmost seen so far\n        dfs(node.left, depth + 1)\n        dfs(node.right, depth + 1)\n\n    dfs(root, 0)\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(h)",
-      "explanation": "DFS with a depth counter. If this is the first node at this depth, append it. Otherwise overwrite it — since we visit left before right, the last write at each depth comes from the rightmost node at that level. Equivalent result to BFS but uses the call stack instead of an explicit queue."
+      "explanation": "DFS with a depth counter. If this is the first node at this depth, append it. Otherwise overwrite it \u2014 since we visit left before right, the last write at each depth comes from the rightmost node at that level. Equivalent result to BFS but uses the call stack instead of an explicit queue."
+    },
+    {
+      "label": "BFS \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction rightSideView(root) {\n  root = buildTree(root);\n  if (!root) return [];\n  const result = []; const queue = [root];\n  while (queue.length > 0) {\n    const levelSize = queue.length;\n    for (let i = 0; i < levelSize; i++) {\n      const node = queue.shift();\n      if (i === levelSize - 1) result.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n  }\n  return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "BFS level by level. At each level, the last node dequeued is the rightmost visible node. Record its value."
     }
   ],
   "hints": [

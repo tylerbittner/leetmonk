@@ -13,7 +13,7 @@
     "dynamic-programming",
     "array"
   ],
-  "description": "## Split Array Largest Sum\n\nYou are a project manager distributing a sequence of tasks to a team of workers. Each task has a fixed workload (a non-negative integer), and the tasks must be assigned in order — you cannot rearrange them. Each worker receives a contiguous block of one or more tasks. Your goal is to distribute the tasks across exactly `k` workers so that the **heaviest workload** assigned to any single worker is as **small as possible**.\n\nGiven an array `nums` of non-negative integers representing task workloads and an integer `k` representing the number of workers, split `nums` into exactly `k` non-empty contiguous subarrays. Return the **minimized maximum** subarray sum.\n\n**Constraints:**\n- `1 <= nums.length <= 1000`\n- `0 <= nums[i] <= 10^6`\n- `1 <= k <= min(50, nums.length)`",
+  "description": "## Split Array Largest Sum\n\nYou are a project manager distributing a sequence of tasks to a team of workers. Each task has a fixed workload (a non-negative integer), and the tasks must be assigned in order \u2014 you cannot rearrange them. Each worker receives a contiguous block of one or more tasks. Your goal is to distribute the tasks across exactly `k` workers so that the **heaviest workload** assigned to any single worker is as **small as possible**.\n\nGiven an array `nums` of non-negative integers representing task workloads and an integer `k` representing the number of workers, split `nums` into exactly `k` non-empty contiguous subarrays. Return the **minimized maximum** subarray sum.\n\n**Constraints:**\n- `1 <= nums.length <= 1000`\n- `0 <= nums[i] <= 10^6`\n- `1 <= k <= min(50, nums.length)`",
   "examples": [
     {
       "input": "nums = [7, 2, 5, 10, 8], k = 2",
@@ -233,34 +233,44 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} k\n * @return {number}\n */\nfunction splitArray(nums, k) {\n    \n}"
   },
   "functionName": "split_array",
   "solutions": [
     {
-      "label": "Dynamic Programming — O(n² * k)",
+      "label": "Dynamic Programming \u2014 O(n\u00b2 * k)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    n = len(nums)\n    # prefix[i] = sum of nums[0..i-1]\n    prefix = [0] * (n + 1)\n    for i in range(n):\n        prefix[i + 1] = prefix[i] + nums[i]\n\n    # dp[i][j] = min largest sum when splitting nums[0..i-1] into j parts\n    dp = [[float('inf')] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 0\n\n    for i in range(1, n + 1):\n        for j in range(1, min(i, k) + 1):\n            # Try every split point: last subarray is nums[m..i-1]\n            for m in range(j - 1, i):\n                last_sum = prefix[i] - prefix[m]\n                dp[i][j] = min(dp[i][j], max(dp[m][j - 1], last_sum))\n\n    return dp[n][k]",
-      "timeComplexity": "O(n² * k)",
+      "timeComplexity": "O(n\u00b2 * k)",
       "spaceComplexity": "O(n * k)",
-      "explanation": "Build a 2D table where dp[i][j] represents the minimum possible largest subarray sum when dividing the first i elements into exactly j contiguous groups.\n\nThe base case is dp[0][0] = 0 — zero elements split into zero groups has zero cost. For each state dp[i][j], try every possible starting position m for the last group. The last group covers nums[m..i-1] with sum computed via prefix sums. The cost of this choice is the worse of the previous groups' cost dp[m][j-1] and the current group's sum. We take the minimum over all choices of m.\n\nThis approach is correct and intuitive but runs in cubic-ish time, which becomes impractical for larger inputs. It serves as a natural starting point before discovering the more elegant binary search solution."
+      "explanation": "Build a 2D table where dp[i][j] represents the minimum possible largest subarray sum when dividing the first i elements into exactly j contiguous groups.\n\nThe base case is dp[0][0] = 0 \u2014 zero elements split into zero groups has zero cost. For each state dp[i][j], try every possible starting position m for the last group. The last group covers nums[m..i-1] with sum computed via prefix sums. The cost of this choice is the worse of the previous groups' cost dp[m][j-1] and the current group's sum. We take the minimum over all choices of m.\n\nThis approach is correct and intuitive but runs in cubic-ish time, which becomes impractical for larger inputs. It serves as a natural starting point before discovering the more elegant binary search solution."
     },
     {
-      "label": "Binary Search on Answer — O(n log(sum(nums)))",
+      "label": "Binary Search on Answer \u2014 O(n log(sum(nums)))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    def can_split(max_sum: int) -> bool:\n        \"\"\"Can we split nums into at most k subarrays each with sum <= max_sum?\"\"\"\n        count = 1\n        current = 0\n        for num in nums:\n            if current + num > max_sum:\n                count += 1\n                current = num\n                if count > k:\n                    return False\n            else:\n                current += num\n        return True\n\n    lo, hi = max(nums), sum(nums)\n    while lo < hi:\n        mid = lo + (hi - lo) // 2\n        if can_split(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo",
       "timeComplexity": "O(n log(sum(nums)))",
       "spaceComplexity": "O(1)",
-      "explanation": "Instead of searching over how to partition the array, search over what the answer could be. The answer — the maximum subarray sum — must lie between max(nums) (every element needs at least one subarray, and the largest element alone forces this lower bound) and sum(nums) (putting everything in one group).\n\nThe key observation is monotonicity: if we can achieve a maximum sum of X using k or fewer groups, then we can certainly achieve X+1 as well (just use the same split). This means the predicate \"can we split into at most k parts where no part exceeds max_sum?\" flips from False to True exactly once as max_sum increases. That makes it perfect for binary search.\n\nThe feasibility check is a greedy scan: walk through the array accumulating a running sum. Whenever adding the next element would exceed the candidate max_sum, start a new subarray and increment the count. If the count exceeds k, the candidate is too small.\n\nThis is the classic \"minimize the maximum\" variant of Binary Search on Answer — a pattern that appears frequently in interviews. Anytime you see \"minimize the maximum\" or \"maximize the minimum\" over partitions or assignments, consider whether the feasibility check is monotone. If so, binary search on the answer value gives you an elegant O(n log S) solution."
+      "explanation": "Instead of searching over how to partition the array, search over what the answer could be. The answer \u2014 the maximum subarray sum \u2014 must lie between max(nums) (every element needs at least one subarray, and the largest element alone forces this lower bound) and sum(nums) (putting everything in one group).\n\nThe key observation is monotonicity: if we can achieve a maximum sum of X using k or fewer groups, then we can certainly achieve X+1 as well (just use the same split). This means the predicate \"can we split into at most k parts where no part exceeds max_sum?\" flips from False to True exactly once as max_sum increases. That makes it perfect for binary search.\n\nThe feasibility check is a greedy scan: walk through the array accumulating a running sum. Whenever adding the next element would exceed the candidate max_sum, start a new subarray and increment the count. If the count exceeds k, the candidate is too small.\n\nThis is the classic \"minimize the maximum\" variant of Binary Search on Answer \u2014 a pattern that appears frequently in interviews. Anytime you see \"minimize the maximum\" or \"maximize the minimum\" over partitions or assignments, consider whether the feasibility check is monotone. If so, binary search on the answer value gives you an elegant O(n log S) solution."
+    },
+    {
+      "label": "Binary Search on Answer \u2014 O(n log(sum))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function splitArray(nums, k) {\n    function canSplit(maxSum) {\n        let count = 1, current = 0;\n        for (const num of nums) {\n            if (current + num > maxSum) { count++; current = num; if (count > k) return false; }\n            else current += num;\n        }\n        return true;\n    }\n    let lo = Math.max(...nums), hi = nums.reduce((a, b) => a + b, 0);\n    while (lo < hi) {\n        const mid = Math.floor((lo + hi) / 2);\n        if (canSplit(mid)) hi = mid;\n        else lo = mid + 1;\n    }\n    return lo;\n}",
+      "timeComplexity": "O(n log(sum(nums)))",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on the answer between max(nums) and sum(nums). For each candidate max sum, greedily check if we can split into at most k subarrays."
     }
   ],
   "hints": [
     "The answer must be between max(nums) and sum(nums). Why?",
     "If you could check whether a given maximum sum is achievable in k splits, how would you find the optimal value?",
     "For a fixed candidate maximum sum, greedily assign elements left to right: accumulate until adding the next element would exceed the limit, then start a new subarray. Count how many subarrays you need.",
-    "The feasibility check is monotone — if max_sum = X works, then X+1 also works. Use binary search on the answer space."
+    "The feasibility check is monotone \u2014 if max_sum = X works, then X+1 also works. Use binary search on the answer space."
   ],
   "lcEquivalent": "410. Split Array Largest Sum"
 }

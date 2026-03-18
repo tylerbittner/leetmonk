@@ -10,7 +10,7 @@
     "backtracking",
     "array"
   ],
-  "description": "## Subsets\n\nYou are designing a feature selection tool for a machine learning pipeline. Given a set of distinct feature indices, you need to generate every possible subset of features to evaluate all possible model configurations — from using no features to using all of them.\n\nGiven an integer array `nums` of **unique** elements, return all possible subsets (the power set).\n\nThe solution set must **not contain duplicate subsets**. Return the answer in a consistent sorted order: each subset sorted, and the list of subsets sorted lexicographically.\n\n**Constraints:**\n- `1 <= nums.length <= 10`\n- `-10 <= nums[i] <= 10`\n- All the numbers of `nums` are unique.",
+  "description": "## Subsets\n\nYou are designing a feature selection tool for a machine learning pipeline. Given a set of distinct feature indices, you need to generate every possible subset of features to evaluate all possible model configurations \u2014 from using no features to using all of them.\n\nGiven an integer array `nums` of **unique** elements, return all possible subsets (the power set).\n\nThe solution set must **not contain duplicate subsets**. Return the answer in a consistent sorted order: each subset sorted, and the list of subsets sorted lexicographically.\n\n**Constraints:**\n- `1 <= nums.length <= 10`\n- `-10 <= nums[i] <= 10`\n- All the numbers of `nums` are unique.",
   "examples": [
     {
       "input": "nums = [1, 2, 3]",
@@ -687,12 +687,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[][]}\n */\nfunction subsets(nums) {\n    \n}"
   },
   "functionName": "subsets",
   "solutions": [
     {
-      "label": "Iterative Bit Masking — O(n * 2^n)",
+      "label": "Iterative Bit Masking \u2014 O(n * 2^n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    nums.sort()\n    n = len(nums)\n    result = []\n    for mask in range(1 << n):\n        subset = [nums[i] for i in range(n) if mask & (1 << i)]\n        result.append(subset)\n    result.sort()\n    return result",
@@ -701,13 +702,22 @@
       "explanation": "Each subset corresponds to a bitmask from 0 to 2^n - 1. If bit i is set, nums[i] is included in the subset. This gives a clean, iterative way to enumerate all 2^n subsets. Sort the output for deterministic comparison."
     },
     {
-      "label": "Backtracking — O(n * 2^n)",
+      "label": "Backtracking \u2014 O(n * 2^n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    nums.sort()\n    result = []\n    def backtrack(start, current):\n        result.append(list(current))\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()\n    backtrack(0, [])\n    result.sort()\n    return result",
       "timeComplexity": "O(n * 2^n)",
       "spaceComplexity": "O(n * 2^n)",
       "explanation": "Backtracking: at each step, record the current subset as a valid result. Then try adding each remaining element (starting from the current index to avoid duplicates). After adding an element and recursing, remove it (backtrack). This generates all 2^n subsets."
+    },
+    {
+      "label": "Backtracking \u2014 O(n * 2^n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function subsets(nums) {\n    nums.sort((a, b) => a - b);\n    const result = [];\n    function backtrack(start, current) {\n        result.push([...current]);\n        for (let i = start; i < nums.length; i++) {\n            current.push(nums[i]);\n            backtrack(i + 1, current);\n            current.pop();\n        }\n    }\n    backtrack(0, []);\n    result.sort((a, b) => {\n        for (let i = 0; i < Math.min(a.length, b.length); i++) {\n            if (a[i] !== b[i]) return a[i] - b[i];\n        }\n        return a.length - b.length;\n    });\n    return result;\n}",
+      "timeComplexity": "O(n * 2^n)",
+      "spaceComplexity": "O(n * 2^n)",
+      "explanation": "Sort input, then backtrack: record each state as a valid subset, try adding each remaining element, then backtrack. Sort result for consistent ordering."
     }
   ],
   "hints": [

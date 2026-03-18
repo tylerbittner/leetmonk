@@ -15,12 +15,12 @@
     {
       "input": "intervals = [[1,3],[6,9]], newInterval = [2,5]",
       "output": "[[1,5],[6,9]]",
-      "explanation": "[1,3] and [2,5] overlap — merge to [1,5]."
+      "explanation": "[1,3] and [2,5] overlap \u2014 merge to [1,5]."
     },
     {
       "input": "intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]",
       "output": "[[1,2],[3,10],[12,16]]",
-      "explanation": "[4,8] overlaps with [3,5],[6,7],[8,10] — merge all to [3,10]."
+      "explanation": "[4,8] overlaps with [3,5],[6,7],[8,10] \u2014 merge all to [3,10]."
     }
   ],
   "exampleCases": [
@@ -206,7 +206,7 @@
           7
         ]
       ],
-      "explanation": "Touching at endpoint — merge"
+      "explanation": "Touching at endpoint \u2014 merge"
     },
     {
       "input": {
@@ -359,27 +359,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef insert_interval(intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef insert_interval(intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} intervals\n * @param {number[]} newInterval\n * @return {number[][]}\n */\nfunction insertInterval(intervals, newInterval) {\n    \n}"
   },
   "functionName": "insert_interval",
   "solutions": [
     {
-      "label": "Linear Scan — O(n)",
+      "label": "Linear Scan \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef insert_interval(intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n    result = []\n    i = 0\n    n = len(intervals)\n\n    # Add all intervals that end before newInterval starts\n    while i < n and intervals[i][1] < newInterval[0]:\n        result.append(intervals[i])\n        i += 1\n\n    # Merge all overlapping intervals with newInterval\n    while i < n and intervals[i][0] <= newInterval[1]:\n        newInterval[0] = min(newInterval[0], intervals[i][0])\n        newInterval[1] = max(newInterval[1], intervals[i][1])\n        i += 1\n    result.append(newInterval)\n\n    # Add remaining intervals\n    while i < n:\n        result.append(intervals[i])\n        i += 1\n\n    return result",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
-      "explanation": "Three phases: (1) add all intervals that end before the new interval starts — no overlap possible; (2) merge all intervals that overlap with newInterval by expanding its boundaries; (3) append all remaining intervals. Two intervals overlap if one starts before the other ends."
+      "explanation": "Three phases: (1) add all intervals that end before the new interval starts \u2014 no overlap possible; (2) merge all intervals that overlap with newInterval by expanding its boundaries; (3) append all remaining intervals. Two intervals overlap if one starts before the other ends."
     },
     {
-      "label": "Sort + Merge Intervals — O(n log n)",
+      "label": "Sort + Merge Intervals \u2014 O(n log n)",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List\n\ndef insert_interval(intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n    # Insert the new interval, sort, then merge\n    all_intervals = intervals + [newInterval]\n    all_intervals.sort(key=lambda x: x[0])\n\n    merged = [all_intervals[0]]\n    for start, end in all_intervals[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n\n    return merged",
       "timeComplexity": "O(n log n)",
       "spaceComplexity": "O(n)",
       "explanation": "Append the new interval to the list, sort by start time, then perform a standard merge-intervals pass. Two intervals [a,b] and [c,d] overlap if c <= b; merge them to [min(a,c), max(b,d)]. Sorting adds O(n log n) overhead compared to the O(n) linear scan approach which exploits the already-sorted input."
+    },
+    {
+      "label": "Linear Scan \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function insertInterval(intervals, newInterval) {\n    const result = [];\n    let i = 0, n = intervals.length;\n    while (i < n && intervals[i][1] < newInterval[0]) { result.push(intervals[i++]); }\n    while (i < n && intervals[i][0] <= newInterval[1]) {\n        newInterval[0] = Math.min(newInterval[0], intervals[i][0]);\n        newInterval[1] = Math.max(newInterval[1], intervals[i][1]);\n        i++;\n    }\n    result.push(newInterval);\n    while (i < n) result.push(intervals[i++]);\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Three phases: add all intervals before the new one, merge all overlapping intervals with it, then add the rest."
     }
   ],
   "hints": [

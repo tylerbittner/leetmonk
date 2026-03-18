@@ -293,12 +293,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[][]} lists\n * @return {number[]}\n */\nfunction mergeKSorted(lists) {\n    \n}"
   },
   "functionName": "merge_k_sorted",
   "solutions": [
     {
-      "label": "Min-Heap — O(N log k)",
+      "label": "Min-Heap \u2014 O(N log k)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\nimport heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    # Convert all lists to linked lists and initialize heap\n    heap = []  # (val, counter, node)\n    counter = 0\n    for lst in lists:\n        node = build_list(lst)\n        if node:\n            heapq.heappush(heap, (node.val, counter, node))\n            counter += 1\n\n    dummy = ListNode(0)\n    curr = dummy\n\n    while heap:\n        val, _, node = heapq.heappop(heap)\n        curr.next = node\n        curr = curr.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, counter, node.next))\n            counter += 1\n\n    return list_to_arr(dummy.next)",
@@ -307,13 +308,22 @@
       "explanation": "Use a min-heap of size k to always extract the globally smallest remaining node. Initialize the heap with the head of each non-empty list. After extracting a node, push its successor (if any) into the heap. The counter breaks ties in the heap since ListNode objects aren't comparable. N is the total number of nodes, k is the number of lists."
     },
     {
-      "label": "Divide and Conquer — O(N log k)",
+      "label": "Divide and Conquer \u2014 O(N log k)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\nimport heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    nodes = [build_list(lst) for lst in lists]\n\n    def merge_two(l1, l2):\n        dummy = ListNode(0)\n        curr = dummy\n        while l1 and l2:\n            if l1.val <= l2.val:\n                curr.next, l1 = l1, l1.next\n            else:\n                curr.next, l2 = l2, l2.next\n            curr = curr.next\n        curr.next = l1 or l2\n        return dummy.next\n\n    def divide_conquer(lists):\n        if not lists:\n            return None\n        if len(lists) == 1:\n            return lists[0]\n        mid = len(lists) // 2\n        left = divide_conquer(lists[:mid])\n        right = divide_conquer(lists[mid:])\n        return merge_two(left, right)\n\n    return list_to_arr(divide_conquer(nodes))",
       "timeComplexity": "O(N log k)",
       "spaceComplexity": "O(log k)",
-      "explanation": "Repeatedly merge pairs of lists in a tournament-style bracket. In each round, merge adjacent pairs — this halves the number of lists. After log(k) rounds, all lists are merged. Each merge pass touches O(N) nodes total, giving O(N log k) overall. The recursion depth is O(log k)."
+      "explanation": "Repeatedly merge pairs of lists in a tournament-style bracket. In each round, merge adjacent pairs \u2014 this halves the number of lists. After log(k) rounds, all lists are merged. Each merge pass touches O(N) nodes total, giving O(N log k) overall. The recursion depth is O(log k)."
+    },
+    {
+      "label": "Divide and Conquer \u2014 O(N log k)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction mergeKSorted(lists) {\n    const nodes = lists.map(lst => buildList(lst));\n    function mergeTwo(l1, l2) {\n        const dummy = new ListNode(0);\n        let curr = dummy;\n        while (l1 && l2) {\n            if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }\n            else { curr.next = l2; l2 = l2.next; }\n            curr = curr.next;\n        }\n        curr.next = l1 || l2;\n        return dummy.next;\n    }\n    function divideConquer(arr) {\n        if (arr.length === 0) return null;\n        if (arr.length === 1) return arr[0];\n        const mid = Math.floor(arr.length / 2);\n        const left = divideConquer(arr.slice(0, mid));\n        const right = divideConquer(arr.slice(mid));\n        return mergeTwo(left, right);\n    }\n    return listToArr(divideConquer(nodes));\n}",
+      "timeComplexity": "O(N log k)",
+      "spaceComplexity": "O(log k)",
+      "explanation": "Merge pairs of lists in a tournament-style bracket using divide and conquer. Each pass halves the number of lists, giving O(log k) rounds. Each round touches O(N) nodes total, so overall O(N log k)."
     }
   ],
   "hints": [

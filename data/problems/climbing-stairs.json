@@ -132,12 +132,13 @@
     }
   ],
   "starterCode": {
-    "python": "def climb_stairs(n: int) -> int:\n    pass"
+    "python": "def climb_stairs(n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @return {number}\n */\nfunction climbStairs(n) {\n    \n}"
   },
   "functionName": "climb_stairs",
   "solutions": [
     {
-      "label": "Memoization — O(n)",
+      "label": "Memoization \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "def climb_stairs(n: int) -> int:\n    memo = {}\n    def dp(i):\n        if i <= 1:\n            return 1\n        if i in memo:\n            return memo[i]\n        memo[i] = dp(i - 1) + dp(i - 2)\n        return memo[i]\n    return dp(n)",
@@ -146,13 +147,22 @@
       "explanation": "To reach step n, you either came from step n-1 (one step) or step n-2 (two steps). So ways(n) = ways(n-1) + ways(n-2). This recurrence is the Fibonacci sequence. Naive recursion would be exponential, but memoization ensures each subproblem is solved only once."
     },
     {
-      "label": "Iterative DP — O(n) space O(1)",
+      "label": "Iterative DP \u2014 O(n) space O(1)",
       "approach": "optimal",
       "language": "python",
       "code": "def climb_stairs(n: int) -> int:\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Since each step only depends on the previous two values, we can iterate forward with just two variables instead of a full array or recursion stack."
+    },
+    {
+      "label": "Iterative DP \u2014 O(n) space O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function climbStairs(n) {\n    if (n <= 2) return n;\n    let a = 1, b = 2;\n    for (let i = 3; i <= n; i++) {\n        [a, b] = [b, a + b];\n    }\n    return b;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Fibonacci iteration: each step only depends on the two previous values, so we only need two variables."
     }
   ],
   "hints": [

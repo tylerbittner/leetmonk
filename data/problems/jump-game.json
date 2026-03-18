@@ -262,27 +262,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {boolean}\n */\nfunction canJump(nums) {\n    \n}"
   },
   "functionName": "can_jump",
   "solutions": [
     {
-      "label": "Greedy — O(n)",
+      "label": "Greedy \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    max_reach = 0\n\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n\n    return True",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Track `max_reach` — the farthest index reachable so far. At each position `i`, if `i > max_reach` we're stuck and return False. Otherwise, update `max_reach` with `i + nums[i]`. If we finish the loop, we can reach the end. The key insight: if we can reach index `i`, we can reach any index up to `i + nums[i]`."
+      "explanation": "Track `max_reach` \u2014 the farthest index reachable so far. At each position `i`, if `i > max_reach` we're stuck and return False. Otherwise, update `max_reach` with `i + nums[i]`. If we finish the loop, we can reach the end. The key insight: if we can reach index `i`, we can reach any index up to `i + nums[i]`."
     },
     {
-      "label": "DP — O(n²)",
+      "label": "DP \u2014 O(n\u00b2)",
       "approach": "brute-force",
       "language": "python",
       "code": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    n = len(nums)\n    reachable = [False] * n\n    reachable[0] = True\n\n    for i in range(1, n):\n        for j in range(i):\n            if reachable[j] and j + nums[j] >= i:\n                reachable[i] = True\n                break\n\n    return reachable[n - 1]",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(n)",
-      "explanation": "Mark each index as reachable or not. Index 0 is always reachable. For each index i, check all previous indices j: if j is reachable AND j + nums[j] >= i, then i is reachable. O(n²) because we check all previous indices for each position. The greedy approach reduces this to O(n) by tracking only the maximum reach."
+      "explanation": "Mark each index as reachable or not. Index 0 is always reachable. For each index i, check all previous indices j: if j is reachable AND j + nums[j] >= i, then i is reachable. O(n\u00b2) because we check all previous indices for each position. The greedy approach reduces this to O(n) by tracking only the maximum reach."
+    },
+    {
+      "label": "Greedy \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function canJump(nums) {\n    let maxReach = 0;\n    for (let i = 0; i < nums.length; i++) {\n        if (i > maxReach) return false;\n        maxReach = Math.max(maxReach, i + nums[i]);\n    }\n    return true;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track the maximum index reachable. If current index exceeds maxReach, we can't proceed."
     }
   ],
   "hints": [

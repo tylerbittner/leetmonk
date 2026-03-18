@@ -119,27 +119,37 @@
     }
   ],
   "starterCode": {
-    "python": "def longest_palindrome(s: str) -> str:\n    pass"
+    "python": "def longest_palindrome(s: str) -> str:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {string}\n */\nfunction longestPalindrome(s) {\n    \n}"
   },
   "functionName": "longest_palindrome",
   "solutions": [
     {
-      "label": "Expand Around Center — O(n²)",
+      "label": "Expand Around Center \u2014 O(n\u00b2)",
       "approach": "optimal",
       "language": "python",
       "code": "def longest_palindrome(s: str) -> str:\n    def expand(left: int, right: int) -> str:\n        while left >= 0 and right < len(s) and s[left] == s[right]:\n            left -= 1\n            right += 1\n        return s[left + 1:right]\n\n    result = \"\"\n    for i in range(len(s)):\n        # Odd-length palindromes\n        odd = expand(i, i)\n        if len(odd) > len(result):\n            result = odd\n        # Even-length palindromes\n        even = expand(i, i + 1)\n        if len(even) > len(result):\n            result = even\n\n    return result",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
-      "explanation": "Every palindrome has a center — either a single character (odd length) or a pair of matching characters (even length). Expand outward from each possible center while characters match. Track the longest palindrome found. Since we scan left to right and only update when strictly longer, we naturally return the leftmost one."
+      "explanation": "Every palindrome has a center \u2014 either a single character (odd length) or a pair of matching characters (even length). Expand outward from each possible center while characters match. Track the longest palindrome found. Since we scan left to right and only update when strictly longer, we naturally return the leftmost one."
     },
     {
-      "label": "DP — O(n²)",
+      "label": "DP \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "def longest_palindrome(s: str) -> str:\n    n = len(s)\n    dp = [[False] * n for _ in range(n)]\n    start, max_len = 0, 1\n\n    # All single characters are palindromes\n    for i in range(n):\n        dp[i][i] = True\n\n    # Two-character palindromes\n    for i in range(n - 1):\n        if s[i] == s[i + 1]:\n            dp[i][i + 1] = True\n            start, max_len = i, 2\n\n    # Longer substrings\n    for length in range(3, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            if s[i] == s[j] and dp[i + 1][j - 1]:\n                dp[i][j] = True\n                if length > max_len:\n                    start, max_len = i, length\n\n    return s[start:start + max_len]",
-      "timeComplexity": "O(n²)",
-      "spaceComplexity": "O(n²)",
-      "explanation": "Build a 2D DP table where `dp[i][j]` is True if `s[i..j]` is a palindrome. Base cases: every single character, every matching pair. For longer substrings: `s[i..j]` is a palindrome if `s[i] == s[j]` and `s[i+1..j-1]` is also a palindrome. Track the start and length of the longest palindromic substring found. Uses O(n²) space vs O(1) for the expand-around-center approach."
+      "timeComplexity": "O(n\u00b2)",
+      "spaceComplexity": "O(n\u00b2)",
+      "explanation": "Build a 2D DP table where `dp[i][j]` is True if `s[i..j]` is a palindrome. Base cases: every single character, every matching pair. For longer substrings: `s[i..j]` is a palindrome if `s[i] == s[j]` and `s[i+1..j-1]` is also a palindrome. Track the start and length of the longest palindromic substring found. Uses O(n\u00b2) space vs O(1) for the expand-around-center approach."
+    },
+    {
+      "label": "Expand Around Center \u2014 O(n\u00b2)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function longestPalindrome(s) {\n    let start = 0, maxLen = 1;\n    function expand(l, r) {\n        while (l >= 0 && r < s.length && s[l] === s[r]) { l--; r++; }\n        if (r - l - 1 > maxLen) { maxLen = r - l - 1; start = l + 1; }\n    }\n    for (let i = 0; i < s.length; i++) {\n        expand(i, i);     // odd length\n        expand(i, i + 1); // even length\n    }\n    return s.slice(start, start + maxLen);\n}",
+      "timeComplexity": "O(n\u00b2)",
+      "spaceComplexity": "O(1)",
+      "explanation": "For each center (single char or between two chars), expand outward while characters match. Track the longest found."
     }
   ],
   "hints": [

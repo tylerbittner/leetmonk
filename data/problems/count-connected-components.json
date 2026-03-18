@@ -78,7 +78,7 @@
         "edges": []
       },
       "expected": 3,
-      "explanation": "No edges — each node is its own component"
+      "explanation": "No edges \u2014 each node is its own component"
     },
     {
       "input": {
@@ -226,7 +226,7 @@
         ]
       },
       "expected": 1,
-      "explanation": "Cycle — all connected"
+      "explanation": "Cycle \u2014 all connected"
     },
     {
       "input": {
@@ -255,12 +255,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @param {number[][]} edges\n * @return {number}\n */\nfunction countComponents(n, edges) {\n    \n}"
   },
   "functionName": "count_components",
   "solutions": [
     {
-      "label": "DFS — O(V+E)",
+      "label": "DFS \u2014 O(V+E)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    graph = [[] for _ in range(n)]\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n\n    visited = set()\n    count = 0\n\n    def dfs(node):\n        visited.add(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                dfs(neighbor)\n\n    for node in range(n):\n        if node not in visited:\n            count += 1\n            dfs(node)\n\n    return count",
@@ -269,13 +270,22 @@
       "explanation": "Build an adjacency list for the undirected graph. For each unvisited node, start a DFS that marks all reachable nodes as visited, and increment the component count. The number of DFS invocations from the outer loop equals the number of connected components."
     },
     {
-      "label": "Union-Find — O(V+E·α(V))",
+      "label": "Union-Find \u2014 O(V+E\u00b7\u03b1(V))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef count_components(n: int, edges: List[List[int]]) -> int:\n    parent = list(range(n))\n    rank = [0] * n\n\n    def find(x):\n        if parent[x] != x:\n            parent[x] = find(parent[x])  # path compression\n        return parent[x]\n\n    def union(x, y):\n        px, py = find(x), find(y)\n        if px == py:\n            return 0  # already same component\n        if rank[px] < rank[py]:\n            px, py = py, px\n        parent[py] = px\n        if rank[px] == rank[py]:\n            rank[px] += 1\n        return 1  # merged two components\n\n    components = n\n    for u, v in edges:\n        components -= union(u, v)\n\n    return components",
-      "timeComplexity": "O(V + E·α(V))",
+      "timeComplexity": "O(V + E\u00b7\u03b1(V))",
       "spaceComplexity": "O(V)",
-      "explanation": "Union-Find (Disjoint Set Union) efficiently tracks components. Start with n components (each node its own). For each edge, union the two nodes — if they were in different components, decrement the count. With path compression and union by rank, each operation is nearly O(1) (amortized O(α(V)), where α is the inverse Ackermann function)."
+      "explanation": "Union-Find (Disjoint Set Union) efficiently tracks components. Start with n components (each node its own). For each edge, union the two nodes \u2014 if they were in different components, decrement the count. With path compression and union by rank, each operation is nearly O(1) (amortized O(\u03b1(V)), where \u03b1 is the inverse Ackermann function)."
+    },
+    {
+      "label": "Union-Find \u2014 O(V + E\u00b7\u03b1(V))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function countComponents(n, edges) {\n    const parent = Array.from({length: n}, (_, i) => i);\n    const rank = new Array(n).fill(0);\n    function find(x) {\n        if (parent[x] !== x) parent[x] = find(parent[x]);\n        return parent[x];\n    }\n    function union(x, y) {\n        const px = find(x), py = find(y);\n        if (px === py) return 0;\n        if (rank[px] < rank[py]) { parent[px] = py; }\n        else if (rank[px] > rank[py]) { parent[py] = px; }\n        else { parent[py] = px; rank[px]++; }\n        return 1;\n    }\n    let components = n;\n    for (const [u, v] of edges) components -= union(u, v);\n    return components;\n}",
+      "timeComplexity": "O(V + E\u00b7\u03b1(V))",
+      "spaceComplexity": "O(V)",
+      "explanation": "Union-Find with path compression and union by rank. Start with n components, decrement by 1 each time two separate components are merged."
     }
   ],
   "hints": [

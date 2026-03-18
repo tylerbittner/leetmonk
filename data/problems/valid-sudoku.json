@@ -15,7 +15,7 @@
     {
       "input": "board = [[\"5\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"],[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"],[\"8\",\".\",\".\",\".\",\"6\",\".\",\".\",\".\",\"3\"],[\"4\",\".\",\".\",\"8\",\".\",\"3\",\".\",\".\",\"1\"],[\"7\",\".\",\".\",\".\",\"2\",\".\",\".\",\".\",\"6\"],[\".\",\"6\",\".\",\".\",\".\",\".\",\"2\",\"8\",\".\"],[\".\",\".\",\".\",\"4\",\"1\",\"9\",\".\",\".\",\"5\"],[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]",
       "output": "true",
-      "explanation": "The board is valid — no row, column, or box has a repeated digit."
+      "explanation": "The board is valid \u2014 no row, column, or box has a repeated digit."
     }
   ],
   "exampleCases": [
@@ -1524,12 +1524,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string[][]} board\n * @return {boolean}\n */\nfunction isValidSudoku(board) {\n    \n}"
   },
   "functionName": "is_valid_sudoku",
   "solutions": [
     {
-      "label": "Hash Sets for Rows, Cols, Boxes — O(1)",
+      "label": "Hash Sets for Rows, Cols, Boxes \u2014 O(1)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    rows = defaultdict(set)\n    cols = defaultdict(set)\n    boxes = defaultdict(set)\n    for r in range(9):\n        for c in range(9):\n            val = board[r][c]\n            if val == '.':\n                continue\n            box_id = (r // 3, c // 3)\n            if val in rows[r] or val in cols[c] or val in boxes[box_id]:\n                return False\n            rows[r].add(val)\n            cols[c].add(val)\n            boxes[box_id].add(val)\n    return True",
@@ -1538,13 +1539,22 @@
       "explanation": "Use three dictionaries of sets: one for rows, one for columns, one for 3x3 boxes (keyed by (row//3, col//3)). For each non-empty cell, check if the digit already exists in its row, column, or box set. If so, the board is invalid. Since the board is always 9x9, time and space are constant."
     },
     {
-      "label": "Bitmask Approach — O(1)",
+      "label": "Bitmask Approach \u2014 O(1)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    rows = [0] * 9\n    cols = [0] * 9\n    boxes = [0] * 9\n    for r in range(9):\n        for c in range(9):\n            val = board[r][c]\n            if val == '.':\n                continue\n            bit = 1 << (int(val) - 1)\n            box_id = (r // 3) * 3 + (c // 3)\n            if rows[r] & bit or cols[c] & bit or boxes[box_id] & bit:\n                return False\n            rows[r] |= bit\n            cols[c] |= bit\n            boxes[box_id] |= bit\n    return True",
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
       "explanation": "Use integer bitmasks instead of sets for a more efficient representation. Each row, column, and box is a 9-bit integer where bit i represents digit (i+1). Check membership with bitwise AND, update with bitwise OR. Faster in practice due to better cache efficiency and no hash overhead."
+    },
+    {
+      "label": "Hash Sets for Rows, Cols, Boxes \u2014 O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function isValidSudoku(board) {\n    const rows = Array.from({length: 9}, () => new Set());\n    const cols = Array.from({length: 9}, () => new Set());\n    const boxes = Array.from({length: 9}, () => new Set());\n    for (let r = 0; r < 9; r++) {\n        for (let c = 0; c < 9; c++) {\n            const val = board[r][c];\n            if (val === '.') continue;\n            const boxId = Math.floor(r / 3) * 3 + Math.floor(c / 3);\n            if (rows[r].has(val) || cols[c].has(val) || boxes[boxId].has(val)) return false;\n            rows[r].add(val);\n            cols[c].add(val);\n            boxes[boxId].add(val);\n        }\n    }\n    return true;\n}",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Three arrays of Sets (rows, cols, boxes). For each non-empty cell, check if its value already exists in its row, column, or 3x3 box. The box index is `Math.floor(r/3)*3 + Math.floor(c/3)`. Since the board is always 9x9, time and space are constant."
     }
   ],
   "hints": [

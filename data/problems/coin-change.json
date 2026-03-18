@@ -204,12 +204,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} coins\n * @param {number} amount\n * @return {number}\n */\nfunction coinChange(coins, amount) {\n    \n}"
   },
   "functionName": "coin_change",
   "solutions": [
     {
-      "label": "BFS — O(amount * len(coins))",
+      "label": "BFS \u2014 O(amount * len(coins))",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    if amount == 0:\n        return 0\n    visited = {0}\n    queue = deque([0])\n    steps = 0\n    while queue:\n        steps += 1\n        for _ in range(len(queue)):\n            curr = queue.popleft()\n            for coin in coins:\n                nxt = curr + coin\n                if nxt == amount:\n                    return steps\n                if nxt < amount and nxt not in visited:\n                    visited.add(nxt)\n                    queue.append(nxt)\n    return -1",
@@ -218,13 +219,22 @@
       "explanation": "Model as a shortest-path problem: BFS from 0 to the target amount, where each edge represents adding one coin. Each BFS level corresponds to using one more coin. The first time we reach the target amount, we have found the minimum number of coins."
     },
     {
-      "label": "Bottom-Up DP — O(amount * len(coins))",
+      "label": "Bottom-Up DP \u2014 O(amount * len(coins))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for coin in coins:\n            if coin <= a:\n                dp[a] = min(dp[a], dp[a - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
       "timeComplexity": "O(amount * len(coins))",
       "spaceComplexity": "O(amount)",
       "explanation": "Build a DP table where dp[i] = minimum coins needed to make amount i. Initialize dp[0] = 0 (zero coins for zero amount) and everything else as infinity. For each amount from 1 to the target, try subtracting each coin denomination: dp[i] = min(dp[i], dp[i - coin] + 1). If dp[amount] is still infinity, return -1."
+    },
+    {
+      "label": "Bottom-Up DP \u2014 O(amount * len(coins))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function coinChange(coins, amount) {\n    const dp = new Array(amount + 1).fill(Infinity);\n    dp[0] = 0;\n    for (let a = 1; a <= amount; a++) {\n        for (const coin of coins) {\n            if (coin <= a) {\n                dp[a] = Math.min(dp[a], dp[a - coin] + 1);\n            }\n        }\n    }\n    return dp[amount] === Infinity ? -1 : dp[amount];\n}",
+      "timeComplexity": "O(amount * len(coins))",
+      "spaceComplexity": "O(amount)",
+      "explanation": "Bottom-up DP: dp[i] = minimum coins to make amount i. For each amount, try each coin denomination and take the minimum."
     }
   ],
   "hints": [

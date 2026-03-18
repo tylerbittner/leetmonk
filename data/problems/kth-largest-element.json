@@ -12,7 +12,7 @@
     "heap",
     "array"
   ],
-  "description": "## Kth Largest Element in an Array\n\nYou are ranking players in an online competition by their scores. Rather than sorting the entire leaderboard, you only need to find the player in a specific rank position — for example, who scored the 3rd highest overall.\n\nGiven an integer array `nums` and an integer `k`, return the **kth largest** element in the array.\n\nNote: it is the kth largest in sorted order, **not** the kth distinct element.\n\n**Constraints:**\n- `1 <= k <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
+  "description": "## Kth Largest Element in an Array\n\nYou are ranking players in an online competition by their scores. Rather than sorting the entire leaderboard, you only need to find the player in a specific rank position \u2014 for example, who scored the 3rd highest overall.\n\nGiven an integer array `nums` and an integer `k`, return the **kth largest** element in the array.\n\nNote: it is the kth largest in sorted order, **not** the kth distinct element.\n\n**Constraints:**\n- `1 <= k <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
   "examples": [
     {
       "input": "nums = [3, 2, 1, 5, 6, 4], k = 2",
@@ -235,12 +235,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} k\n * @return {number}\n */\nfunction findKthLargest(nums, k) {\n    \n}"
   },
   "functionName": "find_kth_largest",
   "solutions": [
     {
-      "label": "Sort — O(n log n)",
+      "label": "Sort \u2014 O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    nums.sort(reverse=True)\n    return nums[k - 1]",
@@ -249,17 +250,26 @@
       "explanation": "Sort the array in descending order and return the element at index k-1. Simple and correct but sorts the entire array even though we only need one element."
     },
     {
-      "label": "Min-Heap — O(n log k)",
+      "label": "Min-Heap \u2014 O(n log k)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nimport heapq\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    heap = []\n    for num in nums:\n        heapq.heappush(heap, num)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return heap[0]",
       "timeComplexity": "O(n log k)",
       "spaceComplexity": "O(k)",
       "explanation": "Maintain a min-heap of size k. For each element, push it onto the heap. If the heap exceeds size k, pop the smallest element. This ensures only the k largest values remain. After processing all elements, the heap's root (minimum of the k largest) is the kth largest overall."
+    },
+    {
+      "label": "Sort \u2014 O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function findKthLargest(nums, k) {\n    nums.sort((a, b) => b - a);\n    return nums[k - 1];\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sort descending and return the k-th element. Simple and practical for interview use."
     }
   ],
   "hints": [
-    "You don't need to fully sort the array — only the top k elements matter.",
+    "You don't need to fully sort the array \u2014 only the top k elements matter.",
     "A min-heap of size k lets you efficiently track the k largest elements seen so far."
   ],
   "lcEquivalent": "215. Kth Largest Element in an Array"

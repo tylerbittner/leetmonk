@@ -11,17 +11,17 @@
     "two-pointers",
     "linked-list"
   ],
-  "description": "## Reorder List\n\nGiven a linked list as a plain integer list `head` with nodes `L0 → L1 → … → Ln-1 → Ln`, reorder it to: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → …`\n\nReturn the reordered list as a plain integer list.\n\n**Constraints:**\n- The number of nodes is in the range `[1, 5 * 10^4]`.\n- `1 <= Node.val <= 1000`",
+  "description": "## Reorder List\n\nGiven a linked list as a plain integer list `head` with nodes `L0 \u2192 L1 \u2192 \u2026 \u2192 Ln-1 \u2192 Ln`, reorder it to: `L0 \u2192 Ln \u2192 L1 \u2192 Ln-1 \u2192 L2 \u2192 Ln-2 \u2192 \u2026`\n\nReturn the reordered list as a plain integer list.\n\n**Constraints:**\n- The number of nodes is in the range `[1, 5 * 10^4]`.\n- `1 <= Node.val <= 1000`",
   "examples": [
     {
       "input": "head = [1,2,3,4]",
       "output": "[1,4,2,3]",
-      "explanation": "1→4→2→3: first, last, second, second-to-last."
+      "explanation": "1\u21924\u21922\u21923: first, last, second, second-to-last."
     },
     {
       "input": "head = [1,2,3,4,5]",
       "output": "[1,5,2,4,3]",
-      "explanation": "1→5→2→4→3."
+      "explanation": "1\u21925\u21922\u21924\u21923."
     }
   ],
   "exampleCases": [
@@ -239,32 +239,42 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    head = build_list(head)\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[]} head\n * @return {number[]}\n */\nfunction reorderList(head) {\n    head = buildList(head);\n    \n}"
   },
   "functionName": "reorder_list",
   "solutions": [
     {
-      "label": "Find Middle + Reverse + Merge — O(n)",
+      "label": "Find Middle + Reverse + Merge \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    node = build_list(head)\n    if not node or not node.next:\n        return list_to_arr(node)\n\n    # Step 1: Find middle using slow/fast pointers\n    slow, fast = node, node\n    while fast.next and fast.next.next:\n        slow = slow.next\n        fast = fast.next.next\n\n    # Step 2: Reverse the second half\n    second = slow.next\n    slow.next = None  # cut the list in half\n    prev = None\n    while second:\n        tmp = second.next\n        second.next = prev\n        prev = second\n        second = tmp\n    second = prev\n\n    # Step 3: Merge the two halves\n    first = node\n    while second:\n        tmp1 = first.next\n        tmp2 = second.next\n        first.next = second\n        second.next = tmp1\n        first = tmp1\n        second = tmp2\n\n    return list_to_arr(node)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
-      "explanation": "Three steps: (1) Find the middle using slow/fast pointers — slow lands on the midpoint. (2) Reverse the second half of the list in place. (3) Interleave the first half and the reversed second half by alternating nodes. Each step takes O(n) time and O(1) space."
+      "explanation": "Three steps: (1) Find the middle using slow/fast pointers \u2014 slow lands on the midpoint. (2) Reverse the second half of the list in place. (3) Interleave the first half and the reversed second half by alternating nodes. Each step takes O(n) time and O(1) space."
     },
     {
-      "label": "Array Approach — O(n)",
+      "label": "Array Approach \u2014 O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef reorder_list(head: List[int]) -> List[int]:\n    node = build_list(head)\n    if not node:\n        return []\n\n    # Collect all nodes into an array\n    nodes = []\n    curr = node\n    while curr:\n        nodes.append(curr)\n        curr = curr.next\n\n    # Use two pointers to reorder in-place\n    left, right = 0, len(nodes) - 1\n    while left < right:\n        nodes[left].next = nodes[right]\n        left += 1\n        if left == right:\n            break\n        nodes[right].next = nodes[left]\n        right -= 1\n    nodes[left].next = None\n\n    return list_to_arr(node)",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "Collect all nodes into an array (O(n) space), then use two pointers from both ends to rewire the links in the reordered pattern. Simpler to implement than the in-place approach but uses O(n) extra space for the array."
+    },
+    {
+      "label": "Find Middle + Reverse + Merge \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction reorderList(head) {\n    let node = buildList(head);\n    if (!node || !node.next) return listToArr(node);\n    // Find middle\n    let slow = node, fast = node;\n    while (fast.next && fast.next.next) { slow = slow.next; fast = fast.next.next; }\n    // Reverse second half\n    let second = slow.next;\n    slow.next = null;\n    let prev = null;\n    while (second) { const tmp = second.next; second.next = prev; prev = second; second = tmp; }\n    second = prev;\n    // Merge\n    let first = node;\n    while (second) {\n        const tmp1 = first.next, tmp2 = second.next;\n        first.next = second; second.next = tmp1;\n        first = tmp1; second = tmp2;\n    }\n    return listToArr(node);\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Three steps: find middle with slow/fast pointers, reverse second half in-place, then interleave the two halves."
     }
   ],
   "hints": [
     "Split the list at its midpoint. Reverse the second half. Then interleave the two halves.",
-    "Use slow/fast pointers to find the middle in O(n). Reversing and merging also take O(n) — no extra space needed."
+    "Use slow/fast pointers to find the middle in O(n). Reversing and merging also take O(n) \u2014 no extra space needed."
   ],
   "lcEquivalent": "143. Reorder List"
 }

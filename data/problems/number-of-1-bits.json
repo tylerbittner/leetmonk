@@ -18,7 +18,7 @@
     {
       "input": "n = 128",
       "output": "1",
-      "explanation": "128 = 10000000 in binary — one '1' bit."
+      "explanation": "128 = 10000000 in binary \u2014 one '1' bit."
     },
     {
       "input": "n = 2147483645",
@@ -115,12 +115,13 @@
     }
   ],
   "starterCode": {
-    "python": "def hamming_weight(n: int) -> int:\n    pass"
+    "python": "def hamming_weight(n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @return {number}\n */\nfunction hammingWeight(n) {\n    \n}"
   },
   "functionName": "hamming_weight",
   "solutions": [
     {
-      "label": "Bit Check Loop — O(32)",
+      "label": "Bit Check Loop \u2014 O(32)",
       "approach": "obvious",
       "language": "python",
       "code": "def hamming_weight(n: int) -> int:\n    count = 0\n    while n:\n        count += n & 1\n        n >>= 1\n    return count",
@@ -129,13 +130,22 @@
       "explanation": "Check the least significant bit with `n & 1`, then right-shift n to examine the next bit. Repeat until n is 0."
     },
     {
-      "label": "Brian Kernighan's Algorithm — O(k)",
+      "label": "Brian Kernighan's Algorithm \u2014 O(k)",
       "approach": "optimal",
       "language": "python",
       "code": "def hamming_weight(n: int) -> int:\n    count = 0\n    while n:\n        n &= n - 1  # clear the lowest set bit\n        count += 1\n    return count",
       "timeComplexity": "O(k)",
       "spaceComplexity": "O(1)",
       "explanation": "The trick `n &= n - 1` clears exactly the lowest set bit of n. Subtracting 1 from n flips the trailing 0s to 1s and the lowest 1 to 0, so ANDing with n clears that lowest 1 bit. Repeating this k times (where k is the number of set bits) is faster than checking all 32 bits when k is small."
+    },
+    {
+      "label": "Brian Kernighan's Algorithm \u2014 O(k)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function hammingWeight(n) {\n    let count = 0;\n    while (n !== 0) {\n        n &= n - 1;\n        count++;\n    }\n    return count;\n}",
+      "timeComplexity": "O(k)",
+      "spaceComplexity": "O(1)",
+      "explanation": "n & (n-1) clears the lowest set bit. Count how many times this can be done before n reaches 0 \u2014 that's the number of set bits."
     }
   ],
   "hints": [

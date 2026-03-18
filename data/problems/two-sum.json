@@ -278,27 +278,37 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nfunction twoSum(nums, target) {\n    \n}"
   },
   "functionName": "two_sum",
   "solutions": [
     {
-      "label": "Brute Force — O(n²)",
+      "label": "Brute Force \u2014 O(n\u00b2)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    n = len(nums)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []",
-      "timeComplexity": "O(n²)",
+      "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
       "explanation": "Check every pair of indices (i, j) where i < j. For each pair, test if their sum equals the target. Return the first matching pair found. Simple but slow for large inputs."
     },
     {
-      "label": "Hash Map — O(n)",
+      "label": "Hash Map \u2014 O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "The key insight is that for each number, there is exactly one other value that would complete the pair: target - num (the complement). As we iterate, we check if the complement is already in our hash map. If so, we found the answer. Otherwise, we store the current number and its index for future lookups. This single-pass approach trades space for time."
+    },
+    {
+      "label": "Hash Map \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function twoSum(nums, target) {\n    const seen = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (seen.has(complement)) return [seen.get(complement), i];\n        seen.set(nums[i], i);\n    }\n    return [];\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "For each element, compute its complement (target - nums[i]) and check the Map. If found, return the stored index and the current index. Otherwise record the current element and its index. Single pass with O(1) lookups."
     }
   ],
   "hints": [
