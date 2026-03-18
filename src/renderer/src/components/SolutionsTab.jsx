@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-export default function SolutionsTab({ solutions = [] }) {
+export default function SolutionsTab({ solutions = [], userCode, onOpenDiff }) {
   const [expanded, setExpanded] = useState({ 0: true })
 
   if (solutions.length === 0) {
@@ -50,6 +50,19 @@ export default function SolutionsTab({ solutions = [] }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <ComplexityBadge label="Time" value={sol.timeComplexity} />
               <ComplexityBadge label="Space" value={sol.spaceComplexity} />
+              {onOpenDiff && userCode && userCode.trim() && (
+                <button
+                  onClick={e => { e.stopPropagation(); onOpenDiff(i) }}
+                  style={{
+                    padding: '3px 8px', borderRadius: 4, border: '1px solid var(--border)',
+                    background: 'var(--bg-primary)', color: 'var(--text-muted)',
+                    cursor: 'pointer', fontSize: 11, lineHeight: 1
+                  }}
+                  title="Compare with my code"
+                >
+                  ⟺ Compare
+                </button>
+              )}
               <span style={{ color: 'var(--text-muted)', fontSize: 16 }}>
                 {expanded[i] ? '▲' : '▼'}
               </span>

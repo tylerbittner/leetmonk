@@ -39,7 +39,7 @@ function MarkdownContent({ children }) {
   )
 }
 
-export default function ProblemDescription({ problem, submissions = [] }) {
+export default function ProblemDescription({ problem, submissions = [], onSolutionsViewed, userCode, onOpenDiff }) {
   const [activeTab, setActiveTab] = useState('description')
 
   return (
@@ -83,7 +83,10 @@ export default function ProblemDescription({ problem, submissions = [] }) {
           <div
             key={id}
             className={`tab ${activeTab === id ? 'active' : ''}`}
-            onClick={() => setActiveTab(id)}
+            onClick={() => {
+              setActiveTab(id)
+              if (id === 'solutions' && onSolutionsViewed) onSolutionsViewed()
+            }}
           >
             {label}
             {count > 0 && (
@@ -140,7 +143,7 @@ export default function ProblemDescription({ problem, submissions = [] }) {
         )}
 
         {activeTab === 'solutions' && (
-          <SolutionsTab solutions={problem.solutions} />
+          <SolutionsTab solutions={problem.solutions} userCode={userCode} onOpenDiff={onOpenDiff} />
         )}
 
         {activeTab === 'submissions' && (

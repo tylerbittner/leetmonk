@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import Editor from '@monaco-editor/react'
 
-export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running }) {
+export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running, canDiff, onOpenDiff }) {
   const editorRef = useRef(null)
 
   function handleEditorDidMount(editor, monaco) {
@@ -27,6 +27,17 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
 
         <div style={{ flex: 1 }} />
 
+        {canDiff && (
+          <button
+            className="btn btn-ghost"
+            onClick={() => onOpenDiff(0)}
+            disabled={running}
+            title="Compare your code with reference solution"
+            style={{ fontSize: 12, padding: '5px 10px' }}
+          >
+            ⟺ Compare
+          </button>
+        )}
         <button
           className="btn btn-ghost"
           onClick={onReset}

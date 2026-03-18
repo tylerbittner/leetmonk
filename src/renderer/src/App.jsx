@@ -12,6 +12,7 @@ import PostSessionReview from './components/PostSessionReview.jsx'
 import ReviewFlag from './components/ReviewFlag.jsx'
 import ReviewQueue from './components/ReviewQueue.jsx'
 import AboutModal from './components/AboutModal.jsx'
+import DiffView from './components/DiffView.jsx'
 
 export default function App() {
   const [problems, setProblems] = useState([])
@@ -31,6 +32,9 @@ export default function App() {
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [solutionsViewed, setSolutionsViewed] = useState({})
+  const [diffViewOpen, setDiffViewOpen] = useState(false)
+  const [diffSolutionIndex, setDiffSolutionIndex] = useState(0)
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
 
@@ -100,6 +104,7 @@ export default function App() {
     setActiveProblemId(id)
     setResults(null)
     setShowConfetti(false)
+    setDiffViewOpen(false)
   }, [])
 
   const getCode = (problemId) => {
@@ -411,6 +416,9 @@ export default function App() {
                   <ProblemDescription
                     problem={activeProblem}
                     submissions={progress[activeProblem.id]?.submissions || []}
+                    onSolutionsViewed={() => setSolutionsViewed(prev => ({ ...prev, [activeProblem.id]: true }))}
+                    userCode={getCode(activeProblem.id)}
+                    onOpenDiff={(idx) => { setDiffSolutionIndex(idx ?? 0); setDiffViewOpen(true) }}
                   />
                 </div>
               </div>
@@ -424,16 +432,27 @@ export default function App() {
             <Panel defaultSize={55} minSize={30}>
               <PanelGroup direction="vertical">
                 <Panel defaultSize={60} minSize={30}>
-                  <CodeEditor
-                    key={activeProblem.id}
-                    problem={activeProblem}
-                    code={getCode(activeProblem.id)}
-                    onChange={(code) => handleCodeChange(activeProblem.id, code)}
-                    onRun={() => handleRun('run')}
-                    onSubmit={() => handleRun('submit')}
-                    onReset={handleReset}
-                    running={running}
-                  />
+                  {diffViewOpen ? (
+                    <DiffView
+                      problem={activeProblem}
+                      userCode={getCode(activeProblem.id)}
+                      initialSolutionIndex={diffSolutionIndex}
+                      onClose={() => setDiffViewOpen(false)}
+                    />
+                  ) : (
+                    <CodeEditor
+                      key={activeProblem.id}
+                      problem={activeProblem}
+                      code={getCode(activeProblem.id)}
+                      onChange={(code) => handleCodeChange(activeProblem.id, code)}
+                      onRun={() => handleRun('run')}
+                      onSubmit={() => handleRun('submit')}
+                      onReset={handleReset}
+                      running={running}
+                      canDiff={!!solutionsViewed[activeProblem.id] && (activeProblem.solutions?.length > 0)}
+                      onOpenDiff={(idx) => { setDiffSolutionIndex(idx ?? 0); setDiffViewOpen(true) }}
+                    />
+                  )}
                 </Panel>
 
                 <PanelResizeHandle style={{
