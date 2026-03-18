@@ -10,7 +10,7 @@ const {
   processReview,
   DEFAULT_W,
   newCardState,
-} = require('../src/renderer/src/fsrs.js')
+} = require('../src/renderer/src/fsrs-cjs.js')
 
 describe('FSRS constants', () => {
   test('DEFAULT_W has 21 elements', () => {

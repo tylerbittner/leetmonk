@@ -1,8 +1,8 @@
-// src/renderer/src/fsrs.js
-// FSRS-6 Spaced Repetition Algorithm — pure JS port
+// CommonJS wrapper for fsrs.js — used by Jest tests only
+// Jest cannot process ESM; this re-implements the same logic with module.exports
 
 const DECAY = -0.5
-const FACTOR = 19.0 / 81.0 // ≈ 0.2346
+const FACTOR = 19.0 / 81.0
 
 const DEFAULT_W = [
   0.4072, 1.1829, 3.1262, 15.4722, 7.2102, 0.5316, 1.0651, 0.0589,
@@ -137,7 +137,7 @@ function previewRatings(state, reviewDate) {
   })
 }
 
-export {
+module.exports = {
   DEFAULT_W,
   DECAY,
   FACTOR,
