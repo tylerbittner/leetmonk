@@ -54,6 +54,8 @@ function playBellSound() {
     osc2.stop(ctx.currentTime + 1.8)
   } catch (_) {}
 }
+import RatingModal from './components/RatingModal.jsx'
+import { processReview, newCardState } from './fsrs.js'
 
 export default function App() {
   const [problems, setProblems] = useState([])
@@ -79,6 +81,8 @@ export default function App() {
   const [diffSolutionIndex, setDiffSolutionIndex] = useState(0)
   const [showPatterns, setShowPatterns] = useState(false)
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+  const [srData, setSrData] = useState({})
+  const [pendingRating, setPendingRating] = useState(null)
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
 
@@ -93,16 +97,18 @@ export default function App() {
       setLoadErrors(errors)
       if (loaded.length > 0) setActiveProblemId(loaded[0].id)
 
-      const [prog, edState, revData, savedSettings] = await Promise.all([
+      const [prog, edState, revData, savedSettings, srStateAll] = await Promise.all([
         window.api.getProgress(),
         window.api.getEditorState(),
         window.api.getReviewData(),
+        window.api.getAllSrState(),
         window.api.getSettings(),
       ])
       setProgress(prog)
       setEditorStateMap(edState)
       setReviewData(revData || {})
       setSettings({ ...DEFAULT_SETTINGS, ...savedSettings })
+      setSrData(srStateAll || {})
     }
     init()
   }, [])
@@ -238,6 +244,7 @@ export default function App() {
           })
           markSessionProblemSolved(activeProblem.id)
           triggerCelebration()
+          setPendingRating({ problemId: activeProblem.id, srState: null })
         } else {
           setProgress(prev => {
             const cur = prev[activeProblem.id] || {}
@@ -338,6 +345,38 @@ export default function App() {
     })
     window.api.removeReviewItem({ problemId })
   }, [])
+
+  const handleResetSr = useCallback((problemId) => {
+    setSrData(prev => {
+      const next = { ...prev }
+      delete next[problemId]
+      return next
+    })
+    window.api.setSrState({ problemId, data: null })
+  }, [])
+
+  const handleRate = useCallback((problemId, rating) => {
+    const currentState = srData[problemId] || newCardState()
+    const newState = processReview(currentState, rating, new Date())
+    setSrData(prev => ({ ...prev, [problemId]: newState }))
+    window.api.setSrState({ problemId, data: newState })
+    // Also flag for review if not already flagged
+    if (!reviewData[problemId]) {
+      const item = {
+        flaggedAt: new Date().toISOString(),
+        interval: Math.max(1, Math.round(newState.stability)),
+        nextReview: newState.nextReview,
+        reviewCount: newState.reps
+      }
+      setReviewData(prev => ({ ...prev, [problemId]: item }))
+      window.api.setReviewItem({ problemId, data: item })
+    } else {
+      // Update existing review item's nextReview to match FSRS
+      const updated = { ...reviewData[problemId], nextReview: newState.nextReview }
+      setReviewData(prev => ({ ...prev, [problemId]: updated }))
+      window.api.setReviewItem({ problemId, data: updated })
+    }
+  }, [srData, reviewData])
 
   const allTags = [...new Set(problems.flatMap(p => p.tags))].sort()
   const solvedCount = Object.values(progress).filter(p => p.status === 'solved').length
@@ -512,8 +551,10 @@ export default function App() {
                   <ReviewFlag
                     problemId={activeProblem.id}
                     reviewData={reviewData[activeProblem.id] || null}
+                    srState={srData[activeProblem.id]}
                     onFlag={handleReviewFlag}
                     onDismiss={handleReviewDismiss}
+                    onResetSr={handleResetSr}
                   />
                 </div>
                 <div style={{ flex: 1, overflow: 'hidden' }}>
@@ -618,6 +659,7 @@ export default function App() {
         <SessionPlanner
           problems={problems}
           progress={progress}
+          reviewData={reviewData}
           onStart={handleStartSession}
           onClose={() => setShowSessionPlanner(false)}
         />
@@ -628,6 +670,20 @@ export default function App() {
           settings={settings}
           onSettingsChange={handleSettingsChange}
           onClose={() => setShowSettings(false)}
+        />
+      )}
+      {pendingRating && (
+        <RatingModal
+          problemId={pendingRating.problemId}
+          srState={srData[pendingRating.problemId] || null}
+          onRate={(rating) => {
+            const cur = srData[pendingRating.problemId] || { difficulty: 5, stability: 1, reps: 0, lapses: 0, lastReview: null, nextReview: null }
+            const next = processReview(cur, rating)
+            setSrData(d => ({ ...d, [pendingRating.problemId]: next }))
+            window.api.setSrState({ problemId: pendingRating.problemId, data: next })
+            setPendingRating(null)
+          }}
+          onDismiss={() => setPendingRating(null)}
         />
       )}
 

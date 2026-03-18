@@ -17,29 +17,7 @@ const progressFile = join(dataDir, 'progress.json')
 const editorStateFile = join(dataDir, 'editor-state.json')
 const sessionsFile = join(dataDir, 'sessions.json')
 const reviewFile = join(dataDir, 'review-schedule.json')
-const settingsFile = join(dataDir, 'settings.json')
-
-const DEFAULT_SETTINGS = {
-  celebrationEffect: 'lotus',
-  soundOnSolve: true,
-  timerVisible: true,
-  editorFontSize: 14,
-  vimKeybindings: false,
-  focusMode: 'standard'
-}
-
-function loadSettings() {
-  try {
-    if (existsSync(settingsFile)) {
-      return { ...DEFAULT_SETTINGS, ...JSON.parse(readFileSync(settingsFile, 'utf8')) }
-    }
-  } catch {}
-  return { ...DEFAULT_SETTINGS }
-}
-
-function saveSettings(data) {
-  writeFileSync(settingsFile, JSON.stringify(data, null, 2))
-}
+const srStateFile = join(dataDir, 'sr-state.json')
 
 function loadReviewData() {
   try {
@@ -52,6 +30,19 @@ function loadReviewData() {
 
 function saveReviewData(data) {
   writeFileSync(reviewFile, JSON.stringify(data, null, 2))
+}
+
+function loadSrState() {
+  try {
+    if (existsSync(srStateFile)) {
+      return JSON.parse(readFileSync(srStateFile, 'utf8'))
+    }
+  } catch {}
+  return {}
+}
+
+function saveSrState(data) {
+  writeFileSync(srStateFile, JSON.stringify(data, null, 2))
 }
 
 function loadSessions() {
@@ -234,14 +225,6 @@ app.whenReady().then(() => {
     writeFileSync(timerFile, JSON.stringify(data, null, 2))
   })
 
-  // IPC: Settings
-  ipcMain.handle('get-settings', () => loadSettings())
-  ipcMain.handle('set-settings', (_, data) => {
-    const merged = { ...DEFAULT_SETTINGS, ...data }
-    saveSettings(merged)
-    return merged
-  })
-
   // IPC: Review schedule (spaced repetition)
   ipcMain.handle('get-review-data', () => loadReviewData())
   ipcMain.handle('set-review-item', (_, { problemId, data }) => {
@@ -256,6 +239,23 @@ app.whenReady().then(() => {
     saveReviewData(review)
     return review
   })
+
+  // IPC: FSRS SR state
+  ipcMain.handle('get-sr-state', (_, { problemId }) => {
+    const state = loadSrState()
+    return state[problemId] || null
+  })
+  ipcMain.handle('set-sr-state', (_, { problemId, data }) => {
+    const state = loadSrState()
+    if (data === null) {
+      delete state[problemId]
+    } else {
+      state[problemId] = data
+    }
+    saveSrState(state)
+    return state[problemId] || null
+  })
+  ipcMain.handle('get-all-sr-state', () => loadSrState())
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

@@ -1,3 +1,5 @@
+import { retrievability } from '../fsrs.js'
+
 const DIFFICULTY_COLORS = {
   Easy: 'var(--accent-green)',
   Medium: 'var(--accent-yellow)',
@@ -17,13 +19,34 @@ function formatOverdue(nextReview) {
   return `in ${days}d`
 }
 
-export default function ReviewQueue({ problems, reviewData, onSelect, activeProblemId }) {
+function getRetrievability(srState) {
+  if (!srState || !srState.lastReview) return null
+  const elapsed = (Date.now() - new Date(srState.lastReview)) / 86400000
+  const r = retrievability(srState.stability, elapsed)
+  return Math.round(r * 100)
+}
+
+function StatusDot({ nextReview }) {
+  const days = daysDiff(nextReview)
+  let color
+  if (days < 0) color = 'var(--accent-red, #e05c5c)'
+  else if (days === 0) color = 'var(--accent-yellow, #e0c050)'
+  else color = 'var(--accent-green)'
+  return (
+    <span style={{
+      display: 'inline-block', width: 6, height: 6,
+      borderRadius: '50%', background: color, flexShrink: 0
+    }} />
+  )
+}
+
+export default function ReviewQueue({ problems, reviewData, srData = {}, onSelect, activeProblemId }) {
   const now = new Date()
 
   const flagged = Object.entries(reviewData || {}).map(([id, data]) => {
     const problem = problems.find(p => p.id === id)
     if (!problem) return null
-    return { ...problem, review: data }
+    return { ...problem, review: data, sr: srData[id] || null }
   }).filter(Boolean)
 
   const due = flagged
@@ -44,29 +67,36 @@ export default function ReviewQueue({ problems, reviewData, onSelect, activeProb
     transition: 'background 0.15s'
   })
 
-  const renderItem = (p, showTiming) => (
-    <div
-      key={p.id}
-      onClick={() => onSelect(p.id)}
-      style={itemStyle(p.id === activeProblemId)}
-      onMouseEnter={e => { if (p.id !== activeProblemId) e.currentTarget.style.background = 'var(--bg-secondary)' }}
-      onMouseLeave={e => { if (p.id !== activeProblemId) e.currentTarget.style.background = 'transparent' }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ color: 'var(--text-primary)', fontSize: 13 }}>{p.title}</span>
-        <span style={{
-          fontSize: 11,
-          color: DIFFICULTY_COLORS[p.difficulty] || 'var(--text-muted)',
-          fontFamily: 'var(--font-mono)'
-        }}>
-          {p.difficulty}
-        </span>
+  const renderItem = (p, showTiming) => {
+    const retPct = getRetrievability(p.sr)
+    return (
+      <div
+        key={p.id}
+        onClick={() => onSelect(p.id)}
+        style={itemStyle(p.id === activeProblemId)}
+        onMouseEnter={e => { if (p.id !== activeProblemId) e.currentTarget.style.background = 'var(--bg-secondary)' }}
+        onMouseLeave={e => { if (p.id !== activeProblemId) e.currentTarget.style.background = 'transparent' }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+          <StatusDot nextReview={p.review.nextReview} />
+          <span style={{ color: 'var(--text-primary)', fontSize: 13, flex: 1 }}>{p.title}</span>
+          <span style={{
+            fontSize: 11,
+            color: DIFFICULTY_COLORS[p.difficulty] || 'var(--text-muted)',
+            fontFamily: 'var(--font-mono)'
+          }}>
+            {p.difficulty}
+          </span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-muted)', marginTop: 2, paddingLeft: 12 }}>
+          <span>{showTiming}</span>
+          {retPct !== null && (
+            <span style={{ fontFamily: 'var(--font-mono)' }}>{retPct}% recall</span>
+          )}
+        </div>
       </div>
-      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
-        {showTiming}
-      </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div style={{ padding: '12px 0' }}>
@@ -89,7 +119,7 @@ export default function ReviewQueue({ problems, reviewData, onSelect, activeProb
             borderRadius: 10,
             fontWeight: 600
           }}>
-            {due.length}
+            {due.length} due
           </span>
         )}
       </div>

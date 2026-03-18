@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 const PROBLEM_COUNTS = [3, 5, 8]
 const TIME_TARGETS = [30, 45, 60, 90]
 
-export default function SessionPlanner({ problems, progress, onStart, onClose }) {
+export default function SessionPlanner({ problems, progress, reviewData = {}, onStart, onClose }) {
   const [problemCount, setProblemCount] = useState(5)
   const [customCount, setCustomCount] = useState('')
   const [useCustomCount, setUseCustomCount] = useState(false)
@@ -12,10 +12,19 @@ export default function SessionPlanner({ problems, progress, onStart, onClose })
   const [selectedTopics, setSelectedTopics] = useState([])
   const [selectedDifficulties, setSelectedDifficulties] = useState(['easy', 'medium', 'hard'])
   const [selectedProblems, setSelectedProblems] = useState(null) // null = not yet generated
+  const [includeDueReviews, setIncludeDueReviews] = useState(false)
 
   const allTags = useMemo(() => [...new Set(problems.flatMap(p => p.tags))].sort(), [problems])
 
   const effectiveCount = useCustomCount ? (parseInt(customCount) || 1) : problemCount
+
+  const dueProblems = useMemo(() => {
+    const now = new Date()
+    return Object.entries(reviewData)
+      .filter(([, data]) => data.nextReview && new Date(data.nextReview) <= now)
+      .map(([id]) => id)
+      .filter(id => problems.find(p => p.id === id))
+  }, [reviewData, problems])
 
   function matchesFilters(p) {
     if (!selectedDifficulties.includes(p.difficulty)) return false
@@ -25,12 +34,9 @@ export default function SessionPlanner({ problems, progress, onStart, onClose })
 
   function generateProblems() {
     const matching = problems.filter(matchesFilters)
-
-    // Sort: unsolved/attempted first, then solved
     const unsolved = matching.filter(p => progress[p.id]?.status !== 'solved')
     const solved = matching.filter(p => progress[p.id]?.status === 'solved')
 
-    // Shuffle each group
     const shuffle = arr => {
       const a = [...arr]
       for (let i = a.length - 1; i > 0; i--) {
@@ -41,8 +47,17 @@ export default function SessionPlanner({ problems, progress, onStart, onClose })
     }
 
     const pool = [...shuffle(unsolved), ...shuffle(solved)]
-    const picked = pool.slice(0, effectiveCount).map(p => p.id)
-    setSelectedProblems(picked)
+
+    if (includeDueReviews && dueProblems.length > 0) {
+      const dueObjects = dueProblems
+        .map(id => problems.find(p => p.id === id))
+        .filter(Boolean)
+      const remaining = pool.filter(p => !dueProblems.includes(p.id))
+      const combined = [...dueObjects, ...remaining]
+      setSelectedProblems(combined.slice(0, effectiveCount).map(p => p.id))
+    } else {
+      setSelectedProblems(pool.slice(0, effectiveCount).map(p => p.id))
+    }
   }
 
   function removeProblem(id) {
@@ -189,6 +204,26 @@ export default function SessionPlanner({ problems, progress, onStart, onClose })
             ))}
           </div>
         </div>
+
+        {/* Due reviews toggle */}
+        {dueProblems.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              onClick={() => { setIncludeDueReviews(!includeDueReviews); setSelectedProblems(null) }}
+              style={{
+                padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13,
+                border: `1px solid ${includeDueReviews ? 'var(--accent-orange)' : 'var(--border)'}`,
+                background: includeDueReviews ? 'var(--accent-orange)22' : 'var(--bg-tertiary)',
+                color: includeDueReviews ? 'var(--accent-orange)' : 'var(--text-muted)'
+              }}
+            >
+              Include due reviews
+            </button>
+            <span style={{ fontSize: 12, color: 'var(--accent-orange)' }}>
+              {dueProblems.length} due
+            </span>
+          </div>
+        )}
 
         {/* Generate / Problem list */}
         <div>
