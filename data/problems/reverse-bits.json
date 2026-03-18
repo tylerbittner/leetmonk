@@ -2,7 +2,12 @@
   "id": "reverse-bits",
   "title": "Reverse Bits",
   "difficulty": "easy",
-  "tags": ["bit-manipulation"],
+  "tags": [
+    "bit-manipulation"
+  ],
+  "patterns": [
+    "bit-manipulation"
+  ],
   "description": "## Reverse Bits\n\nGiven a 32-bit unsigned integer `n`, return the integer obtained by reversing its bits.\n\nFor example, `n = 43261596` (binary `00000010100101000001111010011100`) reversed is `00111001011110000010100101000000` = `964176192`.\n\n**Constraints:**\n- The input must be a **32-bit unsigned integer**.",
   "examples": [
     {
@@ -18,64 +23,88 @@
   ],
   "exampleCases": [
     {
-      "input": {"n": 43261596},
+      "input": {
+        "n": 43261596
+      },
       "expected": 964176192,
       "explanation": "Classic example"
     },
     {
-      "input": {"n": 4294967293},
+      "input": {
+        "n": 4294967293
+      },
       "expected": 3221225471,
       "explanation": "High bit example"
     },
     {
-      "input": {"n": 0},
+      "input": {
+        "n": 0
+      },
       "expected": 0,
       "explanation": "All zeros reversed is still zero"
     },
     {
-      "input": {"n": 1},
+      "input": {
+        "n": 1
+      },
       "expected": 2147483648,
       "explanation": "00000000000000000000000000000001 reversed is 10000000000000000000000000000000"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"n": 2147483648},
+      "input": {
+        "n": 2147483648
+      },
       "expected": 1,
       "explanation": "10000000000000000000000000000000 reversed is 00000000000000000000000000000001"
     },
     {
-      "input": {"n": 4294967295},
+      "input": {
+        "n": 4294967295
+      },
       "expected": 4294967295,
       "explanation": "All 1s reversed is still all 1s"
     },
     {
-      "input": {"n": 2},
+      "input": {
+        "n": 2
+      },
       "expected": 1073741824,
       "explanation": "Bit 1 moved to bit 30"
     },
     {
-      "input": {"n": 3},
+      "input": {
+        "n": 3
+      },
       "expected": 3221225472,
       "explanation": "Bits 0 and 1 reversed to bits 31 and 30"
     },
     {
-      "input": {"n": 2147483647},
+      "input": {
+        "n": 2147483647
+      },
       "expected": 4294967294,
       "explanation": "01111111111111111111111111111111 → 11111111111111111111111111111110"
     },
     {
-      "input": {"n": 4},
+      "input": {
+        "n": 4
+      },
       "expected": 536870912,
       "explanation": "Bit 2 moved to bit 29"
     },
     {
-      "input": {"n": 8},
+      "input": {
+        "n": 8
+      },
       "expected": 268435456,
       "explanation": "Bit 3 moved to bit 28"
     },
     {
-      "input": {"n": 16},
+      "input": {
+        "n": 16
+      },
       "expected": 134217728,
       "explanation": "Bit 4 moved to bit 27"
     }

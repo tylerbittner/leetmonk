@@ -12,6 +12,7 @@ import PostSessionReview from './components/PostSessionReview.jsx'
 import ReviewFlag from './components/ReviewFlag.jsx'
 import ReviewQueue from './components/ReviewQueue.jsx'
 import AboutModal from './components/AboutModal.jsx'
+import PatternLibrary from './components/PatternLibrary.jsx'
 
 export default function App() {
   const [problems, setProblems] = useState([])
@@ -31,6 +32,7 @@ export default function App() {
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [showPatterns, setShowPatterns] = useState(false)
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
 
@@ -305,7 +307,7 @@ export default function App() {
           />
         </div>
 
-        <div style={{ WebkitAppRegion: 'no-drag' }}>
+        <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', gap: 6 }}>
           <button onClick={() => setShowSessionPlanner(true)} style={{
             padding: '4px 12px', borderRadius: 4, border: '1px solid var(--border)',
             background: session ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
@@ -313,6 +315,14 @@ export default function App() {
             cursor: 'pointer', fontSize: 12
           }}>
             {session ? 'Session Active' : 'Plan Session'}
+          </button>
+          <button onClick={() => setShowPatterns(v => !v)} style={{
+            padding: '4px 12px', borderRadius: 4, border: '1px solid var(--border)',
+            background: showPatterns ? 'var(--accent-purple)' : 'var(--bg-tertiary)',
+            color: showPatterns ? '#fff' : 'var(--text-primary)',
+            cursor: 'pointer', fontSize: 12
+          }}>
+            📖 Patterns
           </button>
         </div>
 
@@ -359,105 +369,116 @@ export default function App() {
 
       {/* Main content */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-        {/* Problem sidebar */}
-        <div style={{ display: 'flex', flexShrink: 0 }}>
-          {!sidebarCollapsed && (
-            <div style={{
-              width: 240, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)'
-            }}>
-              <ProblemList
-                problems={filteredProblems}
-                activeProblemId={activeProblemId}
-                progress={progress}
-                onSelect={selectProblem}
-              />
-              <ReviewQueue
-                problems={problems}
-                reviewData={reviewData}
-                onSelect={selectProblem}
-                activeProblemId={activeProblemId}
-              />
+        {showPatterns ? (
+          <PatternLibrary
+            problems={problems}
+            progress={progress}
+            onSelectProblem={(id) => { setShowPatterns(false); selectProblem(id) }}
+          />
+        ) : (
+          <>
+            {/* Problem sidebar */}
+            <div style={{ display: 'flex', flexShrink: 0 }}>
+              {!sidebarCollapsed && (
+                <div style={{
+                  width: 240, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)'
+                }}>
+                  <ProblemList
+                    problems={filteredProblems}
+                    activeProblemId={activeProblemId}
+                    progress={progress}
+                    onSelect={selectProblem}
+                  />
+                  <ReviewQueue
+                    problems={problems}
+                    reviewData={reviewData}
+                    onSelect={selectProblem}
+                    activeProblemId={activeProblemId}
+                  />
+                </div>
+              )}
+              <button
+                onClick={() => setSidebarCollapsed(c => !c)}
+                title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}
+                style={{
+                  width: 14, padding: 0, border: 'none',
+                  borderRight: '1px solid var(--border)',
+                  background: 'var(--bg-secondary)', color: 'var(--text-secondary)',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 11, lineHeight: 1, flexShrink: 0
+                }}
+              >
+                {sidebarCollapsed ? '›' : '‹'}
+              </button>
             </div>
-          )}
-          <button
-            onClick={() => setSidebarCollapsed(c => !c)}
-            title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}
-            style={{
-              width: 14, padding: 0, border: 'none',
-              borderRight: '1px solid var(--border)',
-              background: 'var(--bg-secondary)', color: 'var(--text-secondary)',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, lineHeight: 1, flexShrink: 0
-            }}
-          >
-            {sidebarCollapsed ? '›' : '‹'}
-          </button>
-        </div>
 
-        {/* Main panels */}
-        {activeProblem ? (
-          <PanelGroup direction="horizontal" style={{ flex: 1 }}>
-            <Panel defaultSize={45} minSize={25}>
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'flex-end' }}>
-                  <ReviewFlag
-                    problemId={activeProblem.id}
-                    reviewData={reviewData[activeProblem.id] || null}
-                    onFlag={handleReviewFlag}
-                    onDismiss={handleReviewDismiss}
-                  />
-                </div>
-                <div style={{ flex: 1, overflow: 'hidden' }}>
-                  <ProblemDescription
-                    problem={activeProblem}
-                    submissions={progress[activeProblem.id]?.submissions || []}
-                  />
-                </div>
-              </div>
-            </Panel>
-
-            <PanelResizeHandle style={{
-              width: 4, background: 'var(--border)', cursor: 'col-resize',
-              transition: 'background 0.15s'
-            }} />
-
-            <Panel defaultSize={55} minSize={30}>
-              <PanelGroup direction="vertical">
-                <Panel defaultSize={60} minSize={30}>
-                  <CodeEditor
-                    key={activeProblem.id}
-                    problem={activeProblem}
-                    code={getCode(activeProblem.id)}
-                    onChange={(code) => handleCodeChange(activeProblem.id, code)}
-                    onRun={() => handleRun('run')}
-                    onSubmit={() => handleRun('submit')}
-                    onReset={handleReset}
-                    running={running}
-                  />
+            {/* Main panels */}
+            {activeProblem ? (
+              <PanelGroup direction="horizontal" style={{ flex: 1 }}>
+                <Panel defaultSize={45} minSize={25}>
+                  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'flex-end' }}>
+                      <ReviewFlag
+                        problemId={activeProblem.id}
+                        reviewData={reviewData[activeProblem.id] || null}
+                        onFlag={handleReviewFlag}
+                        onDismiss={handleReviewDismiss}
+                      />
+                    </div>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                      <ProblemDescription
+                        problem={activeProblem}
+                        submissions={progress[activeProblem.id]?.submissions || []}
+                        onOpenPatterns={() => setShowPatterns(true)}
+                      />
+                    </div>
+                  </div>
                 </Panel>
 
                 <PanelResizeHandle style={{
-                  height: 4, background: 'var(--border)', cursor: 'row-resize'
+                  width: 4, background: 'var(--border)', cursor: 'col-resize',
+                  transition: 'background 0.15s'
                 }} />
 
-                <Panel defaultSize={40} minSize={20}>
-                  <TestResults
-                    results={results}
-                    running={running}
-                    mode={lastRunMode}
-                    problem={activeProblem}
-                  />
+                <Panel defaultSize={55} minSize={30}>
+                  <PanelGroup direction="vertical">
+                    <Panel defaultSize={60} minSize={30}>
+                      <CodeEditor
+                        key={activeProblem.id}
+                        problem={activeProblem}
+                        code={getCode(activeProblem.id)}
+                        onChange={(code) => handleCodeChange(activeProblem.id, code)}
+                        onRun={() => handleRun('run')}
+                        onSubmit={() => handleRun('submit')}
+                        onReset={handleReset}
+                        running={running}
+                      />
+                    </Panel>
+
+                    <PanelResizeHandle style={{
+                      height: 4, background: 'var(--border)', cursor: 'row-resize'
+                    }} />
+
+                    <Panel defaultSize={40} minSize={20}>
+                      <TestResults
+                        results={results}
+                        running={running}
+                        mode={lastRunMode}
+                        problem={activeProblem}
+                      />
+                    </Panel>
+                  </PanelGroup>
                 </Panel>
               </PanelGroup>
-            </Panel>
-          </PanelGroup>
-        ) : (
-          <div style={{
-            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--text-muted)', fontSize: 16
-          }}>
-            {problems.length === 0 ? 'Loading problems…' : 'Select a problem to begin'}
-          </div>
+            ) : (
+              <div style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--text-muted)', fontSize: 16
+              }}>
+                {problems.length === 0 ? 'Loading problems…' : 'Select a problem to begin'}
+              </div>
+            )}
+          </>
         )}
       </div>
 

@@ -2,7 +2,16 @@
   "id": "longest-palindromic-substring",
   "title": "Longest Palindromic Substring",
   "difficulty": "medium",
-  "tags": ["string", "dynamic-programming", "two-pointers"],
+  "tags": [
+    "string",
+    "dynamic-programming",
+    "two-pointers"
+  ],
+  "patterns": [
+    "dynamic-programming",
+    "two-pointers",
+    "string"
+  ],
   "description": "## Longest Palindromic Substring\n\nGiven a string `s`, return the longest substring of `s` that is a palindrome. A palindrome reads the same forwards and backwards.\n\nIf there are multiple palindromic substrings of the same maximum length, return the one that starts earliest.\n\n**Constraints:**\n- `1 <= s.length <= 1000`\n- `s` consists of only digits and English letters.",
   "examples": [
     {
@@ -23,64 +32,88 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "babad"},
+      "input": {
+        "s": "babad"
+      },
       "expected": "bab",
       "explanation": "Leftmost longest palindrome"
     },
     {
-      "input": {"s": "cbbd"},
+      "input": {
+        "s": "cbbd"
+      },
       "expected": "bb",
       "explanation": "Even-length palindrome"
     },
     {
-      "input": {"s": "racecar"},
+      "input": {
+        "s": "racecar"
+      },
       "expected": "racecar",
       "explanation": "Entire string is a palindrome"
     },
     {
-      "input": {"s": "a"},
+      "input": {
+        "s": "a"
+      },
       "expected": "a",
       "explanation": "Single character"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "ac"},
+      "input": {
+        "s": "ac"
+      },
       "expected": "a",
       "explanation": "No palindrome longer than 1; return first"
     },
     {
-      "input": {"s": "bananas"},
+      "input": {
+        "s": "bananas"
+      },
       "expected": "anana",
       "explanation": "anana is the longest palindrome"
     },
     {
-      "input": {"s": "abcba"},
+      "input": {
+        "s": "abcba"
+      },
       "expected": "abcba",
       "explanation": "Entire string"
     },
     {
-      "input": {"s": "aacabdkacaa"},
+      "input": {
+        "s": "aacabdkacaa"
+      },
       "expected": "aca",
       "explanation": "aca appears twice; first at index 1"
     },
     {
-      "input": {"s": "aaaa"},
+      "input": {
+        "s": "aaaa"
+      },
       "expected": "aaaa",
       "explanation": "All same characters"
     },
     {
-      "input": {"s": "abcdd"},
+      "input": {
+        "s": "abcdd"
+      },
       "expected": "dd",
       "explanation": "Even palindrome at end"
     },
     {
-      "input": {"s": "xyzyx"},
+      "input": {
+        "s": "xyzyx"
+      },
       "expected": "xyzyx",
       "explanation": "Entire string is a palindrome"
     },
     {
-      "input": {"s": "aab"},
+      "input": {
+        "s": "aab"
+      },
       "expected": "aa",
       "explanation": "Even palindrome at start"
     }

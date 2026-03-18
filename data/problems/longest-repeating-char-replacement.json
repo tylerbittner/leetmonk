@@ -2,7 +2,16 @@
   "id": "longest-repeating-char-replacement",
   "title": "Longest Repeating Character Replacement",
   "difficulty": "medium",
-  "tags": ["string", "sliding-window", "hash-map"],
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-map"
+  ],
+  "patterns": [
+    "sliding-window",
+    "hash-map",
+    "string"
+  ],
   "description": "## Longest Repeating Character Replacement\n\nYou are given a string `s` consisting of uppercase English letters, and an integer `k`. You may choose any character in the string and replace it with any other uppercase letter, and you can do this at most `k` times.\n\nReturn the length of the longest substring that can be made to contain only one distinct character after performing at most `k` replacements.\n\n**Constraints:**\n- `1 <= s.length <= 10^5`\n- `s` consists of only uppercase English letters.\n- `0 <= k <= s.length`",
   "examples": [
     {
@@ -18,64 +27,100 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "ABAB", "k": 2},
+      "input": {
+        "s": "ABAB",
+        "k": 2
+      },
       "expected": 4,
       "explanation": "Entire string can be made uniform"
     },
     {
-      "input": {"s": "AABABBA", "k": 1},
+      "input": {
+        "s": "AABABBA",
+        "k": 1
+      },
       "expected": 4,
       "explanation": "Best window of length 4"
     },
     {
-      "input": {"s": "AAAA", "k": 0},
+      "input": {
+        "s": "AAAA",
+        "k": 0
+      },
       "expected": 4,
       "explanation": "Already uniform"
     },
     {
-      "input": {"s": "ABCD", "k": 0},
+      "input": {
+        "s": "ABCD",
+        "k": 0
+      },
       "expected": 1,
       "explanation": "No replacements; best is single char"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "A", "k": 0},
+      "input": {
+        "s": "A",
+        "k": 0
+      },
       "expected": 1,
       "explanation": "Single character"
     },
     {
-      "input": {"s": "ABCDE", "k": 4},
+      "input": {
+        "s": "ABCDE",
+        "k": 4
+      },
       "expected": 5,
       "explanation": "Replace 4 chars to match the 5th"
     },
     {
-      "input": {"s": "AABABBA", "k": 0},
+      "input": {
+        "s": "AABABBA",
+        "k": 0
+      },
       "expected": 2,
       "explanation": "No replacements; longest run of same char is AA"
     },
     {
-      "input": {"s": "BAAA", "k": 1},
+      "input": {
+        "s": "BAAA",
+        "k": 1
+      },
       "expected": 4,
       "explanation": "Replace B to get AAAA"
     },
     {
-      "input": {"s": "KRSCDCSONAJNHLBMDQGIFAS", "k": 4},
+      "input": {
+        "s": "KRSCDCSONAJNHLBMDQGIFAS",
+        "k": 4
+      },
       "expected": 6,
       "explanation": "Longest window achievable with 4 swaps"
     },
     {
-      "input": {"s": "AAABBBBB", "k": 2},
+      "input": {
+        "s": "AAABBBBB",
+        "k": 2
+      },
       "expected": 7,
       "explanation": "Replace 2 A's: BBBBBBB length 7"
     },
     {
-      "input": {"s": "ABBB", "k": 2},
+      "input": {
+        "s": "ABBB",
+        "k": 2
+      },
       "expected": 4,
       "explanation": "Replace A and have BBBB"
     },
     {
-      "input": {"s": "EOEMQONLY", "k": 1},
+      "input": {
+        "s": "EOEMQONLY",
+        "k": 1
+      },
       "expected": 3,
       "explanation": "Window EOE: max_freq=2, replacements=1 — length 3"
     }

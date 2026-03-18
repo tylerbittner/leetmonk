@@ -6,6 +6,10 @@
     "backtracking",
     "array"
   ],
+  "patterns": [
+    "backtracking",
+    "array"
+  ],
   "description": "## Permutations\n\nYou are building a combination lock testing tool for a security firm. Given a set of distinct digit codes, your tool must generate every possible ordering of those codes so testers can try all combinations systematically.\n\nGiven an array `nums` of **distinct** integers, return **all possible permutations**.\n\nReturn the answer with each permutation sorted by the outer list lexicographically for consistent comparison.\n\n**Constraints:**\n- `1 <= nums.length <= 6`\n- `-10 <= nums[i] <= 10`\n- All the integers of `nums` are unique.",
   "examples": [
     {
@@ -512,7 +516,7 @@
   "functionName": "permutations",
   "solutions": [
     {
-      "label": "Backtracking \u2014 O(n * n!)",
+      "label": "Backtracking — O(n * n!)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(current, remaining):\n        if not remaining:\n            result.append(list(current))\n            return\n        for i in range(len(remaining)):\n            current.append(remaining[i])\n            backtrack(current, remaining[:i] + remaining[i+1:])\n            current.pop()\n    backtrack([], nums)\n    result.sort()\n    return result",
@@ -521,7 +525,7 @@
       "explanation": "At each level of recursion, choose one element from the remaining options. Add it to the current permutation and recurse with the reduced set. When no elements remain, we have a complete permutation. The total number of permutations is n!, and building each one takes O(n) work."
     },
     {
-      "label": "Backtracking with Swap \u2014 O(n * n!)",
+      "label": "Backtracking with Swap — O(n * n!)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    result = []\n    def backtrack(start):\n        if start == len(nums):\n            result.append(list(nums))\n            return\n        for i in range(start, len(nums)):\n            nums[start], nums[i] = nums[i], nums[start]\n            backtrack(start + 1)\n            nums[start], nums[i] = nums[i], nums[start]\n    backtrack(0)\n    result.sort()\n    return result",

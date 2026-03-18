@@ -2,7 +2,14 @@
   "id": "longest-common-subsequence",
   "title": "Longest Common Subsequence",
   "difficulty": "medium",
-  "tags": ["string", "dynamic-programming"],
+  "tags": [
+    "string",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "dynamic-programming",
+    "string"
+  ],
   "description": "## Longest Common Subsequence\n\nGiven two strings `text1` and `text2`, return the length of their longest common subsequence.\n\nA subsequence is a sequence derived from a string by deleting some (or no) characters without changing the order of the remaining characters. A common subsequence is one that appears in both strings.\n\nIf there is no common subsequence, return 0.\n\n**Constraints:**\n- `1 <= text1.length, text2.length <= 1000`\n- `text1` and `text2` consist of only lowercase English letters.",
   "examples": [
     {
@@ -23,64 +30,100 @@
   ],
   "exampleCases": [
     {
-      "input": {"text1": "abcde", "text2": "ace"},
+      "input": {
+        "text1": "abcde",
+        "text2": "ace"
+      },
       "expected": 3,
       "explanation": "LCS = ace"
     },
     {
-      "input": {"text1": "abc", "text2": "abc"},
+      "input": {
+        "text1": "abc",
+        "text2": "abc"
+      },
       "expected": 3,
       "explanation": "Identical strings"
     },
     {
-      "input": {"text1": "abc", "text2": "def"},
+      "input": {
+        "text1": "abc",
+        "text2": "def"
+      },
       "expected": 0,
       "explanation": "No common characters"
     },
     {
-      "input": {"text1": "bl", "text2": "yby"},
+      "input": {
+        "text1": "bl",
+        "text2": "yby"
+      },
       "expected": 1,
       "explanation": "LCS = b"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"text1": "a", "text2": "a"},
+      "input": {
+        "text1": "a",
+        "text2": "a"
+      },
       "expected": 1,
       "explanation": "Single matching char"
     },
     {
-      "input": {"text1": "a", "text2": "b"},
+      "input": {
+        "text1": "a",
+        "text2": "b"
+      },
       "expected": 0,
       "explanation": "No match"
     },
     {
-      "input": {"text1": "bsbininm", "text2": "jmjkbkjkv"},
+      "input": {
+        "text1": "bsbininm",
+        "text2": "jmjkbkjkv"
+      },
       "expected": 1,
       "explanation": "LCS = b or m or j"
     },
     {
-      "input": {"text1": "oxcpqrsvwf", "text2": "shmtulqrypy"},
+      "input": {
+        "text1": "oxcpqrsvwf",
+        "text2": "shmtulqrypy"
+      },
       "expected": 2,
       "explanation": "LCS = qr"
     },
     {
-      "input": {"text1": "ezupkr", "text2": "ubmrapg"},
+      "input": {
+        "text1": "ezupkr",
+        "text2": "ubmrapg"
+      },
       "expected": 2,
       "explanation": "LCS = ur"
     },
     {
-      "input": {"text1": "abcd", "text2": "abdc"},
+      "input": {
+        "text1": "abcd",
+        "text2": "abdc"
+      },
       "expected": 3,
       "explanation": "LCS = abc or abd"
     },
     {
-      "input": {"text1": "hofubmnylkra", "text2": "pqhgxgdofcvmr"},
+      "input": {
+        "text1": "hofubmnylkra",
+        "text2": "pqhgxgdofcvmr"
+      },
       "expected": 5,
       "explanation": "LCS = h,o,f,m,r (length 5)"
     },
     {
-      "input": {"text1": "aaaaaa", "text2": "aaaa"},
+      "input": {
+        "text1": "aaaaaa",
+        "text2": "aaaa"
+      },
       "expected": 4,
       "explanation": "Shorter string is the LCS"
     }

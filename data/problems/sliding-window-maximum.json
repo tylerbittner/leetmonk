@@ -7,6 +7,11 @@
     "deque",
     "array"
   ],
+  "patterns": [
+    "monotonic-stack",
+    "sliding-window",
+    "array"
+  ],
   "description": "## Sliding Window Maximum\n\nYou are monitoring a real-time telemetry feed from an aircraft. A sensor window of size `k` slides across the data stream one position at a time. At each position, you need to report the peak reading within that window for anomaly detection.\n\nGiven an integer array `nums` and an integer `k`, return an array of the **maximum values** in each sliding window of size `k`.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`\n- `1 <= k <= nums.length`",
   "examples": [
     {
@@ -303,7 +308,7 @@
   "functionName": "max_sliding_window",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n*k)",
+      "label": "Brute Force — O(n*k)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    n = len(nums)\n    result = []\n    for i in range(n - k + 1):\n        result.append(max(nums[i:i + k]))\n    return result",
@@ -312,7 +317,7 @@
       "explanation": "For each window position, call max() on the window slice. Simple but recomputes the maximum from scratch each time, leading to O(k) work per window."
     },
     {
-      "label": "Monotonic Deque \u2014 O(n)",
+      "label": "Monotonic Deque — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    dq = deque()  # Stores indices, decreasing order of values\n    result = []\n    for i, num in enumerate(nums):\n        # Remove elements outside the window\n        if dq and dq[0] < i - k + 1:\n            dq.popleft()\n        # Remove smaller elements from the back\n        while dq and nums[dq[-1]] < num:\n            dq.pop()\n        dq.append(i)\n        # Start recording once the first window is complete\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result",

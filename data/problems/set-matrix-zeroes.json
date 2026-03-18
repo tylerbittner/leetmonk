@@ -6,6 +6,10 @@
     "matrix",
     "hash-set"
   ],
+  "patterns": [
+    "matrix",
+    "hash-map"
+  ],
   "description": "## Set Matrix Zeroes\n\nYou are processing sensor grid data for a surveillance system. When a sensor reports zero (malfunction), all sensors in the same row and column must also be set to zero to flag the entire affected axis.\n\nGiven an `m x n` integer matrix `matrix`, if an element is `0`, set its entire **row** and **column** to `0`s **in-place** and return the modified matrix.\n\n**Constraints:**\n- `m == matrix.length`\n- `n == matrix[i].length`\n- `1 <= m, n <= 200`\n- `-2^31 <= matrix[i][j] <= 2^31 - 1`",
   "examples": [
     {
@@ -556,7 +560,7 @@
   "functionName": "set_zeroes",
   "solutions": [
     {
-      "label": "Record Positions with Sets \u2014 O(m*n)",
+      "label": "Record Positions with Sets — O(m*n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef set_zeroes(matrix: List[List[int]]) -> List[List[int]]:\n    zero_rows = set()\n    zero_cols = set()\n    m, n = len(matrix), len(matrix[0])\n    for i in range(m):\n        for j in range(n):\n            if matrix[i][j] == 0:\n                zero_rows.add(i)\n                zero_cols.add(j)\n    for i in range(m):\n        for j in range(n):\n            if i in zero_rows or j in zero_cols:\n                matrix[i][j] = 0\n    return matrix",
@@ -565,7 +569,7 @@
       "explanation": "First pass: scan the matrix and record which rows and columns contain zeros using sets. Second pass: zero out any cell whose row or column appears in the recorded sets."
     },
     {
-      "label": "First Row/Column as Markers \u2014 O(m*n)",
+      "label": "First Row/Column as Markers — O(m*n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef set_zeroes(matrix: List[List[int]]) -> List[List[int]]:\n    m, n = len(matrix), len(matrix[0])\n    first_row_zero = any(matrix[0][j] == 0 for j in range(n))\n    first_col_zero = any(matrix[i][0] == 0 for i in range(m))\n    # Use first row and first col as markers\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][j] == 0:\n                matrix[i][0] = 0\n                matrix[0][j] = 0\n    # Zero out cells based on markers\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][0] == 0 or matrix[0][j] == 0:\n                matrix[i][j] = 0\n    # Handle first row and col separately\n    if first_row_zero:\n        for j in range(n):\n            matrix[0][j] = 0\n    if first_col_zero:\n        for i in range(m):\n            matrix[i][0] = 0\n    return matrix",

@@ -7,6 +7,10 @@
     "array",
     "math"
   ],
+  "patterns": [
+    "matrix",
+    "array"
+  ],
   "description": "## Minimum Column Average\n\nA network of environmental sensors is arranged in a grid across a field. Each row represents a single daily reading taken across all sensor stations, and each column represents one station's readings over multiple days.\n\nGiven an `m x n` matrix `matrix` where `matrix[i][j]` is the reading from station `j` on day `i`, compute the **average reading for each station** (column) and return the **minimum** of those averages as a float **rounded to 5 decimal places**.\n\n**Constraints:**\n- `1 <= m, n <= 100`\n- `-1000 <= matrix[i][j] <= 1000`",
   "examples": [
     {
@@ -29,32 +33,59 @@
     {
       "input": {
         "matrix": [
-          [1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 9]
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
         ]
       },
-      "expected": 4.0,
+      "expected": 4,
       "explanation": "Column averages: 4.0, 5.0, 6.0. Minimum is 4.0."
     },
     {
       "input": {
         "matrix": [
-          [10, 20],
-          [30, 40],
-          [50, 60]
+          [
+            10,
+            20
+          ],
+          [
+            30,
+            40
+          ],
+          [
+            50,
+            60
+          ]
         ]
       },
-      "expected": 30.0,
+      "expected": 30,
       "explanation": "Rectangular 3x2 matrix. Column averages: 30.0 and 40.0. Minimum is 30.0."
     },
     {
       "input": {
         "matrix": [
-          [3, 1, 4, 1, 5]
+          [
+            3,
+            1,
+            4,
+            1,
+            5
+          ]
         ]
       },
-      "expected": 1.0,
+      "expected": 1,
       "explanation": "Single row — column averages equal the values themselves. Minimum is 1.0."
     }
   ],
@@ -62,40 +93,65 @@
     {
       "input": {
         "matrix": [
-          [2],
-          [7],
-          [3],
-          [8]
+          [
+            2
+          ],
+          [
+            7
+          ],
+          [
+            3
+          ],
+          [
+            8
+          ]
         ]
       },
-      "expected": 5.0,
+      "expected": 5,
       "explanation": "Single column — average of all values (2+7+3+8)/4=5.0."
     },
     {
       "input": {
         "matrix": [
-          [42]
+          [
+            42
+          ]
         ]
       },
-      "expected": 42.0,
+      "expected": 42,
       "explanation": "Single cell matrix — minimum column average is 42.0."
     },
     {
       "input": {
         "matrix": [
-          [5, 5],
-          [5, 5],
-          [5, 5]
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            5
+          ]
         ]
       },
-      "expected": 5.0,
+      "expected": 5,
       "explanation": "All values identical — every column average is 5.0."
     },
     {
       "input": {
         "matrix": [
-          [-3, -1],
-          [-2, -4]
+          [
+            -3,
+            -1
+          ],
+          [
+            -2,
+            -4
+          ]
         ]
       },
       "expected": -2.5,
@@ -104,31 +160,67 @@
     {
       "input": {
         "matrix": [
-          [1, 2, 3, 4, 5],
-          [6, 7, 8, 9, 10],
-          [11, 12, 13, 14, 15]
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          [
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
         ]
       },
-      "expected": 6.0,
+      "expected": 6,
       "explanation": "3x5 matrix. Column averages: 6.0, 7.0, 8.0, 9.0, 10.0. Minimum is 6.0."
     },
     {
       "input": {
         "matrix": [
-          [0, 5],
-          [0, 10],
-          [0, 15]
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            15
+          ]
         ]
       },
-      "expected": 0.0,
+      "expected": 0,
       "explanation": "First column is all zeros (average 0.0), second column averages to 10.0. Minimum is 0.0."
     },
     {
       "input": {
         "matrix": [
-          [10, -5],
-          [3, 2],
-          [-7, 8]
+          [
+            10,
+            -5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            -7,
+            8
+          ]
         ]
       },
       "expected": 1.66667,
@@ -137,8 +229,14 @@
     {
       "input": {
         "matrix": [
-          [100, -100],
-          [1, 1]
+          [
+            100,
+            -100
+          ],
+          [
+            1,
+            1
+          ]
         ]
       },
       "expected": -49.5,
@@ -151,7 +249,7 @@
   "functionName": "min_column_average",
   "solutions": [
     {
-      "label": "Column Iteration \u2014 O(m*n)",
+      "label": "Column Iteration — O(m*n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    m = len(matrix)\n    n = len(matrix[0])\n    min_avg = float('inf')\n    for col in range(n):\n        col_sum = 0\n        for row in range(m):\n            col_sum += matrix[row][col]\n        avg = col_sum / m\n        if avg < min_avg:\n            min_avg = avg\n    return round(min_avg, 5)",
@@ -160,7 +258,7 @@
       "explanation": "Iterate over each column index 0 through n-1. For each column, sum all m values by walking down the rows, then divide by m to get the column average. Track the running minimum across all column averages. Return the minimum rounded to 5 decimal places."
     },
     {
-      "label": "Zip Transpose \u2014 O(m*n)",
+      "label": "Zip Transpose — O(m*n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    return round(min(sum(col) / len(col) for col in zip(*matrix)), 5)",

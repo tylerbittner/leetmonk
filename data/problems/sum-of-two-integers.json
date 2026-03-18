@@ -2,7 +2,13 @@
   "id": "sum-of-two-integers",
   "title": "Sum of Two Integers",
   "difficulty": "medium",
-  "tags": ["bit-manipulation", "math"],
+  "tags": [
+    "bit-manipulation",
+    "math"
+  ],
+  "patterns": [
+    "bit-manipulation"
+  ],
   "description": "## Sum of Two Integers\n\nCalculate the sum of two integers `a` and `b` without using the `+` or `-` operators.\n\n**Constraints:**\n- `-1000 <= a, b <= 1000`",
   "examples": [
     {
@@ -18,64 +24,100 @@
   ],
   "exampleCases": [
     {
-      "input": {"a": 1, "b": 2},
+      "input": {
+        "a": 1,
+        "b": 2
+      },
       "expected": 3,
       "explanation": "Basic addition"
     },
     {
-      "input": {"a": 2, "b": 3},
+      "input": {
+        "a": 2,
+        "b": 3
+      },
       "expected": 5,
       "explanation": "Basic addition"
     },
     {
-      "input": {"a": 1, "b": -1},
+      "input": {
+        "a": 1,
+        "b": -1
+      },
       "expected": 0,
       "explanation": "Positive and negative"
     },
     {
-      "input": {"a": -1, "b": -1},
+      "input": {
+        "a": -1,
+        "b": -1
+      },
       "expected": -2,
       "explanation": "Both negative"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"a": 0, "b": 0},
+      "input": {
+        "a": 0,
+        "b": 0
+      },
       "expected": 0,
       "explanation": "Both zero"
     },
     {
-      "input": {"a": 5, "b": 0},
+      "input": {
+        "a": 5,
+        "b": 0
+      },
       "expected": 5,
       "explanation": "Add zero"
     },
     {
-      "input": {"a": -5, "b": 5},
+      "input": {
+        "a": -5,
+        "b": 5
+      },
       "expected": 0,
       "explanation": "Cancel out"
     },
     {
-      "input": {"a": -7, "b": 3},
+      "input": {
+        "a": -7,
+        "b": 3
+      },
       "expected": -4,
       "explanation": "Negative result"
     },
     {
-      "input": {"a": 100, "b": 200},
+      "input": {
+        "a": 100,
+        "b": 200
+      },
       "expected": 300,
       "explanation": "Larger numbers"
     },
     {
-      "input": {"a": -100, "b": -200},
+      "input": {
+        "a": -100,
+        "b": -200
+      },
       "expected": -300,
       "explanation": "Both large negatives"
     },
     {
-      "input": {"a": 1000, "b": -1000},
+      "input": {
+        "a": 1000,
+        "b": -1000
+      },
       "expected": 0,
       "explanation": "Cancel to zero"
     },
     {
-      "input": {"a": -3, "b": 7},
+      "input": {
+        "a": -3,
+        "b": 7
+      },
       "expected": 4,
       "explanation": "Mixed signs"
     }

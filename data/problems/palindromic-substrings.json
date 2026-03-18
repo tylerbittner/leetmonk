@@ -2,7 +2,16 @@
   "id": "palindromic-substrings",
   "title": "Palindromic Substrings",
   "difficulty": "medium",
-  "tags": ["string", "dynamic-programming", "two-pointers"],
+  "tags": [
+    "string",
+    "dynamic-programming",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "dynamic-programming",
+    "string"
+  ],
   "description": "## Palindromic Substrings\n\nGiven a string `s`, return the number of substrings that are palindromes. A palindrome reads the same forwards and backwards. Single characters always count as palindromes.\n\n**Constraints:**\n- `1 <= s.length <= 1000`\n- `s` consists of lowercase English letters.",
   "examples": [
     {
@@ -18,64 +27,88 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "abc"},
+      "input": {
+        "s": "abc"
+      },
       "expected": 3,
       "explanation": "Only single characters"
     },
     {
-      "input": {"s": "aaa"},
+      "input": {
+        "s": "aaa"
+      },
       "expected": 6,
       "explanation": "3 singles + 2 pairs + 1 triple"
     },
     {
-      "input": {"s": "a"},
+      "input": {
+        "s": "a"
+      },
       "expected": 1,
       "explanation": "Single character"
     },
     {
-      "input": {"s": "abba"},
+      "input": {
+        "s": "abba"
+      },
       "expected": 6,
       "explanation": "a, b, b, a, bb, abba"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "aa"},
+      "input": {
+        "s": "aa"
+      },
       "expected": 3,
       "explanation": "a, a, aa"
     },
     {
-      "input": {"s": "aba"},
+      "input": {
+        "s": "aba"
+      },
       "expected": 4,
       "explanation": "a, b, a, aba"
     },
     {
-      "input": {"s": "abcd"},
+      "input": {
+        "s": "abcd"
+      },
       "expected": 4,
       "explanation": "Only single characters are palindromes"
     },
     {
-      "input": {"s": "racecar"},
+      "input": {
+        "s": "racecar"
+      },
       "expected": 10,
       "explanation": "r,a,c,e,c,a,r + aca(×1) + aceca + racecar = 7 singles + cec,aceca,racecar = 10"
     },
     {
-      "input": {"s": "aaaa"},
+      "input": {
+        "s": "aaaa"
+      },
       "expected": 10,
       "explanation": "C(5,2) = 10 — all substrings of all same chars are palindromes"
     },
     {
-      "input": {"s": "ab"},
+      "input": {
+        "s": "ab"
+      },
       "expected": 2,
       "explanation": "a, b"
     },
     {
-      "input": {"s": "aab"},
+      "input": {
+        "s": "aab"
+      },
       "expected": 4,
       "explanation": "a, a, b, aa"
     },
     {
-      "input": {"s": "fdsklf"},
+      "input": {
+        "s": "fdsklf"
+      },
       "expected": 6,
       "explanation": "Only single characters"
     }

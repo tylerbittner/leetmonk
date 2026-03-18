@@ -7,6 +7,10 @@
     "array",
     "sorting"
   ],
+  "patterns": [
+    "two-pointers",
+    "array"
+  ],
   "description": "## Merge Sorted Arrays\n\nYou are merging two sorted inventory lists into a single unified catalog. The first list has been pre-allocated with extra space at the end to accommodate the second list's entries.\n\nYou are given two integer arrays `nums1` and `nums2`, sorted in non-decreasing order, and two integers `m` and `n`, representing the number of elements in `nums1` and `nums2` respectively.\n\nMerge `nums2` into `nums1` **in-place** so that `nums1` becomes a single sorted array. Return `nums1`.\n\n`nums1` has a length of `m + n`, where the first `m` elements are valid and the last `n` elements are set to `0` as placeholders.\n\n**Constraints:**\n- `nums1.length == m + n`\n- `nums2.length == n`\n- `0 <= m, n <= 200`\n- `-10^9 <= nums1[i], nums2[i] <= 10^9`",
   "examples": [
     {
@@ -352,7 +356,7 @@
   "functionName": "merge_sorted",
   "solutions": [
     {
-      "label": "Extra Space \u2014 O(m+n)",
+      "label": "Extra Space — O(m+n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    temp = nums1[:m] + nums2[:n]\n    temp.sort()\n    for i in range(m + n):\n        nums1[i] = temp[i]\n    return nums1",
@@ -361,7 +365,7 @@
       "explanation": "Copy valid elements from both arrays, sort, and write back. Simple but uses extra space and does not exploit the pre-sorted property."
     },
     {
-      "label": "Merge From End \u2014 O(m+n)",
+      "label": "Merge From End — O(m+n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    p1, p2, write = m - 1, n - 1, m + n - 1\n    while p1 >= 0 and p2 >= 0:\n        if nums1[p1] > nums2[p2]:\n            nums1[write] = nums1[p1]\n            p1 -= 1\n        else:\n            nums1[write] = nums2[p2]\n            p2 -= 1\n        write -= 1\n    # Remaining elements from nums2 (nums1 elements already in place)\n    while p2 >= 0:\n        nums1[write] = nums2[p2]\n        p2 -= 1\n        write -= 1\n    return nums1",

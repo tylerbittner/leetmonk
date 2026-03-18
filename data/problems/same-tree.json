@@ -2,7 +2,14 @@
   "id": "same-tree",
   "title": "Same Tree",
   "difficulty": "easy",
-  "tags": ["tree", "depth-first-search"],
+  "tags": [
+    "tree",
+    "depth-first-search"
+  ],
+  "patterns": [
+    "depth-first-search",
+    "tree"
+  ],
   "description": "## Same Tree\n\nGiven two binary trees `p` and `q` (as level-order lists), return `true` if they are identical — same structure and same node values at every position.\n\n**Constraints:**\n- The number of nodes in both trees is in the range `[0, 100]`.\n- `-10^4 <= Node.val <= 10^4`",
   "examples": [
     {
@@ -23,64 +30,182 @@
   ],
   "exampleCases": [
     {
-      "input": {"p": [1, 2, 3], "q": [1, 2, 3]},
+      "input": {
+        "p": [
+          1,
+          2,
+          3
+        ],
+        "q": [
+          1,
+          2,
+          3
+        ]
+      },
       "expected": true,
       "explanation": "Identical trees"
     },
     {
-      "input": {"p": [1, 2], "q": [1, null, 2]},
+      "input": {
+        "p": [
+          1,
+          2
+        ],
+        "q": [
+          1,
+          null,
+          2
+        ]
+      },
       "expected": false,
       "explanation": "Different structure"
     },
     {
-      "input": {"p": [1, 2, 1], "q": [1, 1, 2]},
+      "input": {
+        "p": [
+          1,
+          2,
+          1
+        ],
+        "q": [
+          1,
+          1,
+          2
+        ]
+      },
       "expected": false,
       "explanation": "Different values"
     },
     {
-      "input": {"p": [], "q": []},
+      "input": {
+        "p": [],
+        "q": []
+      },
       "expected": true,
       "explanation": "Both empty"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"p": [1], "q": [1]},
+      "input": {
+        "p": [
+          1
+        ],
+        "q": [
+          1
+        ]
+      },
       "expected": true,
       "explanation": "Single nodes match"
     },
     {
-      "input": {"p": [1], "q": [2]},
+      "input": {
+        "p": [
+          1
+        ],
+        "q": [
+          2
+        ]
+      },
       "expected": false,
       "explanation": "Different root values"
     },
     {
-      "input": {"p": [], "q": [1]},
+      "input": {
+        "p": [],
+        "q": [
+          1
+        ]
+      },
       "expected": false,
       "explanation": "One empty, one not"
     },
     {
-      "input": {"p": [1, 2, 3, 4, 5], "q": [1, 2, 3, 4, 5]},
+      "input": {
+        "p": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "q": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
       "expected": true,
       "explanation": "Larger identical trees"
     },
     {
-      "input": {"p": [1, 2, 3, 4, 5], "q": [1, 2, 3, 4, 6]},
+      "input": {
+        "p": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "q": [
+          1,
+          2,
+          3,
+          4,
+          6
+        ]
+      },
       "expected": false,
       "explanation": "Differ only at leaf"
     },
     {
-      "input": {"p": [1, 2, 3], "q": [1, 2]},
+      "input": {
+        "p": [
+          1,
+          2,
+          3
+        ],
+        "q": [
+          1,
+          2
+        ]
+      },
       "expected": false,
       "explanation": "Different size"
     },
     {
-      "input": {"p": [-1, -2, -3], "q": [-1, -2, -3]},
+      "input": {
+        "p": [
+          -1,
+          -2,
+          -3
+        ],
+        "q": [
+          -1,
+          -2,
+          -3
+        ]
+      },
       "expected": true,
       "explanation": "Identical with negative values"
     },
     {
-      "input": {"p": [1, 2, null, 3], "q": [1, 2, null, 3]},
+      "input": {
+        "p": [
+          1,
+          2,
+          null,
+          3
+        ],
+        "q": [
+          1,
+          2,
+          null,
+          3
+        ]
+      },
       "expected": true,
       "explanation": "Same unbalanced trees"
     }

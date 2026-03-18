@@ -6,6 +6,10 @@
     "binary-search",
     "array"
   ],
+  "patterns": [
+    "binary-search",
+    "array"
+  ],
   "description": "## Binary Search\n\nYou are managing a catalog of products in a warehouse. Products are indexed with unique integer codes and sorted in ascending order in a database. You need to quickly locate a specific product by its code.\n\nGiven a sorted array of integers `nums` and an integer `target`, return the **index** of `target` in the array, or `-1` if it does not exist.\n\nYou must write an algorithm with **O(log n)** runtime complexity.\n\n**Constraints:**\n- `1 <= nums.length <= 10^4`\n- `-10^4 <= nums[i], target <= 10^4`\n- All integers in `nums` are **unique**.\n- `nums` is sorted in ascending order.",
   "examples": [
     {
@@ -228,7 +232,7 @@
   "functionName": "binary_search",
   "solutions": [
     {
-      "label": "Linear Scan \u2014 O(n)",
+      "label": "Linear Scan — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    for i, num in enumerate(nums):\n        if num == target:\n            return i\n    return -1",
@@ -237,7 +241,7 @@
       "explanation": "Scan through the array from left to right. Return the index of the first match, or -1 if not found. Does not exploit the sorted property of the array."
     },
     {
-      "label": "Binary Search \u2014 O(log n)",
+      "label": "Binary Search — O(log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
@@ -247,7 +251,7 @@
     }
   ],
   "hints": [
-    "The array is sorted \u2014 you can eliminate half the remaining elements at each step.",
+    "The array is sorted — you can eliminate half the remaining elements at each step.",
     "Use two pointers (left and right) and check the middle element each iteration."
   ],
   "lcEquivalent": "704. Binary Search"

@@ -7,6 +7,10 @@
     "array",
     "binary-search-on-answer"
   ],
+  "patterns": [
+    "binary-search",
+    "array"
+  ],
   "description": "## Cutting Ribbons\n\nYou work at a craft supply shop preparing ribbon bundles for customers. You have several spools of ribbon, each with a different remaining length. A customer wants to buy exactly `k` pieces of ribbon, all the same integer length.\n\nYou can cut any spool into as many pieces as you like (each piece must be a positive integer length), and leftover ribbon from a spool is discarded. You want to maximize the length of each piece so the customer gets the best value.\n\nGiven an array `ribbons` where `ribbons[i]` is the length of the i-th spool, and an integer `k` representing the number of pieces the customer needs, return the **maximum possible integer length** of ribbon you can achieve for all `k` pieces. If it is impossible to obtain `k` pieces of any positive length, return `0`.\n\n**Constraints:**\n- `1 <= ribbons.length <= 10^5`\n- `1 <= ribbons[i] <= 10^5`\n- `1 <= k <= 10^9`",
   "examples": [
     {
@@ -27,74 +31,173 @@
   ],
   "exampleCases": [
     {
-      "input": { "ribbons": [9, 7, 5], "k": 3 },
+      "input": {
+        "ribbons": [
+          9,
+          7,
+          5
+        ],
+        "k": 3
+      },
       "expected": 5,
       "explanation": "At length 5: 9//5=1, 7//5=1, 5//5=1. Total=3 pieces."
     },
     {
-      "input": { "ribbons": [7, 5, 9], "k": 4 },
+      "input": {
+        "ribbons": [
+          7,
+          5,
+          9
+        ],
+        "k": 4
+      },
       "expected": 4,
       "explanation": "At length 4: 7//4=1, 5//4=1, 9//4=2. Total=4 pieces."
     },
     {
-      "input": { "ribbons": [5, 7, 9], "k": 22 },
+      "input": {
+        "ribbons": [
+          5,
+          7,
+          9
+        ],
+        "k": 22
+      },
       "expected": 0,
       "explanation": "Max pieces at length 1 = 5+7+9 = 21 < 22, impossible."
     }
   ],
   "hiddenCases": [
     {
-      "input": { "ribbons": [10], "k": 1 },
+      "input": {
+        "ribbons": [
+          10
+        ],
+        "k": 1
+      },
       "expected": 10,
       "explanation": "Single spool, one piece needed: take the whole spool."
     },
     {
-      "input": { "ribbons": [10], "k": 3 },
+      "input": {
+        "ribbons": [
+          10
+        ],
+        "k": 3
+      },
       "expected": 3,
       "explanation": "Single spool of 10, need 3 pieces: 10//3=3, so max length is 3."
     },
     {
-      "input": { "ribbons": [5, 5, 5, 5], "k": 4 },
+      "input": {
+        "ribbons": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "k": 4
+      },
       "expected": 5,
       "explanation": "All equal ribbons, one piece each at full length."
     },
     {
-      "input": { "ribbons": [5, 5, 5, 5], "k": 8 },
+      "input": {
+        "ribbons": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "k": 8
+      },
       "expected": 2,
       "explanation": "All length 5, need 8 pieces: at length 2, each gives 2 pieces = 8 total."
     },
     {
-      "input": { "ribbons": [1, 2, 3], "k": 7 },
+      "input": {
+        "ribbons": [
+          1,
+          2,
+          3
+        ],
+        "k": 7
+      },
       "expected": 0,
       "explanation": "At length 1: 1+2+3=6 < 7. Impossible."
     },
     {
-      "input": { "ribbons": [100000], "k": 1 },
+      "input": {
+        "ribbons": [
+          100000
+        ],
+        "k": 1
+      },
       "expected": 100000,
       "explanation": "Large single spool, one piece: take all of it."
     },
     {
-      "input": { "ribbons": [1, 1, 1, 1, 1], "k": 5 },
+      "input": {
+        "ribbons": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 5
+      },
       "expected": 1,
       "explanation": "Each spool gives exactly one piece of length 1."
     },
     {
-      "input": { "ribbons": [1, 1, 1, 1, 1], "k": 6 },
+      "input": {
+        "ribbons": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 6
+      },
       "expected": 0,
       "explanation": "Five spools of length 1, need 6 pieces: impossible."
     },
     {
-      "input": { "ribbons": [3, 5, 8, 12], "k": 7 },
+      "input": {
+        "ribbons": [
+          3,
+          5,
+          8,
+          12
+        ],
+        "k": 7
+      },
       "expected": 3,
       "explanation": "At length 3: 3//3=1, 5//3=1, 8//3=2, 12//3=4. Total=8>=7. At length 4: 0+1+2+3=6<7. Answer is 3."
     },
     {
-      "input": { "ribbons": [100, 200, 300], "k": 12 },
+      "input": {
+        "ribbons": [
+          100,
+          200,
+          300
+        ],
+        "k": 12
+      },
       "expected": 50,
       "explanation": "At length 50: 2+4+6=12 pieces. At length 51: 1+3+5=9<12."
     },
     {
-      "input": { "ribbons": [7, 3, 1], "k": 2 },
+      "input": {
+        "ribbons": [
+          7,
+          3,
+          1
+        ],
+        "k": 2
+      },
       "expected": 3,
       "explanation": "At length 3: 7//3=2, 3//3=1, 1//3=0. Total=3>=2. At length 4: 7//4=1, 3//4=0, 1//4=0. Total=1<2. Answer is 3."
     }

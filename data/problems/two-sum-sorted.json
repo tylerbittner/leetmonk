@@ -1,13 +1,18 @@
 {
   "id": "two-sum-sorted",
-  "title": "Two Sum II \u2014 Input Array Is Sorted",
+  "title": "Two Sum II — Input Array Is Sorted",
   "difficulty": "medium",
   "tags": [
     "two-pointers",
     "binary-search",
     "array"
   ],
-  "description": "## Two Sum II \u2014 Input Array Is Sorted\n\nYou are calibrating a spectrometer by matching pairs of frequency readings. The frequency table has already been sorted in non-decreasing order. You need to find two readings that sum to a target frequency and report their positions (1-indexed).\n\nGiven a **1-indexed** sorted array `numbers` and an integer `target`, return the indices of the two numbers (as a `[index1, index2]` pair with `index1 < index2`) that add up to `target`.\n\nEach input has **exactly one solution**. You may not use the same element twice. Your solution must use **O(1)** extra space.\n\n**Constraints:**\n- `2 <= numbers.length <= 3 * 10^4`\n- `-1000 <= numbers[i] <= 1000`\n- `numbers` is sorted in non-decreasing order.\n- `-1000 <= target <= 1000`\n- Exactly one solution exists.",
+  "patterns": [
+    "two-pointers",
+    "binary-search",
+    "array"
+  ],
+  "description": "## Two Sum II — Input Array Is Sorted\n\nYou are calibrating a spectrometer by matching pairs of frequency readings. The frequency table has already been sorted in non-decreasing order. You need to find two readings that sum to a target frequency and report their positions (1-indexed).\n\nGiven a **1-indexed** sorted array `numbers` and an integer `target`, return the indices of the two numbers (as a `[index1, index2]` pair with `index1 < index2`) that add up to `target`.\n\nEach input has **exactly one solution**. You may not use the same element twice. Your solution must use **O(1)** extra space.\n\n**Constraints:**\n- `2 <= numbers.length <= 3 * 10^4`\n- `-1000 <= numbers[i] <= 1000`\n- `numbers` is sorted in non-decreasing order.\n- `-1000 <= target <= 1000`\n- Exactly one solution exists.",
   "examples": [
     {
       "input": "numbers = [2, 7, 11, 15], target = 9",
@@ -264,7 +269,7 @@
   "functionName": "two_sum_sorted",
   "solutions": [
     {
-      "label": "Binary Search \u2014 O(n log n)",
+      "label": "Binary Search — O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nimport bisect\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    n = len(numbers)\n    for i in range(n):\n        complement = target - numbers[i]\n        # Binary search for complement in the rest of the array\n        j = bisect.bisect_left(numbers, complement, i + 1)\n        if j < n and numbers[j] == complement:\n            return [i + 1, j + 1]\n    return []",
@@ -273,7 +278,7 @@
       "explanation": "For each element, compute its complement (target - numbers[i]) and binary search the remaining sorted subarray for it. Returns 1-indexed positions."
     },
     {
-      "label": "Two Pointers \u2014 O(n)",
+      "label": "Two Pointers — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    left, right = 0, len(numbers) - 1\n    while left < right:\n        total = numbers[left] + numbers[right]\n        if total == target:\n            return [left + 1, right + 1]\n        elif total < target:\n            left += 1\n        else:\n            right -= 1\n    return []",
@@ -283,7 +288,7 @@
     }
   ],
   "hints": [
-    "The array is sorted \u2014 what happens to the sum when you move the left pointer right? Or move the right pointer left?",
+    "The array is sorted — what happens to the sum when you move the left pointer right? Or move the right pointer left?",
     "Start with the widest possible window (leftmost and rightmost elements) and converge based on the current sum."
   ],
   "lcEquivalent": "167. Two Sum II - Input Array Is Sorted"

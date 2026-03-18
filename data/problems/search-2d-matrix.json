@@ -6,6 +6,10 @@
     "binary-search",
     "matrix"
   ],
+  "patterns": [
+    "binary-search",
+    "matrix"
+  ],
   "description": "## Search a 2D Matrix\n\nYou are querying a distributed database where records are stored in a 2D grid. The grid has two important properties: each row is sorted left to right, and the first element of each row is strictly greater than the last element of the previous row. This means the entire grid, when read row by row, is one continuous sorted sequence.\n\nGiven an `m x n` integer matrix `matrix` and an integer `target`, return `true` if `target` is in the matrix, `false` otherwise.\n\nYou must solve this in **O(log(m * n))** time.\n\n**Constraints:**\n- `m == matrix.length`\n- `n == matrix[i].length`\n- `1 <= m, n <= 100`\n- `-10^4 <= matrix[i][j], target <= 10^4`",
   "examples": [
     {
@@ -341,7 +345,7 @@
   "functionName": "search_matrix",
   "solutions": [
     {
-      "label": "Row-then-Column Search \u2014 O(m + log n)",
+      "label": "Row-then-Column Search — O(m + log n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef search_matrix(matrix: List[List[int]], target: int) -> bool:\n    m, n = len(matrix), len(matrix[0])\n    # Find the correct row\n    row = -1\n    for i in range(m):\n        if matrix[i][0] <= target <= matrix[i][n - 1]:\n            row = i\n            break\n    if row == -1:\n        return False\n    # Binary search in that row\n    left, right = 0, n - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if matrix[row][mid] == target:\n            return True\n        elif matrix[row][mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
@@ -350,7 +354,7 @@
       "explanation": "Linear scan to find the row whose range could contain the target (by checking row boundaries), then binary search within that row. The row scan is O(m) and the column search is O(log n)."
     },
     {
-      "label": "Full Binary Search \u2014 O(log(m*n))",
+      "label": "Full Binary Search — O(log(m*n))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef search_matrix(matrix: List[List[int]], target: int) -> bool:\n    m, n = len(matrix), len(matrix[0])\n    left, right = 0, m * n - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        row, col = divmod(mid, n)\n        val = matrix[row][col]\n        if val == target:\n            return True\n        elif val < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",

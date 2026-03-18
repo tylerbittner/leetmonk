@@ -2,7 +2,15 @@
   "id": "invert-binary-tree",
   "title": "Invert Binary Tree",
   "difficulty": "easy",
-  "tags": ["tree", "depth-first-search", "breadth-first-search"],
+  "tags": [
+    "tree",
+    "depth-first-search",
+    "breadth-first-search"
+  ],
+  "patterns": [
+    "depth-first-search",
+    "tree"
+  ],
   "description": "## Invert Binary Tree\n\nGiven the root of a binary tree (as a level-order list), invert the tree by swapping every left and right child, and return the resulting tree as a level-order list.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 100]`.\n- `-100 <= Node.val <= 100`",
   "examples": [
     {
@@ -18,65 +26,211 @@
   ],
   "exampleCases": [
     {
-      "input": {"root": [4, 2, 7, 1, 3, 6, 9]},
-      "expected": [4, 7, 2, 9, 6, 3, 1],
+      "input": {
+        "root": [
+          4,
+          2,
+          7,
+          1,
+          3,
+          6,
+          9
+        ]
+      },
+      "expected": [
+        4,
+        7,
+        2,
+        9,
+        6,
+        3,
+        1
+      ],
       "explanation": "Full tree inversion"
     },
     {
-      "input": {"root": [2, 1, 3]},
-      "expected": [2, 3, 1],
+      "input": {
+        "root": [
+          2,
+          1,
+          3
+        ]
+      },
+      "expected": [
+        2,
+        3,
+        1
+      ],
       "explanation": "Simple swap"
     },
     {
-      "input": {"root": []},
+      "input": {
+        "root": []
+      },
       "expected": [],
       "explanation": "Empty tree"
     },
     {
-      "input": {"root": [1]},
-      "expected": [1],
+      "input": {
+        "root": [
+          1
+        ]
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single node unchanged"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"root": [1, 2]},
-      "expected": [1, null, 2],
+      "input": {
+        "root": [
+          1,
+          2
+        ]
+      },
+      "expected": [
+        1,
+        null,
+        2
+      ],
       "explanation": "Left child moves to right"
     },
     {
-      "input": {"root": [1, null, 2]},
-      "expected": [1, 2],
+      "input": {
+        "root": [
+          1,
+          null,
+          2
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "Right child moves to left"
     },
     {
-      "input": {"root": [1, 2, 3, 4, 5, 6, 7]},
-      "expected": [1, 3, 2, 7, 6, 5, 4],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        2,
+        7,
+        6,
+        5,
+        4
+      ],
       "explanation": "Perfect binary tree inverted"
     },
     {
-      "input": {"root": [3, 1, 4, null, 2]},
-      "expected": [3, 4, 1, null, null, 2],
+      "input": {
+        "root": [
+          3,
+          1,
+          4,
+          null,
+          2
+        ]
+      },
+      "expected": [
+        3,
+        4,
+        1,
+        null,
+        null,
+        2
+      ],
       "explanation": "Unbalanced tree"
     },
     {
-      "input": {"root": [-1, -2, -3]},
-      "expected": [-1, -3, -2],
+      "input": {
+        "root": [
+          -1,
+          -2,
+          -3
+        ]
+      },
+      "expected": [
+        -1,
+        -3,
+        -2
+      ],
       "explanation": "Negative values"
     },
     {
-      "input": {"root": [5, 3, 7, 1, 4, 6, 8]},
-      "expected": [5, 7, 3, 8, 6, 4, 1],
+      "input": {
+        "root": [
+          5,
+          3,
+          7,
+          1,
+          4,
+          6,
+          8
+        ]
+      },
+      "expected": [
+        5,
+        7,
+        3,
+        8,
+        6,
+        4,
+        1
+      ],
       "explanation": "BST inverted"
     },
     {
-      "input": {"root": [10, 5, 15, 3, 7, 12, 20]},
-      "expected": [10, 15, 5, 20, 12, 7, 3],
+      "input": {
+        "root": [
+          10,
+          5,
+          15,
+          3,
+          7,
+          12,
+          20
+        ]
+      },
+      "expected": [
+        10,
+        15,
+        5,
+        20,
+        12,
+        7,
+        3
+      ],
       "explanation": "Larger BST inverted"
     },
     {
-      "input": {"root": [1, 2, null, 3]},
-      "expected": [1, null, 2, null, 3],
+      "input": {
+        "root": [
+          1,
+          2,
+          null,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        null,
+        2,
+        null,
+        3
+      ],
       "explanation": "Left-skewed becomes right-skewed"
     }
   ],

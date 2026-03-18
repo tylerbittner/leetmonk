@@ -2,7 +2,16 @@
   "id": "binary-tree-max-path-sum",
   "title": "Binary Tree Maximum Path Sum",
   "difficulty": "hard",
-  "tags": ["tree", "depth-first-search", "dynamic-programming"],
+  "tags": [
+    "tree",
+    "depth-first-search",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "depth-first-search",
+    "dynamic-programming",
+    "tree"
+  ],
   "description": "## Binary Tree Maximum Path Sum\n\nGiven a binary tree (as a level-order list), return the maximum sum of any path in the tree.\n\nA **path** is a sequence of nodes where each pair of adjacent nodes has an edge between them. A path must contain at least one node and does not need to go through the root. Values can be negative.\n\n**Constraints:**\n- The number of nodes is in the range `[1, 3 * 10^4]`.\n- `-1000 <= Node.val <= 1000`",
   "examples": [
     {
@@ -18,64 +27,165 @@
   ],
   "exampleCases": [
     {
-      "input": {"root": [1, 2, 3]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3
+        ]
+      },
       "expected": 6,
       "explanation": "Path: 2+1+3=6"
     },
     {
-      "input": {"root": [-10, 9, 20, null, null, 15, 7]},
+      "input": {
+        "root": [
+          -10,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      },
       "expected": 42,
       "explanation": "Path: 15+20+7=42"
     },
     {
-      "input": {"root": [-3]},
+      "input": {
+        "root": [
+          -3
+        ]
+      },
       "expected": -3,
       "explanation": "Single node, must include it"
     },
     {
-      "input": {"root": [1, -2, 3]},
+      "input": {
+        "root": [
+          1,
+          -2,
+          3
+        ]
+      },
       "expected": 4,
       "explanation": "Path 1→3 = 4 (skip -2)"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"root": [2, -1]},
+      "input": {
+        "root": [
+          2,
+          -1
+        ]
+      },
       "expected": 2,
       "explanation": "Root only is better"
     },
     {
-      "input": {"root": [-1, -2, 3]},
+      "input": {
+        "root": [
+          -1,
+          -2,
+          3
+        ]
+      },
       "expected": 3,
       "explanation": "Just the right child"
     },
     {
-      "input": {"root": [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1]},
+      "input": {
+        "root": [
+          5,
+          4,
+          8,
+          11,
+          null,
+          13,
+          4,
+          7,
+          2,
+          null,
+          null,
+          null,
+          1
+        ]
+      },
       "expected": 48,
       "explanation": "Path through node 4: 7+11+4+5+8+13=48? No: best is 7+11+4+5+8+13=48"
     },
     {
-      "input": {"root": [-1, -2, -3]},
+      "input": {
+        "root": [
+          -1,
+          -2,
+          -3
+        ]
+      },
       "expected": -1,
       "explanation": "All negative, pick largest"
     },
     {
-      "input": {"root": [1, 2, null, 3, null, 4]},
+      "input": {
+        "root": [
+          1,
+          2,
+          null,
+          3,
+          null,
+          4
+        ]
+      },
       "expected": 10,
       "explanation": "Path 4+3+2+1=10"
     },
     {
-      "input": {"root": [9, 6, -3, null, null, -6, 2, null, null, 2, null, -6, -6, -6]},
+      "input": {
+        "root": [
+          9,
+          6,
+          -3,
+          null,
+          null,
+          -6,
+          2,
+          null,
+          null,
+          2,
+          null,
+          -6,
+          -6,
+          -6
+        ]
+      },
       "expected": 16,
       "explanation": "Best path goes through 9 and 6"
     },
     {
-      "input": {"root": [0, -1, 1]},
+      "input": {
+        "root": [
+          0,
+          -1,
+          1
+        ]
+      },
       "expected": 1,
       "explanation": "Only right child is positive contribution"
     },
     {
-      "input": {"root": [5, -1, 4, null, null, 3, null]},
+      "input": {
+        "root": [
+          5,
+          -1,
+          4,
+          null,
+          null,
+          3,
+          null
+        ]
+      },
       "expected": 12,
       "explanation": "Path 3+4+5=12"
     }
@@ -110,4 +220,3 @@
   ],
   "lcEquivalent": "124. Binary Tree Maximum Path Sum"
 }
-

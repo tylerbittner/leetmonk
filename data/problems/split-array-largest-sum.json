@@ -8,6 +8,11 @@
     "dynamic-programming",
     "binary-search-on-answer"
   ],
+  "patterns": [
+    "binary-search",
+    "dynamic-programming",
+    "array"
+  ],
   "description": "## Split Array Largest Sum\n\nYou are a project manager distributing a sequence of tasks to a team of workers. Each task has a fixed workload (a non-negative integer), and the tasks must be assigned in order — you cannot rearrange them. Each worker receives a contiguous block of one or more tasks. Your goal is to distribute the tasks across exactly `k` workers so that the **heaviest workload** assigned to any single worker is as **small as possible**.\n\nGiven an array `nums` of non-negative integers representing task workloads and an integer `k` representing the number of workers, split `nums` into exactly `k` non-empty contiguous subarrays. Return the **minimized maximum** subarray sum.\n\n**Constraints:**\n- `1 <= nums.length <= 1000`\n- `0 <= nums[i] <= 10^6`\n- `1 <= k <= min(50, nums.length)`",
   "examples": [
     {
@@ -29,7 +34,13 @@
   "exampleCases": [
     {
       "input": {
-        "nums": [7, 2, 5, 10, 8],
+        "nums": [
+          7,
+          2,
+          5,
+          10,
+          8
+        ],
         "k": 2
       },
       "expected": 18,
@@ -37,7 +48,13 @@
     },
     {
       "input": {
-        "nums": [1, 2, 3, 4, 5],
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
         "k": 2
       },
       "expected": 9,
@@ -45,7 +62,11 @@
     },
     {
       "input": {
-        "nums": [1, 4, 4],
+        "nums": [
+          1,
+          4,
+          4
+        ],
         "k": 3
       },
       "expected": 4,
@@ -55,7 +76,13 @@
   "hiddenCases": [
     {
       "input": {
-        "nums": [7, 2, 5, 10, 8],
+        "nums": [
+          7,
+          2,
+          5,
+          10,
+          8
+        ],
         "k": 1
       },
       "expected": 32,
@@ -63,7 +90,13 @@
     },
     {
       "input": {
-        "nums": [7, 2, 5, 10, 8],
+        "nums": [
+          7,
+          2,
+          5,
+          10,
+          8
+        ],
         "k": 5
       },
       "expected": 10,
@@ -71,7 +104,12 @@
     },
     {
       "input": {
-        "nums": [0, 0, 0, 0],
+        "nums": [
+          0,
+          0,
+          0,
+          0
+        ],
         "k": 2
       },
       "expected": 0,
@@ -79,7 +117,9 @@
     },
     {
       "input": {
-        "nums": [42],
+        "nums": [
+          42
+        ],
         "k": 1
       },
       "expected": 42,
@@ -87,7 +127,17 @@
     },
     {
       "input": {
-        "nums": [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "k": 3
       },
       "expected": 3,
@@ -95,7 +145,14 @@
     },
     {
       "input": {
-        "nums": [2, 3, 1, 2, 4, 3],
+        "nums": [
+          2,
+          3,
+          1,
+          2,
+          4,
+          3
+        ],
         "k": 5
       },
       "expected": 4,
@@ -103,7 +160,19 @@
     },
     {
       "input": {
-        "nums": [10, 5, 13, 4, 8, 4, 5, 11, 14, 7, 6],
+        "nums": [
+          10,
+          5,
+          13,
+          4,
+          8,
+          4,
+          5,
+          11,
+          14,
+          7,
+          6
+        ],
         "k": 3
       },
       "expected": 32,
@@ -111,7 +180,17 @@
     },
     {
       "input": {
-        "nums": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
         "k": 4
       },
       "expected": 15,
@@ -119,7 +198,18 @@
     },
     {
       "input": {
-        "nums": [100, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "nums": [
+          100,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "k": 2
       },
       "expected": 100,
@@ -127,7 +217,15 @@
     },
     {
       "input": {
-        "nums": [5, 2, 6, 1, 7, 3, 4],
+        "nums": [
+          5,
+          2,
+          6,
+          1,
+          7,
+          3,
+          4
+        ],
         "k": 3
       },
       "expected": 13,

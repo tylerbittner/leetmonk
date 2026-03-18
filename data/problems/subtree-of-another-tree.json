@@ -2,7 +2,14 @@
   "id": "subtree-of-another-tree",
   "title": "Subtree of Another Tree",
   "difficulty": "easy",
-  "tags": ["tree", "depth-first-search"],
+  "tags": [
+    "tree",
+    "depth-first-search"
+  ],
+  "patterns": [
+    "depth-first-search",
+    "tree"
+  ],
   "description": "## Subtree of Another Tree\n\nGiven two binary trees `root` and `subRoot` (as level-order lists), return `true` if there is a node in `root` whose subtree is identical to `subRoot`.\n\nA subtree of a binary tree `tree` is a tree that consists of a node in `tree` and all of this node's descendants.\n\n**Constraints:**\n- The number of nodes in `root` is in the range `[1, 2000]`.\n- The number of nodes in `subRoot` is in the range `[1, 1000]`.\n- `-10^4 <= root.val, subRoot.val <= 10^4`",
   "examples": [
     {
@@ -18,64 +25,201 @@
   ],
   "exampleCases": [
     {
-      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [4, 1, 2]},
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        "subRoot": [
+          4,
+          1,
+          2
+        ]
+      },
       "expected": true,
       "explanation": "Subtree found at node 4"
     },
     {
-      "input": {"root": [3, 4, 5, 1, 2, null, null, null, null, 0], "subRoot": [4, 1, 2]},
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "subRoot": [
+          4,
+          1,
+          2
+        ]
+      },
       "expected": false,
       "explanation": "Extra node makes it not match"
     },
     {
-      "input": {"root": [1, 1], "subRoot": [1]},
+      "input": {
+        "root": [
+          1,
+          1
+        ],
+        "subRoot": [
+          1
+        ]
+      },
       "expected": true,
       "explanation": "Both leaf nodes match"
     },
     {
-      "input": {"root": [1, 2, 3], "subRoot": [1, 2]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3
+        ],
+        "subRoot": [
+          1,
+          2
+        ]
+      },
       "expected": false,
       "explanation": "subRoot doesn't match any subtree"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"root": [1], "subRoot": [1]},
+      "input": {
+        "root": [
+          1
+        ],
+        "subRoot": [
+          1
+        ]
+      },
       "expected": true,
       "explanation": "Identical single nodes"
     },
     {
-      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [2, 4, 5]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "subRoot": [
+          2,
+          4,
+          5
+        ]
+      },
       "expected": true,
       "explanation": "Left subtree matches"
     },
     {
-      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [3]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "subRoot": [
+          3
+        ]
+      },
       "expected": true,
       "explanation": "Leaf node as subRoot"
     },
     {
-      "input": {"root": [1, 2, 3, 4, 5], "subRoot": [2, 3, 4]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "subRoot": [
+          2,
+          3,
+          4
+        ]
+      },
       "expected": false,
       "explanation": "No matching subtree"
     },
     {
-      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [4]},
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        "subRoot": [
+          4
+        ]
+      },
       "expected": false,
       "explanation": "Node 4 has children 1 and 2, so doesn't match single-node subRoot"
     },
     {
-      "input": {"root": [1, 2, 3], "subRoot": [2]},
+      "input": {
+        "root": [
+          1,
+          2,
+          3
+        ],
+        "subRoot": [
+          2
+        ]
+      },
       "expected": true,
       "explanation": "Leaf node matches"
     },
     {
-      "input": {"root": [3, 4, 5, 1, 2], "subRoot": [5]},
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        "subRoot": [
+          5
+        ]
+      },
       "expected": true,
       "explanation": "Right leaf subtree matches"
     },
     {
-      "input": {"root": [10, 5, 15, 3, 7], "subRoot": [5, 3, 7]},
+      "input": {
+        "root": [
+          10,
+          5,
+          15,
+          3,
+          7
+        ],
+        "subRoot": [
+          5,
+          3,
+          7
+        ]
+      },
       "expected": true,
       "explanation": "Left subtree matches exactly"
     }

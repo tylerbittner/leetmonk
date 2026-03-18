@@ -2,7 +2,14 @@
   "id": "counting-bits",
   "title": "Counting Bits",
   "difficulty": "easy",
-  "tags": ["bit-manipulation", "dynamic-programming"],
+  "tags": [
+    "bit-manipulation",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "bit-manipulation",
+    "dynamic-programming"
+  ],
   "description": "## Counting Bits\n\nGiven an integer `n`, return an array `ans` of length `n + 1` such that for each `i` (0 <= i <= n), `ans[i]` is the number of `1` bits in the binary representation of `i`.\n\n**Constraints:**\n- `0 <= n <= 10^5`",
   "examples": [
     {
@@ -18,65 +25,190 @@
   ],
   "exampleCases": [
     {
-      "input": {"n": 2},
-      "expected": [0, 1, 1],
+      "input": {
+        "n": 2
+      },
+      "expected": [
+        0,
+        1,
+        1
+      ],
       "explanation": "0,1,2 have 0,1,1 set bits"
     },
     {
-      "input": {"n": 5},
-      "expected": [0, 1, 1, 2, 1, 2],
+      "input": {
+        "n": 5
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2
+      ],
       "explanation": "Counts for 0 through 5"
     },
     {
-      "input": {"n": 0},
-      "expected": [0],
+      "input": {
+        "n": 0
+      },
+      "expected": [
+        0
+      ],
       "explanation": "0 has no set bits"
     },
     {
-      "input": {"n": 7},
-      "expected": [0, 1, 1, 2, 1, 2, 2, 3],
+      "input": {
+        "n": 7
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        3
+      ],
       "explanation": "Counts for 0 through 7"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"n": 1},
-      "expected": [0, 1],
+      "input": {
+        "n": 1
+      },
+      "expected": [
+        0,
+        1
+      ],
       "explanation": "0 and 1"
     },
     {
-      "input": {"n": 8},
-      "expected": [0, 1, 1, 2, 1, 2, 2, 3, 1],
+      "input": {
+        "n": 8
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        3,
+        1
+      ],
       "explanation": "8 = 1000 has one bit"
     },
     {
-      "input": {"n": 10},
-      "expected": [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2],
+      "input": {
+        "n": 10
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        3,
+        1,
+        2,
+        2
+      ],
       "explanation": "Counts for 0 through 10"
     },
     {
-      "input": {"n": 4},
-      "expected": [0, 1, 1, 2, 1],
+      "input": {
+        "n": 4
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
       "explanation": "Counts for 0 through 4"
     },
     {
-      "input": {"n": 3},
-      "expected": [0, 1, 1, 2],
+      "input": {
+        "n": 3
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2
+      ],
       "explanation": "0=0, 1=1, 2=1, 3=2"
     },
     {
-      "input": {"n": 6},
-      "expected": [0, 1, 1, 2, 1, 2, 2],
+      "input": {
+        "n": 6
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
       "explanation": "Counts for 0 through 6"
     },
     {
-      "input": {"n": 15},
-      "expected": [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4],
+      "input": {
+        "n": 15
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        3,
+        1,
+        2,
+        2,
+        3,
+        2,
+        3,
+        3,
+        4
+      ],
       "explanation": "Counts for 0 through 15"
     },
     {
-      "input": {"n": 16},
-      "expected": [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1],
+      "input": {
+        "n": 16
+      },
+      "expected": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        3,
+        1,
+        2,
+        2,
+        3,
+        2,
+        3,
+        3,
+        4,
+        1
+      ],
       "explanation": "16=10000 has 1 set bit"
     }
   ],

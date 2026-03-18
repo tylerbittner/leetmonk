@@ -2,7 +2,16 @@
   "id": "count-connected-components",
   "title": "Count Connected Components",
   "difficulty": "medium",
-  "tags": ["graph", "depth-first-search", "union-find"],
+  "tags": [
+    "graph",
+    "depth-first-search",
+    "union-find"
+  ],
+  "patterns": [
+    "union-find",
+    "depth-first-search",
+    "graph"
+  ],
   "description": "## Count Connected Components\n\nYou have `n` nodes labeled from `0` to `n - 1` and a list of undirected edges. Return the number of connected components in the graph.\n\nA connected component is a group of nodes where every node can reach every other node through a path of edges.\n\n**Constraints:**\n- `1 <= n <= 2000`\n- `0 <= edges.length <= 5000`\n- `edges[i].length == 2`\n- `0 <= a_i, b_i < n`\n- `a_i != b_i`\n- There are no repeated edges.",
   "examples": [
     {
@@ -18,64 +27,229 @@
   ],
   "exampleCases": [
     {
-      "input": {"n": 5, "edges": [[0, 1], [1, 2], [3, 4]]},
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
       "expected": 2,
       "explanation": "Two components"
     },
     {
-      "input": {"n": 5, "edges": [[0, 1], [1, 2], [2, 3], [3, 4]]},
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
       "expected": 1,
       "explanation": "All connected"
     },
     {
-      "input": {"n": 3, "edges": []},
+      "input": {
+        "n": 3,
+        "edges": []
+      },
       "expected": 3,
       "explanation": "No edges — each node is its own component"
     },
     {
-      "input": {"n": 4, "edges": [[0, 1], [2, 3]]},
+      "input": {
+        "n": 4,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
       "expected": 2,
       "explanation": "Two pairs"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"n": 1, "edges": []},
+      "input": {
+        "n": 1,
+        "edges": []
+      },
       "expected": 1,
       "explanation": "Single node"
     },
     {
-      "input": {"n": 2, "edges": [[0, 1]]},
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            1
+          ]
+        ]
+      },
       "expected": 1,
       "explanation": "Two nodes connected"
     },
     {
-      "input": {"n": 2, "edges": []},
+      "input": {
+        "n": 2,
+        "edges": []
+      },
       "expected": 2,
       "explanation": "Two isolated nodes"
     },
     {
-      "input": {"n": 6, "edges": [[0, 1], [2, 3], [4, 5]]},
+      "input": {
+        "n": 6,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
       "expected": 3,
       "explanation": "Three pairs"
     },
     {
-      "input": {"n": 6, "edges": [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]]},
+      "input": {
+        "n": 6,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
       "expected": 1,
       "explanation": "Linear chain"
     },
     {
-      "input": {"n": 7, "edges": [[0, 1], [0, 2], [3, 4], [5, 6]]},
+      "input": {
+        "n": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ]
+        ]
+      },
       "expected": 3,
       "explanation": "Three components"
     },
     {
-      "input": {"n": 4, "edges": [[0, 1], [1, 2], [2, 3], [0, 3]]},
+      "input": {
+        "n": 4,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      },
       "expected": 1,
       "explanation": "Cycle — all connected"
     },
     {
-      "input": {"n": 5, "edges": [[0, 1], [0, 2], [0, 3], [0, 4]]},
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ]
+        ]
+      },
       "expected": 1,
       "explanation": "Star graph"
     }

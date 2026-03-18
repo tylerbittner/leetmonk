@@ -7,6 +7,10 @@
     "hash-map",
     "sorting"
   ],
+  "patterns": [
+    "hash-map",
+    "string"
+  ],
   "description": "## Group Anagrams\n\nYou are curating a thesaurus system. Words that are anagrams of each other should be grouped together so users can discover all related rearrangements at once.\n\nGiven an array of strings `strs`, group the **anagrams** together. You can return the answer in any order.\n\n**Note:** The returned groups should each be sorted alphabetically, and the list of groups should be sorted lexicographically for consistent comparison.\n\n**Constraints:**\n- `1 <= strs.length <= 10^4`\n- `0 <= strs[i].length <= 100`\n- `strs[i]` consists of lowercase English letters.",
   "examples": [
     {
@@ -314,7 +318,7 @@
   "functionName": "group_anagrams",
   "solutions": [
     {
-      "label": "Sort Key \u2014 O(n * k log k)",
+      "label": "Sort Key — O(n * k log k)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        key = ''.join(sorted(s))\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",
@@ -323,7 +327,7 @@
       "explanation": "Group strings by their sorted form as the hash key. Anagrams produce the same sorted key because they contain the same characters. Sort each group and the outer list for deterministic output. Here n is the number of strings and k is the maximum string length."
     },
     {
-      "label": "Character Count Key \u2014 O(n * k)",
+      "label": "Character Count Key — O(n * k)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nfrom collections import defaultdict\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    groups = defaultdict(list)\n    for s in strs:\n        count = [0] * 26\n        for c in s:\n            count[ord(c) - ord('a')] += 1\n        key = tuple(count)\n        groups[key].append(s)\n    result = [sorted(group) for group in groups.values()]\n    result.sort()\n    return result",

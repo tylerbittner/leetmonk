@@ -6,7 +6,11 @@
     "binary-search",
     "array"
   ],
-  "description": "## Find Minimum in Rotated Sorted Array\n\nYou are monitoring a circular conveyor belt system where packages are sorted by weight. The belt has been rotated by an unknown offset. Given the sorted weights read from the current starting point \u2014 e.g., `[3, 4, 5, 1, 2]` \u2014 you need to quickly locate the lightest package.\n\nGiven a sorted array that has been rotated between 1 and n times, return the **minimum element**.\n\nAll elements are **unique**. You must solve this in **O(log n)** time.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 5000`\n- `-5000 <= nums[i] <= 5000`\n- All integers are unique.\n- `nums` is sorted and rotated between 1 and n times.",
+  "patterns": [
+    "binary-search",
+    "array"
+  ],
+  "description": "## Find Minimum in Rotated Sorted Array\n\nYou are monitoring a circular conveyor belt system where packages are sorted by weight. The belt has been rotated by an unknown offset. Given the sorted weights read from the current starting point — e.g., `[3, 4, 5, 1, 2]` — you need to quickly locate the lightest package.\n\nGiven a sorted array that has been rotated between 1 and n times, return the **minimum element**.\n\nAll elements are **unique**. You must solve this in **O(log n)** time.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 5000`\n- `-5000 <= nums[i] <= 5000`\n- All integers are unique.\n- `nums` is sorted and rotated between 1 and n times.",
   "examples": [
     {
       "input": "nums = [3, 4, 5, 1, 2]",
@@ -222,7 +226,7 @@
   "functionName": "find_minimum",
   "solutions": [
     {
-      "label": "Linear Scan \u2014 O(n)",
+      "label": "Linear Scan — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    return min(nums)",
@@ -231,7 +235,7 @@
       "explanation": "Simply return the minimum value in the array. Correct but does not exploit the sorted/rotated structure."
     },
     {
-      "label": "Binary Search \u2014 O(log n)",
+      "label": "Binary Search — O(log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef find_minimum(nums: List[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = left + (right - left) // 2\n        if nums[mid] > nums[right]:\n            # Minimum is in the right half\n            left = mid + 1\n        else:\n            # Minimum is in the left half (including mid)\n            right = mid\n    return nums[left]",
