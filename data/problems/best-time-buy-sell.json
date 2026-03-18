@@ -210,7 +210,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} prices\n * @return {number}\n */\nfunction maxProfit(prices) {\n    \n}"
   },
   "functionName": "max_profit",
   "solutions": [
@@ -231,6 +232,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "The key insight is that to maximize profit, we want to buy at the lowest price seen so far and sell at the current price. Track the minimum price as we iterate. For each new price, either update the minimum or check if selling at today's price yields a better profit than the best so far."
+    },
+    {
+      "label": "Greedy — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxProfit(prices) {\n    let minPrice = Infinity;\n    let maxP = 0;\n    for (const price of prices) {\n        if (price < minPrice) {\n            minPrice = price;\n        } else if (price - minPrice > maxP) {\n            maxP = price - minPrice;\n        }\n    }\n    return maxP;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track the minimum price seen so far. For each price, either update the minimum or compute the profit if selling today and update the max profit."
     }
   ],
   "hints": [

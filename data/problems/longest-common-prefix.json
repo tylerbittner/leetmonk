@@ -6,7 +6,7 @@
     "string",
     "array"
   ],
-  "description": "## Longest Common Prefix\n\nYou are building an autocomplete system for a search engine. When a user types characters, the system needs to find the longest shared prefix across all matching words \u2014 this prefix represents what can be safely auto-completed without ambiguity.\n\nGiven an array of strings `strs`, return the **longest common prefix** shared by all strings. If there is no common prefix, return an empty string `\"\"`.\n\n**Constraints:**\n- `1 <= strs.length <= 200`\n- `0 <= strs[i].length <= 200`\n- `strs[i]` consists of only lowercase English letters.",
+  "description": "## Longest Common Prefix\n\nYou are building an autocomplete system for a search engine. When a user types characters, the system needs to find the longest shared prefix across all matching words — this prefix represents what can be safely auto-completed without ambiguity.\n\nGiven an array of strings `strs`, return the **longest common prefix** shared by all strings. If there is no common prefix, return an empty string `\"\"`.\n\n**Constraints:**\n- `1 <= strs.length <= 200`\n- `0 <= strs[i].length <= 200`\n- `strs[i]` consists of only lowercase English letters.",
   "examples": [
     {
       "input": "strs = [\"flower\",\"flow\",\"flight\"]",
@@ -185,12 +185,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    pass"
+    "python": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    pass",
+    "javascript": "/**\n * @param {string[]} strs\n * @return {string}\n */\nfunction longestCommonPrefix(strs) {\n    \n}"
   },
   "functionName": "longest_common_prefix",
   "solutions": [
     {
-      "label": "Horizontal Scanning \u2014 O(S)",
+      "label": "Horizontal Scanning — O(S)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix:\n                return \"\"\n    return prefix",
@@ -199,18 +200,27 @@
       "explanation": "Start with the first string as the candidate prefix. For each subsequent string, trim the prefix from the right until it becomes a prefix of that string (or becomes empty). Where S is the total number of characters across all strings."
     },
     {
-      "label": "Vertical Scanning \u2014 O(S)",
+      "label": "Vertical Scanning — O(S)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef longest_common_prefix(strs: List[str]) -> str:\n    if not strs:\n        return \"\"\n    for i, char in enumerate(strs[0]):\n        for s in strs[1:]:\n            if i >= len(s) or s[i] != char:\n                return strs[0][:i]\n    return strs[0]",
       "timeComplexity": "O(S)",
       "spaceComplexity": "O(1)",
       "explanation": "Compare character by character across all strings simultaneously (column by column). For each position i, check if all strings have the same character. Stop as soon as a mismatch is found or any string is exhausted. This is often faster in practice because it stops early at the first mismatch. Where S is the total number of characters across all strings."
+    },
+    {
+      "label": "Vertical Scanning — O(S)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function longestCommonPrefix(strs) {\n    if (!strs.length) return \"\";\n    for (let i = 0; i < strs[0].length; i++) {\n        const c = strs[0][i];\n        for (let j = 1; j < strs.length; j++) {\n            if (i >= strs[j].length || strs[j][i] !== c) return strs[0].slice(0, i);\n        }\n    }\n    return strs[0];\n}",
+      "timeComplexity": "O(S)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Compare character by character across all strings. Stop at the first mismatch."
     }
   ],
   "hints": [
     "Start with the first string as the prefix candidate and trim it as needed.",
-    "Alternatively, compare column by column \u2014 check the same character position across all strings."
+    "Alternatively, compare column by column — check the same character position across all strings."
   ],
   "lcEquivalent": "14. Longest Common Prefix"
 }

@@ -86,7 +86,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef word_break(s: str, wordDict: List[str]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @param {string[]} wordDict\n * @return {boolean}\n */\nfunction wordBreak(s, wordDict) {\n    \n}"
   },
   "functionName": "word_break",
   "solutions": [
@@ -107,6 +108,15 @@
       "timeComplexity": "O(n² · m)",
       "spaceComplexity": "O(n)",
       "explanation": "Top-down DP with memoization. `can_segment(start)` returns True if `s[start:]` can be segmented. At each position, try every prefix `s[start:end]` — if it's in the dictionary and the remainder `s[end:]` can also be segmented, return True. `lru_cache` ensures each start position is computed only once. Equivalent to bottom-up DP but written recursively."
+    },
+    {
+      "label": "Dynamic Programming \u2014 O(n\u00b2\u00b7m)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function wordBreak(s, wordDict) {\n    const wordSet = new Set(wordDict);\n    const n = s.length;\n    const dp = new Array(n + 1).fill(false);\n    dp[0] = true;\n    for (let i = 1; i <= n; i++) {\n        for (let j = 0; j < i; j++) {\n            if (dp[j] && wordSet.has(s.slice(j, i))) {\n                dp[i] = true;\n                break;\n            }\n        }\n    }\n    return dp[n];\n}",
+      "timeComplexity": "O(n\u00b2\u00b7m)",
+      "spaceComplexity": "O(n + k)",
+      "explanation": "`dp[i]` is true if `s.slice(0, i)` can be segmented. For each `i`, try all split points `j`: if `dp[j]` is true and `s.slice(j, i)` is in the word set, set `dp[i] = true`. The answer is `dp[n]`."
     }
   ],
   "hints": [

@@ -86,7 +86,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef level_order(root: List[Optional[int]]) -> List[List[int]]:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef level_order(root: List[Optional[int]]) -> List[List[int]]:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @return {number[][]}\n */\nfunction levelOrder(root) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "level_order",
   "solutions": [
@@ -107,6 +108,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(h)",
       "explanation": "Use DFS with a depth parameter. When we first visit a depth, append a new empty list to result. Then append the node's value to result[depth]. Recurse left then right. This naturally populates levels in left-to-right order since we visit left subtree first."
+    },
+    {
+      "label": "BFS — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction levelOrder(root) {\n  root = buildTree(root);\n  if (!root) return [];\n  const result = []; const queue = [root];\n  while (queue.length > 0) {\n    const levelSize = queue.length; const level = [];\n    for (let i = 0; i < levelSize; i++) {\n      const node = queue.shift(); level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "BFS with a queue. At each iteration, snapshot the current queue size to know how many nodes belong to the current level, dequeue that many nodes, collect their values, and enqueue their children for the next level."
     }
   ],
   "hints": [

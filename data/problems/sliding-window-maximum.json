@@ -298,7 +298,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef max_sliding_window(nums: List[int], k: int) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} k\n * @return {number[]}\n */\nfunction maxSlidingWindow(nums, k) {\n    \n}"
   },
   "functionName": "max_sliding_window",
   "solutions": [
@@ -319,6 +320,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(k)",
       "explanation": "Maintain a deque of indices in decreasing order of their values. The front always holds the index of the current window's maximum. Before adding a new element, remove from the back any indices whose values are smaller (they can never be a future maximum). Remove from the front any indices that have slid out of the window. Each element is pushed and popped at most once, giving amortized O(1) per element."
+    },
+    {
+      "label": "Monotonic Deque — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxSlidingWindow(nums, k) {\n    const dq = []; // stores indices, decreasing order of values\n    const result = [];\n    for (let i = 0; i < nums.length; i++) {\n        // Remove elements outside the window\n        if (dq.length > 0 && dq[0] < i - k + 1) dq.shift();\n        // Remove smaller elements from the back\n        while (dq.length > 0 && nums[dq[dq.length - 1]] < nums[i]) dq.pop();\n        dq.push(i);\n        if (i >= k - 1) result.push(nums[dq[0]]);\n    }\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(k)",
+      "explanation": "Maintain a deque of indices in decreasing order of values. The front always holds the current window maximum's index. Each element is pushed/popped at most once."
     }
   ],
   "hints": [

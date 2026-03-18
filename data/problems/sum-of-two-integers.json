@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "def get_sum(a: int, b: int) -> int:\n    pass"
+    "python": "def get_sum(a: int, b: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} a\n * @param {number} b\n * @return {number}\n */\nfunction getSum(a, b) {\n    \n}"
   },
   "functionName": "get_sum",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
       "explanation": "Same bit manipulation logic as the iterative version, expressed recursively. Base case: when carry (y) reaches 0, return the accumulated sum (x). Otherwise recurse with the XOR sum (no carry) and the left-shifted AND (carry). 32-bit masking is still needed for Python's arbitrary-precision integers."
+    },
+    {
+      "label": "Bit Manipulation — O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function getSum(a, b) {\n    while (b !== 0) {\n        const carry = (a & b) << 1;\n        a = a ^ b;\n        b = carry;\n    }\n    return a;\n}",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "XOR gives sum without carry. AND shifted left gives the carry. Repeat until carry is zero. JavaScript handles 32-bit integers natively so no masking needed."
     }
   ],
   "hints": [

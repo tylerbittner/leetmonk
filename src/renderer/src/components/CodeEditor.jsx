@@ -1,20 +1,19 @@
 import React, { useRef } from 'react'
 import Editor from '@monaco-editor/react'
 
-export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running }) {
+export default function CodeEditor({ problem, code, language, onChange, onLanguageChange, onRun, onSubmit, onReset, running }) {
   const editorRef = useRef(null)
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor
-
-    // Register keyboard shortcuts inside Monaco
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => onRun())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => onSubmit())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => onReset())
-
-    // Focus on mount
     editor.focus()
   }
+
+  const monacoLang = language === 'javascript' ? 'javascript' : 'python'
+  const tabSize = language === 'javascript' ? 2 : 4
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
@@ -23,7 +22,18 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
         display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px',
         borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', flexShrink: 0
       }}>
-        <span style={{ fontSize: 12, color: 'var(--text-muted)', marginRight: 4 }}>Python 3</span>
+        <select
+          value={language}
+          onChange={(e) => onLanguageChange(e.target.value)}
+          style={{
+            fontSize: 12, background: 'var(--bg-tertiary)', color: 'var(--text-primary)',
+            border: '1px solid var(--border)', borderRadius: 4, padding: '3px 6px',
+            cursor: 'pointer', outline: 'none'
+          }}
+        >
+          <option value="python">Python 3</option>
+          <option value="javascript">JavaScript</option>
+        </select>
 
         <div style={{ flex: 1 }} />
 
@@ -60,7 +70,7 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
       <div style={{ flex: 1, overflow: 'hidden' }}>
         <Editor
           height="100%"
-          language="python"
+          language={monacoLang}
           value={code}
           onChange={(val) => onChange(val ?? '')}
           onMount={handleEditorDidMount}
@@ -73,7 +83,7 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             wordWrap: 'on',
-            tabSize: 4,
+            tabSize,
             insertSpaces: true,
             automaticLayout: true,
             padding: { top: 12, bottom: 12 },

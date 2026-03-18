@@ -129,7 +129,8 @@
     }
   ],
   "starterCode": {
-    "python": "def climb_stairs(n: int) -> int:\n    pass"
+    "python": "def climb_stairs(n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @return {number}\n */\nfunction climbStairs(n) {\n    \n}"
   },
   "functionName": "climb_stairs",
   "solutions": [
@@ -150,6 +151,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "The recurrence is identical to Fibonacci: ways(n) = ways(n-1) + ways(n-2). Since each step only depends on the previous two values, we can iterate forward with just two variables instead of a full array or recursion stack."
+    },
+    {
+      "label": "Iterative DP — O(n) space O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function climbStairs(n) {\n    if (n <= 2) return n;\n    let a = 1, b = 2;\n    for (let i = 3; i <= n; i++) {\n        [a, b] = [b, a + b];\n    }\n    return b;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Fibonacci iteration: each step only depends on the two previous values, so we only need two variables."
     }
   ],
   "hints": [

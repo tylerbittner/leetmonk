@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} k\n * @return {number[]}\n */\nfunction topKFrequent(nums, k) {\n    \n}"
   },
   "functionName": "top_k_frequent",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(n log k)",
       "spaceComplexity": "O(n)",
       "explanation": "Count frequencies. Maintain a min-heap of size k: push each element's (frequency, value) pair, and if the heap grows beyond k, pop the minimum (least frequent). The remaining k elements are the most frequent. Sort before returning for consistent output."
+    },
+    {
+      "label": "Sort by Frequency — O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function topKFrequent(nums, k) {\n    const count = new Map();\n    for (const num of nums) count.set(num, (count.get(num) || 0) + 1);\n    return [...count.entries()]\n        .sort((a, b) => b[1] - a[1])\n        .slice(0, k)\n        .map(([num]) => num)\n        .sort((a, b) => a - b);\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Count frequencies with a Map, sort by frequency descending, take top k, then sort the result ascending."
     }
   ],
   "hints": [

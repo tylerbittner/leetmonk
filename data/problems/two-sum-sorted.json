@@ -259,7 +259,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef two_sum_sorted(numbers: List[int], target: int) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} numbers\n * @param {number} target\n * @return {number[]}\n */\nfunction twoSumSorted(numbers, target) {\n    \n}"
   },
   "functionName": "two_sum_sorted",
   "solutions": [
@@ -280,6 +281,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Place two pointers at the ends of the sorted array. If their sum is less than the target, move the left pointer right to increase the sum. If greater, move the right pointer left to decrease it. The sorted order guarantees convergence to the unique solution."
+    },
+    {
+      "label": "Two Pointers — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function twoSumSorted(numbers, target) {\n    let left = 0, right = numbers.length - 1;\n    while (left < right) {\n        const total = numbers[left] + numbers[right];\n        if (total === target) return [left + 1, right + 1];\n        else if (total < target) left++;\n        else right--;\n    }\n    return [];\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers from both ends. Move left right if sum is too small, move right left if sum is too large. Return 1-indexed positions when found."
     }
   ],
   "hints": [

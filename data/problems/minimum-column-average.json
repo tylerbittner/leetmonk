@@ -146,7 +146,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    pass"
+    "python": "from typing import List\n\ndef min_column_average(matrix: List[List[int]]) -> float:\n    pass",
+    "javascript": "/**\n * @param {number[][]} matrix\n * @return {number}\n */\nfunction minColumnAverage(matrix) {\n    \n}"
   },
   "functionName": "min_column_average",
   "solutions": [
@@ -167,6 +168,15 @@
       "timeComplexity": "O(m*n)",
       "spaceComplexity": "O(1)",
       "explanation": "Use `zip(*matrix)` to lazily transpose the matrix — each element yielded by zip is a tuple of all values in one column. For each column tuple, compute its average with `sum(col) / len(col)`. Pass a generator expression directly to `min` to find the smallest average without allocating any intermediate list. The overall work is still O(m*n) since every cell is visited once, but auxiliary space is O(1) because zip and the generator are both lazy."
+    },
+    {
+      "label": "Column Iteration — O(m*n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function minColumnAverage(matrix) {\n    const m = matrix.length;\n    const n = matrix[0].length;\n    let minAvg = Infinity;\n    for (let col = 0; col < n; col++) {\n        let sum = 0;\n        for (let row = 0; row < m; row++) {\n            sum += matrix[row][col];\n        }\n        const avg = sum / m;\n        if (avg < minAvg) minAvg = avg;\n    }\n    return parseFloat(minAvg.toFixed(5));\n}",
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Iterate over each column, sum all values in that column, compute the average, and track the minimum. Return the minimum rounded to 5 decimal places."
     }
   ],
   "hints": [

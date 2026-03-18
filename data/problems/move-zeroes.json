@@ -273,7 +273,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[]}\n */\nfunction moveZeroes(nums) {\n    \n}"
   },
   "functionName": "move_zeroes",
   "solutions": [
@@ -294,6 +295,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Use a `write` pointer that only advances when a non-zero value is placed. Scan with `read`; whenever a non-zero is found, write it to the `write` position and advance `write`. After the scan, fill the remaining positions with zeros. This preserves relative order of non-zero elements."
+    },
+    {
+      "label": "Two Pointers In-Place — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function moveZeroes(nums) {\n    let write = 0;\n    for (let read = 0; read < nums.length; read++) {\n        if (nums[read] !== 0) {\n            nums[write++] = nums[read];\n        }\n    }\n    for (let i = write; i < nums.length; i++) {\n        nums[i] = 0;\n    }\n    return nums;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use a write pointer that advances only on non-zero values. After placing all non-zeros, fill remaining positions with zeros in a second pass."
     }
   ],
   "hints": [

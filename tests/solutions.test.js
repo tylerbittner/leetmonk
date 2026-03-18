@@ -9,6 +9,7 @@
 const { readdirSync, readFileSync, existsSync } = require('fs')
 const { join } = require('path')
 const { execRunner } = require('../src/executor/runner-cjs.js')
+const { execRunnerJs } = require('../src/executor/runner-js-cjs.js')
 
 const PROBLEMS_DIR = join(__dirname, '../data/problems')
 const TIMEOUT_PER_SOLUTION = 30000  // 30s total per solution
@@ -51,7 +52,8 @@ describe('Solution verification', () => {
         const sol = problem.solutions[si]
         if (!sol.code) continue
 
-        const result = await execRunner({
+        const runner = sol.language === 'javascript' ? execRunnerJs : execRunner
+        const result = await runner({
           code: sol.code,
           cases: allCases,
           problem

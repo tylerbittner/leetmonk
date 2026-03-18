@@ -336,7 +336,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef three_sum(nums: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef three_sum(nums: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[][]}\n */\nfunction threeSum(nums) {\n    \n}"
   },
   "functionName": "three_sum",
   "solutions": [
@@ -357,6 +358,15 @@
       "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
       "explanation": "Sort the array first. Fix the first element with an outer loop. For the remaining two elements, use two pointers from both ends of the remaining subarray. If the sum is too small, move the left pointer right; if too large, move the right pointer left. Skip duplicate values at each level to avoid duplicate triplets. The sorted order ensures canonical output."
+    },
+    {
+      "label": "Sort + Two Pointers — O(n²)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function threeSum(nums) {\n    nums.sort((a, b) => a - b);\n    const result = [];\n    for (let i = 0; i < nums.length - 2; i++) {\n        if (i > 0 && nums[i] === nums[i - 1]) continue;\n        let left = i + 1, right = nums.length - 1;\n        while (left < right) {\n            const total = nums[i] + nums[left] + nums[right];\n            if (total === 0) {\n                result.push([nums[i], nums[left], nums[right]]);\n                while (left < right && nums[left] === nums[left + 1]) left++;\n                while (left < right && nums[right] === nums[right - 1]) right--;\n                left++; right--;\n            } else if (total < 0) left++;\n            else right--;\n        }\n    }\n    return result;\n}",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sort then fix first element. Use two pointers to find pairs summing to its negative. Skip duplicates at each level."
     }
   ],
   "hints": [

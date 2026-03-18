@@ -507,7 +507,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef permutations(nums: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[][]}\n */\nfunction permutations(nums) {\n    \n}"
   },
   "functionName": "permutations",
   "solutions": [
@@ -528,6 +529,15 @@
       "timeComplexity": "O(n * n!)",
       "spaceComplexity": "O(n * n!)",
       "explanation": "Use in-place swaps instead of creating new list slices. At position `start`, try placing each remaining element by swapping it to position `start`. Recurse for positions start+1 onward. After returning, swap back to restore state (backtrack). This is more memory-efficient during recursion."
+    },
+    {
+      "label": "Backtracking — O(n * n!)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function permutations(nums) {\n    const result = [];\n    function backtrack(start) {\n        if (start === nums.length) {\n            result.push([...nums]);\n            return;\n        }\n        for (let i = start; i < nums.length; i++) {\n            [nums[start], nums[i]] = [nums[i], nums[start]];\n            backtrack(start + 1);\n            [nums[start], nums[i]] = [nums[i], nums[start]];\n        }\n    }\n    backtrack(0);\n    result.sort((a, b) => {\n        for (let i = 0; i < a.length; i++) {\n            if (a[i] !== b[i]) return a[i] - b[i];\n        }\n        return 0;\n    });\n    return result;\n}",
+      "timeComplexity": "O(n * n!)",
+      "spaceComplexity": "O(n * n!)",
+      "explanation": "Use in-place swaps to generate all permutations. At each position, swap the current element with each subsequent element, recurse, then swap back to restore state. Sort result for consistent ordering."
     }
   ],
   "hints": [

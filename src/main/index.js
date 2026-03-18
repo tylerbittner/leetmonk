@@ -3,6 +3,7 @@ import { join } from 'path'
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs'
 import { spawnSync } from 'child_process'
 import { execRunner } from '../executor/runner.js'
+import { execRunnerJs } from '../executor/runner-js.js'
 
 // Enable remote debugging for E2E tests
 if (process.env.E2E_CDP_PORT) {
@@ -153,9 +154,10 @@ app.whenReady().then(() => {
   ipcMain.handle('load-problems', () => loadProblems())
 
   // IPC: Run code
-  ipcMain.handle('run-code', async (_, { code, problem, mode }) => {
+  ipcMain.handle('run-code', async (_, { code, problem, mode, language }) => {
     const cases = mode === 'run' ? problem.exampleCases : [...problem.exampleCases, ...problem.hiddenCases]
-    return execRunner({ code, cases, problem })
+    const runner = language === 'javascript' ? execRunnerJs : execRunner
+    return runner({ code, cases, problem })
   })
 
   // IPC: Progress

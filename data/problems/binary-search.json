@@ -223,7 +223,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef binary_search(nums: List[int], target: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number}\n */\nfunction search(nums, target) {\n    \n}"
   },
   "functionName": "binary_search",
   "solutions": [
@@ -244,6 +245,15 @@
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
       "explanation": "Check the middle element. If it equals the target, return its index. If it is less than the target, the answer must be in the right half, so move left = mid + 1. If greater, search the left half with right = mid - 1. Each iteration eliminates half the remaining candidates, yielding logarithmic time."
+    },
+    {
+      "label": "Binary Search — O(log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function search(nums, target) {\n    let left = 0, right = nums.length - 1;\n    while (left <= right) {\n        const mid = left + Math.floor((right - left) / 2);\n        if (nums[mid] === target) return mid;\n        else if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Standard binary search: maintain left and right bounds, check mid each iteration, and narrow the search range by half until the target is found or the range is exhausted."
     }
   ],
   "hints": [

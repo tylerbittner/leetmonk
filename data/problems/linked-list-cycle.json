@@ -2,7 +2,10 @@
   "id": "linked-list-cycle",
   "title": "Linked List Cycle",
   "difficulty": "easy",
-  "tags": ["linked-list", "two-pointers"],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
   "description": "## Linked List Cycle\n\nYou are given a linked list as an integer array `head` and an integer `pos`. The parameter `pos` indicates which node's index the tail connects back to (0-indexed), creating a cycle. If `pos == -1`, there is no cycle.\n\nReturn `true` if the linked list has a cycle, `false` otherwise.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 10^4]`.\n- `-10^5 <= Node.val <= 10^5`\n- `pos` is `-1` or a valid index in the list.",
   "examples": [
     {
@@ -23,70 +26,157 @@
   ],
   "exampleCases": [
     {
-      "input": {"head": [3, 2, 0, -4], "pos": 1},
+      "input": {
+        "head": [
+          3,
+          2,
+          0,
+          -4
+        ],
+        "pos": 1
+      },
       "expected": true,
       "explanation": "Cycle at index 1"
     },
     {
-      "input": {"head": [1, 2], "pos": 0},
+      "input": {
+        "head": [
+          1,
+          2
+        ],
+        "pos": 0
+      },
       "expected": true,
       "explanation": "Cycle at start"
     },
     {
-      "input": {"head": [1], "pos": -1},
+      "input": {
+        "head": [
+          1
+        ],
+        "pos": -1
+      },
       "expected": false,
       "explanation": "No cycle"
     },
     {
-      "input": {"head": [1, 2, 3, 4], "pos": -1},
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "pos": -1
+      },
       "expected": false,
       "explanation": "No cycle"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"head": [], "pos": -1},
+      "input": {
+        "head": [],
+        "pos": -1
+      },
       "expected": false,
       "explanation": "Empty list"
     },
     {
-      "input": {"head": [1, 2, 3], "pos": 0},
+      "input": {
+        "head": [
+          1,
+          2,
+          3
+        ],
+        "pos": 0
+      },
       "expected": true,
       "explanation": "Full cycle"
     },
     {
-      "input": {"head": [1, 2, 3], "pos": 2},
+      "input": {
+        "head": [
+          1,
+          2,
+          3
+        ],
+        "pos": 2
+      },
       "expected": true,
       "explanation": "Self-loop at tail"
     },
     {
-      "input": {"head": [1, 2, 3, 4, 5], "pos": 2},
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pos": 2
+      },
       "expected": true,
       "explanation": "Cycle in middle"
     },
     {
-      "input": {"head": [1, 2, 3, 4, 5], "pos": -1},
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pos": -1
+      },
       "expected": false,
       "explanation": "Long list, no cycle"
     },
     {
-      "input": {"head": [1, 2, 3, 4, 5], "pos": 0},
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pos": 0
+      },
       "expected": true,
       "explanation": "Cycle back to head"
     },
     {
-      "input": {"head": [1, 2], "pos": -1},
+      "input": {
+        "head": [
+          1,
+          2
+        ],
+        "pos": -1
+      },
       "expected": false,
       "explanation": "Two-node list, no cycle"
     },
     {
-      "input": {"head": [1, 2, 3, 4, 5], "pos": 4},
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pos": 4
+      },
       "expected": true,
       "explanation": "Self-loop at tail"
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list_with_cycle(nums: List[int], pos: int) -> Optional[ListNode]:\n    if not nums:\n        return None\n    nodes = [ListNode(n) for n in nums]\n    for i in range(len(nodes) - 1):\n        nodes[i].next = nodes[i + 1]\n    if pos >= 0:\n        nodes[-1].next = nodes[pos]\n    return nodes[0]\n\ndef has_cycle(head: List[int], pos: int) -> bool:\n    head = build_list_with_cycle(head, pos)\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list_with_cycle(nums: List[int], pos: int) -> Optional[ListNode]:\n    if not nums:\n        return None\n    nodes = [ListNode(n) for n in nums]\n    for i in range(len(nodes) - 1):\n        nodes[i].next = nodes[i + 1]\n    if pos >= 0:\n        nodes[-1].next = nodes[pos]\n    return nodes[0]\n\ndef has_cycle(head: List[int], pos: int) -> bool:\n    head = build_list_with_cycle(head, pos)\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildListWithCycle(nums, pos) {\n  if (!nums || nums.length === 0) return null;\n  const nodes = nums.map(n => new ListNode(n));\n  for (let i = 0; i < nodes.length - 1; i++) nodes[i].next = nodes[i + 1];\n  if (pos >= 0) nodes[nodes.length - 1].next = nodes[pos];\n  return nodes[0];\n}\n/**\n * @param {number[]} head\n * @param {number} pos\n * @return {boolean}\n */\nfunction hasCycle(head, pos) {\n  head = buildListWithCycle(head, pos);\n    \n}"
   },
   "functionName": "has_cycle",
   "solutions": [
@@ -107,6 +197,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Floyd's cycle detection (tortoise and hare): use two pointers moving at different speeds. The slow pointer moves one step at a time; the fast pointer moves two. If there's a cycle, fast will eventually lap slow and they'll meet inside the cycle. If there's no cycle, fast will reach None."
+    },
+    {
+      "label": "Floyd's Two-Pointer — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildListWithCycle(nums, pos) {\n  if (!nums || nums.length === 0) return null;\n  const nodes = nums.map(n => new ListNode(n));\n  for (let i = 0; i < nodes.length - 1; i++) nodes[i].next = nodes[i + 1];\n  if (pos >= 0) nodes[nodes.length - 1].next = nodes[pos];\n  return nodes[0];\n}\nfunction hasCycle(head, pos) {\n  head = buildListWithCycle(head, pos);\n  let slow = head, fast = head;\n  while (fast !== null && fast.next !== null) {\n    slow = slow.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }\n  return false;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Floyd's cycle detection: slow moves one step, fast moves two. If they meet, there's a cycle."
     }
   ],
   "hints": [

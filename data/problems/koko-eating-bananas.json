@@ -12,7 +12,7 @@
     {
       "input": "piles = [3, 6, 7, 11], h = 8",
       "output": "4",
-      "explanation": "At speed 4: pile 3\u21921hr, pile 6\u21922hr, pile 7\u21922hr, pile 11\u21923hr. Total = 8hrs."
+      "explanation": "At speed 4: pile 3→1hr, pile 6→2hr, pile 7→2hr, pile 11→3hr. Total = 8hrs."
     },
     {
       "input": "piles = [30, 11, 23, 4, 20], h = 5",
@@ -173,7 +173,7 @@
         "h": 1000000000
       },
       "expected": 1,
-      "explanation": "Large pile but abundant time \u2014 speed 1 works (needs exactly 10^9 hours)"
+      "explanation": "Large pile but abundant time — speed 1 works (needs exactly 10^9 hours)"
     },
     {
       "input": {
@@ -212,12 +212,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} piles\n * @param {number} h\n * @return {number}\n */\nfunction minEatingSpeed(piles, h) {\n    \n}"
   },
   "functionName": "min_eating_speed",
   "solutions": [
     {
-      "label": "Linear Search \u2014 O(max_pile * n)",
+      "label": "Linear Search — O(max_pile * n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n    k = 1\n    while hours_needed(k) > h:\n        k += 1\n    return k",
@@ -226,13 +227,22 @@
       "explanation": "Try every speed from 1 upward until we find one that finishes all piles within h hours. Correct but extremely slow when max pile size is large."
     },
     {
-      "label": "Binary Search \u2014 O(n log max_pile)",
+      "label": "Binary Search — O(n log max_pile)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\nimport math\n\ndef min_eating_speed(piles: List[int], h: int) -> int:\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n\n    left, right = 1, max(piles)\n    while left < right:\n        mid = left + (right - left) // 2\n        if hours_needed(mid) <= h:\n            right = mid\n        else:\n            left = mid + 1\n    return left",
       "timeComplexity": "O(n log max_pile)",
       "spaceComplexity": "O(1)",
       "explanation": "The answer lies in [1, max(piles)]. The key insight is monotonicity: a higher speed always finishes in fewer or equal hours. This means we can binary search on the speed. If speed `mid` finishes within h hours, the answer could be mid or smaller (search left). Otherwise, we need more speed (search right)."
+    },
+    {
+      "label": "Binary Search — O(n log max_pile)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function minEatingSpeed(piles, h) {\n    let lo = 1, hi = Math.max(...piles);\n    while (lo < hi) {\n        const mid = lo + Math.floor((hi - lo) / 2);\n        const hours = piles.reduce((sum, p) => sum + Math.ceil(p / mid), 0);\n        if (hours <= h) hi = mid;\n        else lo = mid + 1;\n    }\n    return lo;\n}",
+      "timeComplexity": "O(n log max_pile)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on eating speed. For each candidate speed, check if total hours needed is within h."
     }
   ],
   "hints": [

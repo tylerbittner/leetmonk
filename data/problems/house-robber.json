@@ -6,7 +6,7 @@
     "dynamic-programming",
     "array"
   ],
-  "description": "## House Robber\n\nYou are a security consultant auditing a string of connected server nodes. Each node stores a certain amount of data. However, any two directly adjacent nodes are linked by an alarm \u2014 if you extract data from both, the alarm triggers.\n\nGiven an integer array `nums` where `nums[i]` represents the data in the i-th node, return the **maximum amount of data** you can extract without triggering any alarm (i.e., without selecting two adjacent nodes).\n\n**Constraints:**\n- `1 <= nums.length <= 100`\n- `0 <= nums[i] <= 400`",
+  "description": "## House Robber\n\nYou are a security consultant auditing a string of connected server nodes. Each node stores a certain amount of data. However, any two directly adjacent nodes are linked by an alarm — if you extract data from both, the alarm triggers.\n\nGiven an integer array `nums` where `nums[i]` represents the data in the i-th node, return the **maximum amount of data** you can extract without triggering any alarm (i.e., without selecting two adjacent nodes).\n\n**Constraints:**\n- `1 <= nums.length <= 100`\n- `0 <= nums[i] <= 400`",
   "examples": [
     {
       "input": "nums = [1, 2, 3, 1]",
@@ -201,12 +201,13 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number}\n */\nfunction rob(nums) {\n    \n}"
   },
   "functionName": "rob",
   "solutions": [
     {
-      "label": "Recursive with Memoization \u2014 O(n)",
+      "label": "Recursive with Memoization — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    memo = {}\n    def dp(i):\n        if i >= len(nums):\n            return 0\n        if i in memo:\n            return memo[i]\n        # Either skip this house or rob it (and skip next)\n        memo[i] = max(dp(i + 1), nums[i] + dp(i + 2))\n        return memo[i]\n    return dp(0)",
@@ -215,13 +216,22 @@
       "explanation": "At each house, we face a choice: skip it (move to i+1) or rob it and skip the adjacent house (move to i+2). We take the maximum of these two options. Memoization prevents recomputing overlapping subproblems, reducing exponential recursion to linear time."
     },
     {
-      "label": "Iterative DP \u2014 O(n) space O(1)",
+      "label": "Iterative DP — O(n) space O(1)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    if not nums:\n        return 0\n    if len(nums) == 1:\n        return nums[0]\n    prev2, prev1 = 0, 0\n    for num in nums:\n        curr = max(prev1, prev2 + num)\n        prev2, prev1 = prev1, curr\n    return prev1",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "The recurrence dp[i] = max(dp[i-1], dp[i-2] + nums[i]) captures the rob-or-skip decision at each house. Since each state only depends on the previous two, we need just two variables (prev1 and prev2) instead of a full array."
+    },
+    {
+      "label": "Iterative DP — O(n) space O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function rob(nums) {\n    let a = 0, b = 0;\n    for (const n of nums) {\n        [a, b] = [b, Math.max(b, a + n)];\n    }\n    return b;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Track two variables: best without current house and best with. At each step, new best = max(old best, prev-prev best + current)."
     }
   ],
   "hints": [

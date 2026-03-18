@@ -347,7 +347,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    pass"
+    "python": "from typing import List\n\ndef merge_sorted(nums1: List[int], m: int, nums2: List[int], n: int) -> List[int]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums1\n * @param {number} m\n * @param {number[]} nums2\n * @param {number} n\n * @return {number[]}\n */\nfunction mergeSorted(nums1, m, nums2, n) {\n    \n}"
   },
   "functionName": "merge_sorted",
   "solutions": [
@@ -368,6 +369,15 @@
       "timeComplexity": "O(m+n)",
       "spaceComplexity": "O(1)",
       "explanation": "The key insight is to merge from the end. By placing the largest elements first (into the trailing zeros of nums1), we avoid overwriting any unprocessed elements. Compare the largest unplaced elements from each array and place the larger one at the write position, decrementing the pointers as we go."
+    },
+    {
+      "label": "Merge From End — O(m+n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function mergeSorted(nums1, m, nums2, n) {\n    let p1 = m - 1, p2 = n - 1, write = m + n - 1;\n    while (p1 >= 0 && p2 >= 0) {\n        if (nums1[p1] > nums2[p2]) {\n            nums1[write--] = nums1[p1--];\n        } else {\n            nums1[write--] = nums2[p2--];\n        }\n    }\n    while (p2 >= 0) {\n        nums1[write--] = nums2[p2--];\n    }\n    return nums1;\n}",
+      "timeComplexity": "O(m+n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Merge from the end to avoid overwriting unprocessed elements. Place the largest elements first into the trailing positions of nums1."
     }
   ],
   "hints": [

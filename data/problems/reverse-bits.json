@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "def reverse_bits(n: int) -> int:\n    pass"
+    "python": "def reverse_bits(n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @return {number}\n */\nfunction reverseBits(n) {\n    \n}"
   },
   "functionName": "reverse_bits",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
       "explanation": "Convert n to a 32-character binary string (zero-padded with zfill), reverse it, then convert back to an integer. `bin(n)[2:]` removes the '0b' prefix. `zfill(32)` pads to exactly 32 bits. `[::-1]` reverses the string. `int(..., 2)` converts the reversed binary string back to an integer."
+    },
+    {
+      "label": "Bit-by-Bit Reversal — O(32)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function reverseBits(n) {\n    let result = 0;\n    for (let i = 0; i < 32; i++) {\n        result = (result * 2) + (n & 1);\n        n >>>= 1;\n    }\n    return result >>> 0;\n}",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Extract the LSB of n each iteration, shift result left (multiply by 2), OR in the bit. Use >>> 0 to ensure unsigned 32-bit result."
     }
   ],
   "hints": [

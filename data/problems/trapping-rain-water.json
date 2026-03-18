@@ -229,7 +229,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef trap_water(heights: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} heights\n * @return {number}\n */\nfunction trapWater(heights) {\n    \n}"
   },
   "functionName": "trap_water",
   "solutions": [
@@ -250,6 +251,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Two pointers move inward from both ends. Process the side with the smaller max boundary: the water level there is determined by that smaller max, because the other wall is at least as tall. This eliminates the need for precomputed arrays and achieves constant extra space."
+    },
+    {
+      "label": "Two Pointers — O(n) space O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function trapWater(heights) {\n    if (!heights.length) return 0;\n    let left = 0, right = heights.length - 1;\n    let maxLeft = heights[left], maxRight = heights[right];\n    let water = 0;\n    while (left < right) {\n        if (maxLeft <= maxRight) {\n            left++;\n            maxLeft = Math.max(maxLeft, heights[left]);\n            water += maxLeft - heights[left];\n        } else {\n            right--;\n            maxRight = Math.max(maxRight, heights[right]);\n            water += maxRight - heights[right];\n        }\n    }\n    return water;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers inward. Process the side with the smaller max: that side's water level is bounded by its own max since the other wall is taller."
     }
   ],
   "hints": [

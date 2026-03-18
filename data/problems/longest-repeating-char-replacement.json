@@ -2,7 +2,11 @@
   "id": "longest-repeating-char-replacement",
   "title": "Longest Repeating Character Replacement",
   "difficulty": "medium",
-  "tags": ["string", "sliding-window", "hash-map"],
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-map"
+  ],
   "description": "## Longest Repeating Character Replacement\n\nYou are given a string `s` consisting of uppercase English letters, and an integer `k`. You may choose any character in the string and replace it with any other uppercase letter, and you can do this at most `k` times.\n\nReturn the length of the longest substring that can be made to contain only one distinct character after performing at most `k` replacements.\n\n**Constraints:**\n- `1 <= s.length <= 10^5`\n- `s` consists of only uppercase English letters.\n- `0 <= k <= s.length`",
   "examples": [
     {
@@ -18,70 +22,107 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "ABAB", "k": 2},
+      "input": {
+        "s": "ABAB",
+        "k": 2
+      },
       "expected": 4,
       "explanation": "Entire string can be made uniform"
     },
     {
-      "input": {"s": "AABABBA", "k": 1},
+      "input": {
+        "s": "AABABBA",
+        "k": 1
+      },
       "expected": 4,
       "explanation": "Best window of length 4"
     },
     {
-      "input": {"s": "AAAA", "k": 0},
+      "input": {
+        "s": "AAAA",
+        "k": 0
+      },
       "expected": 4,
       "explanation": "Already uniform"
     },
     {
-      "input": {"s": "ABCD", "k": 0},
+      "input": {
+        "s": "ABCD",
+        "k": 0
+      },
       "expected": 1,
       "explanation": "No replacements; best is single char"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "A", "k": 0},
+      "input": {
+        "s": "A",
+        "k": 0
+      },
       "expected": 1,
       "explanation": "Single character"
     },
     {
-      "input": {"s": "ABCDE", "k": 4},
+      "input": {
+        "s": "ABCDE",
+        "k": 4
+      },
       "expected": 5,
       "explanation": "Replace 4 chars to match the 5th"
     },
     {
-      "input": {"s": "AABABBA", "k": 0},
+      "input": {
+        "s": "AABABBA",
+        "k": 0
+      },
       "expected": 2,
       "explanation": "No replacements; longest run of same char is AA"
     },
     {
-      "input": {"s": "BAAA", "k": 1},
+      "input": {
+        "s": "BAAA",
+        "k": 1
+      },
       "expected": 4,
       "explanation": "Replace B to get AAAA"
     },
     {
-      "input": {"s": "KRSCDCSONAJNHLBMDQGIFAS", "k": 4},
+      "input": {
+        "s": "KRSCDCSONAJNHLBMDQGIFAS",
+        "k": 4
+      },
       "expected": 6,
       "explanation": "Longest window achievable with 4 swaps"
     },
     {
-      "input": {"s": "AAABBBBB", "k": 2},
+      "input": {
+        "s": "AAABBBBB",
+        "k": 2
+      },
       "expected": 7,
       "explanation": "Replace 2 A's: BBBBBBB length 7"
     },
     {
-      "input": {"s": "ABBB", "k": 2},
+      "input": {
+        "s": "ABBB",
+        "k": 2
+      },
       "expected": 4,
       "explanation": "Replace A and have BBBB"
     },
     {
-      "input": {"s": "EOEMQONLY", "k": 1},
+      "input": {
+        "s": "EOEMQONLY",
+        "k": 1
+      },
       "expected": 3,
       "explanation": "Window EOE: max_freq=2, replacements=1 — length 3"
     }
   ],
   "starterCode": {
-    "python": "def character_replacement(s: str, k: int) -> int:\n    pass"
+    "python": "def character_replacement(s: str, k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @param {number} k\n * @return {number}\n */\nfunction characterReplacement(s, k) {\n    \n}"
   },
   "functionName": "character_replacement",
   "solutions": [
@@ -102,6 +143,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Maintain a sliding window and track the frequency of the most common character in the window (`max_freq`). The number of replacements needed equals `window_size - max_freq`. If this exceeds k, shrink the window from the left. A key insight: `max_freq` is never decremented — we only need the window to grow, and any smaller window we've already considered."
+    },
+    {
+      "label": "Sliding Window — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function characterReplacement(s, k) {\n    const count = new Array(26).fill(0);\n    let left = 0, maxCount = 0, result = 0;\n    for (let right = 0; right < s.length; right++) {\n        const idx = s.charCodeAt(right) - 65;\n        count[idx]++;\n        maxCount = Math.max(maxCount, count[idx]);\n        while ((right - left + 1) - maxCount > k) {\n            count[s.charCodeAt(left) - 65]--;\n            left++;\n        }\n        result = Math.max(result, right - left + 1);\n    }\n    return result;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sliding window: window is valid if (size - max_freq) <= k. Expand right, shrink left when invalid."
     }
   ],
   "hints": [

@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef valid_tree(n: int, edges: List[List[int]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number} n\n * @param {number[][]} edges\n * @return {boolean}\n */\nfunction validTree(n, edges) {\n    \n}"
   },
   "functionName": "valid_tree",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(V + E·α(V))",
       "spaceComplexity": "O(V)",
       "explanation": "First check that |edges| == n-1 (necessary condition). Then use Union-Find: for each edge, attempt to union the two nodes. If they're already in the same set (find(u) == find(v)), adding this edge would create a cycle — return False. If all edges are processed without a cycle and the edge count condition holds, the graph is a valid tree."
+    },
+    {
+      "label": "Union-Find — O(V+E·α(V))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function validTree(n, edges) {\n    if (edges.length !== n - 1) return false;\n    const parent = Array.from({length: n}, (_, i) => i);\n    function find(x) {\n        while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }\n        return x;\n    }\n    for (const [u, v] of edges) {\n        const pu = find(u), pv = find(v);\n        if (pu === pv) return false;\n        parent[pu] = pv;\n    }\n    return true;\n}",
+      "timeComplexity": "O(V + E·α(V))",
+      "spaceComplexity": "O(V)",
+      "explanation": "Check n-1 edges (necessary). Use Union-Find: if two nodes share a root, adding the edge creates a cycle. Path compression ensures near-constant per operation."
     }
   ],
   "hints": [

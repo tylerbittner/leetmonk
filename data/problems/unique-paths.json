@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "def unique_paths(m: int, n: int) -> int:\n    pass"
+    "python": "def unique_paths(m: int, n: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number} m\n * @param {number} n\n * @return {number}\n */\nfunction uniquePaths(m, n) {\n    \n}"
   },
   "functionName": "unique_paths",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(min(m,n))",
       "spaceComplexity": "O(1)",
       "explanation": "To reach the bottom-right, the robot must make exactly `m-1` down moves and `n-1` right moves, for a total of `m+n-2` moves. The number of unique orderings of these moves is `C(m+n-2, m-1)` — choosing which of the total moves will be 'down'. This gives a closed-form O(1) formula."
+    },
+    {
+      "label": "Dynamic Programming \u2014 O(m\u00b7n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function uniquePaths(m, n) {\n    const dp = Array.from({length: m}, () => new Array(n).fill(1));\n    for (let r = 1; r < m; r++) {\n        for (let c = 1; c < n; c++) {\n            dp[r][c] = dp[r - 1][c] + dp[r][c - 1];\n        }\n    }\n    return dp[m - 1][n - 1];\n}",
+      "timeComplexity": "O(m\u00b7n)",
+      "spaceComplexity": "O(m\u00b7n)",
+      "explanation": "Initialize a grid where all border cells are 1 (only one path along any edge). Fill interior cells with the sum of the cell above and the cell to the left. The bottom-right cell holds the answer."
     }
   ],
   "hints": [

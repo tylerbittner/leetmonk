@@ -240,7 +240,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number}\n */\nfunction searchRotated(nums, target) {\n    \n}"
   },
   "functionName": "search_rotated",
   "solutions": [
@@ -261,6 +262,15 @@
       "timeComplexity": "O(log n)",
       "spaceComplexity": "O(1)",
       "explanation": "The key insight: even in a rotated array, at least one half of any binary search split is always sorted. Determine which half is sorted by comparing nums[left] with nums[mid]. The sorted half gives a clear range check -- if the target falls within that sorted range, search there; otherwise search the other half."
+    },
+    {
+      "label": "Modified Binary Search — O(log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function searchRotated(nums, target) {\n    let left = 0, right = nums.length - 1;\n    while (left <= right) {\n        const mid = Math.floor((left + right) / 2);\n        if (nums[mid] === target) return mid;\n        if (nums[left] <= nums[mid]) {\n            if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n            else left = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n            else right = mid - 1;\n        }\n    }\n    return -1;\n}",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "At least one half of every binary split is sorted. Determine which half is sorted, then check if target falls in that range to decide which side to search."
     }
   ],
   "hints": [

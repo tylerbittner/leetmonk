@@ -215,7 +215,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    pass"
+    "python": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} heights\n * @return {number}\n */\nfunction maxWater(heights) {\n    \n}"
   },
   "functionName": "max_water",
   "solutions": [
@@ -236,6 +237,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Start with the widest container (left=0, right=n-1). The bottleneck is always the shorter panel. Move the shorter panel inward: any other move would only decrease width without guaranteeing a height gain. This greedy choice systematically eliminates suboptimal candidates and finds the optimal pair in one pass."
+    },
+    {
+      "label": "Two Pointers — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxWater(heights) {\n    let left = 0, right = heights.length - 1;\n    let maxVol = 0;\n    while (left < right) {\n        const vol = Math.min(heights[left], heights[right]) * (right - left);\n        maxVol = Math.max(maxVol, vol);\n        if (heights[left] <= heights[right]) left++;\n        else right--;\n    }\n    return maxVol;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers from both ends. Always move the pointer with the shorter height inward, since that is the bottleneck. Track the maximum volume seen."
     }
   ],
   "hints": [

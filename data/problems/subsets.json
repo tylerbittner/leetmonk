@@ -683,7 +683,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {number[][]}\n */\nfunction subsets(nums) {\n    \n}"
   },
   "functionName": "subsets",
   "solutions": [
@@ -704,6 +705,15 @@
       "timeComplexity": "O(n * 2^n)",
       "spaceComplexity": "O(n * 2^n)",
       "explanation": "Backtracking: at each step, record the current subset as a valid result. Then try adding each remaining element (starting from the current index to avoid duplicates). After adding an element and recursing, remove it (backtrack). This generates all 2^n subsets."
+    },
+    {
+      "label": "Backtracking — O(n * 2^n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function subsets(nums) {\n    nums.sort((a, b) => a - b);\n    const result = [];\n    function backtrack(start, current) {\n        result.push([...current]);\n        for (let i = start; i < nums.length; i++) {\n            current.push(nums[i]);\n            backtrack(i + 1, current);\n            current.pop();\n        }\n    }\n    backtrack(0, []);\n    result.sort((a, b) => {\n        for (let i = 0; i < Math.min(a.length, b.length); i++) {\n            if (a[i] !== b[i]) return a[i] - b[i];\n        }\n        return a.length - b.length;\n    });\n    return result;\n}",
+      "timeComplexity": "O(n * 2^n)",
+      "spaceComplexity": "O(n * 2^n)",
+      "explanation": "Sort input, then backtrack: record each state as a valid subset, try adding each remaining element, then backtrack. Sort result for consistent ordering."
     }
   ],
   "hints": [

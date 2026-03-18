@@ -2,7 +2,11 @@
   "id": "longest-palindromic-substring",
   "title": "Longest Palindromic Substring",
   "difficulty": "medium",
-  "tags": ["string", "dynamic-programming", "two-pointers"],
+  "tags": [
+    "string",
+    "dynamic-programming",
+    "two-pointers"
+  ],
   "description": "## Longest Palindromic Substring\n\nGiven a string `s`, return the longest substring of `s` that is a palindrome. A palindrome reads the same forwards and backwards.\n\nIf there are multiple palindromic substrings of the same maximum length, return the one that starts earliest.\n\n**Constraints:**\n- `1 <= s.length <= 1000`\n- `s` consists of only digits and English letters.",
   "examples": [
     {
@@ -23,70 +27,95 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "babad"},
+      "input": {
+        "s": "babad"
+      },
       "expected": "bab",
       "explanation": "Leftmost longest palindrome"
     },
     {
-      "input": {"s": "cbbd"},
+      "input": {
+        "s": "cbbd"
+      },
       "expected": "bb",
       "explanation": "Even-length palindrome"
     },
     {
-      "input": {"s": "racecar"},
+      "input": {
+        "s": "racecar"
+      },
       "expected": "racecar",
       "explanation": "Entire string is a palindrome"
     },
     {
-      "input": {"s": "a"},
+      "input": {
+        "s": "a"
+      },
       "expected": "a",
       "explanation": "Single character"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "ac"},
+      "input": {
+        "s": "ac"
+      },
       "expected": "a",
       "explanation": "No palindrome longer than 1; return first"
     },
     {
-      "input": {"s": "bananas"},
+      "input": {
+        "s": "bananas"
+      },
       "expected": "anana",
       "explanation": "anana is the longest palindrome"
     },
     {
-      "input": {"s": "abcba"},
+      "input": {
+        "s": "abcba"
+      },
       "expected": "abcba",
       "explanation": "Entire string"
     },
     {
-      "input": {"s": "aacabdkacaa"},
+      "input": {
+        "s": "aacabdkacaa"
+      },
       "expected": "aca",
       "explanation": "aca appears twice; first at index 1"
     },
     {
-      "input": {"s": "aaaa"},
+      "input": {
+        "s": "aaaa"
+      },
       "expected": "aaaa",
       "explanation": "All same characters"
     },
     {
-      "input": {"s": "abcdd"},
+      "input": {
+        "s": "abcdd"
+      },
       "expected": "dd",
       "explanation": "Even palindrome at end"
     },
     {
-      "input": {"s": "xyzyx"},
+      "input": {
+        "s": "xyzyx"
+      },
       "expected": "xyzyx",
       "explanation": "Entire string is a palindrome"
     },
     {
-      "input": {"s": "aab"},
+      "input": {
+        "s": "aab"
+      },
       "expected": "aa",
       "explanation": "Even palindrome at start"
     }
   ],
   "starterCode": {
-    "python": "def longest_palindrome(s: str) -> str:\n    pass"
+    "python": "def longest_palindrome(s: str) -> str:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {string}\n */\nfunction longestPalindrome(s) {\n    \n}"
   },
   "functionName": "longest_palindrome",
   "solutions": [
@@ -107,6 +136,15 @@
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(n²)",
       "explanation": "Build a 2D DP table where `dp[i][j]` is True if `s[i..j]` is a palindrome. Base cases: every single character, every matching pair. For longer substrings: `s[i..j]` is a palindrome if `s[i] == s[j]` and `s[i+1..j-1]` is also a palindrome. Track the start and length of the longest palindromic substring found. Uses O(n²) space vs O(1) for the expand-around-center approach."
+    },
+    {
+      "label": "Expand Around Center — O(n²)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function longestPalindrome(s) {\n    let start = 0, maxLen = 1;\n    function expand(l, r) {\n        while (l >= 0 && r < s.length && s[l] === s[r]) { l--; r++; }\n        if (r - l - 1 > maxLen) { maxLen = r - l - 1; start = l + 1; }\n    }\n    for (let i = 0; i < s.length; i++) {\n        expand(i, i);     // odd length\n        expand(i, i + 1); // even length\n    }\n    return s.slice(start, start + maxLen);\n}",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "For each center (single char or between two chars), expand outward while characters match. Track the longest found."
     }
   ],
   "hints": [

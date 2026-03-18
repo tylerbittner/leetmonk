@@ -134,7 +134,8 @@
     }
   ],
   "starterCode": {
-    "python": "def is_valid(s: str) -> bool:\n    pass"
+    "python": "def is_valid(s: str) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {boolean}\n */\nfunction isValid(s) {\n    \n}"
   },
   "functionName": "is_valid",
   "solutions": [
@@ -155,6 +156,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "A neat variation: when we see an opener, push the expected closer onto the stack. When we see a closer, pop from the stack and verify it matches. The stack directly holds what we expect to see next, making the comparison simpler."
+    },
+    {
+      "label": "Stack \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function isValid(s) {\n    const stack = [];\n    const pairs = {'(': ')', '[': ']', '{': '}'};\n    for (const c of s) {\n        if (pairs[c]) {\n            stack.push(pairs[c]);\n        } else if (stack.pop() !== c) {\n            return false;\n        }\n    }\n    return stack.length === 0;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Push the expected closing bracket when encountering an opener. For each closer, pop and verify it matches. If pop returns undefined or the wrong bracket, the string is invalid. Stack must be empty at the end."
     }
   ],
   "hints": [

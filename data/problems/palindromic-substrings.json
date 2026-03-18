@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "def count_palindromes(s: str) -> int:\n    pass"
+    "python": "def count_palindromes(s: str) -> int:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {number}\n */\nfunction countPalindromes(s) {\n    \n}"
   },
   "functionName": "count_palindromes",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(n²)",
       "explanation": "Build a 2D DP table: `dp[i][j]` is True iff `s[i..j]` is a palindrome. Base cases: every single character and every matching adjacent pair. For lengths ≥ 3: `dp[i][j]` is True if outer characters match and `dp[i+1][j-1]` is True. Count every True entry. Uses O(n²) space vs O(1) for the expand-around-center approach."
+    },
+    {
+      "label": "Expand Around Center — O(n²)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function countPalindromes(s) {\n    let count = 0;\n    function expand(left, right) {\n        while (left >= 0 && right < s.length && s[left] === s[right]) {\n            count++;\n            left--;\n            right++;\n        }\n    }\n    for (let i = 0; i < s.length; i++) {\n        expand(i, i);     // odd-length\n        expand(i, i + 1); // even-length\n    }\n    return count;\n}",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Every palindrome expands from a center. For each index, expand outward for both odd-length and even-length palindromes, counting every valid expansion."
     }
   ],
   "hints": [

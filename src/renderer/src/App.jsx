@@ -31,8 +31,10 @@ export default function App() {
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [languageMap, setLanguageMap] = useState({})
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
+  const currentLanguage = activeProblemId ? (languageMap[activeProblemId] ?? 'python') : 'python'
 
   // Load everything on startup
   useEffect(() => {
@@ -102,14 +104,21 @@ export default function App() {
     setShowConfetti(false)
   }, [])
 
-  const getCode = (problemId) => {
+  const getCode = (problemId, lang) => {
     const p = problems.find(x => x.id === problemId)
-    return editorState[problemId] ?? p?.starterCode?.python ?? ''
+    const language = lang ?? languageMap[problemId] ?? 'python'
+    const key = `${problemId}:${language}`
+    const starter = language === 'javascript'
+      ? (p?.starterCode?.javascript ?? '')
+      : (p?.starterCode?.python ?? '')
+    return editorState[key] ?? starter
   }
 
   const handleCodeChange = useCallback((problemId, code) => {
-    setEditorStateMap(prev => ({ ...prev, [problemId]: code }))
-    window.api.setEditorState({ problemId, code })
+    const language = languageMap[problemId] ?? 'python'
+    const key = `${problemId}:${language}`
+    setEditorStateMap(prev => ({ ...prev, [key]: code }))
+    window.api.setEditorState({ problemId: key, code })
 
     // Mark as attempted on first edit
     setProgress(prev => {
@@ -121,6 +130,11 @@ export default function App() {
       }
       return prev
     })
+  }, [languageMap])
+
+  const handleLanguageChange = useCallback((problemId, language) => {
+    setLanguageMap(prev => ({ ...prev, [problemId]: language }))
+    setResults(null)
   }, [])
 
   // Mark problem solved in session when submit succeeds
@@ -148,7 +162,7 @@ export default function App() {
     const startTime = Date.now()
 
     try {
-      const result = await window.api.runCode({ code, problem: activeProblem, mode })
+      const result = await window.api.runCode({ code, problem: activeProblem, mode, language: currentLanguage })
       setResults(result)
 
       const passed = result.results?.filter(r => r.passed).length ?? 0
@@ -209,11 +223,15 @@ export default function App() {
   const handleReset = useCallback(() => {
     if (!activeProblem) return
     if (!confirm('Reset to starter code? Your current code will be lost.')) return
-    const starter = activeProblem.starterCode?.python ?? ''
-    setEditorStateMap(prev => ({ ...prev, [activeProblem.id]: starter }))
-    window.api.setEditorState({ problemId: activeProblem.id, code: starter })
+    const language = languageMap[activeProblem.id] ?? 'python'
+    const starter = language === 'javascript'
+      ? (activeProblem.starterCode?.javascript ?? '')
+      : (activeProblem.starterCode?.python ?? '')
+    const key = `${activeProblem.id}:${language}`
+    setEditorStateMap(prev => ({ ...prev, [key]: starter }))
+    window.api.setEditorState({ problemId: key, code: starter })
     setResults(null)
-  }, [activeProblem])
+  }, [activeProblem, languageMap])
 
   function triggerConfetti() {
     setShowConfetti(true)
@@ -425,10 +443,12 @@ export default function App() {
               <PanelGroup direction="vertical">
                 <Panel defaultSize={60} minSize={30}>
                   <CodeEditor
-                    key={activeProblem.id}
+                    key={`${activeProblem.id}:${currentLanguage}`}
                     problem={activeProblem}
                     code={getCode(activeProblem.id)}
+                    language={currentLanguage}
                     onChange={(code) => handleCodeChange(activeProblem.id, code)}
+                    onLanguageChange={(lang) => handleLanguageChange(activeProblem.id, lang)}
                     onRun={() => handleRun('run')}
                     onSubmit={() => handleRun('submit')}
                     onReset={handleReset}
@@ -468,7 +488,7 @@ export default function App() {
         color: 'var(--text-muted)', background: 'var(--bg-secondary)', flexShrink: 0
       }}>
         {activeProblem && <span>{activeProblem.id}</span>}
-        <span>Python 3</span>
+        <span>{currentLanguage === 'javascript' ? 'JavaScript' : 'Python 3'}</span>
         <span style={{ marginLeft: 'auto' }}>
           {Object.values(progress).filter(p => p.status === 'solved').length} / {problems.length} solved
         </span>

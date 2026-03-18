@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_path_sum(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n    pass"
+    "python": "from typing import List, Optional\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_tree(nodes: List[Optional[int]]) -> Optional[TreeNode]:\n    if not nodes or nodes[0] is None:\n        return None\n    root = TreeNode(nodes[0])\n    queue = deque([root])\n    i = 1\n    while queue and i < len(nodes):\n        node = queue.popleft()\n        if i < len(nodes) and nodes[i] is not None:\n            node.left = TreeNode(nodes[i])\n            queue.append(node.left)\n        i += 1\n        if i < len(nodes) and nodes[i] is not None:\n            node.right = TreeNode(nodes[i])\n            queue.append(node.right)\n        i += 1\n    return root\n\ndef max_path_sum(root: List[Optional[int]]) -> int:\n    root = build_tree(root)\n    pass",
+    "javascript": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\n/**\n * @param {(number|null)[]} root\n * @return {number}\n */\nfunction maxPathSum(root) {\n  root = buildTree(root);\n    \n}"
   },
   "functionName": "max_path_sum",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(n²)",
       "spaceComplexity": "O(h)",
       "explanation": "For each node, compute the best path passing through it: node.val + best_down(left) + best_down(right). Take the maximum across all nodes. The helper max_down gives the maximum gain starting from a node going only downward. This is O(n²) because max_down is recomputed from scratch for each node. The optimal O(n) solution avoids this by computing gains bottom-up in a single DFS pass."
+    },
+    {
+      "label": "DFS with Global Max — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\nfunction buildTree(nodes) {\n  if (!nodes || nodes.length === 0 || nodes[0] === null) return null;\n  const root = new TreeNode(nodes[0]); const queue = [root]; let i = 1;\n  while (queue.length > 0 && i < nodes.length) {\n    const node = queue.shift();\n    if (i < nodes.length && nodes[i] !== null) { node.left = new TreeNode(nodes[i]); queue.push(node.left); } i++;\n    if (i < nodes.length && nodes[i] !== null) { node.right = new TreeNode(nodes[i]); queue.push(node.right); } i++;\n  }\n  return root;\n}\nfunction maxPathSum(root) {\n  root = buildTree(root);\n  let res = root.val;\n  function dfs(node) {\n    if (!node) return 0;\n    const leftGain = Math.max(dfs(node.left), 0);\n    const rightGain = Math.max(dfs(node.right), 0);\n    res = Math.max(res, node.val + leftGain + rightGain);\n    return node.val + Math.max(leftGain, rightGain);\n  }\n  dfs(root);\n  return res;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "For each node, compute the max gain from left and right subtrees (clamped to 0 to skip negative paths). Update a global max with the path through this node (both directions). Return the best single-direction gain to the parent."
     }
   ],
   "hints": [

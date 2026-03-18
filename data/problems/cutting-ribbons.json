@@ -100,7 +100,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef max_ribbon_length(ribbons: List[int], k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} ribbons\n * @param {number} k\n * @return {number}\n */\nfunction maxRibbonLength(ribbons, k) {\n    \n}"
   },
   "functionName": "max_ribbon_length",
   "solutions": [
@@ -121,6 +122,15 @@
       "timeComplexity": "O(n log max_ribbon)",
       "spaceComplexity": "O(1)",
       "explanation": "This problem is a textbook example of the **Binary Search on Answer** pattern (also called parametric binary search). Instead of searching for a value inside an array, we binary search over the space of possible answers.\n\nThe key insight is **monotonicity of the feasibility function**. Define `can_cut(m)` as whether we can obtain at least k pieces of length m. If we can cut k pieces of length m, we can certainly cut k pieces of any shorter length (each ribbon yields at least as many pieces). Conversely, if we cannot get k pieces of length m, we cannot get k pieces of any longer length either. This means there is a threshold: all lengths up to some value are feasible, and all lengths above it are not.\n\nThis monotone structure is exactly what binary search exploits. We search the range [1, max(ribbons)] for the largest feasible length:\n\n1. Pick the midpoint `mid`.\n2. Count pieces: `sum(r // mid for r in ribbons)`.\n3. If count >= k, this length works — record it and search higher (`lo = mid + 1`).\n4. If count < k, this length is too long — search lower (`hi = mid - 1`).\n\nEach binary search step takes O(n) to count pieces across all ribbons, and we perform O(log max_ribbon) steps, giving O(n log max_ribbon) total — a massive improvement over the linear scan."
+    },
+    {
+      "label": "Binary Search on Answer — O(n log max_ribbon)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function maxRibbonLength(ribbons, k) {\n    let lo = 1, hi = Math.max(...ribbons);\n    let result = 0;\n    while (lo <= hi) {\n        const mid = lo + Math.floor((hi - lo) / 2);\n        const total = ribbons.reduce((sum, r) => sum + Math.floor(r / mid), 0);\n        if (total >= k) { result = mid; lo = mid + 1; }\n        else hi = mid - 1;\n    }\n    return result;\n}",
+      "timeComplexity": "O(n log max_ribbon)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on the answer: find the largest piece length in [1, max(ribbons)] where the total number of pieces is at least k."
     }
   ],
   "hints": [

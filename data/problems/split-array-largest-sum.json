@@ -135,7 +135,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef split_array(nums: List[int], k: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} k\n * @return {number}\n */\nfunction splitArray(nums, k) {\n    \n}"
   },
   "functionName": "split_array",
   "solutions": [
@@ -156,6 +157,15 @@
       "timeComplexity": "O(n log(sum(nums)))",
       "spaceComplexity": "O(1)",
       "explanation": "Instead of searching over how to partition the array, search over what the answer could be. The answer — the maximum subarray sum — must lie between max(nums) (every element needs at least one subarray, and the largest element alone forces this lower bound) and sum(nums) (putting everything in one group).\n\nThe key observation is monotonicity: if we can achieve a maximum sum of X using k or fewer groups, then we can certainly achieve X+1 as well (just use the same split). This means the predicate \"can we split into at most k parts where no part exceeds max_sum?\" flips from False to True exactly once as max_sum increases. That makes it perfect for binary search.\n\nThe feasibility check is a greedy scan: walk through the array accumulating a running sum. Whenever adding the next element would exceed the candidate max_sum, start a new subarray and increment the count. If the count exceeds k, the candidate is too small.\n\nThis is the classic \"minimize the maximum\" variant of Binary Search on Answer — a pattern that appears frequently in interviews. Anytime you see \"minimize the maximum\" or \"maximize the minimum\" over partitions or assignments, consider whether the feasibility check is monotone. If so, binary search on the answer value gives you an elegant O(n log S) solution."
+    },
+    {
+      "label": "Binary Search on Answer — O(n log(sum))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function splitArray(nums, k) {\n    function canSplit(maxSum) {\n        let count = 1, current = 0;\n        for (const num of nums) {\n            if (current + num > maxSum) { count++; current = num; if (count > k) return false; }\n            else current += num;\n        }\n        return true;\n    }\n    let lo = Math.max(...nums), hi = nums.reduce((a, b) => a + b, 0);\n    while (lo < hi) {\n        const mid = Math.floor((lo + hi) / 2);\n        if (canSplit(mid)) hi = mid;\n        else lo = mid + 1;\n    }\n    return lo;\n}",
+      "timeComplexity": "O(n log(sum(nums)))",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on the answer between max(nums) and sum(nums). For each candidate max sum, greedily check if we can split into at most k subarrays."
     }
   ],
   "hints": [

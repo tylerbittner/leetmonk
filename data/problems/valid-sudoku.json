@@ -1520,7 +1520,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef is_valid_sudoku(board: List[List[str]]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string[][]} board\n * @return {boolean}\n */\nfunction isValidSudoku(board) {\n    \n}"
   },
   "functionName": "is_valid_sudoku",
   "solutions": [
@@ -1541,6 +1542,15 @@
       "timeComplexity": "O(1)",
       "spaceComplexity": "O(1)",
       "explanation": "Use integer bitmasks instead of sets for a more efficient representation. Each row, column, and box is a 9-bit integer where bit i represents digit (i+1). Check membership with bitwise AND, update with bitwise OR. Faster in practice due to better cache efficiency and no hash overhead."
+    },
+    {
+      "label": "Hash Sets for Rows, Cols, Boxes \u2014 O(1)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function isValidSudoku(board) {\n    const rows = Array.from({length: 9}, () => new Set());\n    const cols = Array.from({length: 9}, () => new Set());\n    const boxes = Array.from({length: 9}, () => new Set());\n    for (let r = 0; r < 9; r++) {\n        for (let c = 0; c < 9; c++) {\n            const val = board[r][c];\n            if (val === '.') continue;\n            const boxId = Math.floor(r / 3) * 3 + Math.floor(c / 3);\n            if (rows[r].has(val) || cols[c].has(val) || boxes[boxId].has(val)) return false;\n            rows[r].add(val);\n            cols[c].add(val);\n            boxes[boxId].add(val);\n        }\n    }\n    return true;\n}",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Three arrays of Sets (rows, cols, boxes). For each non-empty cell, check if its value already exists in its row, column, or 3x3 box. The box index is `Math.floor(r/3)*3 + Math.floor(c/3)`. Since the board is always 9x9, time and space are constant."
     }
   ],
   "hints": [

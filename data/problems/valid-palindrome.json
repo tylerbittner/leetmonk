@@ -134,7 +134,8 @@
     }
   ],
   "starterCode": {
-    "python": "def is_palindrome(s: str) -> bool:\n    pass"
+    "python": "def is_palindrome(s: str) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {boolean}\n */\nfunction isPalindrome(s) {\n    \n}"
   },
   "functionName": "is_palindrome",
   "solutions": [
@@ -155,6 +156,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Use two pointers starting from each end. Skip non-alphanumeric characters from both sides. Compare the characters at the pointers case-insensitively. If they ever differ, return False. This avoids creating any extra data structures."
+    },
+    {
+      "label": "Two Pointers \u2014 O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function isPalindrome(s) {\n    const isAlnum = c => /[a-z0-9]/.test(c);\n    let left = 0, right = s.length - 1;\n    while (left < right) {\n        while (left < right && !isAlnum(s[left].toLowerCase())) left++;\n        while (left < right && !isAlnum(s[right].toLowerCase())) right--;\n        if (s[left].toLowerCase() !== s[right].toLowerCase()) return false;\n        left++; right--;\n    }\n    return true;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Two pointers from both ends. Skip non-alphanumeric characters, then compare lowercased characters. Return false on any mismatch. O(1) extra space — no filtered copy needed."
     }
   ],
   "hints": [

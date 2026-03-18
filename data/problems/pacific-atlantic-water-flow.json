@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} heights\n * @return {number[][]}\n */\nfunction pacificAtlantic(heights) {\n    \n}"
   },
   "functionName": "pacific_atlantic",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(m·n)",
       "spaceComplexity": "O(m·n)",
       "explanation": "Same reverse-flood idea but using recursive DFS instead of BFS. For each border cell of each ocean, run DFS that only advances to neighbors with height >= current (water flows downhill, so going backwards means going uphill or flat). Collect all reachable cells per ocean and return their intersection."
+    },
+    {
+      "label": "BFS from Borders — O(m·n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function pacificAtlantic(heights) {\n    const m = heights.length, n = heights[0].length;\n    function bfs(starts) {\n        const visited = new Set(starts.map(([r, c]) => r * n + c));\n        const queue = [...starts];\n        let i = 0;\n        while (i < queue.length) {\n            const [r, c] = queue[i++];\n            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {\n                const nr = r + dr, nc = c + dc;\n                if (nr >= 0 && nr < m && nc >= 0 && nc < n &&\n                    !visited.has(nr * n + nc) && heights[nr][nc] >= heights[r][c]) {\n                    visited.add(nr * n + nc);\n                    queue.push([nr, nc]);\n                }\n            }\n        }\n        return visited;\n    }\n    const pacStarts = [], atlStarts = [];\n    for (let r = 0; r < m; r++) {\n        pacStarts.push([r, 0]); atlStarts.push([r, n - 1]);\n    }\n    for (let c = 0; c < n; c++) {\n        pacStarts.push([0, c]); atlStarts.push([m - 1, c]);\n    }\n    const pac = bfs(pacStarts), atl = bfs(atlStarts);\n    const result = [];\n    for (let r = 0; r < m; r++) {\n        for (let c = 0; c < n; c++) {\n            if (pac.has(r * n + c) && atl.has(r * n + c)) result.push([r, c]);\n        }\n    }\n    return result;\n}",
+      "timeComplexity": "O(m·n)",
+      "spaceComplexity": "O(m·n)",
+      "explanation": "Reverse BFS from each ocean's border cells, expanding to neighbors with equal or greater height. Cells reachable from both Pacific and Atlantic borders are the answer."
     }
   ],
   "hints": [

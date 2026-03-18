@@ -113,7 +113,8 @@
     }
   ],
   "starterCode": {
-    "python": "def num_decodings(s: str) -> int:\n    pass"
+    "python": "def num_decodings(s: str) -> int:\n    pass",
+    "javascript": "/**\n * @param {string} s\n * @return {number}\n */\nfunction numDecodings(s) {\n    \n}"
   },
   "functionName": "num_decodings",
   "solutions": [
@@ -134,6 +135,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "explanation": "Same DP recurrence as the O(n) space version, but only track the previous two dp values instead of the full array. At each step, `prev1` = dp[i] and `prev2` = dp[i-1]. After the loop, `prev1` holds the answer. Reduces space from O(n) to O(1)."
+    },
+    {
+      "label": "Space-Optimized DP — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function numDecodings(s) {\n    if (!s || s[0] === '0') return 0;\n    let prev2 = 1, prev1 = 1;\n    for (let i = 1; i < s.length; i++) {\n        let curr = 0;\n        if (s[i] !== '0') curr += prev1;\n        const two = parseInt(s.slice(i - 1, i + 1));\n        if (two >= 10 && two <= 26) curr += prev2;\n        [prev2, prev1] = [prev1, curr];\n    }\n    return prev1;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Space-optimized DP: track only the two previous values. At each position, check single-digit decode (not '0') and two-digit decode (10-26)."
     }
   ],
   "hints": [

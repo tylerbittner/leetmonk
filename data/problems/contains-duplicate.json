@@ -224,7 +224,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    pass",
+    "javascript": "/**\n * @param {number[]} nums\n * @return {boolean}\n */\nfunction containsDuplicate(nums) {\n    \n}"
   },
   "functionName": "contains_duplicate",
   "solutions": [
@@ -245,6 +246,15 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "explanation": "Use a hash set to track elements seen so far. For each element, check if it is already in the set (O(1) lookup). If so, we found a duplicate. Otherwise, add it to the set. One pass through the array."
+    },
+    {
+      "label": "Hash Set — O(n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function containsDuplicate(nums) {\n    const seen = new Set();\n    for (const num of nums) {\n        if (seen.has(num)) return true;\n        seen.add(num);\n    }\n    return false;\n}",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a Set to track numbers seen so far. If a number is already in the set, return true. Otherwise add it and continue."
     }
   ],
   "hints": [

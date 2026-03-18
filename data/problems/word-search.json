@@ -86,7 +86,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    pass"
+    "python": "from typing import List\n\ndef word_search(board: List[List[str]], word: str) -> bool:\n    pass",
+    "javascript": "/**\n * @param {string[][]} board\n * @param {string} word\n * @return {boolean}\n */\nfunction wordSearch(board, word) {\n    \n}"
   },
   "functionName": "word_search",
   "solutions": [
@@ -107,6 +108,15 @@
       "timeComplexity": "O(m·n·4^L)",
       "spaceComplexity": "O(L)",
       "explanation": "Same backtracking DFS but uses an explicit `visited` set instead of modifying the board in-place. Adds the current cell before recursing and removes it on backtrack. Slightly more overhead per call (hash set operations) but doesn't mutate the input. The in-place approach is preferred when mutation is acceptable."
+    },
+    {
+      "label": "Backtracking DFS \u2014 O(m\u00b7n\u00b74^L)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function wordSearch(board, word) {\n    const m = board.length, n = board[0].length;\n    function dfs(r, c, idx) {\n        if (idx === word.length) return true;\n        if (r < 0 || r >= m || c < 0 || c >= n) return false;\n        if (board[r][c] !== word[idx]) return false;\n        const tmp = board[r][c];\n        board[r][c] = '#';\n        const found = dfs(r + 1, c, idx + 1) || dfs(r - 1, c, idx + 1) ||\n                      dfs(r, c + 1, idx + 1) || dfs(r, c - 1, idx + 1);\n        board[r][c] = tmp;\n        return found;\n    }\n    for (let r = 0; r < m; r++) {\n        for (let c = 0; c < n; c++) {\n            if (dfs(r, c, 0)) return true;\n        }\n    }\n    return false;\n}",
+      "timeComplexity": "O(m\u00b7n\u00b74^L)",
+      "spaceComplexity": "O(L)",
+      "explanation": "Try DFS from every cell. At each step, if the cell matches the next letter, mark it visited by replacing with '#', recurse in all four directions, then restore the original value. L is the word length. O(L) stack space for recursion depth."
     }
   ],
   "hints": [

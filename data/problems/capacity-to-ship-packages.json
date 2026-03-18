@@ -142,7 +142,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef ship_within_days(weights: List[int], days: int) -> int:\n    pass"
+    "python": "from typing import List\n\ndef ship_within_days(weights: List[int], days: int) -> int:\n    pass",
+    "javascript": "/**\n * @param {number[]} weights\n * @param {number} days\n * @return {number}\n */\nfunction shipWithinDays(weights, days) {\n    \n}"
   },
   "functionName": "ship_within_days",
   "solutions": [
@@ -163,6 +164,15 @@
       "timeComplexity": "O(n log(sum(weights)))",
       "spaceComplexity": "O(1)",
       "explanation": "Instead of testing every capacity one by one, we observe a critical property: if a capacity C is large enough to ship all crates within `days` days, then any capacity greater than C also works. Conversely, if C is too small, so is every value below it. This **monotonicity** means the answer space has a clean boundary — all values below the answer fail, and all values at or above the answer succeed. Whenever a problem has this structure, we can binary search for the boundary.\n\n**Setting the bounds:** The lower bound is `max(weights)` because the truck must fit at least the heaviest crate. The upper bound is `sum(weights)` because loading everything onto a single truck always works in one day.\n\n**Binary search loop:** We pick the midpoint capacity and run the greedy `can_ship` check. If mid works (packages fit in `days` days or fewer), the answer might be mid or something smaller, so we set `hi = mid`. If mid fails, we need more capacity, so `lo = mid + 1`. When `lo == hi`, we have found the exact minimum capacity.\n\n**The greedy check:** Walk through packages in order, accumulating weight on the current day's truck. When the next package would exceed capacity, start a new day and reset the load. Count total days used. This greedy packing is optimal because shipping fewer crates on an earlier day never helps — it only pushes more weight to later days.\n\nThis pattern — binary searching over a numeric answer using a feasibility check — is called **Binary Search on Answer** (or Parametric Binary Search). It applies whenever you can phrase the problem as \"find the smallest value X such that f(X) is true\" and f is monotone."
+    },
+    {
+      "label": "Binary Search on Answer — O(n log(sum(weights)))",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function shipWithinDays(weights, days) {\n    function canShip(capacity) {\n        let dayCount = 1, currentLoad = 0;\n        for (const w of weights) {\n            if (currentLoad + w > capacity) { dayCount++; currentLoad = 0; }\n            currentLoad += w;\n        }\n        return dayCount <= days;\n    }\n    let lo = Math.max(...weights);\n    let hi = weights.reduce((a, b) => a + b, 0);\n    while (lo < hi) {\n        const mid = lo + Math.floor((hi - lo) / 2);\n        if (canShip(mid)) hi = mid;\n        else lo = mid + 1;\n    }\n    return lo;\n}",
+      "timeComplexity": "O(n log(sum(weights)))",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on the answer between max(weights) and sum(weights). For each candidate capacity, greedily simulate shipping and check if it fits within the day limit."
     }
   ],
   "hints": [

@@ -86,7 +86,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef merge_k_sorted(lists: List[List[int]]) -> List[int]:\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[][]} lists\n * @return {number[]}\n */\nfunction mergeKSorted(lists) {\n    \n}"
   },
   "functionName": "merge_k_sorted",
   "solutions": [
@@ -107,6 +108,15 @@
       "timeComplexity": "O(N log k)",
       "spaceComplexity": "O(log k)",
       "explanation": "Repeatedly merge pairs of lists in a tournament-style bracket. In each round, merge adjacent pairs — this halves the number of lists. After log(k) rounds, all lists are merged. Each merge pass touches O(N) nodes total, giving O(N log k) overall. The recursion depth is O(log k)."
+    },
+    {
+      "label": "Divide and Conquer — O(N log k)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction mergeKSorted(lists) {\n    const nodes = lists.map(lst => buildList(lst));\n    function mergeTwo(l1, l2) {\n        const dummy = new ListNode(0);\n        let curr = dummy;\n        while (l1 && l2) {\n            if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }\n            else { curr.next = l2; l2 = l2.next; }\n            curr = curr.next;\n        }\n        curr.next = l1 || l2;\n        return dummy.next;\n    }\n    function divideConquer(arr) {\n        if (arr.length === 0) return null;\n        if (arr.length === 1) return arr[0];\n        const mid = Math.floor(arr.length / 2);\n        const left = divideConquer(arr.slice(0, mid));\n        const right = divideConquer(arr.slice(mid));\n        return mergeTwo(left, right);\n    }\n    return listToArr(divideConquer(nodes));\n}",
+      "timeComplexity": "O(N log k)",
+      "spaceComplexity": "O(log k)",
+      "explanation": "Merge pairs of lists in a tournament-style bracket using divide and conquer. Each pass halves the number of lists, giving O(log k) rounds. Each round touches O(N) nodes total, so overall O(N log k)."
     }
   ],
   "hints": [

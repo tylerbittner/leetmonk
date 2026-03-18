@@ -81,7 +81,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} intervals\n * @return {number[][]}\n */\nfunction mergeIntervals(intervals) {\n    \n}"
   },
   "functionName": "merge_intervals",
   "solutions": [
@@ -102,6 +103,15 @@
       "timeComplexity": "O(n² log n)",
       "spaceComplexity": "O(n)",
       "explanation": "Repeatedly pass through the sorted list until no more merges happen. In each pass, merge any overlapping consecutive intervals. This is inefficient since one pass is always enough after sorting — but it illustrates the concept of iteratively reducing overlaps. The optimal solution does it in a single pass."
+    },
+    {
+      "label": "Sort and Merge — O(n log n)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function mergeIntervals(intervals) {\n    intervals.sort((a, b) => a[0] - b[0]);\n    const merged = [intervals[0]];\n    for (let i = 1; i < intervals.length; i++) {\n        const [start, end] = intervals[i];\n        if (start <= merged[merged.length - 1][1]) {\n            merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], end);\n        } else {\n            merged.push([start, end]);\n        }\n    }\n    return merged;\n}",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort intervals by start time. Then scan linearly: if the current interval's start is <= the last merged interval's end, they overlap — extend the end. Otherwise, add as a new segment."
     }
   ],
   "hints": [

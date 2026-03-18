@@ -585,7 +585,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List\n\ndef rotate_image(matrix: List[List[int]]) -> List[List[int]]:\n    pass"
+    "python": "from typing import List\n\ndef rotate_image(matrix: List[List[int]]) -> List[List[int]]:\n    pass",
+    "javascript": "/**\n * @param {number[][]} matrix\n * @return {number[][]}\n */\nfunction rotateImage(matrix) {\n    \n}"
   },
   "functionName": "rotate_image",
   "solutions": [
@@ -606,6 +607,15 @@
       "timeComplexity": "O(n\u00b2)",
       "spaceComplexity": "O(1)",
       "explanation": "Process the matrix layer by layer from outside in. For each element in a layer, perform a 4-way cyclic swap: top->right, right->bottom, bottom->left, left->top. Only a single temp variable is needed per swap cycle."
+    },
+    {
+      "label": "Transpose + Reverse Rows — O(n²)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "function rotateImage(matrix) {\n    const n = matrix.length;\n    // Transpose\n    for (let i = 0; i < n; i++) {\n        for (let j = i + 1; j < n; j++) {\n            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];\n        }\n    }\n    // Reverse each row\n    for (let i = 0; i < n; i++) {\n        matrix[i].reverse();\n    }\n    return matrix;\n}",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "explanation": "A 90° clockwise rotation is equivalent to transpose then reverse each row. Both operations are in-place."
     }
   ],
   "hints": [

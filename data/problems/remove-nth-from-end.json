@@ -86,7 +86,8 @@
     }
   ],
   "starterCode": {
-    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    head = build_list(head)\n    pass"
+    "python": "from typing import List, Optional\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef build_list(nums: List[int]) -> Optional[ListNode]:\n    dummy = ListNode(0)\n    cur = dummy\n    for n in nums:\n        cur.next = ListNode(n)\n        cur = cur.next\n    return dummy.next\n\ndef list_to_arr(head: Optional[ListNode]) -> List[int]:\n    result = []\n    while head:\n        result.append(head.val)\n        head = head.next\n    return result\n\ndef remove_nth_from_end(head: List[int], n: int) -> List[int]:\n    head = build_list(head)\n    pass",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\n/**\n * @param {number[]} head\n * @param {number} n\n * @return {number[]}\n */\nfunction removeNthFromEnd(head, n) {\n    head = buildList(head);\n    \n}"
   },
   "functionName": "remove_nth_from_end",
   "solutions": [
@@ -107,6 +108,15 @@
       "timeComplexity": "O(L)",
       "spaceComplexity": "O(1)",
       "explanation": "Two passes: first count the list length L, then find and skip the (L-n)-th node from the front (0-indexed). Uses two traversals of the list instead of one, but same O(L) time complexity. The one-pass two-pointer approach is preferred as it only traverses the list once."
+    },
+    {
+      "label": "Two-Pointer (One Pass) — O(L)",
+      "approach": "optimal",
+      "language": "javascript",
+      "code": "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction buildList(nums) {\n  const dummy = new ListNode(0); let cur = dummy;\n  for (const n of nums) { cur.next = new ListNode(n); cur = cur.next; }\n  return dummy.next;\n}\nfunction listToArr(head) {\n  const res = []; while (head) { res.push(head.val); head = head.next; } return res;\n}\nfunction removeNthFromEnd(head, n) {\n    const node = buildList(head);\n    const dummy = new ListNode(0);\n    dummy.next = node;\n    let fast = dummy, slow = dummy;\n    for (let i = 0; i <= n; i++) fast = fast.next;\n    while (fast) { fast = fast.next; slow = slow.next; }\n    slow.next = slow.next.next;\n    return listToArr(dummy.next);\n}",
+      "timeComplexity": "O(L)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Advance fast n+1 steps ahead of slow. Then move both until fast reaches null. Slow is now just before the target node — skip it with slow.next = slow.next.next."
     }
   ],
   "hints": [
