@@ -1,7 +1,7 @@
 {
   "name": "leetmonk",
   "version": "1.0.3",
-  "description": "Offline LeetCode practice app",
+  "description": "Deep practice in solitude. Master algorithms without the noise.",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
