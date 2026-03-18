@@ -251,6 +251,5 @@
   "hints": [
     "At each position, you have two choices: extend the current subarray or start a new one.",
     "If your running sum becomes negative, it's always better to start fresh at the next element."
-  ],
-  "lcEquivalent": "53. Maximum Subarray"
+  ]
 }

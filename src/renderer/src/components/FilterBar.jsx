@@ -10,19 +10,6 @@ export default function FilterBar({ filters, onFiltersChange, allTags, problems,
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="Search problems…"
-        value={filters.search}
-        onChange={e => update({ search: e.target.value })}
-        style={{
-          background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
-          borderRadius: 6, padding: '5px 10px', color: 'var(--text-primary)',
-          fontSize: 12, outline: 'none', width: 160
-        }}
-      />
-
       {/* Difficulty filter */}
       <select
         value={filters.difficulty}

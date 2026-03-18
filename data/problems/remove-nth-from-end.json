@@ -262,6 +262,5 @@
   "hints": [
     "Use two pointers with a gap of n between them. When the leading pointer reaches the end, the trailing pointer is just before the node to delete.",
     "A dummy node before the head simplifies handling the case where you need to remove the head."
-  ],
-  "lcEquivalent": "19. Remove Nth Node From End of List"
+  ]
 }

@@ -280,6 +280,5 @@
   "hints": [
     "Even in a rotated array, at least one half of any binary search split is always sorted.",
     "Determine which half is sorted, then check if the target falls in that sorted range."
-  ],
-  "lcEquivalent": "33. Search in Rotated Sorted Array"
+  ]
 }

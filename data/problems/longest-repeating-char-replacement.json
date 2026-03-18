@@ -162,6 +162,5 @@
   "hints": [
     "The number of characters you need to replace in a window equals window_size minus the count of the most frequent character.",
     "Use a sliding window: if replacements needed exceed k, shrink from the left. The window only needs to grow to find a longer valid substring."
-  ],
-  "lcEquivalent": "424. Longest Repeating Character Replacement"
+  ]
 }

@@ -256,6 +256,5 @@
   "hints": [
     "Use BFS. At each level, the rightmost node is the last one dequeued.",
     "Process all nodes at each level in order; record the value of the last node at each level."
-  ],
-  "lcEquivalent": "199. Binary Tree Right Side View"
+  ]
 }

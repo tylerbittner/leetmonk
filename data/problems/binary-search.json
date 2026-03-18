@@ -263,6 +263,5 @@
   "hints": [
     "The array is sorted \u2014 you can eliminate half the remaining elements at each step.",
     "Use two pointers (left and right) and check the middle element each iteration."
-  ],
-  "lcEquivalent": "704. Binary Search"
+  ]
 }

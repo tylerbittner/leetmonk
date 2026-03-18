@@ -233,6 +233,5 @@
   "hints": [
     "Define dp[i] as the length of the LIS ending at index i. For each i, look back at all j < i where nums[j] < nums[i].",
     "For O(n log n): maintain an array of the smallest possible tail values for subsequences of each length, and use binary search to update it."
-  ],
-  "lcEquivalent": "300. Longest Increasing Subsequence"
+  ]
 }

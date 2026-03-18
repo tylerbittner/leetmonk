@@ -155,6 +155,5 @@
   "hints": [
     "Every palindrome has a center: either a single character (odd length) or two matching characters (even length). Try expanding from each possible center.",
     "For each index i, check both odd-length palindromes (centered at i) and even-length palindromes (centered between i and i+1)."
-  ],
-  "lcEquivalent": "5. Longest Palindromic Substring"
+  ]
 }

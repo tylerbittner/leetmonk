@@ -1560,6 +1560,5 @@
   "hints": [
     "You need to check three constraints: rows, columns, and 3x3 boxes. Use a separate set for each.",
     "The box index for cell (r, c) is (r // 3) * 3 + (c // 3)."
-  ],
-  "lcEquivalent": "36. Valid Sudoku"
+  ]
 }

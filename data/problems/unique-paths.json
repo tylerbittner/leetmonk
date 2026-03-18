@@ -160,6 +160,5 @@
   "hints": [
     "The number of paths to reach a cell equals paths from above plus paths from the left.",
     "Alternatively, the robot always makes exactly (m-1) down and (n-1) right moves \u2014 count the arrangements using combinatorics."
-  ],
-  "lcEquivalent": "62. Unique Paths"
+  ]
 }

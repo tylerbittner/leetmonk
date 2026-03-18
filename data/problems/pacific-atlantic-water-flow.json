@@ -622,6 +622,5 @@
   "hints": [
     "Instead of simulating water flowing forward (from cell to ocean), work backwards: start from each ocean's border and flood inward to cells from which water could reach that ocean.",
     "A cell can flow to an ocean if it's reachable going uphill from the ocean border. Find cells reachable from both Pacific and Atlantic borders."
-  ],
-  "lcEquivalent": "417. Pacific Atlantic Water Flow"
+  ]
 }

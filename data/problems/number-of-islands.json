@@ -362,6 +362,5 @@
   "hints": [
     "When you find a '1', it's a new island. Use DFS/BFS to mark all connected '1's as visited so you don't count them again.",
     "Mark cells as visited by changing '1' to '0' (or use a separate visited set)."
-  ],
-  "lcEquivalent": "200. Number of Islands"
+  ]
 }

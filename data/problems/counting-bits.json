@@ -249,6 +249,5 @@
   "hints": [
     "For each i, count its bits by checking i & 1 and shifting right \u2014 but this is O(n log n) total.",
     "O(n) trick: dp[i] = dp[i >> 1] + (i & 1). Shifting right removes the last bit; the recurrence builds on already-computed results."
-  ],
-  "lcEquivalent": "338. Counting Bits"
+  ]
 }

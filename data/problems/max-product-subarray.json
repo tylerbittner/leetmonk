@@ -225,6 +225,5 @@
   "hints": [
     "A negative number times a negative number is positive \u2014 so tracking the minimum product is just as important as tracking the maximum.",
     "At each position, the max product ending here is the maximum of: starting fresh at this element, extending the previous max, or extending the previous min (which could flip sign)."
-  ],
-  "lcEquivalent": "152. Maximum Product Subarray"
+  ]
 }

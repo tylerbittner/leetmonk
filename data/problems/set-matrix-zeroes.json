@@ -591,6 +591,5 @@
   "hints": [
     "You need to record which rows and columns had zeros before you start modifying the matrix.",
     "Can you use the first row and first column of the matrix itself as markers to avoid extra space?"
-  ],
-  "lcEquivalent": "73. Set Matrix Zeroes"
+  ]
 }

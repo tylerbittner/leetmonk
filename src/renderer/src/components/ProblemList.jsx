@@ -2,8 +2,24 @@ import React from 'react'
 
 const difficultyColor = { easy: 'var(--easy)', medium: 'var(--medium)', hard: 'var(--hard)' }
 
-export default function ProblemList({ problems, activeProblemId, progress, onSelect }) {
+export default function ProblemList({ problems, activeProblemId, progress, onSelect, searchValue, onSearchChange }) {
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+      {/* Search input */}
+      <div style={{ padding: '8px 10px 4px', flexShrink: 0 }}>
+        <input
+          type="text"
+          placeholder="Search problems…"
+          value={searchValue ?? ''}
+          onChange={e => onSearchChange && onSearchChange(e.target.value)}
+          style={{
+            width: '100%', boxSizing: 'border-box',
+            background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
+            borderRadius: 6, padding: '5px 10px', color: 'var(--text-primary)',
+            fontSize: 12, outline: 'none',
+          }}
+        />
+      </div>
     <div style={{ overflow: 'auto', flex: 1 }}>
       <div style={{ padding: '8px 0' }}>
         {problems.length === 0 && (
@@ -59,6 +75,7 @@ export default function ProblemList({ problems, activeProblemId, progress, onSel
           )
         })}
       </div>
+    </div>
     </div>
   )
 }

@@ -270,6 +270,5 @@
   "hints": [
     "Water at any position is bounded by the minimum of the tallest bar to its left and to its right.",
     "Can you compute max-left and max-right arrays in linear time, then derive the answer?"
-  ],
-  "lcEquivalent": "42. Trapping Rain Water"
+  ]
 }

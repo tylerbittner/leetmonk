@@ -395,6 +395,5 @@
   "hints": [
     "Two intervals overlap if one starts at or before the other ends. Process intervals in three phases: before, overlapping, and after the new interval.",
     "During the overlap phase, expand the new interval's boundaries to cover all overlapping intervals."
-  ],
-  "lcEquivalent": "57. Insert Interval"
+  ]
 }

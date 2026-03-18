@@ -240,6 +240,5 @@
   "hints": [
     "Think of it as finding the shortest path from 0 to amount, where each step adds a coin's value.",
     "Use a DP array: dp[i] = minimum coins to make amount i. Build up from dp[0] = 0."
-  ],
-  "lcEquivalent": "322. Coin Change"
+  ]
 }

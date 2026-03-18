@@ -215,6 +215,5 @@
   "hints": [
     "Put all numbers in a hash set. For each number, check if it's the start of a sequence (num-1 is not in the set).",
     "Only count sequences from their start \u2014 this ensures each element is visited at most once, giving O(n) time."
-  ],
-  "lcEquivalent": "128. Longest Consecutive Sequence"
+  ]
 }

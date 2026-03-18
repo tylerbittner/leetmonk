@@ -153,6 +153,5 @@
   "hints": [
     "At each position, you can decode one digit (must be 1-9) or two digits (must be 10-26).",
     "Define dp[i] = number of ways to decode s[:i]. Combine the one-digit and two-digit cases from previous positions."
-  ],
-  "lcEquivalent": "91. Decode Ways"
+  ]
 }

@@ -260,6 +260,5 @@
   "hints": [
     "Sort by start time. Then check whether any consecutive meetings overlap.",
     "Two meetings overlap if the next one's start time is strictly less than the previous one's end time."
-  ],
-  "lcEquivalent": "252. Meeting Rooms"
+  ]
 }

@@ -305,6 +305,5 @@
   "hints": [
     "For each position, you need the product of everything to its left and everything to its right.",
     "Compute left products in one forward pass, then right products in a backward pass."
-  ],
-  "lcEquivalent": "238. Product of Array Except Self"
+  ]
 }

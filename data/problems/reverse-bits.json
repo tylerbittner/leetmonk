@@ -146,6 +146,5 @@
   "hints": [
     "Process one bit at a time. In each step, take the LSB of n and append it to the result, then shift both.",
     "Remember to do exactly 32 iterations even if n becomes 0 early \u2014 trailing zeros in n become leading zeros in the reversed result."
-  ],
-  "lcEquivalent": "190. Reverse Bits"
+  ]
 }

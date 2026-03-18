@@ -151,6 +151,5 @@
   "hints": [
     "Use `n & 1` to check the least significant bit, then right-shift with `n >>= 1` to check the next.",
     "Optimization: `n & (n-1)` clears the lowest set bit. Count how many times you can do this before n reaches 0."
-  ],
-  "lcEquivalent": "191. Number of 1 Bits"
+  ]
 }

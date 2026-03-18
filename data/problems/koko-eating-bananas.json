@@ -252,6 +252,5 @@
   "hints": [
     "The answer is between 1 and max(piles). The search space is monotonic: higher speed always finishes faster.",
     "Binary search on the speed: check if a given speed k allows finishing all piles in h hours."
-  ],
-  "lcEquivalent": "875. Koko Eating Bananas"
+  ]
 }

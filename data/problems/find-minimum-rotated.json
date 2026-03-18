@@ -257,6 +257,5 @@
   "hints": [
     "In a rotated sorted array, the minimum is the point where the sorted order 'breaks'.",
     "Compare the middle element to the rightmost element to determine which half the minimum is in."
-  ],
-  "lcEquivalent": "153. Find Minimum in Rotated Sorted Array"
+  ]
 }

@@ -271,6 +271,5 @@
   "hints": [
     "You don't need to fully sort the array \u2014 only the top k elements matter.",
     "A min-heap of size k lets you efficiently track the k largest elements seen so far."
-  ],
-  "lcEquivalent": "215. Kth Largest Element in an Array"
+  ]
 }

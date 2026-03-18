@@ -240,6 +240,5 @@
     "Think about what happens to the total number of pieces as you increase the piece length. Does the count go up or down?",
     "If you can get k pieces at length m, can you always get k pieces at length m-1? This monotone property means binary search applies.",
     "Binary search over the answer: search for the largest length m in [1, max(ribbons)] where sum(r // m for r in ribbons) >= k."
-  ],
-  "lcEquivalent": "1891. Cutting Ribbons"
+  ]
 }

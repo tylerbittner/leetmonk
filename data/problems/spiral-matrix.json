@@ -463,6 +463,5 @@
   "hints": [
     "Think of the spiral as repeatedly peeling the outermost layer of the matrix.",
     "Track four boundaries: top, bottom, left, right. After processing each side, shrink the corresponding boundary."
-  ],
-  "lcEquivalent": "54. Spiral Matrix"
+  ]
 }

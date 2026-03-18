@@ -349,6 +349,5 @@
   "hints": [
     "Two strings are anagrams if and only if their sorted characters are equal.",
     "Use the sorted string (or character count tuple) as a hash map key to group anagrams."
-  ],
-  "lcEquivalent": "49. Group Anagrams"
+  ]
 }

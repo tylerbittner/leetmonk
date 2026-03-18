@@ -300,6 +300,5 @@
   "hints": [
     "A valid tree must be connected AND have no cycles. A tree with n nodes always has exactly n-1 edges \u2014 check this first.",
     "Then verify no cycles using DFS (track parent to skip the edge you came from) or Union-Find."
-  ],
-  "lcEquivalent": "261. Graph Valid Tree"
+  ]
 }

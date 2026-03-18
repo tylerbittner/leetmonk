@@ -547,6 +547,5 @@
   "hints": [
     "At each position in the permutation, try placing each unused element.",
     "Backtracking: choose an element, place it, recurse, then unchoose (backtrack)."
-  ],
-  "lcEquivalent": "46. Permutations"
+  ]
 }

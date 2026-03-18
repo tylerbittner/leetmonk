@@ -176,6 +176,5 @@
   "hints": [
     "Think of a window that expands right and contracts left when a duplicate is found.",
     "Store the most recent index of each character. When a duplicate appears, jump the left pointer past the previous occurrence."
-  ],
-  "lcEquivalent": "3. Longest Substring Without Repeating Characters"
+  ]
 }

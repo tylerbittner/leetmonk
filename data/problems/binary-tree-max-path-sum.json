@@ -227,6 +227,5 @@
   "hints": [
     "At each node, you can form a path by combining: the node's value + the best path going down its left subtree + the best path going down its right subtree.",
     "A path going upward from a node can only extend in one direction. Return node.val + max(left, right) for the parent, but update a global max with node.val + left + right."
-  ],
-  "lcEquivalent": "124. Binary Tree Maximum Path Sum"
+  ]
 }

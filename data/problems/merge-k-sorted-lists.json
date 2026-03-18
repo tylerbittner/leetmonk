@@ -329,6 +329,5 @@
   "hints": [
     "A min-heap lets you efficiently find the smallest element among the current front nodes of all k lists.",
     "Push the head of each list into the heap. After popping the minimum, push that node's next (if it exists). Use a counter as tiebreaker since ListNode isn't comparable."
-  ],
-  "lcEquivalent": "23. Merge k Sorted Lists"
+  ]
 }

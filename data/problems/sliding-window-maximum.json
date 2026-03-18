@@ -339,6 +339,5 @@
   "hints": [
     "For each window, you need the maximum quickly. A deque (double-ended queue) can maintain candidates.",
     "Keep the deque in decreasing order of values. The front is always the current window's maximum."
-  ],
-  "lcEquivalent": "239. Sliding Window Maximum"
+  ]
 }

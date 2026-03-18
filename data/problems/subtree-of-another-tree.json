@@ -261,6 +261,5 @@
   "hints": [
     "At each node in root, check if the subtree rooted there is identical to subRoot.",
     "Use a helper `is_same(a, b)` that recursively checks if two trees are identical, then call it from every node in root."
-  ],
-  "lcEquivalent": "572. Subtree of Another Tree"
+  ]
 }

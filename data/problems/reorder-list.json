@@ -275,6 +275,5 @@
   "hints": [
     "Split the list at its midpoint. Reverse the second half. Then interleave the two halves.",
     "Use slow/fast pointers to find the middle in O(n). Reversing and merging also take O(n) \u2014 no extra space needed."
-  ],
-  "lcEquivalent": "143. Reorder List"
+  ]
 }

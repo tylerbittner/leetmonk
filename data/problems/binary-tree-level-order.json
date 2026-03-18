@@ -332,6 +332,5 @@
   "hints": [
     "Use BFS (a queue). At each step, process all nodes currently in the queue \u2014 that's one complete level.",
     "Record len(queue) before processing each level to know exactly how many nodes belong to that level."
-  ],
-  "lcEquivalent": "102. Binary Tree Level Order Traversal"
+  ]
 }

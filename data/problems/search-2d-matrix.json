@@ -376,6 +376,5 @@
   "hints": [
     "The matrix, read row by row, forms a single sorted sequence.",
     "You can treat the matrix as a 1D array and map index i to row=i//n, col=i%n."
-  ],
-  "lcEquivalent": "74. Search a 2D Matrix"
+  ]
 }

@@ -319,6 +319,5 @@
   "hints": [
     "Sort by start time. Use a min-heap to track when each room becomes free.",
     "For each new meeting, if the earliest-ending room frees up before this meeting starts, reuse it. Otherwise, open a new room."
-  ],
-  "lcEquivalent": "253. Meeting Rooms II"
+  ]
 }

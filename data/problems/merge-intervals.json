@@ -393,6 +393,5 @@
   "hints": [
     "Sort intervals by start time. Then scan left to right: if the next interval overlaps with the last one, merge them.",
     "Two intervals [a,b] and [c,d] overlap if c <= b (c starts before b ends). Merge by extending end to max(b, d)."
-  ],
-  "lcEquivalent": "56. Merge Intervals"
+  ]
 }

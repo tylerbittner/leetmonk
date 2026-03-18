@@ -191,6 +191,5 @@
   "hints": [
     "Use a hash map to track how many of each character from t you still need in the current window.",
     "Use a variable to count how many required characters are still missing. When it hits 0, try shrinking the window from the left."
-  ],
-  "lcEquivalent": "76. Minimum Window Substring"
+  ]
 }

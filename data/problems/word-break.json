@@ -211,6 +211,5 @@
   "hints": [
     "Define dp[i] as whether s[:i] can be segmented into dictionary words.",
     "For each position i, try all split points j: if dp[j] is True and s[j:i] is in the dictionary, then dp[i] is True."
-  ],
-  "lcEquivalent": "139. Word Break"
+  ]
 }

@@ -271,6 +271,5 @@
     "If you could check whether a given maximum sum is achievable in k splits, how would you find the optimal value?",
     "For a fixed candidate maximum sum, greedily assign elements left to right: accumulate until adding the next element would exceed the limit, then start a new subarray. Count how many subarrays you need.",
     "The feasibility check is monotone \u2014 if max_sum = X works, then X+1 also works. Use binary search on the answer space."
-  ],
-  "lcEquivalent": "410. Split Array Largest Sum"
+  ]
 }

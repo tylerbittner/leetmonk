@@ -318,6 +318,5 @@
   "hints": [
     "Sort candidates first. Use backtracking, and at each step try adding a candidate or moving to the next.",
     "Allow reuse by not incrementing the start index when recursing. Prune when a candidate exceeds the remaining target."
-  ],
-  "lcEquivalent": "39. Combination Sum"
+  ]
 }

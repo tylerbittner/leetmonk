@@ -264,6 +264,5 @@
   "hints": [
     "What data structure lets you check membership in O(1)?",
     "You only need to know if something has been seen before \u2014 a set is perfect for this."
-  ],
-  "lcEquivalent": "217. Contains Duplicate"
+  ]
 }

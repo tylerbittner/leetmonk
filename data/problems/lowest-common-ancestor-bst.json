@@ -274,6 +274,5 @@
   "hints": [
     "Use the BST property: if both p and q are smaller than the current node, go left; if both are larger, go right.",
     "The LCA is the first node where p and q 'split' \u2014 one goes left and one goes right, or one equals the current node."
-  ],
-  "lcEquivalent": "235. Lowest Common Ancestor of a Binary Search Tree"
+  ]
 }

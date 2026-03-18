@@ -355,6 +355,5 @@
   "hints": [
     "A stack can help track days that haven't yet found a warmer day.",
     "When you encounter a temperature warmer than the stack top, pop and resolve that day's answer."
-  ],
-  "lcEquivalent": "739. Daily Temperatures"
+  ]
 }

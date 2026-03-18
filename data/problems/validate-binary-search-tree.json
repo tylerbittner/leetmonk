@@ -219,6 +219,5 @@
   "hints": [
     "Simply checking left < node < right is not enough \u2014 a node deep in the left subtree must also be less than all of its ancestors.",
     "Pass down valid bounds: when going left, update the upper bound to the current node's value; when going right, update the lower bound."
-  ],
-  "lcEquivalent": "98. Validate Binary Search Tree"
+  ]
 }

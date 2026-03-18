@@ -215,6 +215,5 @@
   "hints": [
     "The simplest approach: track visited nodes in a set. If you see a node twice, there's a cycle.",
     "Space-optimal: use two pointers (slow and fast). If they ever point to the same node, there's a cycle."
-  ],
-  "lcEquivalent": "141. Linked List Cycle"
+  ]
 }

@@ -313,6 +313,5 @@
   "hints": [
     "Use a slow pointer to track where the next non-zero should be written.",
     "After placing all non-zeros, fill the remaining slots with zeros."
-  ],
-  "lcEquivalent": "283. Move Zeroes"
+  ]
 }

@@ -212,6 +212,5 @@
   "hints": [
     "The expected sum of 0 through n is n*(n+1)/2. The missing number is the difference between expected and actual sum.",
     "XOR trick: x ^ x = 0 and x ^ 0 = x. XOR all indices and all values \u2014 everything cancels except the missing number."
-  ],
-  "lcEquivalent": "268. Missing Number"
+  ]
 }

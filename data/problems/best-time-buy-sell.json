@@ -250,6 +250,5 @@
   "hints": [
     "At each day, you want to sell at the highest price after buying at the lowest price seen so far.",
     "Track the minimum price encountered as you iterate. The best profit at each step is current price minus that minimum."
-  ],
-  "lcEquivalent": "121. Best Time to Buy and Sell Stock"
+  ]
 }

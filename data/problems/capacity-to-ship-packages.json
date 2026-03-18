@@ -294,6 +294,5 @@
     "If capacity C is enough to ship everything in time, then capacity C+1 is also enough. What search technique exploits this monotone property?",
     "Write a helper function that checks whether a given capacity lets you ship all packages within the day limit using a greedy left-to-right scan.",
     "Binary search for the smallest capacity where your helper returns true."
-  ],
-  "lcEquivalent": "1011. Capacity to Ship Packages Within D Days"
+  ]
 }

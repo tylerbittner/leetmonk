@@ -271,6 +271,5 @@
   "hints": [
     "At each node, swap its left and right children. Then recursively do the same for both subtrees.",
     "This is a simple recursive post-order or pre-order traversal where you swap children at every node."
-  ],
-  "lcEquivalent": "226. Invert Binary Tree"
+  ]
 }

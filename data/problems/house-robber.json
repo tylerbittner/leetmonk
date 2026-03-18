@@ -241,6 +241,5 @@
   "hints": [
     "For each house, you decide: rob it (plus best from two back) or skip it (best from one back).",
     "You only need to remember the last two DP values."
-  ],
-  "lcEquivalent": "198. House Robber"
+  ]
 }

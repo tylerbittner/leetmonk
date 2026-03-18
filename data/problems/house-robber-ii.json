@@ -215,6 +215,5 @@
   "hints": [
     "The circular constraint means you can't rob both the first and last house. Split into two cases: one where you exclude the first house, one where you exclude the last.",
     "Each case is just the original linear House Robber problem \u2014 solve it with DP in O(n)."
-  ],
-  "lcEquivalent": "213. House Robber II"
+  ]
 }

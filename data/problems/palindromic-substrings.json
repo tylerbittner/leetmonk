@@ -150,6 +150,5 @@
   "hints": [
     "Every palindrome has a center \u2014 a single character for odd-length or a matching pair for even-length.",
     "Try expanding outward from each center: every successful expansion is a new palindromic substring to count."
-  ],
-  "lcEquivalent": "647. Palindromic Substrings"
+  ]
 }

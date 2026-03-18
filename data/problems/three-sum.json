@@ -376,6 +376,5 @@
   "hints": [
     "Sort the array first. This makes duplicate skipping easy and enables two-pointer technique.",
     "Fix one element with an outer loop, then use two pointers (left and right) to find pairs that complete the triplet."
-  ],
-  "lcEquivalent": "15. 3Sum"
+  ]
 }

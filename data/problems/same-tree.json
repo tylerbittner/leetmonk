@@ -247,6 +247,5 @@
   "hints": [
     "Two trees are the same if both nodes are None, or both are non-None with equal values and identical left and right subtrees.",
     "Use recursion: check root values match, then recursively check left and right subtrees."
-  ],
-  "lcEquivalent": "100. Same Tree"
+  ]
 }

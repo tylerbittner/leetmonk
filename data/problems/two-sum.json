@@ -314,6 +314,5 @@
   "hints": [
     "For each number, what value would you need to find to complete the pair?",
     "A hash map can tell you in O(1) whether a value has been seen before."
-  ],
-  "lcEquivalent": "1. Two Sum"
+  ]
 }

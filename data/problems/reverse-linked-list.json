@@ -237,6 +237,5 @@
   "hints": [
     "Use three pointers: prev (None initially), curr (head), and next_node (to save curr.next before overwriting it).",
     "At each step, reverse the link: curr.next = prev, then advance both pointers."
-  ],
-  "lcEquivalent": "206. Reverse Linked List"
+  ]
 }

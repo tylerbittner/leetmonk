@@ -280,6 +280,5 @@
   "hints": [
     "Think column by column: for each column index j, sum matrix[0][j], matrix[1][j], ..., matrix[m-1][j] and divide by m.",
     "Python's zip(*matrix) transposes the matrix lazily \u2014 each tuple it yields contains all values from one column, so you can iterate columns without any extra indexing."
-  ],
-  "lcEquivalent": null
+  ]
 }

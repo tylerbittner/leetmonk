@@ -298,6 +298,5 @@
   "hints": [
     "Track the maximum index you can reach from positions visited so far.",
     "If at any point your current index exceeds the max reachable index, you're stuck and return False."
-  ],
-  "lcEquivalent": "55. Jump Game"
+  ]
 }

@@ -291,6 +291,5 @@
   "hints": [
     "Use DFS or BFS to explore each connected component. Count how many times you start a new exploration from an unvisited node.",
     "Union-Find is an elegant alternative: start with n components and reduce the count each time you merge two different components."
-  ],
-  "lcEquivalent": "323. Number of Connected Components in an Undirected Graph"
+  ]
 }

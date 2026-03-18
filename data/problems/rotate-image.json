@@ -624,6 +624,5 @@
   "hints": [
     "A clockwise rotation equals a transpose followed by reversing each row.",
     "Alternatively, process the matrix layer by layer (outer ring, then next inner ring, etc.) doing a 4-way swap."
-  ],
-  "lcEquivalent": "48. Rotate Image"
+  ]
 }

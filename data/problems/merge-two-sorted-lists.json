@@ -294,6 +294,5 @@
   "hints": [
     "Use a dummy head node to simplify building the result \u2014 avoids special-casing the first node.",
     "At each step, take the smaller of the two front nodes. When one list runs out, append the rest of the other."
-  ],
-  "lcEquivalent": "21. Merge Two Sorted Lists"
+  ]
 }

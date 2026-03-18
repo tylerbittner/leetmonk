@@ -159,6 +159,5 @@
   "hints": [
     "XOR gives addition without carry. AND gives the carry positions. Shift carry left by 1 and repeat.",
     "Python integers are arbitrary precision, so mask to 32 bits with `& 0xFFFFFFFF`. Handle negative results separately."
-  ],
-  "lcEquivalent": "371. Sum of Two Integers"
+  ]
 }

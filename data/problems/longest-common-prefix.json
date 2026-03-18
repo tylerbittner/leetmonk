@@ -225,6 +225,5 @@
   "hints": [
     "Start with the first string as the prefix candidate and trim it as needed.",
     "Alternatively, compare column by column \u2014 check the same character position across all strings."
-  ],
-  "lcEquivalent": "14. Longest Common Prefix"
+  ]
 }

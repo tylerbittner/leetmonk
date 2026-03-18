@@ -322,6 +322,5 @@
   "hints": [
     "Try starting from every cell that matches the first letter. Use DFS to explore all 4 directions.",
     "Mark cells as visited before recursing (to avoid reuse) and restore them on backtrack."
-  ],
-  "lcEquivalent": "79. Word Search"
+  ]
 }

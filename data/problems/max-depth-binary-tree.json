@@ -206,6 +206,5 @@
   "hints": [
     "The depth of an empty tree is 0. The depth of any other tree is 1 + max(depth of left, depth of right).",
     "Alternatively, use BFS level-by-level and count the number of levels."
-  ],
-  "lcEquivalent": "104. Maximum Depth of Binary Tree"
+  ]
 }

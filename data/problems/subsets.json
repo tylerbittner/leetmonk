@@ -723,6 +723,5 @@
   "hints": [
     "At each element, you make a binary choice: include it or not. This generates 2^n subsets.",
     "Backtracking: build subsets incrementally, recording each state, and undo choices as you go."
-  ],
-  "lcEquivalent": "78. Subsets"
+  ]
 }

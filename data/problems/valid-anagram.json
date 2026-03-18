@@ -185,6 +185,5 @@
   "hints": [
     "Two strings are anagrams if they have the same character frequencies.",
     "You can sort both strings and compare, or count characters using a hash map."
-  ],
-  "lcEquivalent": "242. Valid Anagram"
+  ]
 }

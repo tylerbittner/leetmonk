@@ -168,6 +168,5 @@
   "hints": [
     "To reach step n, you either came from step n-1 (one step) or step n-2 (two steps). So ways(n) = ways(n-1) + ways(n-2).",
     "This is the Fibonacci sequence! You only need to track the last two values."
-  ],
-  "lcEquivalent": "70. Climbing Stairs"
+  ]
 }

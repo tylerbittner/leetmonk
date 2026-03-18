@@ -267,6 +267,5 @@
   "hints": [
     "Count element frequencies with a hash map, then pick the top k by frequency.",
     "A min-heap of size k gives O(n log k) \u2014 push elements by frequency and evict the minimum when size exceeds k."
-  ],
-  "lcEquivalent": "347. Top K Frequent Elements"
+  ]
 }

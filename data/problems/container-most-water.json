@@ -255,6 +255,5 @@
   "hints": [
     "The amount of water is determined by the shorter of the two panels and their distance.",
     "Start with the widest possible container. Which pointer should you move inward and why?"
-  ],
-  "lcEquivalent": "11. Container With Most Water"
+  ]
 }

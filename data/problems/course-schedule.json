@@ -300,6 +300,5 @@
   "hints": [
     "Model courses and prerequisites as a directed graph. The problem reduces to: does the graph have a cycle?",
     "Use DFS with three states: unvisited, in-progress (on current path), and done. If you reach an in-progress node, you've found a cycle."
-  ],
-  "lcEquivalent": "207. Course Schedule"
+  ]
 }

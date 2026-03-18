@@ -300,6 +300,5 @@
   "hints": [
     "The array is sorted \u2014 what happens to the sum when you move the left pointer right? Or move the right pointer left?",
     "Start with the widest possible window (leftmost and rightmost elements) and converge based on the current sum."
-  ],
-  "lcEquivalent": "167. Two Sum II - Input Array Is Sorted"
+  ]
 }

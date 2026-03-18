@@ -331,6 +331,5 @@
   "hints": [
     "Minimizing removals is equivalent to maximizing the number of intervals you can keep. Think about which intervals to keep.",
     "Sort by end time and greedily keep intervals that don't overlap. The interval ending earliest is always the better choice to keep."
-  ],
-  "lcEquivalent": "435. Non-overlapping Intervals"
+  ]
 }

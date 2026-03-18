@@ -387,6 +387,5 @@
   "hints": [
     "Starting from the back avoids overwriting elements you haven't processed yet.",
     "Place the larger of the two current elements at the write pointer and advance accordingly."
-  ],
-  "lcEquivalent": "88. Merge Sorted Array"
+  ]
 }

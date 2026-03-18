@@ -61,16 +61,10 @@ export default function ProblemDescription({ problem, submissions = [], onSoluti
             {problem.difficulty}
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
-          {problem.tags.map(tag => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
-        </div>
-        {problem.patterns && problem.patterns.length > 0 && (
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-            {problem.patterns.map(pid => {
-              const pat = patternById[pid]
-              if (!pat) return null
+        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+          {(problem.patterns && problem.patterns.length > 0 ? problem.patterns : problem.tags).map(pid => {
+            const pat = patternById?.[pid]
+            if (pat) {
               return (
                 <button
                   key={pid}
@@ -86,18 +80,13 @@ export default function ProblemDescription({ problem, submissions = [], onSoluti
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(168,85,247,0.2)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'rgba(168,85,247,0.1)'}
                 >
-                  <span>{pat.emoji}</span>
                   <span>{pat.name}</span>
                 </button>
               )
-            })}
-          </div>
-        )}
-        {problem.lcEquivalent && (
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>
-            LC: {problem.lcEquivalent}
-          </div>
-        )}
+            }
+            return <span key={pid} className="tag">{pid}</span>
+          })}
+        </div>
       </div>
 
       {/* Tabs */}
