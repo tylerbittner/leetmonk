@@ -12,6 +12,8 @@ import PostSessionReview from './components/PostSessionReview.jsx'
 import ReviewFlag from './components/ReviewFlag.jsx'
 import ReviewQueue from './components/ReviewQueue.jsx'
 import AboutModal from './components/AboutModal.jsx'
+import RatingModal from './components/RatingModal.jsx'
+import { processReview, newCardState } from './fsrs.js'
 
 export default function App() {
   const [problems, setProblems] = useState([])
@@ -31,6 +33,8 @@ export default function App() {
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [srData, setSrData] = useState({})
+  const [pendingRating, setPendingRating] = useState(null) // { problemId, srState }
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
 
@@ -45,14 +49,16 @@ export default function App() {
       setLoadErrors(errors)
       if (loaded.length > 0) setActiveProblemId(loaded[0].id)
 
-      const [prog, edState, revData] = await Promise.all([
+      const [prog, edState, revData, srStateAll] = await Promise.all([
         window.api.getProgress(),
         window.api.getEditorState(),
-        window.api.getReviewData()
+        window.api.getReviewData(),
+        window.api.getAllSrState()
       ])
       setProgress(prog)
       setEditorStateMap(edState)
       setReviewData(revData || {})
+      setSrData(srStateAll || {})
     }
     init()
   }, [])
@@ -187,6 +193,10 @@ export default function App() {
           })
           markSessionProblemSolved(activeProblem.id)
           triggerConfetti()
+          setPendingRating({
+            problemId: activeProblem.id,
+            srState: srData[activeProblem.id] || newCardState()
+          })
         } else {
           setProgress(prev => {
             const cur = prev[activeProblem.id] || {}
@@ -275,6 +285,38 @@ export default function App() {
     })
     window.api.removeReviewItem({ problemId })
   }, [])
+
+  const handleResetSr = useCallback((problemId) => {
+    setSrData(prev => {
+      const next = { ...prev }
+      delete next[problemId]
+      return next
+    })
+    window.api.setSrState({ problemId, data: null })
+  }, [])
+
+  const handleRate = useCallback((problemId, rating) => {
+    const currentState = srData[problemId] || newCardState()
+    const newState = processReview(currentState, rating, new Date())
+    setSrData(prev => ({ ...prev, [problemId]: newState }))
+    window.api.setSrState({ problemId, data: newState })
+    // Also flag for review if not already flagged
+    if (!reviewData[problemId]) {
+      const item = {
+        flaggedAt: new Date().toISOString(),
+        interval: Math.max(1, Math.round(newState.stability)),
+        nextReview: newState.nextReview,
+        reviewCount: newState.reps
+      }
+      setReviewData(prev => ({ ...prev, [problemId]: item }))
+      window.api.setReviewItem({ problemId, data: item })
+    } else {
+      // Update existing review item's nextReview to match FSRS
+      const updated = { ...reviewData[problemId], nextReview: newState.nextReview }
+      setReviewData(prev => ({ ...prev, [problemId]: updated }))
+      window.api.setReviewItem({ problemId, data: updated })
+    }
+  }, [srData, reviewData])
 
   const allTags = [...new Set(problems.flatMap(p => p.tags))].sort()
 
@@ -374,6 +416,7 @@ export default function App() {
               <ReviewQueue
                 problems={problems}
                 reviewData={reviewData}
+                srData={srData}
                 onSelect={selectProblem}
                 activeProblemId={activeProblemId}
               />
@@ -403,8 +446,10 @@ export default function App() {
                   <ReviewFlag
                     problemId={activeProblem.id}
                     reviewData={reviewData[activeProblem.id] || null}
+                    srState={srData[activeProblem.id]}
                     onFlag={handleReviewFlag}
                     onDismiss={handleReviewDismiss}
+                    onResetSr={handleResetSr}
                   />
                 </div>
                 <div style={{ flex: 1, overflow: 'hidden' }}>
@@ -469,8 +514,17 @@ export default function App() {
       }}>
         {activeProblem && <span>{activeProblem.id}</span>}
         <span>Python 3</span>
-        <span style={{ marginLeft: 'auto' }}>
-          {Object.values(progress).filter(p => p.status === 'solved').length} / {problems.length} solved
+        <span style={{ marginLeft: 'auto', display: 'flex', gap: 12, alignItems: 'center' }}>
+          {(() => {
+            const now = new Date()
+            const dueCount = Object.values(reviewData).filter(
+              r => r.nextReview && new Date(r.nextReview) <= now
+            ).length
+            return dueCount > 0 ? (
+              <span style={{ color: 'var(--accent-orange)' }}>{dueCount} due for review</span>
+            ) : null
+          })()}
+          <span>{Object.values(progress).filter(p => p.status === 'solved').length} / {problems.length} solved</span>
         </span>
       </div>
 
@@ -478,8 +532,20 @@ export default function App() {
         <SessionPlanner
           problems={problems}
           progress={progress}
+          reviewData={reviewData}
           onStart={handleStartSession}
           onClose={() => setShowSessionPlanner(false)}
+        />
+      )}
+
+      {pendingRating && (
+        <RatingModal
+          problemId={pendingRating.problemId}
+          srState={pendingRating.srState}
+          onRate={(rating) => {
+            handleRate(pendingRating.problemId, rating)
+          }}
+          onDismiss={() => setPendingRating(null)}
         />
       )}
 
