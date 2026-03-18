@@ -1,20 +1,60 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import Editor from '@monaco-editor/react'
 
-export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running, canDiff, onOpenDiff }) {
+export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, onReset, running, settings }) {
   const editorRef = useRef(null)
+  const vimModeRef = useRef(null)
+  const vimStatusRef = useRef(null)
+
+  const fontSize = settings?.editorFontSize ?? 14
+  const vimEnabled = settings?.vimKeybindings ?? false
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor
 
-    // Register keyboard shortcuts inside Monaco
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => onRun())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => onSubmit())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => onReset())
 
-    // Focus on mount
     editor.focus()
+
+    if (vimEnabled) {
+      import('monaco-vim').then(mod => {
+        const initVimMode = mod.initVimMode || mod.default
+        if (initVimMode && vimStatusRef.current) {
+          vimModeRef.current = initVimMode(editor, vimStatusRef.current)
+        }
+      }).catch(() => {})
+    }
   }
+
+  // Toggle vim mode when setting changes after mount
+  useEffect(() => {
+    if (!editorRef.current) return
+    if (vimEnabled) {
+      import('monaco-vim').then(mod => {
+        const initVimMode = mod.initVimMode || mod.default
+        if (initVimMode && vimStatusRef.current && !vimModeRef.current) {
+          vimModeRef.current = initVimMode(editorRef.current, vimStatusRef.current)
+        }
+      }).catch(() => {})
+    } else {
+      if (vimModeRef.current) {
+        vimModeRef.current.dispose()
+        vimModeRef.current = null
+      }
+    }
+  }, [vimEnabled])
+
+  // Clean up vim mode on unmount
+  useEffect(() => {
+    return () => {
+      if (vimModeRef.current) {
+        vimModeRef.current.dispose()
+        vimModeRef.current = null
+      }
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
@@ -24,20 +64,15 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
         borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', flexShrink: 0
       }}>
         <span style={{ fontSize: 12, color: 'var(--text-muted)', marginRight: 4 }}>Python 3</span>
+        {vimEnabled && (
+          <span style={{
+            fontSize: 10, color: 'var(--accent-purple)', background: 'rgba(168,85,247,0.12)',
+            border: '1px solid rgba(168,85,247,0.3)', borderRadius: 4, padding: '1px 6px', fontWeight: 600
+          }}>VIM</span>
+        )}
 
         <div style={{ flex: 1 }} />
 
-        {canDiff && (
-          <button
-            className="btn btn-ghost"
-            onClick={() => onOpenDiff(0)}
-            disabled={running}
-            title="Compare your code with reference solution"
-            style={{ fontSize: 12, padding: '5px 10px' }}
-          >
-            ⟺ Compare
-          </button>
-        )}
         <button
           className="btn btn-ghost"
           onClick={onReset}
@@ -77,10 +112,10 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
           onMount={handleEditorDidMount}
           theme="vs-dark"
           options={{
-            fontSize: 14,
+            fontSize,
             fontFamily: "'Fira Code', 'SF Mono', Consolas, 'Courier New', monospace",
             fontLigatures: true,
-            lineHeight: 22,
+            lineHeight: Math.round(fontSize * 1.6),
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             wordWrap: 'on',
@@ -88,14 +123,8 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
             insertSpaces: true,
             automaticLayout: true,
             padding: { top: 12, bottom: 12 },
-            suggest: {
-              showSnippets: true,
-              showWords: true
-            },
-            scrollbar: {
-              verticalScrollbarSize: 6,
-              horizontalScrollbarSize: 6
-            },
+            suggest: { showSnippets: true, showWords: true },
+            scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
             overviewRulerLanes: 0,
             hideCursorInOverviewRuler: true,
             renderLineHighlight: 'line',
@@ -104,6 +133,24 @@ export default function CodeEditor({ problem, code, onChange, onRun, onSubmit, o
           }}
         />
       </div>
+
+      {/* Vim status bar */}
+      <div
+        ref={vimStatusRef}
+        style={{
+          height: vimEnabled ? 22 : 0,
+          overflow: 'hidden',
+          padding: vimEnabled ? '0 12px' : 0,
+          background: 'var(--bg-secondary)',
+          borderTop: vimEnabled ? '1px solid var(--border)' : 'none',
+          fontSize: 12,
+          fontFamily: 'var(--font-mono)',
+          color: 'var(--accent-purple)',
+          display: 'flex', alignItems: 'center',
+          transition: 'height 0.15s',
+          flexShrink: 0,
+        }}
+      />
     </div>
   )
 }

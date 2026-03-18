@@ -15,5 +15,6 @@ contextBridge.exposeInMainWorld('api', {
   getReviewData: () => ipcRenderer.invoke('get-review-data'),
   setReviewItem: (args) => ipcRenderer.invoke('set-review-item', args),
   removeReviewItem: (args) => ipcRenderer.invoke('remove-review-item', args),
-  openExternal: (url) => ipcRenderer.invoke('open-external', url)
+  getSettings: () => ipcRenderer.invoke('get-settings'),
+  setSettings: (data) => ipcRenderer.invoke('set-settings', data)
 })
