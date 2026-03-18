@@ -12,6 +12,45 @@ import PostSessionReview from './components/PostSessionReview.jsx'
 import ReviewFlag from './components/ReviewFlag.jsx'
 import ReviewQueue from './components/ReviewQueue.jsx'
 import AboutModal from './components/AboutModal.jsx'
+import SettingsPanel from './components/SettingsPanel.jsx'
+import LotusEffect from './components/LotusEffect.jsx'
+
+const DEFAULT_SETTINGS = {
+  celebrationEffect: 'lotus',
+  soundOnSolve: true,
+  timerVisible: true,
+  editorFontSize: 14,
+  vimKeybindings: false,
+  focusMode: 'standard',
+}
+
+function playBellSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const osc1 = ctx.createOscillator()
+    const gain1 = ctx.createGain()
+    osc1.connect(gain1)
+    gain1.connect(ctx.destination)
+    osc1.type = 'sine'
+    osc1.frequency.setValueAtTime(880, ctx.currentTime)
+    osc1.frequency.exponentialRampToValueAtTime(698, ctx.currentTime + 2.0)
+    gain1.gain.setValueAtTime(0.28, ctx.currentTime)
+    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.0)
+    osc1.start(ctx.currentTime)
+    osc1.stop(ctx.currentTime + 3.0)
+    const osc2 = ctx.createOscillator()
+    const gain2 = ctx.createGain()
+    osc2.connect(gain2)
+    gain2.connect(ctx.destination)
+    osc2.type = 'sine'
+    osc2.frequency.setValueAtTime(1760, ctx.currentTime)
+    osc2.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 1.2)
+    gain2.gain.setValueAtTime(0.14, ctx.currentTime)
+    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8)
+    osc2.start(ctx.currentTime)
+    osc2.stop(ctx.currentTime + 1.8)
+  } catch (_) {}
+}
 
 export default function App() {
   const [problems, setProblems] = useState([])
@@ -23,14 +62,15 @@ export default function App() {
   const [running, setRunning] = useState(false)
   const [results, setResults] = useState(null)
   const [lastRunMode, setLastRunMode] = useState(null)
-  const [showConfetti, setShowConfetti] = useState(false)
-  const confettiRef = useRef(null)
+  const [showCelebration, setShowCelebration] = useState(false)
   const [session, setSession] = useState(null)
   const [showSessionPlanner, setShowSessionPlanner] = useState(false)
   const [completedSession, setCompletedSession] = useState(null)
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS)
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
 
@@ -45,14 +85,16 @@ export default function App() {
       setLoadErrors(errors)
       if (loaded.length > 0) setActiveProblemId(loaded[0].id)
 
-      const [prog, edState, revData] = await Promise.all([
+      const [prog, edState, revData, savedSettings] = await Promise.all([
         window.api.getProgress(),
         window.api.getEditorState(),
-        window.api.getReviewData()
+        window.api.getReviewData(),
+        window.api.getSettings(),
       ])
       setProgress(prog)
       setEditorStateMap(edState)
       setReviewData(revData || {})
+      setSettings({ ...DEFAULT_SETTINGS, ...savedSettings })
     }
     init()
   }, [])
@@ -72,6 +114,9 @@ export default function App() {
       } else if (e.metaKey && e.key === ']') {
         e.preventDefault()
         navigateProblem(1)
+      } else if (e.metaKey && e.key === ',') {
+        e.preventDefault()
+        setShowSettings(s => !s)
       }
     }
     window.addEventListener('keydown', handleKey)
@@ -99,7 +144,7 @@ export default function App() {
   const selectProblem = useCallback((id) => {
     setActiveProblemId(id)
     setResults(null)
-    setShowConfetti(false)
+    setShowCelebration(false)
   }, [])
 
   const getCode = (problemId) => {
@@ -111,7 +156,6 @@ export default function App() {
     setEditorStateMap(prev => ({ ...prev, [problemId]: code }))
     window.api.setEditorState({ problemId, code })
 
-    // Mark as attempted on first edit
     setProgress(prev => {
       const cur = prev[problemId] || {}
       if (!cur.status || cur.status === 'unsolved') {
@@ -123,7 +167,6 @@ export default function App() {
     })
   }, [])
 
-  // Mark problem solved in session when submit succeeds
   const markSessionProblemSolved = useCallback((problemId) => {
     if (!session || !session.problems.includes(problemId)) return
     const elapsed = Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 1000)
@@ -145,7 +188,6 @@ export default function App() {
     setLastRunMode(mode)
 
     const code = getCode(activeProblem.id)
-    const startTime = Date.now()
 
     try {
       const result = await window.api.runCode({ code, problem: activeProblem, mode })
@@ -155,7 +197,6 @@ export default function App() {
       const total = result.results?.length ?? 0
       const allPassed = total > 0 && passed === total
 
-      // Save submission record for both run and submit
       if (!result.error || total > 0) {
         const submission = {
           id: Date.now(),
@@ -186,7 +227,7 @@ export default function App() {
             return { ...prev, [activeProblem.id]: data }
           })
           markSessionProblemSolved(activeProblem.id)
-          triggerConfetti()
+          triggerCelebration()
         } else {
           setProgress(prev => {
             const cur = prev[activeProblem.id] || {}
@@ -204,7 +245,7 @@ export default function App() {
     } finally {
       setRunning(false)
     }
-  }, [activeProblem, running, editorState, problems, markSessionProblemSolved])
+  }, [activeProblem, running, editorState, problems, markSessionProblemSolved, settings])
 
   const handleReset = useCallback(() => {
     if (!activeProblem) return
@@ -215,10 +256,24 @@ export default function App() {
     setResults(null)
   }, [activeProblem])
 
-  function triggerConfetti() {
-    setShowConfetti(true)
-    setTimeout(() => setShowConfetti(false), 4000)
+  function triggerCelebration() {
+    const effect = settings.celebrationEffect ?? 'lotus'
+    // Bell for confetti mode (lotus effect plays its own bell internally)
+    if (settings.soundOnSolve && effect === 'confetti') {
+      playBellSound()
+    }
+    if (effect !== 'none') {
+      setShowCelebration(true)
+      setTimeout(() => setShowCelebration(false), 4000)
+    } else if (settings.soundOnSolve) {
+      // Play bell even with no visual effect
+      playBellSound()
+    }
   }
+
+  const handleSettingsChange = useCallback((next) => {
+    setSettings(next)
+  }, [])
 
   // Session handlers
   const handleStartSession = useCallback((newSession) => {
@@ -233,13 +288,11 @@ export default function App() {
   const handleSessionNext = useCallback(() => {
     if (!session) return
     const nextIndex = Math.min(session.currentIndex + 1, session.problems.length - 1)
-    // If current problem not yet in results, mark as skipped
     const currentId = session.problems[session.currentIndex]
     const updated = { ...session, currentIndex: nextIndex }
     if (!updated.results[currentId]) {
       updated.results = { ...updated.results, [currentId]: { solved: false, timeSpent: null } }
     }
-    // Check if all done
     if (Object.keys(updated.results).length >= updated.problems.length) {
       updated.completedAt = new Date().toISOString()
     }
@@ -277,6 +330,10 @@ export default function App() {
   }, [])
 
   const allTags = [...new Set(problems.flatMap(p => p.tags))].sort()
+  const solvedCount = Object.values(progress).filter(p => p.status === 'solved').length
+  const activeProblemIndex = activeProblem
+    ? filteredProblems.findIndex(p => p.id === activeProblemId) + 1
+    : 0
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-primary)' }}>
@@ -286,10 +343,15 @@ export default function App() {
         height: 48, borderBottom: '1px solid var(--border)',
         background: 'var(--bg-secondary)', flexShrink: 0, WebkitAppRegion: 'drag'
       }}>
-        <div style={{ width: 70 }} /> {/* macOS traffic lights space */}
+        <div style={{ width: 70 }} />
         <span
           onClick={() => setShowAbout(true)}
-          style={{ fontWeight: 700, fontSize: 16, color: 'var(--accent-green)', letterSpacing: '-0.5px', WebkitAppRegion: 'no-drag', cursor: 'pointer' }}
+          style={{
+            fontWeight: 700, fontSize: 16, color: 'var(--accent-green)', letterSpacing: '-0.5px',
+            WebkitAppRegion: 'no-drag', cursor: 'pointer', transition: 'opacity 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
           title="About LeetMonk"
         >
           LeetMonk &gt;_
@@ -310,7 +372,7 @@ export default function App() {
             padding: '4px 12px', borderRadius: 4, border: '1px solid var(--border)',
             background: session ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
             color: session ? '#fff' : 'var(--text-primary)',
-            cursor: 'pointer', fontSize: 12
+            cursor: 'pointer', fontSize: 12, transition: 'background 0.15s, color 0.15s',
           }}>
             {session ? 'Session Active' : 'Plan Session'}
           </button>
@@ -318,27 +380,30 @@ export default function App() {
 
         {activeProblem && (
           <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)" style={{
-              padding: '4px 7px', borderRadius: 4, border: '1px solid var(--border)',
-              background: 'var(--bg-tertiary)', color: 'var(--text-muted)',
-              cursor: 'pointer', fontSize: 12, lineHeight: 1
-            }}>‹</button>
-            <button onClick={() => navigateProblem(1)} title="Next problem (Cmd+])" style={{
-              padding: '4px 7px', borderRadius: 4, border: '1px solid var(--border)',
-              background: 'var(--bg-tertiary)', color: 'var(--text-muted)',
-              cursor: 'pointer', fontSize: 12, lineHeight: 1
-            }}>›</button>
+            <TopBarBtn onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)">‹</TopBarBtn>
+            <TopBarBtn onClick={() => navigateProblem(1)} title="Next problem (Cmd+])">›</TopBarBtn>
             <button onClick={() => setSidebarCollapsed(c => !c)} title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'} style={{
               padding: '4px 8px', borderRadius: 4, border: '1px solid var(--border)',
               background: sidebarCollapsed ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
               color: sidebarCollapsed ? '#fff' : 'var(--text-muted)',
-              cursor: 'pointer', fontSize: 12
+              cursor: 'pointer', fontSize: 12, transition: 'background 0.15s, color 0.15s',
             }}>
               {sidebarCollapsed ? '◧' : '▣'}
             </button>
-            <Timer problemId={activeProblem.id} />
+            {settings.timerVisible && <Timer problemId={activeProblem.id} />}
           </div>
         )}
+
+        {/* Settings gear */}
+        <div style={{ WebkitAppRegion: 'no-drag' }}>
+          <TopBarBtn
+            onClick={() => setShowSettings(true)}
+            title="Settings (Cmd+,)"
+            active={showSettings}
+          >
+            ⚙
+          </TopBarBtn>
+        </div>
       </div>
 
       {session && (
@@ -359,35 +424,40 @@ export default function App() {
 
       {/* Main content */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-        {/* Problem sidebar */}
+        {/* Sidebar — animated collapse */}
         <div style={{ display: 'flex', flexShrink: 0 }}>
-          {!sidebarCollapsed && (
-            <div style={{
-              width: 240, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)'
-            }}>
-              <ProblemList
-                problems={filteredProblems}
-                activeProblemId={activeProblemId}
-                progress={progress}
-                onSelect={selectProblem}
-              />
-              <ReviewQueue
-                problems={problems}
-                reviewData={reviewData}
-                onSelect={selectProblem}
-                activeProblemId={activeProblemId}
-              />
-            </div>
-          )}
+          <div style={{
+            width: sidebarCollapsed ? 0 : 240,
+            overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
+            background: 'var(--bg-secondary)',
+            transition: 'width 0.2s ease',
+            flexShrink: 0,
+          }}>
+            <ProblemList
+              problems={filteredProblems}
+              activeProblemId={activeProblemId}
+              progress={progress}
+              onSelect={selectProblem}
+            />
+            <ReviewQueue
+              problems={problems}
+              reviewData={reviewData}
+              onSelect={selectProblem}
+              activeProblemId={activeProblemId}
+            />
+          </div>
           <button
             onClick={() => setSidebarCollapsed(c => !c)}
             title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}
+            className="sidebar-toggle"
             style={{
               width: 14, padding: 0, border: 'none',
               borderRight: '1px solid var(--border)',
-              background: 'var(--bg-secondary)', color: 'var(--text-secondary)',
+              background: 'var(--bg-secondary)', color: 'var(--text-muted)',
               cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, lineHeight: 1, flexShrink: 0
+              fontSize: 11, lineHeight: 1, flexShrink: 0,
+              transition: 'color 0.15s, background 0.15s',
             }}
           >
             {sidebarCollapsed ? '›' : '‹'}
@@ -398,7 +468,11 @@ export default function App() {
         {activeProblem ? (
           <PanelGroup direction="horizontal" style={{ flex: 1 }}>
             <Panel defaultSize={45} minSize={25}>
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div
+                key={activeProblem.id}
+                className="problem-enter"
+                style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+              >
                 <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'flex-end' }}>
                   <ReviewFlag
                     problemId={activeProblem.id}
@@ -416,9 +490,9 @@ export default function App() {
               </div>
             </Panel>
 
-            <PanelResizeHandle style={{
+            <PanelResizeHandle className="resize-handle-h" style={{
               width: 4, background: 'var(--border)', cursor: 'col-resize',
-              transition: 'background 0.15s'
+              transition: 'background 0.15s',
             }} />
 
             <Panel defaultSize={55} minSize={30}>
@@ -433,11 +507,13 @@ export default function App() {
                     onSubmit={() => handleRun('submit')}
                     onReset={handleReset}
                     running={running}
+                    settings={settings}
                   />
                 </Panel>
 
-                <PanelResizeHandle style={{
-                  height: 4, background: 'var(--border)', cursor: 'row-resize'
+                <PanelResizeHandle className="resize-handle-v" style={{
+                  height: 4, background: 'var(--border)', cursor: 'row-resize',
+                  transition: 'background 0.15s',
                 }} />
 
                 <Panel defaultSize={40} minSize={20}>
@@ -452,28 +528,42 @@ export default function App() {
             </Panel>
           </PanelGroup>
         ) : (
-          <div style={{
-            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--text-muted)', fontSize: 16
-          }}>
-            {problems.length === 0 ? 'Loading problems…' : 'Select a problem to begin'}
-          </div>
+          <EmptyState loading={problems.length === 0} />
         )}
       </div>
 
-      {/* Bottom status bar */}
-      <div style={{
-        height: 24, borderTop: '1px solid var(--border)', display: 'flex',
-        alignItems: 'center', padding: '0 16px', gap: 16, fontSize: 11,
-        color: 'var(--text-muted)', background: 'var(--bg-secondary)', flexShrink: 0
-      }}>
-        {activeProblem && <span>{activeProblem.id}</span>}
-        <span>Python 3</span>
-        <span style={{ marginLeft: 'auto' }}>
-          {Object.values(progress).filter(p => p.status === 'solved').length} / {problems.length} solved
-        </span>
-      </div>
+      {/* Status bar — hidden in minimal mode */}
+      {settings.focusMode !== 'minimal' && (
+        <div style={{
+          height: 24, borderTop: '1px solid var(--border)', display: 'flex',
+          alignItems: 'center', padding: '0 16px', gap: 16, fontSize: 11,
+          color: 'var(--text-muted)', background: 'var(--bg-secondary)', flexShrink: 0
+        }}>
+          {activeProblem && (
+            <>
+              <span>{activeProblem.id}</span>
+              <span style={{
+                color: activeProblem.difficulty === 'easy' ? 'var(--easy)'
+                  : activeProblem.difficulty === 'medium' ? 'var(--medium)'
+                  : 'var(--hard)',
+                fontWeight: 600, textTransform: 'capitalize',
+              }}>{activeProblem.difficulty}</span>
+              {filteredProblems.length > 0 && (
+                <span>{activeProblemIndex} / {filteredProblems.length}</span>
+              )}
+            </>
+          )}
+          <span>Python 3</span>
+          <span style={{ marginLeft: 'auto' }}>
+            <span style={{ color: solvedCount > 0 ? 'var(--accent-green)' : 'var(--text-muted)', fontWeight: solvedCount > 0 ? 600 : 400 }}>
+              {solvedCount}
+            </span>
+            {' / '}{problems.length} solved
+          </span>
+        </div>
+      )}
 
+      {/* Modals */}
       {showSessionPlanner && (
         <SessionPlanner
           problems={problems}
@@ -483,7 +573,13 @@ export default function App() {
         />
       )}
 
-      {showConfetti && <ConfettiEffect />}
+      {showSettings && (
+        <SettingsPanel
+          settings={settings}
+          onSettingsChange={handleSettingsChange}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
 
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
 
@@ -494,9 +590,94 @@ export default function App() {
           onClose={() => setCompletedSession(null)}
         />
       )}
+
+      {/* Celebration effects */}
+      {showCelebration && settings.celebrationEffect === 'lotus' && (
+        <LotusEffect soundEnabled={settings.soundOnSolve} />
+      )}
+      {showCelebration && settings.celebrationEffect === 'confetti' && (
+        <ConfettiEffect />
+      )}
     </div>
   )
 }
+
+// ─── Top bar button helper ─────────────────────────────────────────────────
+
+function TopBarBtn({ children, onClick, title, active }) {
+  const [hovered, setHovered] = React.useState(false)
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: '4px 8px', borderRadius: 4, border: '1px solid var(--border)',
+        background: active || hovered ? 'var(--bg-hover)' : 'var(--bg-tertiary)',
+        color: active || hovered ? 'var(--text-primary)' : 'var(--text-muted)',
+        cursor: 'pointer', fontSize: 14, lineHeight: 1,
+        transition: 'background 0.15s, color 0.15s',
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+// ─── Empty state ──────────────────────────────────────────────────────────
+
+const ZEN_QUOTES = [
+  'The obstacle is the path.',
+  'A journey of a thousand miles begins with a single step.',
+  "In the beginner's mind there are many possibilities.",
+  'Focus on the journey, not the destination.',
+  'Do the difficult things while they are easy.',
+]
+
+function EmptyState({ loading }) {
+  const quote = ZEN_QUOTES[Math.floor(Date.now() / 86400000) % ZEN_QUOTES.length]
+  return (
+    <div style={{
+      flex: 1, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: 20,
+    }}>
+      {loading ? (
+        <div style={{ color: 'var(--text-muted)', fontSize: 14 }}>Loading problems…</div>
+      ) : (
+        <>
+          <LotusMark />
+          <div style={{ textAlign: 'center', maxWidth: 300 }}>
+            <div style={{
+              fontSize: 13, color: 'var(--text-muted)', fontStyle: 'italic',
+              lineHeight: 1.7, marginBottom: 14, letterSpacing: '0.01em',
+            }}>
+              "{quote}"
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--text-secondary)', letterSpacing: '0.02em' }}>
+              Select a problem to begin
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function LotusMark() {
+  return (
+    <svg width="54" height="46" viewBox="0 0 54 46" fill="none" style={{ opacity: 0.16 }}>
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
+        <g key={i} transform={`rotate(${deg} 27 30)`}>
+          <path d="M27 30 C25 21 20 14 27 7 C34 14 29 21 27 30Z" fill="var(--text-muted)" />
+        </g>
+      ))}
+      <circle cx="27" cy="30" r="3" fill="var(--text-muted)" />
+    </svg>
+  )
+}
+
+// ─── Confetti (kept as selectable option) ────────────────────────────────
 
 function ConfettiEffect() {
   const canvasRef = React.useRef(null)
@@ -540,10 +721,5 @@ function ConfettiEffect() {
     return () => cancelAnimationFrame(frame)
   }, [])
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="confetti-overlay"
-    />
-  )
+  return <canvas ref={canvasRef} className="confetti-overlay" />
 }

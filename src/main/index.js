@@ -17,6 +17,29 @@ const progressFile = join(dataDir, 'progress.json')
 const editorStateFile = join(dataDir, 'editor-state.json')
 const sessionsFile = join(dataDir, 'sessions.json')
 const reviewFile = join(dataDir, 'review-schedule.json')
+const settingsFile = join(dataDir, 'settings.json')
+
+const DEFAULT_SETTINGS = {
+  celebrationEffect: 'lotus',
+  soundOnSolve: true,
+  timerVisible: true,
+  editorFontSize: 14,
+  vimKeybindings: false,
+  focusMode: 'standard'
+}
+
+function loadSettings() {
+  try {
+    if (existsSync(settingsFile)) {
+      return { ...DEFAULT_SETTINGS, ...JSON.parse(readFileSync(settingsFile, 'utf8')) }
+    }
+  } catch {}
+  return { ...DEFAULT_SETTINGS }
+}
+
+function saveSettings(data) {
+  writeFileSync(settingsFile, JSON.stringify(data, null, 2))
+}
 
 function loadReviewData() {
   try {
@@ -209,6 +232,14 @@ app.whenReady().then(() => {
   ipcMain.handle('set-timer-state', (_, data) => {
     const timerFile = join(dataDir, 'timer-state.json')
     writeFileSync(timerFile, JSON.stringify(data, null, 2))
+  })
+
+  // IPC: Settings
+  ipcMain.handle('get-settings', () => loadSettings())
+  ipcMain.handle('set-settings', (_, data) => {
+    const merged = { ...DEFAULT_SETTINGS, ...data }
+    saveSettings(merged)
+    return merged
   })
 
   // IPC: Review schedule (spaced repetition)
