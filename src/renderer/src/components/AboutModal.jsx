@@ -22,12 +22,12 @@ export default function AboutModal({ onClose }) {
           LeetMonk
         </div>
         <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>
-          Offline algorithm practice
+          Deep practice in solitude.
         </div>
 
         <div style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--text-secondary)', marginBottom: 20 }}>
-          35 hand-curated problems across arrays, strings, binary search, sliding window,
-          two pointers, stack, heap, dynamic programming, and backtracking.
+          86 curated problems. No accounts, no network, no distractions.
+          Just you, a problem, and a blank editor.
         </div>
 
         <div style={{ fontSize: 13, marginBottom: 8 }}>
