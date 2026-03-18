@@ -1,28 +1,27 @@
 import { useState, useRef, useEffect } from 'react'
-
-const INTERVALS = [1, 3, 7, 14, 30]
-
-function getNextInterval(current) {
-  const idx = INTERVALS.indexOf(current)
-  if (idx === -1 || idx === INTERVALS.length - 1) return 30
-  return INTERVALS[idx + 1]
-}
+import { retrievability } from '../fsrs.js'
 
 function formatDaysUntil(nextReview) {
   const now = new Date()
   const review = new Date(nextReview)
   const diffMs = review - now
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-  if (diffDays <= 0) return 'Review today!'
-  if (diffDays === 1) return 'Review in 1d'
-  return `Review in ${diffDays}d`
+  if (diffDays <= 0) return 'Review now'
+  if (diffDays === 1) return 'in 1d'
+  return `in ${diffDays}d`
 }
 
 function isDue(nextReview) {
   return new Date(nextReview) <= new Date()
 }
 
-export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss }) {
+function getRetPct(srState) {
+  if (!srState || !srState.lastReview) return null
+  const elapsed = (Date.now() - new Date(srState.lastReview)) / 86400000
+  return Math.round(retrievability(srState.stability, elapsed) * 100)
+}
+
+export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onDismiss, onResetSr }) {
   const [showPopup, setShowPopup] = useState(false)
   const popupRef = useRef(null)
 
@@ -37,6 +36,8 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
   }, [showPopup])
 
   const flagged = reviewData !== null && reviewData !== undefined
+  const due = flagged && isDue(reviewData.nextReview)
+  const retPct = getRetPct(srState)
 
   const handleClick = () => {
     if (!flagged) {
@@ -45,8 +46,6 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
       setShowPopup(!showPopup)
     }
   }
-
-  const due = flagged && isDue(reviewData.nextReview)
 
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
@@ -76,7 +75,10 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
           fontFamily: 'var(--font-mono)',
           whiteSpace: 'nowrap'
         }}>
-          {formatDaysUntil(reviewData.nextReview)}
+          {retPct !== null
+            ? `${retPct}% · ${formatDaysUntil(reviewData.nextReview)}`
+            : formatDaysUntil(reviewData.nextReview)
+          }
         </span>
       )}
 
@@ -98,8 +100,7 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
           }}
         >
           {[
-            { label: 'Mark reviewed', action: 'review' },
-            { label: 'Reset interval', action: 'reset' },
+            { label: 'Reset SR state', action: 'reset' },
             { label: 'Remove flag', action: 'remove' }
           ].map(({ label, action }) => (
             <button
@@ -108,16 +109,6 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
                 setShowPopup(false)
                 if (action === 'remove') {
                   onDismiss(problemId)
-                } else if (action === 'review') {
-                  const newInterval = getNextInterval(reviewData.interval)
-                  const nextReview = new Date()
-                  nextReview.setDate(nextReview.getDate() + newInterval)
-                  onFlag(problemId, {
-                    ...reviewData,
-                    interval: newInterval,
-                    nextReview: nextReview.toISOString(),
-                    reviewCount: (reviewData.reviewCount || 0) + 1
-                  })
                 } else if (action === 'reset') {
                   const nextReview = new Date()
                   nextReview.setDate(nextReview.getDate() + 1)
@@ -126,6 +117,7 @@ export default function ReviewFlag({ problemId, reviewData, onFlag, onDismiss })
                     interval: 1,
                     nextReview: nextReview.toISOString()
                   })
+                  onResetSr && onResetSr(problemId)
                 }
               }}
               style={{
