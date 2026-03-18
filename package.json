@@ -30,7 +30,8 @@
     "react-markdown": "^9.0.1",
     "react-resizable-panels": "^2.0.13",
     "react-syntax-highlighter": "^16.1.0",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "ts-fsrs": "^5.2.3"
   },
   "build": {
     "appId": "com.leetmonk.app",
