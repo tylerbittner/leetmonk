@@ -2,48 +2,11 @@ import React, { useEffect, useRef } from 'react'
 
 function playBellSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
-
-    // Primary tone: singing bowl fundamental
-    const osc1 = ctx.createOscillator()
-    const gain1 = ctx.createGain()
-    osc1.connect(gain1)
-    gain1.connect(ctx.destination)
-    osc1.type = 'sine'
-    osc1.frequency.setValueAtTime(880, ctx.currentTime)
-    osc1.frequency.exponentialRampToValueAtTime(698, ctx.currentTime + 2.0)
-    gain1.gain.setValueAtTime(0.28, ctx.currentTime)
-    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.0)
-    osc1.start(ctx.currentTime)
-    osc1.stop(ctx.currentTime + 3.0)
-
-    // Second harmonic: bright overtone
-    const osc2 = ctx.createOscillator()
-    const gain2 = ctx.createGain()
-    osc2.connect(gain2)
-    gain2.connect(ctx.destination)
-    osc2.type = 'sine'
-    osc2.frequency.setValueAtTime(1760, ctx.currentTime)
-    osc2.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 1.2)
-    gain2.gain.setValueAtTime(0.14, ctx.currentTime)
-    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8)
-    osc2.start(ctx.currentTime)
-    osc2.stop(ctx.currentTime + 1.8)
-
-    // Third harmonic: warm body
-    const osc3 = ctx.createOscillator()
-    const gain3 = ctx.createGain()
-    osc3.connect(gain3)
-    gain3.connect(ctx.destination)
-    osc3.type = 'sine'
-    osc3.frequency.setValueAtTime(440, ctx.currentTime)
-    osc3.frequency.exponentialRampToValueAtTime(349, ctx.currentTime + 2.5)
-    gain3.gain.setValueAtTime(0.12, ctx.currentTime)
-    gain3.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.8)
-    osc3.start(ctx.currentTime)
-    osc3.stop(ctx.currentTime + 2.8)
+    const audio = new Audio(new URL('../../../public/sounds/bell.mp3', import.meta.url).href)
+    audio.volume = 0.6
+    audio.play().catch(() => {})
   } catch (_) {
-    // Audio context unavailable — fail silently
+    // Audio unavailable — fail silently
   }
 }
 

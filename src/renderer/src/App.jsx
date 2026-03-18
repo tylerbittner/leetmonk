@@ -29,29 +29,9 @@ const DEFAULT_SETTINGS = {
 
 function playBellSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
-    const osc1 = ctx.createOscillator()
-    const gain1 = ctx.createGain()
-    osc1.connect(gain1)
-    gain1.connect(ctx.destination)
-    osc1.type = 'sine'
-    osc1.frequency.setValueAtTime(880, ctx.currentTime)
-    osc1.frequency.exponentialRampToValueAtTime(698, ctx.currentTime + 2.0)
-    gain1.gain.setValueAtTime(0.28, ctx.currentTime)
-    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.0)
-    osc1.start(ctx.currentTime)
-    osc1.stop(ctx.currentTime + 3.0)
-    const osc2 = ctx.createOscillator()
-    const gain2 = ctx.createGain()
-    osc2.connect(gain2)
-    gain2.connect(ctx.destination)
-    osc2.type = 'sine'
-    osc2.frequency.setValueAtTime(1760, ctx.currentTime)
-    osc2.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 1.2)
-    gain2.gain.setValueAtTime(0.14, ctx.currentTime)
-    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8)
-    osc2.start(ctx.currentTime)
-    osc2.stop(ctx.currentTime + 1.8)
+    const audio = new Audio(new URL('./public/sounds/bell.mp3', import.meta.url).href)
+    audio.volume = 0.6
+    audio.play().catch(() => {})
   } catch (_) {}
 }
 import RatingModal from './components/RatingModal.jsx'
