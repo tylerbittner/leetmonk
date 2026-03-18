@@ -434,17 +434,6 @@ export default function App() {
           />
         </div>
 
-        <div style={{ WebkitAppRegion: 'no-drag' }}>
-          <button onClick={() => setShowSessionPlanner(true)} style={{
-            padding: '4px 12px', borderRadius: 4, border: '1px solid var(--border)',
-            background: session ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-            color: session ? '#fff' : 'var(--text-primary)',
-            cursor: 'pointer', fontSize: 12, transition: 'background 0.15s, color 0.15s',
-          }}>
-            {session ? 'Session Active' : 'Plan Session'}
-          </button>
-        </div>
-
         {activeProblem && (
           <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', alignItems: 'center', gap: 8 }}>
             <TopBarBtn onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)">‹</TopBarBtn>
@@ -472,19 +461,13 @@ export default function App() {
           </TopBarBtn>
         </div>
 
-        {/* Bug Report */}
-        <div style={{ WebkitAppRegion: 'no-drag' }}>
-          <TopBarBtn onClick={() => setShowBugReport(true)} title="Report a bug">
-            🐛
-          </TopBarBtn>
-        </div>
-
         {/* Settings gear */}
         <div style={{ WebkitAppRegion: 'no-drag' }}>
           <TopBarBtn
             onClick={() => setShowSettings(true)}
             title="Settings (Cmd+,)"
             active={showSettings}
+            iconSize={18}
           >
             ⚙
           </TopBarBtn>
@@ -524,6 +507,8 @@ export default function App() {
               activeProblemId={activeProblemId}
               progress={progress}
               onSelect={selectProblem}
+              searchValue={filters.search}
+              onSearchChange={(v) => setFilters(f => ({ ...f, search: v }))}
             />
             <ReviewQueue
               problems={problems}
@@ -531,6 +516,27 @@ export default function App() {
               onSelect={selectProblem}
               activeProblemId={activeProblemId}
             />
+            {/* Sidebar footer — subtle session planner */}
+            <div style={{
+              borderTop: '1px solid var(--border)', padding: '6px 10px',
+              display: 'flex', justifyContent: 'flex-end', flexShrink: 0,
+            }}>
+              <button
+                onClick={() => setShowSessionPlanner(true)}
+                title={session ? 'Session active — click to manage' : 'Plan a session'}
+                style={{
+                  background: session ? 'var(--accent-blue)' : 'none',
+                  border: '1px solid var(--border)', borderRadius: 4,
+                  padding: '3px 8px', cursor: 'pointer', fontSize: 12,
+                  color: session ? '#fff' : 'var(--text-muted)',
+                  transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 4,
+                }}
+                onMouseEnter={e => { if (!session) e.currentTarget.style.color = 'var(--text-primary)' }}
+                onMouseLeave={e => { if (!session) e.currentTarget.style.color = 'var(--text-muted)' }}
+              >
+                🗓 {session ? 'Active' : 'Plan'}
+              </button>
+            </div>
           </div>
           <button
             onClick={() => setSidebarCollapsed(c => !c)}
@@ -615,6 +621,7 @@ export default function App() {
                     onSubmit={() => handleRun('submit')}
                     onReset={handleReset}
                     running={running}
+                    settings={settings}
                   />
                   )}
                 </Panel>
@@ -687,6 +694,7 @@ export default function App() {
           settings={settings}
           onSettingsChange={handleSettingsChange}
           onClose={() => setShowSettings(false)}
+          onBugReport={() => { setShowSettings(false); setShowBugReport(true) }}
         />
       )}
       {pendingRating && (
@@ -728,7 +736,7 @@ export default function App() {
 
 // ─── Top bar button helper ─────────────────────────────────────────────────
 
-function TopBarBtn({ children, onClick, title, active }) {
+function TopBarBtn({ children, onClick, title, active, iconSize }) {
   const [hovered, setHovered] = React.useState(false)
   return (
     <button
@@ -740,7 +748,7 @@ function TopBarBtn({ children, onClick, title, active }) {
         padding: '4px 8px', borderRadius: 4, border: '1px solid var(--border)',
         background: active || hovered ? 'var(--bg-hover)' : 'var(--bg-tertiary)',
         color: active || hovered ? 'var(--text-primary)' : 'var(--text-muted)',
-        cursor: 'pointer', fontSize: 14, lineHeight: 1,
+        cursor: 'pointer', fontSize: iconSize ?? 14, lineHeight: 1,
         transition: 'background 0.15s, color 0.15s',
       }}
     >

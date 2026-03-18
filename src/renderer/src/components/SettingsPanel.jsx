@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 function Toggle({ value, onChange }) {
   return (
@@ -89,14 +89,40 @@ const DEFAULT_SETTINGS = {
   focusMode: 'standard',
 }
 
-export default function SettingsPanel({ settings, onSettingsChange, onClose }) {
+export default function SettingsPanel({ settings, onSettingsChange, onClose, onBugReport }) {
   const s = { ...DEFAULT_SETTINGS, ...settings }
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const dragging = useRef(false)
+  const dragStart = useRef(null)
 
   function update(key, value) {
     const next = { ...s, [key]: value }
     onSettingsChange(next)
     window.api.setSettings(next)
   }
+
+  function handleDragMouseDown(e) {
+    e.preventDefault()
+    dragging.current = true
+    dragStart.current = { mouseX: e.clientX, mouseY: e.clientY, offX: offset.x, offY: offset.y }
+  }
+
+  useEffect(() => {
+    function onMove(e) {
+      if (!dragging.current || !dragStart.current) return
+      setOffset({
+        x: dragStart.current.offX + e.clientX - dragStart.current.mouseX,
+        y: dragStart.current.offY + e.clientY - dragStart.current.mouseY,
+      })
+    }
+    function onUp() { dragging.current = false }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+    return () => {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+    }
+  }, [])
 
   return (
     <div
@@ -120,18 +146,25 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose }) {
           maxHeight: '85vh',
           overflowY: 'auto',
           boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+          transform: `translate(${offset.x}px, ${offset.y}px)`,
+          userSelect: 'none',
         }}
       >
-        {/* Header */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '20px 24px 0',
-        }}>
+        {/* Header / drag handle */}
+        <div
+          onMouseDown={handleDragMouseDown}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '20px 24px 0',
+            cursor: 'grab',
+          }}
+        >
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
             Settings
           </div>
           <button
             onClick={onClose}
+            onMouseDown={e => e.stopPropagation()}
             style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--text-muted)', fontSize: 18, lineHeight: 1,
@@ -224,6 +257,25 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose }) {
           >
             <Toggle value={s.soundOnSolve} onChange={v => update('soundOnSolve', v)} />
           </SettingRow>
+
+          {/* Bug report */}
+          {onBugReport && (
+            <div style={{ paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
+              <button
+                onClick={onBugReport}
+                style={{
+                  width: '100%', padding: '9px 0', borderRadius: 6,
+                  border: '1px solid var(--border)', background: 'var(--bg-tertiary)',
+                  color: 'var(--text-muted)', fontSize: 13, cursor: 'pointer',
+                  transition: 'color 0.15s, background 0.15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-hover)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'var(--bg-tertiary)' }}
+              >
+                🐛 Report a Bug
+              </button>
+            </div>
+          )}
 
         </div>
       </div>

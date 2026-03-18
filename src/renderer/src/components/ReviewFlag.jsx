@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { retrievability } from '../fsrs.js'
 
 function formatDaysUntil(nextReview) {
@@ -23,7 +23,9 @@ function getRetPct(srState) {
 
 export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onDismiss, onResetSr }) {
   const [showPopup, setShowPopup] = useState(false)
+  const [popupPos, setPopupPos] = useState({ top: 0, left: 0 })
   const popupRef = useRef(null)
+  const buttonRef = useRef(null)
 
   useEffect(() => {
     function handleClick(e) {
@@ -43,6 +45,10 @@ export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onD
     if (!flagged) {
       onFlag(problemId)
     } else {
+      if (!showPopup && buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect()
+        setPopupPos({ top: rect.bottom + 4, left: rect.left })
+      }
       setShowPopup(!showPopup)
     }
   }
@@ -50,6 +56,7 @@ export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onD
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
       <button
+        ref={buttonRef}
         onClick={handleClick}
         title={flagged ? 'Review options' : 'Flag for review'}
         style={{
@@ -86,15 +93,14 @@ export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onD
         <div
           ref={popupRef}
           style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            marginTop: 4,
+            position: 'fixed',
+            top: popupPos.top,
+            left: popupPos.left,
             background: 'var(--bg-tertiary)',
             border: '1px solid var(--border)',
             borderRadius: 6,
             padding: 4,
-            zIndex: 100,
+            zIndex: 1000,
             minWidth: 150,
             boxShadow: '0 4px 12px rgba(0,0,0,0.4)'
           }}
