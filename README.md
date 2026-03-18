@@ -20,17 +20,56 @@ This is deliberate practice in solitude. The environment where craft deepens.
 
 ## Features
 
-- **86 curated problems** across 11 categories — arrays, binary search, dynamic programming, sliding window, two pointers, stack, heap, backtracking, strings, matrix, and more
-- **Monaco editor** — the same editor as VS Code, with Python syntax highlighting and autocompletion
-- **Local code execution** — your code runs against test cases on your machine, via Python 3, with no server and no network call
-- **Hints and solutions** revealed on demand — available when you need them, invisible when you don't
-- **Timer** — measure how long problems actually take; honest feedback is part of deliberate practice
-- **Focus mode** — eliminate visual noise when concentration matters most
-- **Session planner** — batch your practice by pattern or difficulty before you sit down, so the session itself is uninterrupted
-- **Review flagging** — mark problems to revisit; spaced repetition is how retention works
-- **Keyboard shortcuts** — `Cmd+Enter` to run, `Cmd+Shift+Enter` to submit; your hands stay on the keyboard
+### Core Practice
 
-> **Note:** Python 3 is the only supported language at this time.
+- **86 curated problems** spanning 11 categories — arrays, binary search, dynamic programming, sliding window, two pointers, trees, graphs, backtracking, and more
+- **Python & JavaScript** — write solutions in either language and switch freely per problem
+- **Monaco editor** — the same engine as VS Code, with syntax highlighting, autocompletion, and optional **vim keybindings**
+- **Local code execution** — test cases run on your machine via Python 3 or Node.js. No server, no network.
+- **Hints and solutions** — revealed progressively when you need them, invisible when you don't
+
+### Pattern Library
+
+- **22 algorithm patterns** organized by technique and data structure — sliding window, two pointers, binary search on answer, topological sort, and more
+- Each pattern includes a description, "when to use" guide, code template, and complexity analysis
+- Problems are tagged with their underlying patterns — learn the *technique*, not just the problem
+- Mastery indicators show your coverage per pattern
+
+### Spaced Repetition (FSRS)
+
+- Built-in **FSRS-6 algorithm** — the state of the art in memory scheduling
+- After solving a problem, rate yourself (Again / Hard / Good / Easy) and FSRS computes the optimal review date
+- Due problems surface automatically in the session planner and review queue
+- Retrievability percentages show how likely you are to remember each problem
+- No account, no cloud sync — your review state stays local
+
+### Solution Diff View
+
+- Compare your code side-by-side with reference solutions using Monaco's built-in diff editor
+- Available after viewing the Solutions tab — learn by comparing approaches
+- Solution selector when multiple approaches exist (brute force vs. optimal)
+- Line count and complexity comparison at a glance
+
+### Focus & Flow
+
+- **Focus mode** — strip away UI chrome when concentration matters most
+- **Session planner** — batch problems by pattern, difficulty, or due reviews before you sit down
+- **Timer** — honest feedback on how long problems actually take
+- **Lotus celebration** — a calm, earned moment when you solve a problem (falling petals + meditation bell). Not gamification — acknowledgment. Configurable: switch to classic confetti or disable entirely.
+- **Keyboard-driven** — `Cmd+Enter` to run, `Cmd+Shift+Enter` to submit, `Cmd+[/]` to navigate
+
+### Settings & Customization
+
+- Celebration style (lotus petals / confetti / none)
+- Sound on solve (on/off)
+- Vim keybindings toggle
+- Editor font size
+- Focus mode intensity (standard / minimal)
+- Timer visibility
+
+### Bug Reporting
+
+- Built-in 🐛 button pre-fills a GitHub issue with your problem context, app version, and OS — making it easy to help improve LeetMonk
 
 ## Why Offline?
 
@@ -68,7 +107,7 @@ npm install
 npm run dev
 ```
 
-Works on macOS, Windows, and Linux. Electron and Python 3 must be available.
+Works on macOS, Windows, and Linux. Electron, Python 3, and Node.js must be available.
 
 ## Contributing
 
@@ -88,7 +127,8 @@ npm run test:problems
 | UI | [React 18](https://react.dev/) |
 | Code editor | [Monaco Editor](https://microsoft.github.io/monaco-editor/) |
 | Build tooling | [electron-vite](https://electron-vite.org/) |
-| Code execution | Python 3 (spawned subprocess) |
+| Code execution | Python 3 + Node.js (spawned subprocesses) |
+| Spaced repetition | [FSRS-6](https://github.com/open-spaced-repetition/py-fsrs) (pure JS port) |
 | Testing | [Jest](https://jestjs.io/) |
 
 ### Project Structure
@@ -96,25 +136,35 @@ npm run test:problems
 ```
 leetmonk/
 ├── src/
-│   ├── main/index.js            # Electron main process + IPC handlers
-│   ├── preload/index.js         # Secure renderer-to-main bridge
+│   ├── main/index.js              # Electron main process + IPC handlers
+│   ├── preload/index.js           # Secure renderer-to-main bridge
 │   ├── executor/
-│   │   ├── runner.js            # Spawns Python subprocess
-│   │   └── harness_template.py  # Test harness injected into user code
+│   │   ├── runner.js              # Python subprocess executor
+│   │   ├── runner-js.js           # JavaScript subprocess executor
+│   │   └── harness_template.py    # Python test harness
 │   └── renderer/src/
-│       ├── App.jsx              # Root React component
-│       └── components/          # UI components
+│       ├── App.jsx                # Root React component
+│       ├── fsrs.js                # FSRS-6 spaced repetition algorithm
+│       ├── data/patterns.js       # Pattern library definitions
+│       └── components/
+│           ├── PatternLibrary.jsx  # Pattern grid + detail view
+│           ├── RatingModal.jsx     # Post-solve FSRS rating
+│           ├── DiffView.jsx        # Monaco diff editor
+│           ├── SettingsPanel.jsx   # App settings
+│           ├── LotusEffect.jsx     # Celebration animation
+│           ├── BugReportModal.jsx  # GitHub issue reporter
+│           └── ...                 # Problem list, editor, timer, etc.
 ├── data/
-│   └── problems/                # 86 problem JSON files
-└── tests/                       # Jest test suites
+│   └── problems/                  # 86 problem JSON files
+└── tests/                         # Jest test suites (incl. FSRS)
 ```
 
 ### Testing
 
 ```bash
-npm test                 # all tests
+npm test                 # all tests (problems, solutions, FSRS)
 npm run test:problems    # validate problem JSON schemas
-npm run test:solutions   # verify all solutions pass
+npm run test:solutions   # verify all solutions pass (Python + JS)
 ```
 
 ## Disclaimer
