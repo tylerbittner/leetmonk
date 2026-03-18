@@ -12,6 +12,7 @@ import PostSessionReview from './components/PostSessionReview.jsx'
 import ReviewFlag from './components/ReviewFlag.jsx'
 import ReviewQueue from './components/ReviewQueue.jsx'
 import AboutModal from './components/AboutModal.jsx'
+import BugReportModal from './components/BugReportModal.jsx'
 import DiffView from './components/DiffView.jsx'
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [showBugReport, setShowBugReport] = useState(false)
   const [solutionsViewed, setSolutionsViewed] = useState({})
   const [diffViewOpen, setDiffViewOpen] = useState(false)
   const [diffSolutionIndex, setDiffSolutionIndex] = useState(0)
@@ -344,6 +346,19 @@ export default function App() {
             <Timer problemId={activeProblem.id} />
           </div>
         )}
+
+        <button
+          onClick={() => setShowBugReport(true)}
+          title="Report a bug"
+          style={{
+            WebkitAppRegion: 'no-drag',
+            padding: '4px 7px', borderRadius: 4, border: '1px solid var(--border)',
+            background: 'var(--bg-tertiary)', color: 'var(--text-muted)',
+            cursor: 'pointer', fontSize: 14, lineHeight: 1,
+          }}
+        >
+          🐛
+        </button>
       </div>
 
       {session && (
@@ -505,6 +520,13 @@ export default function App() {
       {showConfetti && <ConfettiEffect />}
 
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+
+      {showBugReport && (
+        <BugReportModal
+          onClose={() => setShowBugReport(false)}
+          activeProblemId={activeProblemId}
+        />
+      )}
 
       {completedSession && (
         <PostSessionReview

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
 import { join } from 'path'
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs'
 import { spawnSync } from 'child_process'
@@ -210,6 +210,9 @@ app.whenReady().then(() => {
     const timerFile = join(dataDir, 'timer-state.json')
     writeFileSync(timerFile, JSON.stringify(data, null, 2))
   })
+
+  // IPC: Open external URL in default browser
+  ipcMain.handle('open-external', (_, url) => shell.openExternal(url))
 
   // IPC: Review schedule (spaced repetition)
   ipcMain.handle('get-review-data', () => loadReviewData())
