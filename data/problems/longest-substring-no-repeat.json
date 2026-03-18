@@ -7,7 +7,12 @@
     "hash-map",
     "string"
   ],
-  "description": "## Longest Substring Without Repeating Characters\n\nYou are designing a DNA sequencing analyzer. Each character in a sequence represents a nucleotide marker. You want to find the longest contiguous segment of the sequence where no marker appears twice \u2014 this represents a region of maximum genetic diversity.\n\nGiven a string `s`, return the length of the **longest substring without repeating characters**.\n\n**Constraints:**\n- `0 <= s.length <= 5 * 10^4`\n- `s` consists of English letters, digits, symbols, and spaces.",
+  "patterns": [
+    "sliding-window",
+    "hash-map",
+    "string"
+  ],
+  "description": "## Longest Substring Without Repeating Characters\n\nYou are designing a DNA sequencing analyzer. Each character in a sequence represents a nucleotide marker. You want to find the longest contiguous segment of the sequence where no marker appears twice — this represents a region of maximum genetic diversity.\n\nGiven a string `s`, return the length of the **longest substring without repeating characters**.\n\n**Constraints:**\n- `0 <= s.length <= 5 * 10^4`\n- `s` consists of English letters, digits, symbols, and spaces.",
   "examples": [
     {
       "input": "s = \"abcabcbb\"",
@@ -124,7 +129,7 @@
         "s": "abcdeafbcgj"
       },
       "expected": 8,
-      "explanation": "\"deafbcgj\" \u2014 8 unique chars from index 3 to 10"
+      "explanation": "\"deafbcgj\" — 8 unique chars from index 3 to 10"
     },
     {
       "input": {
@@ -140,16 +145,16 @@
   "functionName": "length_of_longest_substring",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "def length_of_longest_substring(s: str) -> int:\n    n = len(s)\n    max_len = 0\n    for i in range(n):\n        seen = set()\n        for j in range(i, n):\n            if s[j] in seen:\n                break\n            seen.add(s[j])\n            max_len = max(max_len, j - i + 1)\n    return max_len",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(min(n, m))",
       "explanation": "Try every starting position. Extend the substring character by character until a repeat is found. Track the maximum length seen. Here m is the size of the character set."
     },
     {
-      "label": "Sliding Window \u2014 O(n)",
+      "label": "Sliding Window — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "def length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len",

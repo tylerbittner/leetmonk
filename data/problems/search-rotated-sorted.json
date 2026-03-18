@@ -6,6 +6,10 @@
     "binary-search",
     "array"
   ],
+  "patterns": [
+    "binary-search",
+    "array"
+  ],
   "description": "## Search in Rotated Sorted Array\n\nYou are an archivist at a circular filing system. Records are stored in sorted order, but the storage drum has been rotated by an unknown amount. For example, `[4,5,6,7,0,1,2]` is the sorted array `[0,1,2,4,5,6,7]` rotated at index 4.\n\nGiven a sorted-then-rotated array `nums` of **distinct** integers and a `target`, return the **index** of `target`, or `-1` if not found.\n\nYou must achieve **O(log n)** runtime.\n\n**Constraints:**\n- `1 <= nums.length <= 5000`\n- `-10^4 <= nums[i], target <= 10^4`\n- All values of `nums` are **unique**.\n- `nums` is sorted and possibly rotated.",
   "examples": [
     {
@@ -245,7 +249,7 @@
   "functionName": "search_rotated",
   "solutions": [
     {
-      "label": "Linear Search \u2014 O(n)",
+      "label": "Linear Search — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    for i, num in enumerate(nums):\n        if num == target:\n            return i\n    return -1",
@@ -254,7 +258,7 @@
       "explanation": "Simple linear scan ignoring the sorted/rotated structure. Checks each element sequentially."
     },
     {
-      "label": "Modified Binary Search \u2014 O(log n)",
+      "label": "Modified Binary Search — O(log n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef search_rotated(nums: List[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        # Left half is sorted\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        # Right half is sorted\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    return -1",

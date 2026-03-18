@@ -6,6 +6,10 @@
     "stack",
     "string"
   ],
+  "patterns": [
+    "stack",
+    "string"
+  ],
   "description": "## Valid Parentheses\n\nYou are building a syntax validator for a configuration file parser. The configuration uses three types of bracket pairs to group settings. Your validator must ensure every opening bracket is closed by the matching closing bracket, in the correct order.\n\nGiven a string `s` containing only the characters `'('`, `')'`, `'{'`, `'}'`, `'['`, and `']'`, determine if the input string is **valid**.\n\nA string is valid if:\n1. Open brackets must be closed by the same type of bracket.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.\n\n**Constraints:**\n- `1 <= s.length <= 10^4`\n- `s` consists of parentheses only `()[]{}` .",
   "examples": [
     {
@@ -139,7 +143,7 @@
   "functionName": "is_valid",
   "solutions": [
     {
-      "label": "Stack \u2014 O(n)",
+      "label": "Stack — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "def is_valid(s: str) -> bool:\n    stack = []\n    matching = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in '([{':\n            stack.append(char)\n        elif char in ')]}':\n            if not stack or stack[-1] != matching[char]:\n                return False\n            stack.pop()\n    return len(stack) == 0",
@@ -148,7 +152,7 @@
       "explanation": "Push opening brackets onto a stack. When encountering a closing bracket, check if the top of the stack holds the matching opener. If not, or if the stack is empty, it's invalid. After processing all characters, the stack must be empty for the string to be valid."
     },
     {
-      "label": "Stack with Open Set \u2014 O(n)",
+      "label": "Stack with Open Set — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "def is_valid(s: str) -> bool:\n    stack = []\n    pairs = {'(': ')', '[': ']', '{': '}'}\n    for char in s:\n        if char in pairs:\n            stack.append(pairs[char])  # Push the expected closing bracket\n        elif not stack or stack.pop() != char:\n            return False\n    return not stack",

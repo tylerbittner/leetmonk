@@ -2,7 +2,16 @@
   "id": "binary-tree-right-side-view",
   "title": "Binary Tree Right Side View",
   "difficulty": "medium",
-  "tags": ["tree", "breadth-first-search", "depth-first-search"],
+  "tags": [
+    "tree",
+    "breadth-first-search",
+    "depth-first-search"
+  ],
+  "patterns": [
+    "breadth-first-search",
+    "depth-first-search",
+    "tree"
+  ],
   "description": "## Binary Tree Right Side View\n\nGiven a binary tree (as a level-order list), imagine standing on the right side and looking at the tree. Return the values of the nodes you can see, ordered from top to bottom.\n\nThe rightmost node at each level is visible.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 100]`.\n- `-100 <= Node.val <= 100`",
   "examples": [
     {
@@ -23,65 +32,190 @@
   ],
   "exampleCases": [
     {
-      "input": {"root": [1, 2, 3, null, 5, null, 4]},
-      "expected": [1, 3, 4],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          null,
+          5,
+          null,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        4
+      ],
       "explanation": "Rightmost at each level"
     },
     {
-      "input": {"root": [1, null, 3]},
-      "expected": [1, 3],
+      "input": {
+        "root": [
+          1,
+          null,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        3
+      ],
       "explanation": "Right side"
     },
     {
-      "input": {"root": []},
+      "input": {
+        "root": []
+      },
       "expected": [],
       "explanation": "Empty tree"
     },
     {
-      "input": {"root": [1]},
-      "expected": [1],
+      "input": {
+        "root": [
+          1
+        ]
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single node"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"root": [1, 2, 3, 4]},
-      "expected": [1, 3, 4],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        4
+      ],
       "explanation": "4 is rightmost at level 2 (left child of 2)"
     },
     {
-      "input": {"root": [1, 2]},
-      "expected": [1, 2],
+      "input": {
+        "root": [
+          1,
+          2
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "Left-only — still visible from right"
     },
     {
-      "input": {"root": [1, 2, 3, 4, 5, 6, 7]},
-      "expected": [1, 3, 7],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        7
+      ],
       "explanation": "Perfect tree — rightmost at each level"
     },
     {
-      "input": {"root": [1, 2, null, 3, null, 4]},
-      "expected": [1, 2, 3, 4],
+      "input": {
+        "root": [
+          1,
+          2,
+          null,
+          3,
+          null,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ],
       "explanation": "Left-skewed — each level has one node"
     },
     {
-      "input": {"root": [1, 2, 3, null, null, 4, 5]},
-      "expected": [1, 3, 5],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          null,
+          null,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        5
+      ],
       "explanation": "Right side at each level"
     },
     {
-      "input": {"root": [1, 2, 3, null, 5]},
-      "expected": [1, 3, 5],
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          null,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        3,
+        5
+      ],
       "explanation": "Level 2 visible through left subtree"
     },
     {
-      "input": {"root": [1, null, 2, null, 3]},
-      "expected": [1, 2, 3],
+      "input": {
+        "root": [
+          1,
+          null,
+          2,
+          null,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "Right-skewed"
     },
     {
-      "input": {"root": [-1, -2, -3]},
-      "expected": [-1, -3],
+      "input": {
+        "root": [
+          -1,
+          -2,
+          -3
+        ]
+      },
+      "expected": [
+        -1,
+        -3
+      ],
       "explanation": "Negative values"
     }
   ],

@@ -2,7 +2,12 @@
   "id": "number-of-1-bits",
   "title": "Number of 1 Bits",
   "difficulty": "easy",
-  "tags": ["bit-manipulation"],
+  "tags": [
+    "bit-manipulation"
+  ],
+  "patterns": [
+    "bit-manipulation"
+  ],
   "description": "## Number of 1 Bits\n\nGiven a positive integer `n`, return the number of set bits (bits equal to 1) in its binary representation. This is also known as the **Hamming weight**.\n\n**Constraints:**\n- `1 <= n <= 2^31 - 1`",
   "examples": [
     {
@@ -23,64 +28,88 @@
   ],
   "exampleCases": [
     {
-      "input": {"n": 11},
+      "input": {
+        "n": 11
+      },
       "expected": 3,
       "explanation": "1011 has three 1s"
     },
     {
-      "input": {"n": 128},
+      "input": {
+        "n": 128
+      },
       "expected": 1,
       "explanation": "10000000"
     },
     {
-      "input": {"n": 2147483645},
+      "input": {
+        "n": 2147483645
+      },
       "expected": 30,
       "explanation": "30 set bits"
     },
     {
-      "input": {"n": 1},
+      "input": {
+        "n": 1
+      },
       "expected": 1,
       "explanation": "Single bit"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"n": 2147483647},
+      "input": {
+        "n": 2147483647
+      },
       "expected": 31,
       "explanation": "All 31 bits set"
     },
     {
-      "input": {"n": 4},
+      "input": {
+        "n": 4
+      },
       "expected": 1,
       "explanation": "100"
     },
     {
-      "input": {"n": 7},
+      "input": {
+        "n": 7
+      },
       "expected": 3,
       "explanation": "111"
     },
     {
-      "input": {"n": 15},
+      "input": {
+        "n": 15
+      },
       "expected": 4,
       "explanation": "1111"
     },
     {
-      "input": {"n": 16},
+      "input": {
+        "n": 16
+      },
       "expected": 1,
       "explanation": "10000"
     },
     {
-      "input": {"n": 255},
+      "input": {
+        "n": 255
+      },
       "expected": 8,
       "explanation": "11111111"
     },
     {
-      "input": {"n": 5},
+      "input": {
+        "n": 5
+      },
       "expected": 2,
       "explanation": "101 has two 1s"
     },
     {
-      "input": {"n": 6},
+      "input": {
+        "n": 6
+      },
       "expected": 2,
       "explanation": "110 has two 1s"
     }

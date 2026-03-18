@@ -2,7 +2,14 @@
   "id": "combination-sum",
   "title": "Combination Sum",
   "difficulty": "medium",
-  "tags": ["array", "backtracking"],
+  "tags": [
+    "array",
+    "backtracking"
+  ],
+  "patterns": [
+    "backtracking",
+    "array"
+  ],
   "description": "## Combination Sum\n\nGiven an array of distinct positive integers `candidates` and a target integer `target`, return all unique combinations of candidates that sum to `target`. Each number from `candidates` may be used any number of times.\n\nReturn the combinations sorted: each combination must be in non-decreasing order, and the result list must also be sorted lexicographically.\n\n**Constraints:**\n- `1 <= candidates.length <= 30`\n- `2 <= candidates[i] <= 40`\n- All elements of `candidates` are distinct.\n- `1 <= target <= 40`",
   "examples": [
     {
@@ -23,65 +30,254 @@
   ],
   "exampleCases": [
     {
-      "input": {"candidates": [2, 3, 6, 7], "target": 7},
-      "expected": [[2, 2, 3], [7]],
+      "input": {
+        "candidates": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "target": 7
+      },
+      "expected": [
+        [
+          2,
+          2,
+          3
+        ],
+        [
+          7
+        ]
+      ],
       "explanation": "Sorted: [2,2,3] then [7]"
     },
     {
-      "input": {"candidates": [2, 3, 5], "target": 8},
-      "expected": [[2, 2, 2, 2], [2, 3, 3], [3, 5]],
+      "input": {
+        "candidates": [
+          2,
+          3,
+          5
+        ],
+        "target": 8
+      },
+      "expected": [
+        [
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          3,
+          3
+        ],
+        [
+          3,
+          5
+        ]
+      ],
       "explanation": "Three combinations sorted"
     },
     {
-      "input": {"candidates": [2], "target": 1},
+      "input": {
+        "candidates": [
+          2
+        ],
+        "target": 1
+      },
       "expected": [],
       "explanation": "No valid combination"
     },
     {
-      "input": {"candidates": [1, 2], "target": 4},
-      "expected": [[1, 1, 1, 1], [1, 1, 2], [2, 2]],
+      "input": {
+        "candidates": [
+          1,
+          2
+        ],
+        "target": 4
+      },
+      "expected": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
       "explanation": "Three combinations"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"candidates": [3, 5, 8], "target": 11},
-      "expected": [[3, 3, 5], [3, 8]],
+      "input": {
+        "candidates": [
+          3,
+          5,
+          8
+        ],
+        "target": 11
+      },
+      "expected": [
+        [
+          3,
+          3,
+          5
+        ],
+        [
+          3,
+          8
+        ]
+      ],
       "explanation": "3+3+5=11, 3+8=11"
     },
     {
-      "input": {"candidates": [2], "target": 4},
-      "expected": [[2, 2]],
+      "input": {
+        "candidates": [
+          2
+        ],
+        "target": 4
+      },
+      "expected": [
+        [
+          2,
+          2
+        ]
+      ],
       "explanation": "2+2=4"
     },
     {
-      "input": {"candidates": [10], "target": 1},
+      "input": {
+        "candidates": [
+          10
+        ],
+        "target": 1
+      },
       "expected": [],
       "explanation": "No solution"
     },
     {
-      "input": {"candidates": [3, 7], "target": 3},
-      "expected": [[3]],
+      "input": {
+        "candidates": [
+          3,
+          7
+        ],
+        "target": 3
+      },
+      "expected": [
+        [
+          3
+        ]
+      ],
       "explanation": "Single element"
     },
     {
-      "input": {"candidates": [2, 3], "target": 6},
-      "expected": [[2, 2, 2], [3, 3]],
+      "input": {
+        "candidates": [
+          2,
+          3
+        ],
+        "target": 6
+      },
+      "expected": [
+        [
+          2,
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
       "explanation": "Two paths to 6"
     },
     {
-      "input": {"candidates": [2, 5, 10], "target": 10},
-      "expected": [[2, 2, 2, 2, 2], [5, 5], [10]],
+      "input": {
+        "candidates": [
+          2,
+          5,
+          10
+        ],
+        "target": 10
+      },
+      "expected": [
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          10
+        ]
+      ],
       "explanation": "Three ways: all 2s, two 5s, or 10"
     },
     {
-      "input": {"candidates": [4, 2, 6], "target": 8},
-      "expected": [[2, 2, 2, 2], [2, 2, 4], [2, 6], [4, 4]],
+      "input": {
+        "candidates": [
+          4,
+          2,
+          6
+        ],
+        "target": 8
+      },
+      "expected": [
+        [
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          4
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          4,
+          4
+        ]
+      ],
       "explanation": "Four combinations"
     },
     {
-      "input": {"candidates": [2, 3, 5], "target": 5},
-      "expected": [[2, 3], [5]],
+      "input": {
+        "candidates": [
+          2,
+          3,
+          5
+        ],
+        "target": 5
+      },
+      "expected": [
+        [
+          2,
+          3
+        ],
+        [
+          5
+        ]
+      ],
       "explanation": "Two paths to 5"
     }
   ],

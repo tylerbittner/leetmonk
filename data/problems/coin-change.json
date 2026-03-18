@@ -6,6 +6,10 @@
     "dynamic-programming",
     "array"
   ],
+  "patterns": [
+    "dynamic-programming",
+    "array"
+  ],
   "description": "## Coin Change\n\nYou are programming a vending machine for a space station commissary. The machine has an unlimited supply of coins in given denominations. Given a target price, the machine should always dispense change using the **fewest possible coins**.\n\nGiven an array of coin denominations `coins` and an integer `amount`, return the **fewest number of coins** needed to make up that amount. If the amount cannot be made with the given denominations, return `-1`.\n\nYou may use each coin denomination an unlimited number of times.\n\n**Constraints:**\n- `1 <= coins.length <= 12`\n- `1 <= coins[i] <= 2^31 - 1`\n- `0 <= amount <= 10^4`",
   "examples": [
     {
@@ -205,7 +209,7 @@
   "functionName": "coin_change",
   "solutions": [
     {
-      "label": "BFS \u2014 O(amount * len(coins))",
+      "label": "BFS — O(amount * len(coins))",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\nfrom collections import deque\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    if amount == 0:\n        return 0\n    visited = {0}\n    queue = deque([0])\n    steps = 0\n    while queue:\n        steps += 1\n        for _ in range(len(queue)):\n            curr = queue.popleft()\n            for coin in coins:\n                nxt = curr + coin\n                if nxt == amount:\n                    return steps\n                if nxt < amount and nxt not in visited:\n                    visited.add(nxt)\n                    queue.append(nxt)\n    return -1",
@@ -214,7 +218,7 @@
       "explanation": "Model as a shortest-path problem: BFS from 0 to the target amount, where each edge represents adding one coin. Each BFS level corresponds to using one more coin. The first time we reach the target amount, we have found the minimum number of coins."
     },
     {
-      "label": "Bottom-Up DP \u2014 O(amount * len(coins))",
+      "label": "Bottom-Up DP — O(amount * len(coins))",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for coin in coins:\n            if coin <= a:\n                dp[a] = min(dp[a], dp[a - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",

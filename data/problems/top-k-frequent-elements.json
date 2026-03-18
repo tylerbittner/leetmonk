@@ -2,7 +2,17 @@
   "id": "top-k-frequent-elements",
   "title": "Top K Frequent Elements",
   "difficulty": "medium",
-  "tags": ["array", "hash-map", "heap", "sorting"],
+  "tags": [
+    "array",
+    "hash-map",
+    "heap",
+    "sorting"
+  ],
+  "patterns": [
+    "heap",
+    "hash-map",
+    "array"
+  ],
   "description": "## Top K Frequent Elements\n\nGiven an integer array `nums` and an integer `k`, return the `k` most frequent elements. The answer must be returned sorted in ascending order.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`\n- `k` is in the range `[1, number of unique elements]`\n- The answer is guaranteed to be unique.",
   "examples": [
     {
@@ -18,65 +28,205 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [1, 1, 1, 2, 2, 3], "k": 2},
-      "expected": [1, 2],
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "1 and 2 are most frequent (sorted)"
     },
     {
-      "input": {"nums": [1], "k": 1},
-      "expected": [1],
+      "input": {
+        "nums": [
+          1
+        ],
+        "k": 1
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single element"
     },
     {
-      "input": {"nums": [4, 1, -1, 2, -1, 2, 3], "k": 2},
-      "expected": [-1, 2],
+      "input": {
+        "nums": [
+          4,
+          1,
+          -1,
+          2,
+          -1,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": [
+        -1,
+        2
+      ],
       "explanation": "-1 and 2 each appear twice"
     },
     {
-      "input": {"nums": [1, 1, 1, 2, 2, 3], "k": 2},
-      "expected": [1, 2],
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "1 appears 3x, 2 appears 2x — clear top 2"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [1, 1, 2, 2, 3, 3, 4], "k": 3},
-      "expected": [1, 2, 3],
+      "input": {
+        "nums": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          4
+        ],
+        "k": 3
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "Top 3 tied at frequency 2"
     },
     {
-      "input": {"nums": [5, 5, 5, 4, 4, 3], "k": 1},
-      "expected": [5],
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          4,
+          4,
+          3
+        ],
+        "k": 1
+      },
+      "expected": [
+        5
+      ],
       "explanation": "5 is most frequent"
     },
     {
-      "input": {"nums": [1, 1, 1, 1], "k": 1},
-      "expected": [1],
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 1
+      },
+      "expected": [
+        1
+      ],
       "explanation": "All same"
     },
     {
-      "input": {"nums": [3, 0, 1, 0], "k": 1},
-      "expected": [0],
+      "input": {
+        "nums": [
+          3,
+          0,
+          1,
+          0
+        ],
+        "k": 1
+      },
+      "expected": [
+        0
+      ],
       "explanation": "0 appears twice"
     },
     {
-      "input": {"nums": [-1, -1], "k": 1},
-      "expected": [-1],
+      "input": {
+        "nums": [
+          -1,
+          -1
+        ],
+        "k": 1
+      },
+      "expected": [
+        -1
+      ],
       "explanation": "Negative number"
     },
     {
-      "input": {"nums": [1, 2, 3, 1, 2, 1], "k": 3},
-      "expected": [1, 2, 3],
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1,
+          2,
+          1
+        ],
+        "k": 3
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
       "explanation": "All unique elements returned sorted"
     },
     {
-      "input": {"nums": [5, 3, 1, 1, 1, 3, 73, 1], "k": 2},
-      "expected": [1, 3],
+      "input": {
+        "nums": [
+          5,
+          3,
+          1,
+          1,
+          1,
+          3,
+          73,
+          1
+        ],
+        "k": 2
+      },
+      "expected": [
+        1,
+        3
+      ],
       "explanation": "1 appears 4 times, 3 twice"
     },
     {
-      "input": {"nums": [1, 2], "k": 2},
-      "expected": [1, 2],
+      "input": {
+        "nums": [
+          1,
+          2
+        ],
+        "k": 2
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "Equal frequency, return both sorted"
     }
   ],

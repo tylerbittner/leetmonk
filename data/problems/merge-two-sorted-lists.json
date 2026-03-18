@@ -2,7 +2,14 @@
   "id": "merge-two-sorted-lists",
   "title": "Merge Two Sorted Lists",
   "difficulty": "easy",
-  "tags": ["linked-list", "two-pointers"],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "linked-list"
+  ],
   "description": "## Merge Two Sorted Lists\n\nYou are given two sorted linked lists (as plain integer lists). Merge them into one sorted linked list and return the result as a plain integer list.\n\n**Constraints:**\n- The number of nodes in each list is in the range `[0, 50]`.\n- `-100 <= Node.val <= 100`\n- Both `list1` and `list2` are sorted in non-decreasing order.",
   "examples": [
     {
@@ -23,65 +30,230 @@
   ],
   "exampleCases": [
     {
-      "input": {"list1": [1, 2, 4], "list2": [1, 3, 4]},
-      "expected": [1, 1, 2, 3, 4, 4],
+      "input": {
+        "list1": [
+          1,
+          2,
+          4
+        ],
+        "list2": [
+          1,
+          3,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        4
+      ],
       "explanation": "Merged sorted list"
     },
     {
-      "input": {"list1": [], "list2": []},
+      "input": {
+        "list1": [],
+        "list2": []
+      },
       "expected": [],
       "explanation": "Both empty"
     },
     {
-      "input": {"list1": [], "list2": [0]},
-      "expected": [0],
+      "input": {
+        "list1": [],
+        "list2": [
+          0
+        ]
+      },
+      "expected": [
+        0
+      ],
       "explanation": "One empty"
     },
     {
-      "input": {"list1": [1], "list2": [2]},
-      "expected": [1, 2],
+      "input": {
+        "list1": [
+          1
+        ],
+        "list2": [
+          2
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "Single elements"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"list1": [2], "list2": [1]},
-      "expected": [1, 2],
+      "input": {
+        "list1": [
+          2
+        ],
+        "list2": [
+          1
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ],
       "explanation": "Swap needed"
     },
     {
-      "input": {"list1": [1, 3, 5], "list2": [2, 4, 6]},
-      "expected": [1, 2, 3, 4, 5, 6],
+      "input": {
+        "list1": [
+          1,
+          3,
+          5
+        ],
+        "list2": [
+          2,
+          4,
+          6
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "explanation": "Interleaved"
     },
     {
-      "input": {"list1": [1, 2, 3], "list2": [4, 5, 6]},
-      "expected": [1, 2, 3, 4, 5, 6],
+      "input": {
+        "list1": [
+          1,
+          2,
+          3
+        ],
+        "list2": [
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "explanation": "All list1 comes first"
     },
     {
-      "input": {"list1": [1, 1, 1], "list2": [1, 1, 1]},
-      "expected": [1, 1, 1, 1, 1, 1],
+      "input": {
+        "list1": [
+          1,
+          1,
+          1
+        ],
+        "list2": [
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "explanation": "All equal values"
     },
     {
-      "input": {"list1": [-3, -1, 0], "list2": [-2, 2]},
-      "expected": [-3, -2, -1, 0, 2],
+      "input": {
+        "list1": [
+          -3,
+          -1,
+          0
+        ],
+        "list2": [
+          -2,
+          2
+        ]
+      },
+      "expected": [
+        -3,
+        -2,
+        -1,
+        0,
+        2
+      ],
       "explanation": "Negative values"
     },
     {
-      "input": {"list1": [0], "list2": [0]},
-      "expected": [0, 0],
+      "input": {
+        "list1": [
+          0
+        ],
+        "list2": [
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0
+      ],
       "explanation": "Both single zeros"
     },
     {
-      "input": {"list1": [1, 2, 3, 4, 5], "list2": []},
-      "expected": [1, 2, 3, 4, 5],
+      "input": {
+        "list1": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "list2": []
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "explanation": "Second list empty"
     },
     {
-      "input": {"list1": [1, 3, 5, 7], "list2": [2, 4, 6, 8]},
-      "expected": [1, 2, 3, 4, 5, 6, 7, 8],
+      "input": {
+        "list1": [
+          1,
+          3,
+          5,
+          7
+        ],
+        "list2": [
+          2,
+          4,
+          6,
+          8
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
       "explanation": "Perfectly interleaved"
     }
   ],

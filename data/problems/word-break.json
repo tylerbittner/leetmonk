@@ -2,7 +2,15 @@
   "id": "word-break",
   "title": "Word Break",
   "difficulty": "medium",
-  "tags": ["string", "dynamic-programming", "hash-set"],
+  "tags": [
+    "string",
+    "dynamic-programming",
+    "hash-set"
+  ],
+  "patterns": [
+    "dynamic-programming",
+    "string"
+  ],
   "description": "## Word Break\n\nYou are given a string `s` and a list of strings `wordDict`. Return `true` if `s` can be segmented into a space-separated sequence of one or more words from `wordDict`.\n\nNote that the same word from `wordDict` may be reused multiple times in the segmentation.\n\n**Constraints:**\n- `1 <= s.length <= 300`\n- `1 <= wordDict.length <= 1000`\n- `1 <= wordDict[i].length <= 20`\n- `s` and `wordDict[i]` consist of only lowercase English letters.\n- All strings in `wordDict` are unique.",
   "examples": [
     {
@@ -23,64 +31,145 @@
   ],
   "exampleCases": [
     {
-      "input": {"s": "leetcode", "wordDict": ["leet", "code"]},
+      "input": {
+        "s": "leetcode",
+        "wordDict": [
+          "leet",
+          "code"
+        ]
+      },
       "expected": true,
       "explanation": "leet + code"
     },
     {
-      "input": {"s": "applepenapple", "wordDict": ["apple", "pen"]},
+      "input": {
+        "s": "applepenapple",
+        "wordDict": [
+          "apple",
+          "pen"
+        ]
+      },
       "expected": true,
       "explanation": "apple + pen + apple"
     },
     {
-      "input": {"s": "catsandog", "wordDict": ["cats", "dog", "sand", "and", "cat"]},
+      "input": {
+        "s": "catsandog",
+        "wordDict": [
+          "cats",
+          "dog",
+          "sand",
+          "and",
+          "cat"
+        ]
+      },
       "expected": false,
       "explanation": "Cannot complete segmentation"
     },
     {
-      "input": {"s": "cars", "wordDict": ["car", "ca", "rs"]},
+      "input": {
+        "s": "cars",
+        "wordDict": [
+          "car",
+          "ca",
+          "rs"
+        ]
+      },
       "expected": true,
       "explanation": "ca + rs or car + s? car + s won't work (s not in dict), but ca + rs works"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"s": "a", "wordDict": ["a"]},
+      "input": {
+        "s": "a",
+        "wordDict": [
+          "a"
+        ]
+      },
       "expected": true,
       "explanation": "Single character"
     },
     {
-      "input": {"s": "a", "wordDict": ["b"]},
+      "input": {
+        "s": "a",
+        "wordDict": [
+          "b"
+        ]
+      },
       "expected": false,
       "explanation": "No match"
     },
     {
-      "input": {"s": "aaaaaaa", "wordDict": ["aaaa", "aaa"]},
+      "input": {
+        "s": "aaaaaaa",
+        "wordDict": [
+          "aaaa",
+          "aaa"
+        ]
+      },
       "expected": true,
       "explanation": "aaaa + aaa"
     },
     {
-      "input": {"s": "aaaaaaa", "wordDict": ["aaaa", "aa"]},
+      "input": {
+        "s": "aaaaaaa",
+        "wordDict": [
+          "aaaa",
+          "aa"
+        ]
+      },
       "expected": false,
       "explanation": "7 = 4+3 but aaa not in dict; 4+2+1 but a not in dict"
     },
     {
-      "input": {"s": "bb", "wordDict": ["a", "b", "bbb", "bbbb"]},
+      "input": {
+        "s": "bb",
+        "wordDict": [
+          "a",
+          "b",
+          "bbb",
+          "bbbb"
+        ]
+      },
       "expected": true,
       "explanation": "b + b"
     },
     {
-      "input": {"s": "goalspecial", "wordDict": ["go", "goal", "goals", "special"]},
+      "input": {
+        "s": "goalspecial",
+        "wordDict": [
+          "go",
+          "goal",
+          "goals",
+          "special"
+        ]
+      },
       "expected": true,
       "explanation": "goal + special"
     },
     {
-      "input": {"s": "abcd", "wordDict": ["a", "abc", "b", "cd"]},
+      "input": {
+        "s": "abcd",
+        "wordDict": [
+          "a",
+          "abc",
+          "b",
+          "cd"
+        ]
+      },
       "expected": true,
       "explanation": "a + bc? No. ab + cd? ab not in dict. a + b + cd = true"
     },
     {
-      "input": {"s": "foobarbaz", "wordDict": ["foo", "bar", "baz"]},
+      "input": {
+        "s": "foobarbaz",
+        "wordDict": [
+          "foo",
+          "bar",
+          "baz"
+        ]
+      },
       "expected": true,
       "explanation": "foo + bar + baz"
     }

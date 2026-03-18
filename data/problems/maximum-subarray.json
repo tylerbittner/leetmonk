@@ -6,7 +6,12 @@
     "array",
     "dynamic-programming"
   ],
-  "description": "## Maximum Subarray\n\nYou are analyzing voltage fluctuations recorded by an electrical grid monitoring system. The readings can be positive (surplus) or negative (deficit). You need to find the contiguous segment of readings with the highest total sum \u2014 this tells you the best sustained performance window.\n\nGiven an integer array `nums`, find the **contiguous subarray** (containing at least one number) which has the **largest sum** and return that sum.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
+  "patterns": [
+    "dynamic-programming",
+    "greedy",
+    "array"
+  ],
+  "description": "## Maximum Subarray\n\nYou are analyzing voltage fluctuations recorded by an electrical grid monitoring system. The readings can be positive (surplus) or negative (deficit). You need to find the contiguous segment of readings with the highest total sum — this tells you the best sustained performance window.\n\nGiven an integer array `nums`, find the **contiguous subarray** (containing at least one number) which has the **largest sum** and return that sum.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^4 <= nums[i] <= 10^4`",
   "examples": [
     {
       "input": "nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]",
@@ -215,16 +220,16 @@
   "functionName": "max_subarray",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = float('-inf')\n    n = len(nums)\n    for i in range(n):\n        current_sum = 0\n        for j in range(i, n):\n            current_sum += nums[j]\n            if current_sum > max_sum:\n                max_sum = current_sum\n    return max_sum",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
       "explanation": "Try every possible starting index i and extend the subarray to the right, tracking the running sum. Update the global maximum whenever a new high is found."
     },
     {
-      "label": "Kadane's Algorithm \u2014 O(n)",
+      "label": "Kadane's Algorithm — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    max_sum = nums[0]\n    current_sum = nums[0]\n    for i in range(1, len(nums)):\n        current_sum = max(nums[i], current_sum + nums[i])\n        max_sum = max(max_sum, current_sum)\n    return max_sum",

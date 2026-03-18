@@ -6,6 +6,11 @@
     "stack",
     "array"
   ],
+  "patterns": [
+    "monotonic-stack",
+    "array",
+    "stack"
+  ],
   "description": "## Daily Temperatures\n\nYou are managing an agricultural monitoring system that records daily soil temperatures. Farmers need to know how many days they'll have to wait until the next warmer day to schedule irrigation.\n\nGiven an array of integers `temperatures` where `temperatures[i]` represents the temperature on day `i`, return an array `answer` such that `answer[i]` is the number of days after day `i` until a warmer temperature. If there is no future warmer day, `answer[i] == 0`.\n\n**Constraints:**\n- `1 <= temperatures.length <= 10^5`\n- `30 <= temperatures[i] <= 100`",
   "examples": [
     {
@@ -319,16 +324,16 @@
   "functionName": "daily_temperatures",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    for i in range(n):\n        for j in range(i + 1, n):\n            if temperatures[j] > temperatures[i]:\n                answer[i] = j - i\n                break\n    return answer",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(n)",
       "explanation": "For each day, scan forward until a warmer temperature is found and record the distance. If no warmer day exists, the answer is 0."
     },
     {
-      "label": "Monotonic Stack \u2014 O(n)",
+      "label": "Monotonic Stack — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef daily_temperatures(temperatures: List[int]) -> List[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # Stack of indices with unresolved 'next warmer day'\n    for i, temp in enumerate(temperatures):\n        while stack and temperatures[stack[-1]] < temp:\n            idx = stack.pop()\n            answer[idx] = i - idx\n        stack.append(i)\n    return answer",

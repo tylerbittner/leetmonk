@@ -2,7 +2,12 @@
   "id": "reverse-linked-list",
   "title": "Reverse Linked List",
   "difficulty": "easy",
-  "tags": ["linked-list"],
+  "tags": [
+    "linked-list"
+  ],
+  "patterns": [
+    "linked-list"
+  ],
   "description": "## Reverse Linked List\n\nGiven the head of a singly linked list (as a plain integer list), reverse the list and return it as a plain integer list.\n\n**Constraints:**\n- The number of nodes is in the range `[0, 5000]`.\n- `-5000 <= Node.val <= 5000`",
   "examples": [
     {
@@ -23,65 +28,175 @@
   ],
   "exampleCases": [
     {
-      "input": {"head": [1, 2, 3, 4, 5]},
-      "expected": [5, 4, 3, 2, 1],
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
       "explanation": "Full reversal"
     },
     {
-      "input": {"head": [1, 2]},
-      "expected": [2, 1],
+      "input": {
+        "head": [
+          1,
+          2
+        ]
+      },
+      "expected": [
+        2,
+        1
+      ],
       "explanation": "Two nodes"
     },
     {
-      "input": {"head": []},
+      "input": {
+        "head": []
+      },
       "expected": [],
       "explanation": "Empty list"
     },
     {
-      "input": {"head": [1]},
-      "expected": [1],
+      "input": {
+        "head": [
+          1
+        ]
+      },
+      "expected": [
+        1
+      ],
       "explanation": "Single node"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"head": [1, 2, 3]},
-      "expected": [3, 2, 1],
+      "input": {
+        "head": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        3,
+        2,
+        1
+      ],
       "explanation": "Three nodes"
     },
     {
-      "input": {"head": [5, 4, 3, 2, 1]},
-      "expected": [1, 2, 3, 4, 5],
+      "input": {
+        "head": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "explanation": "Already reversed"
     },
     {
-      "input": {"head": [0]},
-      "expected": [0],
+      "input": {
+        "head": [
+          0
+        ]
+      },
+      "expected": [
+        0
+      ],
       "explanation": "Single zero"
     },
     {
-      "input": {"head": [-1, 0, 1]},
-      "expected": [1, 0, -1],
+      "input": {
+        "head": [
+          -1,
+          0,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        -1
+      ],
       "explanation": "Negative values"
     },
     {
-      "input": {"head": [1, 2, 3, 4]},
-      "expected": [4, 3, 2, 1],
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": [
+        4,
+        3,
+        2,
+        1
+      ],
       "explanation": "Even length"
     },
     {
-      "input": {"head": [-5, 4, 0, -3]},
-      "expected": [-3, 0, 4, -5],
+      "input": {
+        "head": [
+          -5,
+          4,
+          0,
+          -3
+        ]
+      },
+      "expected": [
+        -3,
+        0,
+        4,
+        -5
+      ],
       "explanation": "Mixed signs"
     },
     {
-      "input": {"head": [1, 1, 1]},
-      "expected": [1, 1, 1],
+      "input": {
+        "head": [
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        1
+      ],
       "explanation": "All same values"
     },
     {
-      "input": {"head": [100]},
-      "expected": [100],
+      "input": {
+        "head": [
+          100
+        ]
+      },
+      "expected": [
+        100
+      ],
       "explanation": "Large single value"
     }
   ],

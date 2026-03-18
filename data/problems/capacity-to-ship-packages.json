@@ -7,6 +7,10 @@
     "array",
     "binary-search-on-answer"
   ],
+  "patterns": [
+    "binary-search",
+    "array"
+  ],
   "description": "## Capacity to Ship Packages\n\nA freight company needs to transport a batch of crates from one warehouse to another. The crates are lined up on a loading dock and **must be loaded onto trucks in the order they appear** — you cannot rearrange them.\n\nEach crate has a known weight given by the array `weights`. The company has `days` days to complete the shipment. Every day, a single truck departs and carries consecutive crates from the front of the remaining line. The truck can carry any combination of consecutive crates as long as the total weight does not exceed its weight capacity.\n\nAll trucks have the **same capacity**. Find the **minimum capacity** such that all crates can be shipped within `days` days.\n\n**Constraints:**\n- `1 <= days <= weights.length <= 5 * 10^4`\n- `1 <= weights[i] <= 500`",
   "examples": [
     {
@@ -28,7 +32,18 @@
   "exampleCases": [
     {
       "input": {
-        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "weights": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
         "days": 5
       },
       "expected": 15,
@@ -36,7 +51,14 @@
     },
     {
       "input": {
-        "weights": [3, 2, 2, 4, 1, 4],
+        "weights": [
+          3,
+          2,
+          2,
+          4,
+          1,
+          4
+        ],
         "days": 3
       },
       "expected": 6,
@@ -44,7 +66,13 @@
     },
     {
       "input": {
-        "weights": [1, 2, 3, 1, 1],
+        "weights": [
+          1,
+          2,
+          3,
+          1,
+          1
+        ],
         "days": 4
       },
       "expected": 3,
@@ -54,7 +82,9 @@
   "hiddenCases": [
     {
       "input": {
-        "weights": [10],
+        "weights": [
+          10
+        ],
         "days": 1
       },
       "expected": 10,
@@ -62,7 +92,18 @@
     },
     {
       "input": {
-        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "weights": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
         "days": 1
       },
       "expected": 55,
@@ -70,7 +111,18 @@
     },
     {
       "input": {
-        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "weights": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
         "days": 10
       },
       "expected": 10,
@@ -78,7 +130,13 @@
     },
     {
       "input": {
-        "weights": [5, 5, 5, 5, 5],
+        "weights": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
         "days": 5
       },
       "expected": 5,
@@ -86,7 +144,13 @@
     },
     {
       "input": {
-        "weights": [5, 5, 5, 5, 5],
+        "weights": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
         "days": 2
       },
       "expected": 15,
@@ -94,7 +158,13 @@
     },
     {
       "input": {
-        "weights": [5, 5, 5, 5, 5],
+        "weights": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
         "days": 1
       },
       "expected": 25,
@@ -102,7 +172,18 @@
     },
     {
       "input": {
-        "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "weights": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "days": 5
       },
       "expected": 2,
@@ -110,7 +191,16 @@
     },
     {
       "input": {
-        "weights": [100, 200, 150, 80, 70, 300, 50, 90],
+        "weights": [
+          100,
+          200,
+          150,
+          80,
+          70,
+          300,
+          50,
+          90
+        ],
         "days": 3
       },
       "expected": 440,
@@ -118,7 +208,18 @@
     },
     {
       "input": {
-        "weights": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "weights": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
         "days": 2
       },
       "expected": 28,
@@ -126,7 +227,14 @@
     },
     {
       "input": {
-        "weights": [3, 3, 3, 3, 3, 3],
+        "weights": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
         "days": 3
       },
       "expected": 6,
@@ -134,7 +242,13 @@
     },
     {
       "input": {
-        "weights": [10, 1, 1, 1, 1],
+        "weights": [
+          10,
+          1,
+          1,
+          1,
+          1
+        ],
         "days": 2
       },
       "expected": 10,

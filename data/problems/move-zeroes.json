@@ -6,6 +6,10 @@
     "two-pointers",
     "array"
   ],
+  "patterns": [
+    "two-pointers",
+    "array"
+  ],
   "description": "## Move Zeroes\n\nYou are processing a data pipeline where zero values represent missing readings. To prepare the data for analysis, you need to push all the missing readings (zeros) to the end of the buffer while keeping the valid readings in their original relative order.\n\nGiven an integer array `nums`, move all `0`s to the end while maintaining the relative order of the non-zero elements. Return the modified array.\n\nDo this **in-place** without making a copy of the array.\n\n**Constraints:**\n- `1 <= nums.length <= 10^4`\n- `-2^31 <= nums[i] <= 2^31 - 1`",
   "examples": [
     {
@@ -278,7 +282,7 @@
   "functionName": "move_zeroes",
   "solutions": [
     {
-      "label": "Extra Array \u2014 O(n)",
+      "label": "Extra Array — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    non_zeros = [x for x in nums if x != 0]\n    zeros = [0] * (len(nums) - len(non_zeros))\n    result = non_zeros + zeros\n    for i in range(len(nums)):\n        nums[i] = result[i]\n    return nums",
@@ -287,7 +291,7 @@
       "explanation": "Collect non-zero elements, append the appropriate number of zeros, then copy back into the original array. Uses extra space for the temporary list."
     },
     {
-      "label": "Two Pointers In-Place \u2014 O(n)",
+      "label": "Two Pointers In-Place — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef move_zeroes(nums: List[int]) -> List[int]:\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != 0:\n            nums[write] = nums[read]\n            write += 1\n    for i in range(write, len(nums)):\n        nums[i] = 0\n    return nums",

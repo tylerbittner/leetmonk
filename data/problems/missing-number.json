@@ -2,7 +2,15 @@
   "id": "missing-number",
   "title": "Missing Number",
   "difficulty": "easy",
-  "tags": ["array", "math", "bit-manipulation"],
+  "tags": [
+    "array",
+    "math",
+    "bit-manipulation"
+  ],
+  "patterns": [
+    "bit-manipulation",
+    "array"
+  ],
   "description": "## Missing Number\n\nYou are given an array `nums` containing `n` distinct integers in the range `[0, n]`. Exactly one number in this range is missing from the array. Return the missing number.\n\n**Constraints:**\n- `n == nums.length`\n- `1 <= n <= 10^4`\n- `0 <= nums[i] <= n`\n- All numbers in `nums` are unique.",
   "examples": [
     {
@@ -23,64 +31,146 @@
   ],
   "exampleCases": [
     {
-      "input": {"nums": [3, 0, 1]},
+      "input": {
+        "nums": [
+          3,
+          0,
+          1
+        ]
+      },
       "expected": 2,
       "explanation": "Missing 2"
     },
     {
-      "input": {"nums": [0, 1]},
+      "input": {
+        "nums": [
+          0,
+          1
+        ]
+      },
       "expected": 2,
       "explanation": "Missing 2"
     },
     {
-      "input": {"nums": [9, 6, 4, 2, 3, 5, 7, 0, 1]},
+      "input": {
+        "nums": [
+          9,
+          6,
+          4,
+          2,
+          3,
+          5,
+          7,
+          0,
+          1
+        ]
+      },
       "expected": 8,
       "explanation": "Missing 8"
     },
     {
-      "input": {"nums": [0]},
+      "input": {
+        "nums": [
+          0
+        ]
+      },
       "expected": 1,
       "explanation": "Missing 1"
     }
   ],
   "hiddenCases": [
     {
-      "input": {"nums": [1]},
+      "input": {
+        "nums": [
+          1
+        ]
+      },
       "expected": 0,
       "explanation": "Missing 0"
     },
     {
-      "input": {"nums": [1, 2, 3]},
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
       "expected": 0,
       "explanation": "Missing 0"
     },
     {
-      "input": {"nums": [0, 1, 2]},
+      "input": {
+        "nums": [
+          0,
+          1,
+          2
+        ]
+      },
       "expected": 3,
       "explanation": "Missing last"
     },
     {
-      "input": {"nums": [0, 2, 3, 4, 5]},
+      "input": {
+        "nums": [
+          0,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
       "expected": 1,
       "explanation": "Missing 1"
     },
     {
-      "input": {"nums": [0, 1, 2, 3, 5]},
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ]
+      },
       "expected": 4,
       "explanation": "Missing 4"
     },
     {
-      "input": {"nums": [0, 1, 2, 4, 5]},
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          4,
+          5
+        ]
+      },
       "expected": 3,
       "explanation": "Missing 3"
     },
     {
-      "input": {"nums": [0, 1, 2, 3, 4]},
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
       "expected": 5,
       "explanation": "Missing last"
     },
     {
-      "input": {"nums": [1, 0, 2, 4]},
+      "input": {
+        "nums": [
+          1,
+          0,
+          2,
+          4
+        ]
+      },
       "expected": 3,
       "explanation": "Missing 3 from shuffled array"
     }

@@ -6,7 +6,11 @@
     "array",
     "hash-set"
   ],
-  "description": "## Contains Duplicate\n\nYou are running a quality check on a shipment of uniquely-coded components. Each component has an integer identifier. Your task is to detect whether any identifier has been assigned more than once \u2014 a sign of a labeling error.\n\nGiven an integer array `nums`, return `true` if any value appears **at least twice** in the array, and `false` if every element is distinct.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^9 <= nums[i] <= 10^9`",
+  "patterns": [
+    "hash-map",
+    "array"
+  ],
+  "description": "## Contains Duplicate\n\nYou are running a quality check on a shipment of uniquely-coded components. Each component has an integer identifier. Your task is to detect whether any identifier has been assigned more than once — a sign of a labeling error.\n\nGiven an integer array `nums`, return `true` if any value appears **at least twice** in the array, and `false` if every element is distinct.\n\n**Constraints:**\n- `1 <= nums.length <= 10^5`\n- `-10^9 <= nums[i] <= 10^9`",
   "examples": [
     {
       "input": "nums = [1, 2, 3, 1]",
@@ -229,16 +233,16 @@
   "functionName": "contains_duplicate",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    n = len(nums)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if nums[i] == nums[j]:\n                return True\n    return False",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
       "explanation": "Compare every pair of elements. If any two are equal, return True immediately. Return False if no duplicates found after checking all pairs."
     },
     {
-      "label": "Hash Set \u2014 O(n)",
+      "label": "Hash Set — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef contains_duplicate(nums: List[int]) -> bool:\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False",
@@ -249,7 +253,7 @@
   ],
   "hints": [
     "What data structure lets you check membership in O(1)?",
-    "You only need to know if something has been seen before \u2014 a set is perfect for this."
+    "You only need to know if something has been seen before — a set is perfect for this."
   ],
   "lcEquivalent": "217. Contains Duplicate"
 }

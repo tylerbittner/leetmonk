@@ -7,6 +7,10 @@
     "two-pointers",
     "greedy"
   ],
+  "patterns": [
+    "two-pointers",
+    "array"
+  ],
   "description": "## Container With Most Water\n\nYou are designing a solar-powered water collection system. Vertical panels are placed at various positions along a track, and rain collects between any two panels. The amount of water held between panels at position `i` and `j` (with heights `heights[i]` and `heights[j]`) is limited by the shorter panel and their distance apart.\n\nGiven an integer array `heights` of length `n`, where `heights[i]` represents the height of the panel at position `i`, find two panels that together with the x-axis form a container that holds **the most water**.\n\nReturn the **maximum amount of water** the container can store.\n\n**Constraints:**\n- `n == heights.length`\n- `2 <= n <= 10^5`\n- `0 <= heights[i] <= 10^4`",
   "examples": [
     {
@@ -220,16 +224,16 @@
   "functionName": "max_water",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    max_vol = 0\n    n = len(heights)\n    for i in range(n):\n        for j in range(i + 1, n):\n            vol = min(heights[i], heights[j]) * (j - i)\n            if vol > max_vol:\n                max_vol = vol\n    return max_vol",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
       "explanation": "Try every pair of panels (i, j). Water volume = min(heights[i], heights[j]) * (j - i). Track the maximum volume found."
     },
     {
-      "label": "Two Pointers \u2014 O(n)",
+      "label": "Two Pointers — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_water(heights: List[int]) -> int:\n    left, right = 0, len(heights) - 1\n    max_vol = 0\n    while left < right:\n        vol = min(heights[left], heights[right]) * (right - left)\n        max_vol = max(max_vol, vol)\n        if heights[left] <= heights[right]:\n            left += 1\n        else:\n            right -= 1\n    return max_vol",

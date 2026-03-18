@@ -6,6 +6,10 @@
     "array",
     "greedy"
   ],
+  "patterns": [
+    "greedy",
+    "array"
+  ],
   "description": "## Best Time to Buy and Sell Stock\n\nYou are tracking the daily fuel prices at a spacecraft refueling depot. You want to buy fuel on one day and sell it on a future day to maximize your profit.\n\nGiven an array `prices` where `prices[i]` is the fuel price on day `i`, return the **maximum profit** you can achieve from a single buy-sell transaction. You must buy before you sell.\n\nIf no profit is possible, return `0`.\n\n**Constraints:**\n- `1 <= prices.length <= 10^5`\n- `0 <= prices[i] <= 10^4`",
   "examples": [
     {
@@ -215,16 +219,16 @@
   "functionName": "max_profit",
   "solutions": [
     {
-      "label": "Brute Force \u2014 O(n\u00b2)",
+      "label": "Brute Force — O(n²)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    max_p = 0\n    n = len(prices)\n    for i in range(n):\n        for j in range(i + 1, n):\n            profit = prices[j] - prices[i]\n            if profit > max_p:\n                max_p = profit\n    return max_p",
-      "timeComplexity": "O(n\u00b2)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(1)",
       "explanation": "Try every possible buy/sell pair (i, j) where i < j. Track the maximum profit seen. Return 0 if no profitable pair exists."
     },
     {
-      "label": "Greedy \u2014 O(n)",
+      "label": "Greedy — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef max_profit(prices: List[int]) -> int:\n    min_price = float('inf')\n    max_p = 0\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        elif price - min_price > max_p:\n            max_p = price - min_price\n    return max_p",

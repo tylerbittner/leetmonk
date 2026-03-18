@@ -6,6 +6,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import SolutionsTab from './SolutionsTab.jsx'
 import HintsTab from './HintsTab.jsx'
 import SubmissionsTab from './SubmissionsTab.jsx'
+import { patternById } from '../data/patterns.js'
 
 const diffBg = { easy: 'rgba(34,197,94,0.1)', medium: 'rgba(234,179,8,0.1)', hard: 'rgba(239,68,68,0.1)' }
 const diffColor = { easy: 'var(--easy)', medium: 'var(--medium)', hard: 'var(--hard)' }
@@ -39,7 +40,7 @@ function MarkdownContent({ children }) {
   )
 }
 
-export default function ProblemDescription({ problem, submissions = [], onSolutionsViewed, userCode, onOpenDiff }) {
+export default function ProblemDescription({ problem, submissions = [], onSolutionsViewed, userCode, onOpenDiff, onOpenPatterns }) {
   const [activeTab, setActiveTab] = useState('description')
 
   return (
@@ -65,6 +66,33 @@ export default function ProblemDescription({ problem, submissions = [], onSoluti
             <span key={tag} className="tag">{tag}</span>
           ))}
         </div>
+        {problem.patterns && problem.patterns.length > 0 && (
+          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+            {problem.patterns.map(pid => {
+              const pat = patternById[pid]
+              if (!pat) return null
+              return (
+                <button
+                  key={pid}
+                  onClick={onOpenPatterns}
+                  title={`View ${pat.name} pattern`}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    padding: '2px 8px', borderRadius: 10, fontSize: 11, fontWeight: 500,
+                    background: 'rgba(168,85,247,0.1)', color: 'var(--accent-purple)',
+                    border: '1px solid rgba(168,85,247,0.3)',
+                    cursor: 'pointer', transition: 'background 0.1s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(168,85,247,0.2)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(168,85,247,0.1)'}
+                >
+                  <span>{pat.emoji}</span>
+                  <span>{pat.name}</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
         {problem.lcEquivalent && (
           <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>
             LC: {problem.lcEquivalent}

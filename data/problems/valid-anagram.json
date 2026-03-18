@@ -7,6 +7,10 @@
     "hash-map",
     "sorting"
   ],
+  "patterns": [
+    "hash-map",
+    "string"
+  ],
   "description": "## Valid Anagram\n\nYou are building a word puzzle validation system. Two words are anagrams if one is a rearrangement of the other's letters. Your system needs to verify this quickly for any pair of submitted words.\n\nGiven two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.\n\n**Constraints:**\n- `1 <= s.length, t.length <= 5 * 10^4`\n- `s` and `t` consist of lowercase English letters.",
   "examples": [
     {
@@ -150,7 +154,7 @@
   "functionName": "is_anagram",
   "solutions": [
     {
-      "label": "Sorting \u2014 O(n log n)",
+      "label": "Sorting — O(n log n)",
       "approach": "obvious",
       "language": "python",
       "code": "def is_anagram(s: str, t: str) -> bool:\n    return sorted(s) == sorted(t)",
@@ -159,7 +163,7 @@
       "explanation": "Sort both strings and compare them. If they are anagrams, sorting produces identical character sequences. This is concise but the sorting step makes it slower than a counting approach."
     },
     {
-      "label": "Hash Map \u2014 O(n)",
+      "label": "Hash Map — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    return Counter(s) == Counter(t)",

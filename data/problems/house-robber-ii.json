@@ -6,7 +6,11 @@
     "array",
     "dynamic-programming"
   ],
-  "description": "## House Robber II\n\nYou are planning to rob houses along a circular street. Each house has a certain amount of money, given by the array `nums`. Adjacent houses have a connected alarm \u2014 robbing two directly neighboring houses will trigger it.\n\nBecause the street is circular, the first and last houses are also neighbors. Return the maximum amount of money you can rob without triggering any alarms.\n\n**Constraints:**\n- `1 <= nums.length <= 100`\n- `0 <= nums[i] <= 1000`",
+  "patterns": [
+    "dynamic-programming",
+    "array"
+  ],
+  "description": "## House Robber II\n\nYou are planning to rob houses along a circular street. Each house has a certain amount of money, given by the array `nums`. Adjacent houses have a connected alarm — robbing two directly neighboring houses will trigger it.\n\nBecause the street is circular, the first and last houses are also neighbors. Return the maximum amount of money you can rob without triggering any alarms.\n\n**Constraints:**\n- `1 <= nums.length <= 100`\n- `0 <= nums[i] <= 1000`",
   "examples": [
     {
       "input": "nums = [2,3,2]",
@@ -180,7 +184,7 @@
   "functionName": "house_robber_ii",
   "solutions": [
     {
-      "label": "Two Linear Passes \u2014 O(n)",
+      "label": "Two Linear Passes — O(n)",
       "approach": "optimal",
       "language": "python",
       "code": "from typing import List\n\ndef house_robber_ii(nums: List[int]) -> int:\n    if len(nums) == 1:\n        return nums[0]\n\n    def rob_linear(houses: List[int]) -> int:\n        prev2, prev1 = 0, 0\n        for h in houses:\n            prev2, prev1 = prev1, max(prev1, prev2 + h)\n        return prev1\n\n    # Either exclude the first house or the last house\n    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))",
@@ -189,7 +193,7 @@
       "explanation": "Because houses are arranged in a circle, the first and last house are adjacent and cannot both be robbed. This reduces the problem to two independent linear House Robber subproblems: one excluding the first house (`nums[1:]`), and one excluding the last house (`nums[:-1]`). The answer is the maximum of the two. The linear rob function uses two variables to track the best solution up to the previous two houses."
     },
     {
-      "label": "DP with Arrays \u2014 O(n)",
+      "label": "DP with Arrays — O(n)",
       "approach": "obvious",
       "language": "python",
       "code": "from typing import List\n\ndef house_robber_ii(nums: List[int]) -> int:\n    if len(nums) == 1:\n        return nums[0]\n    if len(nums) == 2:\n        return max(nums)\n\n    def rob_linear(houses: List[int]) -> int:\n        n = len(houses)\n        if n == 0:\n            return 0\n        if n == 1:\n            return houses[0]\n        dp = [0] * n\n        dp[0] = houses[0]\n        dp[1] = max(houses[0], houses[1])\n        for i in range(2, n):\n            dp[i] = max(dp[i - 1], dp[i - 2] + houses[i])\n        return dp[-1]\n\n    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))",
@@ -200,7 +204,7 @@
   ],
   "hints": [
     "The circular constraint means you can't rob both the first and last house. Split into two cases: one where you exclude the first house, one where you exclude the last.",
-    "Each case is just the original linear House Robber problem \u2014 solve it with DP in O(n)."
+    "Each case is just the original linear House Robber problem — solve it with DP in O(n)."
   ],
   "lcEquivalent": "213. House Robber II"
 }
