@@ -449,17 +449,7 @@ export default function App() {
           </TopBarBtn>
         </div>
 
-        {/* Settings gear */}
-        <div style={{ WebkitAppRegion: 'no-drag' }}>
-          <TopBarBtn
-            onClick={() => setShowSettings(true)}
-            title="Settings (Cmd+,)"
-            active={showSettings}
-            iconSize={18}
-          >
-            ⚙
-          </TopBarBtn>
-        </div>
+
       </div>
 
       {session && (
