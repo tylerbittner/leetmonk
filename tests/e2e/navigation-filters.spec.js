@@ -141,8 +141,10 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await window.locator("[data-testid=tab-solutions]").click();
     // Wait for solutions to actually load
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
-    await window.waitForTimeout(500); // let solutionsViewed state update
-    // Now btn-diff should be visible
+    // Expand the first solution accordion to reveal btn-diff
+    await window.locator("text=/Brute|Optimal|O\\(/i").first().click();
+    await window.waitForTimeout(500); // let solutionsViewed state update and solution expand
+    // Now btn-diff should be visible inside the expanded solution
     await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();
     await expect(window.locator("[data-testid=diff-view]")).toBeVisible({ timeout: 5000 });
@@ -152,6 +154,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator("[data-testid=tab-solutions]").click();
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
+    await window.locator("text=/Brute|Optimal|O\\(/i").first().click();
     await window.waitForTimeout(500);
     await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();
@@ -166,6 +169,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator("[data-testid=tab-solutions]").click();
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
+    await window.locator("text=/Brute|Optimal|O\\(/i").first().click();
     await window.waitForTimeout(500);
     await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();

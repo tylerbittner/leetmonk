@@ -113,6 +113,12 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
     window.api.setSettings(next)
   }
 
+  useEffect(() => {
+    function onKey(e) { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
   function handleDragMouseDown(e) {
     e.preventDefault()
     dragging.current = true
