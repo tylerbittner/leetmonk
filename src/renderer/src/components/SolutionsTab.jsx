@@ -60,7 +60,7 @@ export default function SolutionsTab({ solutions = [], userCode, onOpenDiff }) {
                   }}
                   title="Compare with my code"
                 >
-                  ⟺ Compare
+                  Diff
                 </button>
               )}
               <span style={{ color: 'var(--text-muted)', fontSize: 16 }}>
