@@ -93,6 +93,4 @@ LeetMonk is an independent open-source project and is **not** affiliated with, e
 
 [Apache License 2.0](./LICENSE) — Copyright © 2026 Tyler Bittner
 
----
 
-*The skill is built in the quiet hours. Offline, focused, yours.*
