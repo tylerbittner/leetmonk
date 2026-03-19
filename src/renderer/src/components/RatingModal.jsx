@@ -100,10 +100,20 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
                 )
               })}
             </div>
-            <div style={{
-              marginTop: 16, textAlign: 'center', color: 'var(--text-muted)', fontSize: 11
-            }}>
-              Click outside to skip rating
+            <div style={{ marginTop: 16, textAlign: 'center' }}>
+              <button
+                onClick={onDismiss}
+                style={{
+                  background: 'none', border: 'none', color: 'var(--text-muted)',
+                  fontSize: 18, cursor: 'pointer', padding: '4px 10px', lineHeight: 1,
+                  borderRadius: 4, transition: 'color 0.15s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                title="Skip rating"
+              >
+                ✕
+              </button>
             </div>
           </>
         )}
