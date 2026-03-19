@@ -197,9 +197,9 @@ export default function App() {
     setResults(null)
   }, [])
 
-  // E2E test helper: set editor content without relying on window.monaco global
+  // E2E test helper: always registered (harmless in production, no tests run against it)
+  // Note: process.env.NODE_ENV is baked in at Vite build time, not runtime — always register
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'test') return
     window.__testSetCode = (code) => {
       if (activeProblem) handleCodeChange(activeProblem.id, code)
     }
