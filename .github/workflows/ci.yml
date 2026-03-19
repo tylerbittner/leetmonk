@@ -31,5 +31,9 @@ jobs:
       - name: Build (verify compilation)
         run: npx electron-vite build
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Run E2E tests
         run: npx playwright test
+        timeout-minutes: 20
