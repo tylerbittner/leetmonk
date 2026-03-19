@@ -75,7 +75,7 @@ export default function Timer({ problemId }) {
   const ss = String(elapsed % 60).padStart(2, '0')
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, position: 'relative' }}>
+    <div data-testid="timer" style={{ display: 'flex', alignItems: 'center', gap: 6, position: 'relative' }}>
       {/* Time display */}
       <div style={{
         fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 700, letterSpacing: '0.08em',

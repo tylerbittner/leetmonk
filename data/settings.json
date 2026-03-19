@@ -1,0 +1,9 @@
+{
+  "celebrationEffect": "lotus",
+  "soundOnSolve": true,
+  "timerVisible": true,
+  "editorFontSize": 18,
+  "vimKeybindings": false,
+  "focusMode": "standard",
+  "sidebarWidth": 240
+}

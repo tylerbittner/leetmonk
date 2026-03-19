@@ -67,7 +67,7 @@ export default function TestResults({ results, running, mode, problem }) {
   const activeResult = cases[activeCase] || cases[0]
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)' }}>
+    <div data-testid="test-results" style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)' }}>
       {/* Summary bar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',

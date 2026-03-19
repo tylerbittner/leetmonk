@@ -167,7 +167,7 @@ export default function PostSessionReview({ session, problems, onClose, onExport
       background: 'rgba(0,0,0,0.7)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }} onClick={onClose}>
-      <div style={{
+      <div data-testid="post-session-review" style={{
         background: 'var(--bg-secondary)',
         border: '1px solid var(--border)',
         borderRadius: 12,

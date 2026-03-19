@@ -10,9 +10,8 @@ if (process.env.E2E_CDP_PORT) {
   app.commandLine.appendSwitch('remote-debugging-port', process.env.E2E_CDP_PORT)
 }
 
-const dataDir = app.isPackaged
-  ? join(process.resourcesPath, 'data')
-  : join(app.getAppPath(), 'data')
+const dataDir = process.env.LEETMONK_DATA_DIR
+  || (app.isPackaged ? join(process.resourcesPath, 'data') : join(app.getAppPath(), 'data'))
 
 const progressFile = join(dataDir, 'progress.json')
 const editorStateFile = join(dataDir, 'editor-state.json')
@@ -159,7 +158,7 @@ function createWindow() {
 
   if (!app.isPackaged) {
     win.loadURL(process.env['ELECTRON_RENDERER_URL'])
-    if (!process.env.E2E_CDP_PORT) {
+    if (!process.env.E2E_CDP_PORT && process.env.NODE_ENV !== 'test') {
       win.webContents.openDevTools({ mode: 'detach' })
     }
   } else {
