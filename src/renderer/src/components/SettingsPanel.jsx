@@ -25,14 +25,24 @@ function Toggle({ value, onChange }) {
   )
 }
 
-function SectionLabel({ children }) {
+function SectionLabel({ children, description }) {
   return (
     <div style={{
-      fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
-      textTransform: 'uppercase', color: 'var(--text-muted)',
-      padding: '16px 0 6px',
+      padding: '20px 0 8px',
+      marginTop: 4,
     }}>
-      {children}
+      <div style={{
+        fontSize: 14, fontWeight: 600,
+        color: 'var(--text-primary)',
+        letterSpacing: '-0.2px',
+      }}>
+        {children}
+      </div>
+      {description && (
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2, lineHeight: 1.4 }}>
+          {description}
+        </div>
+      )}
     </div>
   )
 }
@@ -252,7 +262,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
           </SettingRow>
 
           <SettingRow
-            label="Sound on solve"
+            label="Sound"
             description="Meditation bell when you pass all tests"
           >
             <Toggle value={s.soundOnSolve} onChange={v => update('soundOnSolve', v)} />
