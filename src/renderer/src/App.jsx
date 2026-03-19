@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS = {
   editorFontSize: 14,
   vimKeybindings: false,
   focusMode: 'standard',
+  sidebarWidth: 240,
 }
 
 function playBellSound() {
@@ -53,6 +54,7 @@ export default function App() {
   const [completedSession, setCompletedSession] = useState(null)
   const [reviewData, setReviewData] = useState({})
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [sidebarWidth, setSidebarWidth] = useState(240)
   const [showAbout, setShowAbout] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showBugReport, setShowBugReport] = useState(false)
@@ -287,6 +289,21 @@ export default function App() {
     setResults(null)
   }, [activeProblem, languageMap])
 
+  const handleResizeMouseDown = useCallback((e) => {
+    e.preventDefault()
+    const startX = e.clientX
+    const startWidth = sidebarWidth
+    const onMove = (ev) => {
+      setSidebarWidth(Math.min(400, Math.max(180, startWidth + ev.clientX - startX)))
+    }
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }, [sidebarWidth])
+
   function triggerCelebration() {
     const effect = settings.celebrationEffect ?? 'lotus'
     // Bell for confetti mode (lotus effect plays its own bell internally)
@@ -401,18 +418,18 @@ export default function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-primary)' }}>
       {/* Top bar */}
-      <div style={{
+      <div className="titlebar-drag" style={{
         display: 'flex', alignItems: 'center', gap: 12, padding: '0 16px',
         height: 48, borderBottom: '1px solid var(--border)',
-        background: 'var(--bg-secondary)', flexShrink: 0, WebkitAppRegion: 'drag',
-        userSelect: 'none', WebkitUserSelect: 'none', cursor: 'default',
+        background: 'var(--bg-secondary)', flexShrink: 0,
       }}>
         <div style={{ width: 70 }} />
         <span
+          className="titlebar-no-drag"
           onClick={() => setShowAbout(true)}
           style={{
             fontWeight: 700, fontSize: 16, color: 'var(--accent-green)', letterSpacing: '-0.5px',
-            WebkitAppRegion: 'no-drag', cursor: 'pointer', transition: 'opacity 0.15s',
+            cursor: 'pointer', transition: 'opacity 0.15s',
           }}
           onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
           onMouseLeave={e => e.currentTarget.style.opacity = '1'}
@@ -421,21 +438,17 @@ export default function App() {
           LeetMonk &gt;_
         </span>
 
-        {!isMinimal && (
-          <div style={{ flex: 1, WebkitAppRegion: 'no-drag' }}>
-            <FilterBar
-              filters={filters}
-              onFiltersChange={setFilters}
-              allTags={allTags}
-              problems={problems}
-              progress={progress}
-            />
-          </div>
-        )}
-        {isMinimal && <div style={{ flex: 1 }} />}
+        <div style={{ flex: 1 }} />
+
+        <span className="titlebar-no-drag" style={{
+          fontSize: 12, fontWeight: 600,
+          color: solvedCount > 0 ? 'var(--accent-green)' : 'var(--text-muted)',
+        }}>
+          {solvedCount}/{problems.length}
+        </span>
 
         {activeProblem && (
-          <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="titlebar-no-drag" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <TopBarBtn onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)">‹</TopBarBtn>
             <TopBarBtn onClick={() => navigateProblem(1)} title="Next problem (Cmd+])">›</TopBarBtn>
             <button onClick={() => setSidebarCollapsed(c => !c)} title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'} style={{
@@ -449,8 +462,6 @@ export default function App() {
             {settings.timerVisible && <Timer problemId={activeProblem.id} />}
           </div>
         )}
-
-
       </div>
 
       {session && !isMinimal && (
@@ -471,16 +482,29 @@ export default function App() {
 
       {/* Main content */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-        {/* Sidebar — animated collapse */}
+        {/* Sidebar — animated collapse + resizable */}
         <div style={{ display: 'flex', flexShrink: 0 }}>
           <div style={{
-            width: isSidebarHidden ? 0 : 240,
+            width: isSidebarHidden ? 0 : sidebarWidth,
             overflow: 'hidden',
             display: 'flex', flexDirection: 'column',
             background: 'var(--bg-secondary)',
-            transition: 'width 0.2s ease',
+            transition: isSidebarHidden ? 'width 0.2s ease' : 'none',
             flexShrink: 0,
           }}>
+            {!isSidebarHidden && (
+              <div style={{ padding: '6px 8px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+                <FilterBar
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  allTags={allTags}
+                  problems={problems}
+                  progress={progress}
+                  compact
+                  showStats={false}
+                />
+              </div>
+            )}
             <ProblemList
               problems={filteredProblems}
               activeProblemId={activeProblemId}
@@ -516,6 +540,16 @@ export default function App() {
               </SidebarFooterBtn>
             </div>
           </div>
+          {!isSidebarHidden && (
+            <div
+              className="sidebar-resize-handle"
+              onMouseDown={handleResizeMouseDown}
+              style={{
+                width: 4, flexShrink: 0, cursor: 'col-resize',
+                background: 'transparent', transition: 'background 0.15s',
+              }}
+            />
+          )}
           <button
             onClick={() => setSidebarCollapsed(c => !c)}
             title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}

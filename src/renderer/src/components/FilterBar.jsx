@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function FilterBar({ filters, onFiltersChange, allTags, problems, progress }) {
+export default function FilterBar({ filters, onFiltersChange, allTags, problems, progress, compact = false, showStats = true }) {
   const [tagOpen, setTagOpen] = useState(false)
 
   const update = (patch) => onFiltersChange({ ...filters, ...patch })
@@ -8,17 +8,24 @@ export default function FilterBar({ filters, onFiltersChange, allTags, problems,
   const solvedCount = Object.values(progress).filter(p => p.status === 'solved').length
   const total = problems.length
 
+  const containerStyle = compact
+    ? { display: 'flex', flexDirection: 'column', gap: 4, position: 'relative' }
+    : { display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }
+
+  const selectStyle = {
+    background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
+    borderRadius: 6, padding: '5px 8px', color: 'var(--text-primary)',
+    fontSize: 12, outline: 'none', cursor: 'pointer',
+    ...(compact ? { width: '100%', boxSizing: 'border-box' } : {}),
+  }
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
+    <div style={containerStyle}>
       {/* Difficulty filter */}
       <select
         value={filters.difficulty}
         onChange={e => update({ difficulty: e.target.value })}
-        style={{
-          background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
-          borderRadius: 6, padding: '5px 8px', color: 'var(--text-primary)',
-          fontSize: 12, outline: 'none', cursor: 'pointer'
-        }}
+        style={selectStyle}
       >
         <option value="all">All Difficulties</option>
         <option value="easy">Easy</option>
@@ -30,11 +37,7 @@ export default function FilterBar({ filters, onFiltersChange, allTags, problems,
       <select
         value={filters.status}
         onChange={e => update({ status: e.target.value })}
-        style={{
-          background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
-          borderRadius: 6, padding: '5px 8px', color: 'var(--text-primary)',
-          fontSize: 12, outline: 'none', cursor: 'pointer'
-        }}
+        style={selectStyle}
       >
         <option value="all">All Status</option>
         <option value="solved">Solved</option>
@@ -42,10 +45,10 @@ export default function FilterBar({ filters, onFiltersChange, allTags, problems,
       </select>
 
       {/* Tags filter */}
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', ...(compact ? { width: '100%' } : {}) }}>
         <button
           className="btn btn-ghost"
-          style={{ fontSize: 12, padding: '5px 10px' }}
+          style={{ fontSize: 12, padding: '5px 10px', ...(compact ? { width: '100%', justifyContent: 'flex-start' } : {}) }}
           onClick={() => setTagOpen(o => !o)}
         >
           Topics {filters.tags.length > 0 && `(${filters.tags.length})`}
@@ -83,9 +86,11 @@ export default function FilterBar({ filters, onFiltersChange, allTags, problems,
       </div>
 
       {/* Stats */}
-      <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 4 }}>
-        {solvedCount}/{total} solved
-      </span>
+      {showStats && (
+        <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 4 }}>
+          {solvedCount}/{total} solved
+        </span>
+      )}
 
       {tagOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 99 }} onClick={() => setTagOpen(false)} />

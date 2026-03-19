@@ -57,6 +57,26 @@ body {
   cursor: default;
 }
 
+/* Titlebar drag/no-drag classes */
+.titlebar-drag {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+.titlebar-drag * {
+  -webkit-app-region: no-drag;
+}
+.titlebar-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ─── Sidebar resize handle ──────────────────────────────── */
+
+.sidebar-resize-handle:hover {
+  background: var(--border-light) !important;
+}
+
 /* Scrollbars */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
