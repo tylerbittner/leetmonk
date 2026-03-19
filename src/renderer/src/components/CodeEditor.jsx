@@ -15,6 +15,8 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => onSubmit())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => onReset())
     editor.focus()
+    editor.setPosition({ lineNumber: 1, column: 1 })
+    editor.setSelection({ startLineNumber: 1, startColumn: 1, endLineNumber: 1, endColumn: 1 })
     // Vim init is handled solely by the useEffect below so settings loaded
     // from disk after mount trigger it correctly.
   }
