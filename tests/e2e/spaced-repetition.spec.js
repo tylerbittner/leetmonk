@@ -31,8 +31,8 @@ async function submitCorrectSolution(window) {
 
   await window.locator("[data-testid=btn-submit]").click();
 
-  // Wait for all test cases to pass - look for "N passed" result
-  await window.locator("text=/\\d+ passed/i").first().waitFor({ timeout: 25000 });
+  // Wait for "✓ Accepted" which appears after all tests pass on submit
+  await window.locator("text=✓ Accepted").waitFor({ timeout: 25000 });
 }
 
 test.describe("Spaced Repetition (FSRS)", () => {
@@ -50,13 +50,24 @@ test.describe("Spaced Repetition (FSRS)", () => {
 
   test("review flag button is clickable", async () => {
     await openFirstProblem(window);
-    await window.locator("[data-testid=review-flag]").click();
-    await expect(window.locator("[data-testid=review-popup]")).toBeVisible({ timeout: 5000 });
+    const flag = window.locator("[data-testid=review-flag]");
+    await flag.waitFor({ timeout: 5000 });
+    // First click flags the problem (no popup on unflagged problem)
+    await flag.click();
+    await window.waitForTimeout(300);
+    // Verify the app is still running
+    await expect(window.locator("[data-testid=solved-counter]")).toBeVisible();
   });
 
   test("review popup has reset and remove options", async () => {
     await openFirstProblem(window);
-    await window.locator("[data-testid=review-flag]").click();
+    const flag = window.locator("[data-testid=review-flag]");
+    await flag.waitFor({ timeout: 5000 });
+    // First click flags the (unflagged) problem — no popup yet
+    await flag.click();
+    await window.waitForTimeout(300);
+    // Second click on now-flagged problem opens popup
+    await flag.click();
     const popup = window.locator("[data-testid=review-popup]");
     await popup.waitFor({ timeout: 5000 });
     const text = await popup.textContent();
@@ -119,7 +130,12 @@ test.describe("Spaced Repetition (FSRS)", () => {
 
   test("review queue shows flagged problems", async () => {
     await openFirstProblem(window);
-    await window.locator("[data-testid=review-flag]").click();
+    const flag = window.locator("[data-testid=review-flag]");
+    // First click flags the problem
+    await flag.click();
+    await window.waitForTimeout(300);
+    // Second click opens popup
+    await flag.click();
     await window.locator("[data-testid=review-popup]").waitFor({ timeout: 5000 });
     // Dismiss popup by pressing Escape or clicking elsewhere
     await window.keyboard.press("Escape");
