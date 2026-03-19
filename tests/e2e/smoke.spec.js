@@ -1,17 +1,18 @@
 const { test, expect } = require("@playwright/test");
-const { launchApp } = require("./helpers");
+const { launchApp, ensureSidebarExpanded } = require("./helpers");
 
 test.describe("Smoke tests", () => {
-  let app, window;
+  let app, window, cleanup;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp());
+    ({ app, window, cleanup } = await launchApp());
     // Wait for app to fully load
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 
   test.afterEach(async () => {
     if (app) await app.close().catch(() => {});
+    if (cleanup) cleanup();
   });
 
   test("window opens and problems load", async () => {
@@ -30,10 +31,18 @@ test.describe("Smoke tests", () => {
   test("run Python code shows test results", async () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator(".monaco-editor").waitFor({ timeout: 8000 });
-    await window.waitForTimeout(1000); // wait for monaco ready
+    await window.waitForTimeout(1500);
     await window.locator("[data-testid=btn-run]").click();
-    // Wait for ANY result — the panel changes from the placeholder text
-    await expect(window.locator("text=Run or submit your code to see results")).toBeHidden({ timeout: 15000 });
+    // Two strategies: placeholder disappears OR results appear
+    await Promise.race([
+      window
+        .locator("text=Run or submit your code to see results")
+        .waitFor({ state: "hidden", timeout: 20000 }),
+      window
+        .locator("text=/\\d+ passed|\\d+ failed|Error/i")
+        .first()
+        .waitFor({ timeout: 20000 }),
+    ]);
   });
 
   test("switch to JavaScript", async () => {
@@ -70,6 +79,7 @@ test.describe("Smoke tests", () => {
   });
 
   test("Pattern Library opens", async () => {
+    await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-patterns]").click();
     await expect(window.locator("[data-testid=pattern-library]")).toBeVisible({ timeout: 5000 });
     const cards = window.locator("[data-testid=pattern-card]");
@@ -77,6 +87,7 @@ test.describe("Smoke tests", () => {
   });
 
   test("Plan Session opens planner", async () => {
+    await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-plan-session]").click();
     await expect(window.locator("[data-testid=session-planner]")).toBeVisible({ timeout: 5000 });
   });

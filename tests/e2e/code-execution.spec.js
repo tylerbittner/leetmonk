@@ -21,15 +21,16 @@ async function openFirstProblem(window) {
 }
 
 test.describe("Code Execution", () => {
-  let app, window;
+  let app, window, cleanup;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp({ show: true }));
+    ({ app, window, cleanup } = await launchApp({ show: true }));
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 
   test.afterEach(async () => {
     if (app) await app.close().catch(() => {});
+    if (cleanup) cleanup();
   });
 
   // 1. Python starter code runs without crashing

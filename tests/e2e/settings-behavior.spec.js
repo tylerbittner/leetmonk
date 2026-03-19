@@ -2,15 +2,16 @@ const { test, expect } = require("@playwright/test");
 const { launchApp } = require("./helpers");
 
 test.describe("Settings behavioral tests", () => {
-  let app, window;
+  let app, window, cleanup;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp({ show: true }));
+    ({ app, window, cleanup } = await launchApp({ show: true }));
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 
   test.afterEach(async () => {
     if (app) await app.close().catch(() => {});
+    if (cleanup) cleanup();
   });
 
   async function openSettings(window) {

@@ -1,16 +1,17 @@
 const { test, expect } = require("@playwright/test");
-const { launchApp } = require("./helpers");
+const { launchApp, ensureSidebarExpanded } = require("./helpers");
 
 test.describe("Navigation, Filtering, and Pattern Library", () => {
-  let app, window;
+  let app, window, cleanup;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp());
+    ({ app, window, cleanup } = await launchApp());
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 
   test.afterEach(async () => {
     if (app) await app.close().catch(() => {});
+    if (cleanup) cleanup();
   });
 
   test("problem list shows 86 problems", async () => {
@@ -83,9 +84,11 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   test("Cmd+[ navigates to previous problem", async () => {
     const items = window.locator("[data-testid=problem-item]");
     await items.nth(1).click();
-    await window.waitForTimeout(300);
+    await window.waitForTimeout(500);
+    // Click top bar to move focus out of Monaco
+    await window.locator("[data-testid=top-bar]").click({ position: { x: 200, y: 24 } });
+    await window.waitForTimeout(200);
     const descBefore = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
-    await window.locator("[data-testid=top-bar]").click();
     await window.keyboard.press("Meta+[");
     await window.waitForTimeout(500);
     const descAfter = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
@@ -100,9 +103,11 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   test("Cmd+] navigates to next problem", async () => {
     const items = window.locator("[data-testid=problem-item]");
     await items.first().click();
-    await window.waitForTimeout(300);
+    await window.waitForTimeout(500);
+    // Click top bar to move focus out of Monaco
+    await window.locator("[data-testid=top-bar]").click({ position: { x: 200, y: 24 } });
+    await window.waitForTimeout(200);
     const descBefore = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
-    await window.locator("[data-testid=top-bar]").click();
     await window.keyboard.press("Meta+]");
     await window.waitForTimeout(500);
     const descAfter = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
@@ -114,6 +119,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   });
 
   test("pattern library shows 22+ patterns", async () => {
+    await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-patterns]").click();
     await window.locator("[data-testid=pattern-library]").waitFor({ timeout: 5000 });
     const count = await window.locator("[data-testid=pattern-card]").count();
@@ -121,6 +127,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   });
 
   test("clicking pattern card shows detail", async () => {
+    await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-patterns]").click();
     await window.locator("[data-testid=pattern-library]").waitFor({ timeout: 5000 });
     await window.locator("[data-testid=pattern-card]").first().click();
@@ -132,7 +139,11 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   test("diff view opens after viewing solutions", async () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator("[data-testid=tab-solutions]").click();
+    // Wait for solutions to actually load
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
+    await window.waitForTimeout(500); // let solutionsViewed state update
+    // Now btn-diff should be visible
+    await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();
     await expect(window.locator("[data-testid=diff-view]")).toBeVisible({ timeout: 5000 });
   });
@@ -141,6 +152,8 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator("[data-testid=tab-solutions]").click();
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
+    await window.waitForTimeout(500);
+    await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();
     await window.locator("[data-testid=diff-view]").waitFor({ timeout: 5000 });
     await window.locator("[data-testid=btn-close-diff]").click();
@@ -153,6 +166,8 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await window.locator("[data-testid=problem-item]").first().click();
     await window.locator("[data-testid=tab-solutions]").click();
     await window.locator("text=/Brute|Optimal|O\\(/i").first().waitFor({ timeout: 8000 });
+    await window.waitForTimeout(500);
+    await expect(window.locator("[data-testid=btn-diff]")).toBeVisible({ timeout: 5000 });
     await window.locator("[data-testid=btn-diff]").click();
     await window.locator("[data-testid=diff-view]").waitFor({ timeout: 5000 });
     const selector = window.locator("[data-testid=diff-view] select, [data-testid=solution-select]");
