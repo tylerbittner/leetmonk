@@ -15,18 +15,12 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => onSubmit())
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => onReset())
     editor.focus()
-
-    if (vimEnabled) {
-      import('monaco-vim').then(mod => {
-        const initVimMode = mod.initVimMode || mod.default
-        if (initVimMode && vimStatusRef.current) {
-          vimModeRef.current = initVimMode(editor, vimStatusRef.current)
-        }
-      }).catch(() => {})
-    }
+    // Vim init is handled solely by the useEffect below so settings loaded
+    // from disk after mount trigger it correctly.
   }
 
-  // Toggle vim mode when setting changes after mount
+  // Sole vim init/teardown path — runs on mount (after editorRef is set) and
+  // whenever vimEnabled changes, including when settings load from disk.
   useEffect(() => {
     if (!editorRef.current) return
     if (vimEnabled) {
@@ -42,7 +36,14 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
         vimModeRef.current = null
       }
     }
-  }, [vimEnabled])
+  }, [vimEnabled, editorRef.current]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep Monaco font size in sync when the setting changes — Monaco's options
+  // prop only applies at initial render, so we must call updateOptions directly.
+  useEffect(() => {
+    if (!editorRef.current) return
+    editorRef.current.updateOptions({ fontSize, lineHeight: Math.round(fontSize * 1.6) })
+  }, [fontSize])
 
   // Clean up vim mode on unmount
   useEffect(() => {

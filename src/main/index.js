@@ -19,6 +19,20 @@ const editorStateFile = join(dataDir, 'editor-state.json')
 const sessionsFile = join(dataDir, 'sessions.json')
 const reviewFile = join(dataDir, 'review-schedule.json')
 const srStateFile = join(dataDir, 'sr-state.json')
+const settingsFile = join(dataDir, 'settings.json')
+
+function loadSettings() {
+  try {
+    if (existsSync(settingsFile)) {
+      return JSON.parse(readFileSync(settingsFile, 'utf8'))
+    }
+  } catch {}
+  return {}
+}
+
+function saveSettings(data) {
+  writeFileSync(settingsFile, JSON.stringify(data, null, 2))
+}
 
 function loadReviewData() {
   try {
@@ -324,6 +338,13 @@ app.whenReady().then(() => {
     return state[problemId] || null
   })
   ipcMain.handle('get-all-sr-state', () => loadSrState())
+
+  // IPC: Settings
+  ipcMain.handle('get-settings', () => loadSettings())
+  ipcMain.handle('set-settings', (_, data) => {
+    saveSettings(data)
+    return data
+  })
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

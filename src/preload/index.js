@@ -18,5 +18,7 @@ contextBridge.exposeInMainWorld('api', {
   getSrState: (args) => ipcRenderer.invoke('get-sr-state', args),
   setSrState: (args) => ipcRenderer.invoke('set-sr-state', args),
   getAllSrState: () => ipcRenderer.invoke('get-all-sr-state'),
+  getSettings: () => ipcRenderer.invoke('get-settings'),
+  setSettings: (data) => ipcRenderer.invoke('set-settings', data),
   onOpenSettings: (callback) => ipcRenderer.on('open-settings', callback)
 })

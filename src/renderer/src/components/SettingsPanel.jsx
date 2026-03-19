@@ -221,7 +221,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
 
           <SettingRow
             label="Focus mode"
-            description="Minimal hides the status bar for fewer distractions"
+            description="Minimal hides the sidebar, session bar, filter bar, and status bar. Toggle with Cmd+Shift+F"
           >
             <StyledSelect
               value={s.focusMode}

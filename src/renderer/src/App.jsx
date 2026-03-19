@@ -67,6 +67,8 @@ export default function App() {
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
   const currentLanguage = activeProblemId ? (languageMap[activeProblemId] ?? 'python') : 'python'
+  const isMinimal = settings.focusMode === 'minimal'
+  const isSidebarHidden = sidebarCollapsed || isMinimal
 
   // Handle open-settings from native menu
   useEffect(() => {
@@ -86,7 +88,7 @@ export default function App() {
       setLoadErrors(errors)
       if (loaded.length > 0) setActiveProblemId(loaded[0].id)
 
-      const [prog, edState, revData, savedSettings, srStateAll] = await Promise.all([
+      const [prog, edState, revData, srStateAll, savedSettings] = await Promise.all([
         window.api.getProgress(),
         window.api.getEditorState(),
         window.api.getReviewData(),
@@ -120,6 +122,13 @@ export default function App() {
       } else if (e.metaKey && e.key === ',') {
         e.preventDefault()
         setShowSettings(s => !s)
+      } else if (e.metaKey && e.shiftKey && e.key === 'f') {
+        e.preventDefault()
+        setSettings(s => {
+          const next = { ...s, focusMode: s.focusMode === 'minimal' ? 'standard' : 'minimal' }
+          window.api.setSettings(next)
+          return next
+        })
       }
     }
     window.addEventListener('keydown', handleKey)
@@ -412,15 +421,18 @@ export default function App() {
           LeetMonk &gt;_
         </span>
 
-        <div style={{ flex: 1, WebkitAppRegion: 'no-drag' }}>
-          <FilterBar
-            filters={filters}
-            onFiltersChange={setFilters}
-            allTags={allTags}
-            problems={problems}
-            progress={progress}
-          />
-        </div>
+        {!isMinimal && (
+          <div style={{ flex: 1, WebkitAppRegion: 'no-drag' }}>
+            <FilterBar
+              filters={filters}
+              onFiltersChange={setFilters}
+              allTags={allTags}
+              problems={problems}
+              progress={progress}
+            />
+          </div>
+        )}
+        {isMinimal && <div style={{ flex: 1 }} />}
 
         {activeProblem && (
           <div style={{ WebkitAppRegion: 'no-drag', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -452,7 +464,7 @@ export default function App() {
 
       </div>
 
-      {session && (
+      {session && !isMinimal && (
         <SessionBar
           session={session}
           problems={problems}
@@ -473,7 +485,7 @@ export default function App() {
         {/* Sidebar — animated collapse */}
         <div style={{ display: 'flex', flexShrink: 0 }}>
           <div style={{
-            width: sidebarCollapsed ? 0 : 240,
+            width: isSidebarHidden ? 0 : 240,
             overflow: 'hidden',
             display: 'flex', flexDirection: 'column',
             background: 'var(--bg-secondary)',
