@@ -10,9 +10,13 @@
 
 ## Why Offline?
 
-Most practice tools fight against deep focus. Leaderboards invite comparison. Notifications fragment attention. The browser tab is a context-switching machine.
+Cal Newport calls it *deep work*: cognitively demanding practice performed in a state of distraction-free concentration. It's how real skill is built.
 
-LeetMonk removes the mechanism. No account, no network, no pull toward shallow engagement — just you, a problem, and a blank editor. Offline isn't a limitation; it's the point. Your best thinking happens without WiFi.
+Most algorithm practice tools fight against this. Leaderboards invite comparison. Notifications fragment attention. Streaks gamify urgency. The browser tab is a context-switching machine. Every time you switch context, your brain carries *attention residue* from the previous task — a quick glance at a hint forum, a Discord notification, a background tab — each one degrades focus for minutes afterward.
+
+LeetMonk was designed around the opposite idea. No account, no network, no pull toward shallow engagement — just you, a problem, and a blank editor. An offline app removes the mechanism entirely. There's nothing to check. The decision to stay in flow is made once, at launch. After that, the environment does the work.
+
+The session planner exists for the same reason: decide what you'll practice *before* you sit down, so you're not making small decisions mid-session. Batch the planning; protect the practice. This is deliberate practice in solitude — the environment where craft deepens.
 
 <!-- Screenshots -->
 <!-- ![Main editor view](docs/screenshots/editor.png) -->
