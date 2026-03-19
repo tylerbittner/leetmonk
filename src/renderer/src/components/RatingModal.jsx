@@ -50,72 +50,85 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
         data-testid="rating-modal"
         style={{
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
-          borderRadius: 10, padding: 28, width: 400,
+          borderRadius: 10, width: 400, overflow: 'hidden',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
         }}
         onClick={e => e.stopPropagation()}
       >
-        {confirmed ? (
-          <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            <div style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 500, marginBottom: 8 }}>
-              Next review {formatNextReview(confirmed.nextReview)}
+        {/* Header strip */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          padding: '12px 16px',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 600 }}>
+            Rate Your Solve
+          </span>
+          <div style={{ flex: 1 }} />
+          <button
+            onClick={onDismiss}
+            title="Dismiss"
+            style={{
+              background: 'none', border: 'none', color: 'var(--text-muted)',
+              fontSize: 16, cursor: 'pointer', padding: '2px 4px', lineHeight: 1,
+              borderRadius: 3, transition: 'color 0.15s', display: 'flex', alignItems: 'center'
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: 24 }}>
+          {confirmed ? (
+            <div style={{ textAlign: 'center', padding: '8px 0' }}>
+              <div style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 500, marginBottom: 8 }}>
+                Next review {formatNextReview(confirmed.nextReview)}
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
+                Rated <strong>{confirmed.label}</strong>
+              </div>
             </div>
-            <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-              Rated <strong>{confirmed.label}</strong>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div style={{
-              color: 'var(--text-primary)', fontSize: 15, fontWeight: 600,
-              marginBottom: 20, textAlign: 'center'
-            }}>
-              How did that feel?
-            </div>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-              {RATINGS.map(({ value, label, sublabel, color, testId }) => {
-                const preview = previews.find(p => p.rating === value)
-                return (
-                  <button
-                    key={value}
-                    data-testid={testId}
-                    onClick={() => handleRate(value)}
-                    style={{
-                      flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-                      gap: 6, padding: '12px 8px', borderRadius: 6,
-                      border: `1px solid ${color}33`,
-                      background: `${color}11`,
-                      cursor: 'pointer', transition: 'background 0.12s'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = `${color}22`}
-                    onMouseLeave={e => e.currentTarget.style.background = `${color}11`}
-                  >
-                    <span style={{ color, fontSize: 14, fontWeight: 600 }}>{label}</span>
-                    <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>{sublabel}</span>
-                    <span style={{ color: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>
-                      {formatNextReview(preview.nextReview)}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-            <div style={{ marginTop: 16, textAlign: 'center' }}>
-              <button
-                onClick={onDismiss}
-                style={{
-                  background: 'none', border: 'none', color: 'var(--text-muted)',
-                  fontSize: 18, cursor: 'pointer', padding: '4px 10px', lineHeight: 1,
-                  borderRadius: 4, transition: 'color 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
-                title="Skip rating"
-              >
-                ✕
-              </button>
-            </div>
-          </>
-        )}
+          ) : (
+            <>
+              <div style={{
+                color: 'var(--text-muted)', fontSize: 13,
+                marginBottom: 16, textAlign: 'center'
+              }}>
+                How did that feel?
+              </div>
+              <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+                {RATINGS.map(({ value, label, sublabel, color, testId }) => {
+                  const preview = previews.find(p => p.rating === value)
+                  return (
+                    <button
+                      key={value}
+                      data-testid={testId}
+                      onClick={() => handleRate(value)}
+                      style={{
+                        flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        gap: 6, padding: '12px 8px', borderRadius: 6,
+                        border: `1px solid ${color}33`,
+                        background: `${color}11`,
+                        cursor: 'pointer', transition: 'background 0.12s'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = `${color}22`}
+                      onMouseLeave={e => e.currentTarget.style.background = `${color}11`}
+                    >
+                      <span style={{ color, fontSize: 14, fontWeight: 600 }}>{label}</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>{sublabel}</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>
+                        {formatNextReview(preview.nextReview)}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
