@@ -30,3 +30,6 @@ jobs:
 
       - name: Build (verify compilation)
         run: npx electron-vite build
+
+      - name: Run E2E tests
+        run: npx playwright test

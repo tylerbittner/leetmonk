@@ -450,17 +450,6 @@ export default function App() {
           </div>
         )}
 
-        {/* Pattern Library */}
-        <div style={{ WebkitAppRegion: 'no-drag' }}>
-          <TopBarBtn
-            onClick={() => setShowPatterns(p => !p)}
-            title="Pattern Library"
-            active={showPatterns}
-          >
-            📖
-          </TopBarBtn>
-        </div>
-
 
       </div>
 
@@ -506,26 +495,25 @@ export default function App() {
               onSelect={selectProblem}
               activeProblemId={activeProblemId}
             />
-            {/* Sidebar footer — subtle session planner */}
+            {/* Sidebar footer — patterns + session planner */}
             <div style={{
-              borderTop: '1px solid var(--border)', padding: '6px 10px',
-              display: 'flex', justifyContent: 'flex-end', flexShrink: 0,
+              borderTop: '1px solid var(--border)', padding: '6px 8px',
+              display: 'flex', gap: 6, flexShrink: 0,
             }}>
-              <button
+              <SidebarFooterBtn
+                onClick={() => setShowPatterns(p => !p)}
+                title="Pattern Library"
+                active={showPatterns}
+              >
+                📖 Patterns
+              </SidebarFooterBtn>
+              <SidebarFooterBtn
                 onClick={() => setShowSessionPlanner(true)}
                 title={session ? 'Session active — click to manage' : 'Plan a session'}
-                style={{
-                  background: session ? 'var(--accent-blue)' : 'none',
-                  border: '1px solid var(--border)', borderRadius: 4,
-                  padding: '3px 8px', cursor: 'pointer', fontSize: 12,
-                  color: session ? '#fff' : 'var(--text-muted)',
-                  transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 4,
-                }}
-                onMouseEnter={e => { if (!session) e.currentTarget.style.color = 'var(--text-primary)' }}
-                onMouseLeave={e => { if (!session) e.currentTarget.style.color = 'var(--text-muted)' }}
+                active={!!session}
               >
-                🗓 {session ? 'Active' : 'Plan'}
-              </button>
+                🗓 {session ? 'Active' : 'Plan Session'}
+              </SidebarFooterBtn>
             </div>
           </div>
           <button
@@ -740,6 +728,32 @@ function TopBarBtn({ children, onClick, title, active, iconSize }) {
         color: active || hovered ? 'var(--text-primary)' : 'var(--text-muted)',
         cursor: 'pointer', fontSize: iconSize ?? 14, lineHeight: 1,
         transition: 'background 0.15s, color 0.15s',
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+// ─── Sidebar footer button helper ─────────────────────────────────────────
+
+function SidebarFooterBtn({ children, onClick, title, active }) {
+  const [hovered, setHovered] = React.useState(false)
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        flex: 1, padding: '4px 6px', borderRadius: 4,
+        border: '1px solid var(--border)',
+        background: active ? 'var(--accent-blue)' : (hovered ? 'var(--bg-hover)' : 'var(--bg-tertiary)'),
+        color: active ? '#fff' : (hovered ? 'var(--text-primary)' : 'var(--text-muted)'),
+        cursor: 'pointer', fontSize: 11, lineHeight: 1,
+        transition: 'background 0.15s, color 0.15s',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+        whiteSpace: 'nowrap',
       }}
     >
       {children}
