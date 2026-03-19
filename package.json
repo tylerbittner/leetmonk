@@ -13,11 +13,14 @@
     "test:problems": "jest --testPathPattern='tests/problems'",
     "test:solutions": "jest --testPathPattern='tests/solutions'",
     "test:e2e": "npx electron-vite build && npx playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:coverage": "jest --coverage --testPathPattern=tests/",
+    "test:all": "npm test && npm run test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^4.1.0",
     "electron": "^40.6.1",
     "electron-builder": "^26.8.1",
     "electron-vite": "^5.0.0",
