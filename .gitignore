@@ -10,3 +10,4 @@ data/editor-state.json
 data/timer-state.json
 data/review-schedule.json
 data/sessions.json
+coverage/
