@@ -25,8 +25,20 @@ async function launchApp({ show = false } = {}) {
 }
 
 async function setEditorValue(window, code) {
-  await window.evaluate((c) => window.__testSetCode?.(c), code);
-  await window.waitForTimeout(300);
+  // Retry up to 5 times until __testSetCode is registered and activeProblem is set
+  for (let i = 0; i < 5; i++) {
+    const success = await window.evaluate((c) => {
+      if (typeof window.__testSetCode === "function") {
+        window.__testSetCode(c);
+        return true;
+      }
+      return false;
+    }, code);
+    if (success) break;
+    await window.waitForTimeout(500);
+  }
+  // Wait for Monaco to reflect the new value
+  await window.waitForTimeout(500);
 }
 
 module.exports = { launchApp, setEditorValue };

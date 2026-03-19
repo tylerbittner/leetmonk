@@ -16,8 +16,8 @@ async function getEditorValue(window) {
 async function openFirstProblem(window) {
   await window.locator("[data-testid=problem-item]").first().click();
   await window.locator(".monaco-editor").waitFor({ timeout: 10000 });
-  // Give Monaco a moment to initialize its model
-  await window.waitForTimeout(1000);
+  // Give Monaco and React state (including __testSetCode) time to fully initialize
+  await window.waitForTimeout(2000);
 }
 
 test.describe("Code Execution", () => {
