@@ -52,6 +52,7 @@ export default function SolutionsTab({ solutions = [], userCode, onOpenDiff }) {
               <ComplexityBadge label="Space" value={sol.spaceComplexity} />
               {onOpenDiff && userCode && userCode.trim() && (
                 <button
+                  data-testid="btn-diff"
                   onClick={e => { e.stopPropagation(); onOpenDiff(i) }}
                   style={{
                     padding: '3px 8px', borderRadius: 4, border: '1px solid var(--border)',

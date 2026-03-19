@@ -57,6 +57,7 @@ export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onD
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
       <button
         ref={buttonRef}
+        data-testid="review-flag"
         onClick={handleClick}
         title={flagged ? 'Review options' : 'Flag for review'}
         style={{
@@ -92,6 +93,7 @@ export default function ReviewFlag({ problemId, reviewData, srState, onFlag, onD
       {showPopup && flagged && (
         <div
           ref={popupRef}
+          data-testid="review-popup"
           style={{
             position: 'fixed',
             top: popupPos.top,

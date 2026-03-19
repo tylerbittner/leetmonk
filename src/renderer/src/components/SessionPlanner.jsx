@@ -106,7 +106,7 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center'
     }} onClick={onClose}>
-      <div style={{
+      <div data-testid="session-planner" style={{
         background: 'var(--bg-secondary)', border: '1px solid var(--border)',
         borderRadius: 8, width: 520, maxHeight: '80vh', overflow: 'auto',
         padding: 24, display: 'flex', flexDirection: 'column', gap: 20
@@ -126,14 +126,14 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
           </label>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {PROBLEM_COUNTS.map(n => (
-              <button key={n} onClick={() => { setProblemCount(n); setUseCustomCount(false); setSelectedProblems(null) }}
+              <button key={n} data-testid={`count-${n}`} onClick={() => { setProblemCount(n); setUseCustomCount(false); setSelectedProblems(null) }}
                 style={{
                   padding: '6px 16px', borderRadius: 4, border: '1px solid var(--border)',
                   background: !useCustomCount && problemCount === n ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
                   color: 'var(--text-primary)', cursor: 'pointer', fontSize: 13
                 }}>{n}</button>
             ))}
-            <input type="number" min="1" max="50" placeholder="Custom"
+            <input data-testid="problem-count-input" type="number" min="1" max="50" placeholder="Custom"
               value={customCount}
               onChange={e => { setCustomCount(e.target.value); setUseCustomCount(true); setSelectedProblems(null) }}
               onFocus={() => setUseCustomCount(true)}
@@ -175,7 +175,7 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
           </label>
           <div style={{ display: 'flex', gap: 8 }}>
             {['easy', 'medium', 'hard'].map(d => (
-              <button key={d} onClick={() => toggleDifficulty(d)}
+              <button key={d} data-testid={`diff-${d}`} onClick={() => toggleDifficulty(d)}
                 style={{
                   padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13,
                   border: `1px solid ${selectedDifficulties.includes(d) ? diffColors[d] : 'var(--border)'}`,
@@ -227,7 +227,7 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
 
         {/* Generate / Problem list */}
         <div>
-          <button onClick={generateProblems} style={{
+          <button data-testid="btn-generate" onClick={generateProblems} style={{
             padding: '8px 20px', borderRadius: 4, border: '1px solid var(--border)',
             background: 'var(--bg-tertiary)', color: 'var(--text-primary)',
             cursor: 'pointer', fontSize: 13, marginBottom: 10
@@ -246,20 +246,20 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
                 const p = problems.find(x => x.id === id)
                 if (!p) return null
                 return (
-                  <div key={id} style={{
+                  <div data-testid="session-problem-item" key={id} style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px',
                     background: 'var(--bg-tertiary)', borderRadius: 4, fontSize: 13
                   }}>
                     <span style={{ color: 'var(--text-muted)', width: 20 }}>{i + 1}.</span>
-                    <span style={{ color: diffColors[p.difficulty], fontSize: 11, width: 8 }}>
+                    <span data-testid="difficulty-badge" style={{ color: diffColors[p.difficulty], fontSize: 11, width: 8 }}>
                       {p.difficulty === 'easy' ? 'E' : p.difficulty === 'medium' ? 'M' : 'H'}
                     </span>
                     <span style={{ color: 'var(--text-primary)', flex: 1 }}>{p.title}</span>
-                    <button onClick={() => swapProblem(id)} title="Swap" style={{
+                    <button data-testid="swap-btn" onClick={() => swapProblem(id)} title="Swap" style={{
                       background: 'none', border: 'none', color: 'var(--text-muted)',
                       cursor: 'pointer', fontSize: 12, padding: '2px 6px'
                     }}>swap</button>
-                    <button onClick={() => removeProblem(id)} title="Remove" style={{
+                    <button data-testid="remove-problem-btn" onClick={() => removeProblem(id)} title="Remove" style={{
                       background: 'none', border: 'none', color: 'var(--accent-red)',
                       cursor: 'pointer', fontSize: 12, padding: '2px 6px'
                     }}>x</button>
@@ -271,7 +271,7 @@ export default function SessionPlanner({ problems, progress, reviewData = {}, on
         </div>
 
         {/* Start */}
-        <button onClick={handleStart}
+        <button data-testid="btn-start-session" onClick={handleStart}
           disabled={!selectedProblems || selectedProblems.length === 0}
           style={{
             padding: '10px 24px', borderRadius: 6, border: 'none',

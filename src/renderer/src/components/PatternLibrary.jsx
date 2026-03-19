@@ -30,6 +30,7 @@ function PatternCard({ pattern, problemCount, masteryPct, onClick, isActive }) {
 
   return (
     <div
+      data-testid="pattern-card"
       onClick={onClick}
       style={{
         background: isActive ? 'var(--bg-active)' : 'var(--bg-secondary)',
@@ -95,7 +96,7 @@ function PatternDetail({ pattern, linkedProblems, progress, onSelectProblem, onC
   const [showTemplate, setShowTemplate] = useState(false)
 
   return (
-    <div style={{
+    <div data-testid="pattern-detail" style={{
       background: 'var(--bg-primary)',
       display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden',
     }}>
@@ -324,7 +325,7 @@ export default function PatternLibrary({ problems, progress, onSelectProblem }) 
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+    <div data-testid="pattern-library" style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
       {/* Left panel: grid */}
       <div style={{
         flex: activePattern ? '0 0 55%' : '1',

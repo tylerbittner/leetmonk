@@ -66,6 +66,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
         borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', flexShrink: 0
       }}>
         <select
+          data-testid="language-select"
           value={language}
           onChange={(e) => onLanguageChange(e.target.value)}
           style={{
@@ -84,6 +85,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
         <div style={{ flex: 1 }} />
 
         <button
+          data-testid="btn-reset"
           className="btn btn-ghost"
           onClick={onReset}
           disabled={running}
@@ -93,6 +95,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
           ↺ Reset
         </button>
         <button
+          data-testid="btn-run"
           className="btn btn-ghost"
           onClick={onRun}
           disabled={running}
@@ -102,6 +105,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
           {running ? <Spinner /> : '▶ Run'}
         </button>
         <button
+          data-testid="btn-submit"
           className="btn btn-success"
           onClick={onSubmit}
           disabled={running}
@@ -147,6 +151,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
       {/* Vim status bar */}
       <div
         ref={vimStatusRef}
+        data-testid="vim-statusbar"
         style={{
           height: vimEnabled ? 22 : 0,
           overflow: 'hidden',

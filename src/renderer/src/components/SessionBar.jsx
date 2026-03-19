@@ -27,7 +27,7 @@ export default function SessionBar({ session, problems, onNext, onEnd, onNavigat
   const overTime = session.timeTarget > 0 && elapsed > session.timeTarget * 60
 
   return (
-    <div style={{
+    <div data-testid="session-bar" style={{
       display: 'flex', alignItems: 'center', gap: 12, padding: '0 16px',
       height: 36, background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border)',
       fontSize: 13, flexShrink: 0
@@ -57,7 +57,7 @@ export default function SessionBar({ session, problems, onNext, onEnd, onNavigat
 
       <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
         {session.currentIndex < total - 1 || !session.results[currentId] ? (
-          <button onClick={onNext} style={{
+          <button data-testid="session-next-btn" onClick={onNext} style={{
             padding: '4px 12px', borderRadius: 4, border: '1px solid var(--border)',
             background: 'var(--bg-secondary)', color: 'var(--text-primary)',
             cursor: 'pointer', fontSize: 12
@@ -65,7 +65,7 @@ export default function SessionBar({ session, problems, onNext, onEnd, onNavigat
             {session.results[currentId] ? 'Next Problem' : 'Skip'}
           </button>
         ) : null}
-        <button onClick={onEnd} style={{
+        <button data-testid="session-end-btn" onClick={onEnd} style={{
           padding: '4px 12px', borderRadius: 4, border: '1px solid var(--accent-red)',
           background: 'transparent', color: 'var(--accent-red)',
           cursor: 'pointer', fontSize: 12

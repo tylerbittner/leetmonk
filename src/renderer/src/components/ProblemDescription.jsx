@@ -44,7 +44,7 @@ export default function ProblemDescription({ problem, submissions = [], onSoluti
   const [activeTab, setActiveTab] = useState('description')
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
+    <div data-testid="problem-description" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
       {/* Header */}
       <div style={{ padding: '16px 20px 0', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
@@ -99,6 +99,7 @@ export default function ProblemDescription({ problem, submissions = [], onSoluti
         ].map(({ id, label, count }) => (
           <div
             key={id}
+            data-testid={`tab-${id}`}
             className={`tab ${activeTab === id ? 'active' : ''}`}
             onClick={() => {
               setActiveTab(id)

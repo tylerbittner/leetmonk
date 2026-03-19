@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { previewRatings, newCardState } from '../fsrs.js'
 
 const RATINGS = [
-  { value: 1, label: 'Again', sublabel: 'Blanked out', color: 'var(--accent-red, #e05c5c)' },
-  { value: 2, label: 'Hard',  sublabel: 'Struggled',   color: 'var(--accent-orange)' },
-  { value: 3, label: 'Good',  sublabel: 'Got it',      color: 'var(--accent-blue)' },
-  { value: 4, label: 'Easy',  sublabel: 'Effortless',  color: 'var(--accent-green)' },
+  { value: 1, label: 'Again', sublabel: 'Blanked out', color: 'var(--accent-red, #e05c5c)', testId: 'rate-again' },
+  { value: 2, label: 'Hard',  sublabel: 'Struggled',   color: 'var(--accent-orange)',        testId: 'rate-hard' },
+  { value: 3, label: 'Good',  sublabel: 'Got it',      color: 'var(--accent-blue)',          testId: 'rate-good' },
+  { value: 4, label: 'Easy',  sublabel: 'Effortless',  color: 'var(--accent-green)',         testId: 'rate-easy' },
 ]
 
 function formatNextReview(isoDate) {
@@ -47,6 +47,7 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
       onClick={onDismiss}
     >
       <div
+        data-testid="rating-modal"
         style={{
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
           borderRadius: 10, padding: 28, width: 400,
@@ -73,11 +74,12 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
               How did that feel?
             </div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-              {RATINGS.map(({ value, label, sublabel, color }) => {
+              {RATINGS.map(({ value, label, sublabel, color, testId }) => {
                 const preview = previews.find(p => p.rating === value)
                 return (
                   <button
                     key={value}
+                    data-testid={testId}
                     onClick={() => handleRate(value)}
                     style={{
                       flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',

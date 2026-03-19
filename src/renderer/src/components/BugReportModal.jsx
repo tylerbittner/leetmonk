@@ -61,6 +61,7 @@ export default function BugReportModal({ onClose, activeProblemId }) {
       }}
     >
       <div
+        data-testid="bug-report-modal"
         onClick={e => e.stopPropagation()}
         style={{
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',

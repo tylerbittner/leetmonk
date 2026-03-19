@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-function Toggle({ value, onChange }) {
+function Toggle({ value, onChange, testId }) {
   return (
     <button
       onClick={() => onChange(!value)}
       aria-label={value ? 'On' : 'Off'}
+      data-testid={testId}
       style={{
         width: 38, height: 22, borderRadius: 11, flexShrink: 0,
         background: value ? 'var(--accent-green)' : 'var(--border)',
@@ -65,9 +66,10 @@ function SettingRow({ label, description, children }) {
   )
 }
 
-function StyledSelect({ value, onChange, options }) {
+function StyledSelect({ value, onChange, options, testId }) {
   return (
     <select
+      data-testid={testId}
       value={value}
       onChange={e => onChange(e.target.value)}
       style={{
@@ -146,6 +148,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
     >
       <div
         onClick={e => e.stopPropagation()}
+        data-testid="settings-panel"
         className="modal-enter"
         style={{
           background: 'var(--bg-secondary)',
@@ -200,6 +203,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
               <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>12</span>
               <input
+                data-testid="setting-font-size"
                 type="range"
                 min={12}
                 max={20}
@@ -216,7 +220,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             label="Vim keybindings"
             description="Modal editing with Vim motions"
           >
-            <Toggle value={s.vimKeybindings} onChange={v => update('vimKeybindings', v)} />
+            <Toggle value={s.vimKeybindings} onChange={v => update('vimKeybindings', v)} testId="setting-vim" />
           </SettingRow>
 
           {/* Display section */}
@@ -234,6 +238,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             description="Minimal hides the sidebar, session bar, filter bar, and status bar. Toggle with Cmd+Shift+F"
           >
             <StyledSelect
+              testId="setting-focus-mode"
               value={s.focusMode}
               onChange={v => update('focusMode', v)}
               options={[
@@ -251,6 +256,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             description="Visual reward when all tests pass"
           >
             <StyledSelect
+              testId="setting-celebration"
               value={s.celebrationEffect}
               onChange={v => update('celebrationEffect', v)}
               options={[
@@ -265,13 +271,14 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             label="Sound"
             description="Meditation bell when you pass all tests"
           >
-            <Toggle value={s.soundOnSolve} onChange={v => update('soundOnSolve', v)} />
+            <Toggle value={s.soundOnSolve} onChange={v => update('soundOnSolve', v)} testId="setting-sound" />
           </SettingRow>
 
           {/* Bug report */}
           {onBugReport && (
             <div style={{ paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
               <button
+                data-testid="btn-bug-report"
                 onClick={onBugReport}
                 style={{
                   width: '100%', padding: '9px 0', borderRadius: 6,

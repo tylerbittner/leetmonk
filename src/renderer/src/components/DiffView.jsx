@@ -32,7 +32,7 @@ export default function DiffView({ problem, userCode, initialSolutionIndex = 0, 
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
+    <div data-testid="diff-view" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-primary)' }}>
       {/* Toolbar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px',
@@ -85,6 +85,7 @@ export default function DiffView({ problem, userCode, initialSolutionIndex = 0, 
         </div>
 
         <button
+          data-testid="btn-close-diff"
           onClick={onClose}
           style={{
             padding: '4px 10px', borderRadius: 4, border: '1px solid var(--border)',

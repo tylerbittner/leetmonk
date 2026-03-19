@@ -20,7 +20,7 @@ export default function ProblemList({ problems, activeProblemId, progress, onSel
           }}
         />
       </div>
-    <div style={{ overflow: 'auto', flex: 1 }}>
+    <div data-testid="problem-list" style={{ overflow: 'auto', flex: 1 }}>
       <div style={{ padding: '8px 0' }}>
         {problems.length === 0 && (
           <div style={{ padding: '20px 16px', color: 'var(--text-muted)', fontSize: 13, textAlign: 'center' }}>
@@ -34,6 +34,7 @@ export default function ProblemList({ problems, activeProblemId, progress, onSel
           return (
             <div
               key={p.id}
+              data-testid="problem-item"
               onClick={() => onSelect(p.id)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8,

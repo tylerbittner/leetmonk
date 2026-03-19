@@ -100,7 +100,9 @@ export default function App() {
       setProgress(prog)
       setEditorStateMap(edState)
       setReviewData(revData || {})
-      setSettings({ ...DEFAULT_SETTINGS, ...savedSettings })
+      const merged = { ...DEFAULT_SETTINGS, ...savedSettings }
+      setSettings(merged)
+      if (merged.sidebarWidth) setSidebarWidth(merged.sidebarWidth)
       setSrData(srStateAll || {})
     }
     init()
@@ -293,12 +295,19 @@ export default function App() {
     e.preventDefault()
     const startX = e.clientX
     const startWidth = sidebarWidth
+    let lastWidth = startWidth
     const onMove = (ev) => {
-      setSidebarWidth(Math.min(400, Math.max(180, startWidth + ev.clientX - startX)))
+      lastWidth = Math.min(400, Math.max(180, startWidth + ev.clientX - startX))
+      setSidebarWidth(lastWidth)
     }
     const onUp = () => {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
+      setSettings(s => {
+        const next = { ...s, sidebarWidth: lastWidth }
+        window.api.setSettings(next)
+        return next
+      })
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -418,12 +427,12 @@ export default function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-primary)' }}>
       {/* Top bar */}
-      <div className="titlebar-drag" style={{
+      <div data-testid="top-bar" className="titlebar-drag" style={{
         display: 'flex', alignItems: 'center', gap: 12, padding: '0 16px',
         height: 48, borderBottom: '1px solid var(--border)',
         background: 'var(--bg-secondary)', flexShrink: 0,
       }}>
-        <div style={{ width: 70 }} />
+        <div style={{ width: 70, WebkitAppRegion: 'drag' }} />
         <span
           className="titlebar-no-drag"
           onClick={() => setShowAbout(true)}
@@ -438,9 +447,9 @@ export default function App() {
           LeetMonk &gt;_
         </span>
 
-        <div style={{ flex: 1 }} />
+        <div style={{ flex: 1, WebkitAppRegion: 'drag' }} />
 
-        <span className="titlebar-no-drag" style={{
+        <span data-testid="solved-counter" className="titlebar-no-drag" style={{
           fontSize: 12, fontWeight: 600,
           color: solvedCount > 0 ? 'var(--accent-green)' : 'var(--text-muted)',
         }}>
@@ -484,7 +493,7 @@ export default function App() {
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* Sidebar — animated collapse + resizable */}
         <div style={{ display: 'flex', flexShrink: 0 }}>
-          <div style={{
+          <div data-testid="sidebar" style={{
             width: isSidebarHidden ? 0 : sidebarWidth,
             overflow: 'hidden',
             display: 'flex', flexDirection: 'column',
@@ -528,6 +537,7 @@ export default function App() {
                 onClick={() => setShowPatterns(p => !p)}
                 title="Pattern Library"
                 active={showPatterns}
+                testId="btn-patterns"
               >
                 📖 Patterns
               </SidebarFooterBtn>
@@ -535,6 +545,7 @@ export default function App() {
                 onClick={() => setShowSessionPlanner(true)}
                 title={session ? 'Session active — click to manage' : 'Plan a session'}
                 active={!!session}
+                testId="btn-plan-session"
               >
                 🗓 {session ? 'Active' : 'Plan Session'}
               </SidebarFooterBtn>
@@ -771,10 +782,11 @@ function TopBarBtn({ children, onClick, title, active, iconSize }) {
 
 // ─── Sidebar footer button helper ─────────────────────────────────────────
 
-function SidebarFooterBtn({ children, onClick, title, active }) {
+function SidebarFooterBtn({ children, onClick, title, active, testId }) {
   const [hovered, setHovered] = React.useState(false)
   return (
     <button
+      data-testid={testId}
       onClick={onClick}
       title={title}
       onMouseEnter={() => setHovered(true)}
