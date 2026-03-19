@@ -57,18 +57,17 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
       >
         {confirmed ? (
           <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            <div style={{ color: 'var(--text-primary)', fontSize: 15, marginBottom: 6 }}>
+            <div style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 500, marginBottom: 8 }}>
               Next review {formatNextReview(confirmed.nextReview)}
             </div>
-            <div style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               Rated <strong>{confirmed.label}</strong>
             </div>
           </div>
         ) : (
           <>
             <div style={{
-              color: 'var(--text-secondary)', fontSize: 12,
-              textTransform: 'uppercase', letterSpacing: '0.8px',
+              color: 'var(--text-primary)', fontSize: 15, fontWeight: 600,
               marginBottom: 20, textAlign: 'center'
             }}>
               How did that feel?
@@ -91,9 +90,9 @@ export default function RatingModal({ problemId, srState, onRate, onDismiss }) {
                     onMouseEnter={e => e.currentTarget.style.background = `${color}22`}
                     onMouseLeave={e => e.currentTarget.style.background = `${color}11`}
                   >
-                    <span style={{ color, fontSize: 13, fontWeight: 600 }}>{label}</span>
-                    <span style={{ color: 'var(--text-muted)', fontSize: 10 }}>{sublabel}</span>
-                    <span style={{ color: 'var(--text-muted)', fontSize: 10, fontFamily: 'var(--font-mono)' }}>
+                    <span style={{ color, fontSize: 14, fontWeight: 600 }}>{label}</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>{sublabel}</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>
                       {formatNextReview(preview.nextReview)}
                     </span>
                   </button>
