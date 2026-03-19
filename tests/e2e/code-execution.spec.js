@@ -1,15 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { launchApp } = require("./helpers");
-
-// Helper: set Monaco editor content via the Monaco API
-async function setEditorValue(window, code) {
-  await window.evaluate((value) => {
-    const models = window.monaco?.editor?.getModels();
-    if (models && models.length > 0) {
-      models[0].setValue(value);
-    }
-  }, code);
-}
+const { launchApp, setEditorValue } = require("./helpers");
 
 // Helper: get Monaco editor content
 async function getEditorValue(window) {
@@ -34,7 +24,7 @@ test.describe("Code Execution", () => {
   let app, window;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp());
+    ({ app, window } = await launchApp({ show: true }));
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 

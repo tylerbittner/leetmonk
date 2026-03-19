@@ -20,7 +20,7 @@ test.describe("Settings behavioral tests", () => {
   let app, window;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp());
+    ({ app, window } = await launchApp({ show: true }));
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 

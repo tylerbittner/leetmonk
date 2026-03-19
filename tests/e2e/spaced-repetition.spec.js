@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { launchApp } = require("./helpers");
+const { launchApp, setEditorValue } = require("./helpers");
 
 const correctSolution = `from typing import List
 def max_profit(prices: List[int]) -> int:
@@ -19,10 +19,7 @@ async function openFirstProblem(window) {
 }
 
 async function submitCorrectSolution(window) {
-  await window.evaluate((code) => {
-    const models = window.monaco?.editor?.getModels();
-    if (models?.[0]) models[0].setValue(code);
-  }, correctSolution);
+  await setEditorValue(window, correctSolution);
   await window.locator("[data-testid=btn-submit]").click();
   await window.locator("text=/\\d+ passed/i").waitFor({ timeout: 20000 });
 }
@@ -31,7 +28,7 @@ test.describe("Spaced Repetition (FSRS)", () => {
   let app, window;
 
   test.beforeEach(async () => {
-    ({ app, window } = await launchApp());
+    ({ app, window } = await launchApp({ show: true }));
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
   });
 

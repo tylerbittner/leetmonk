@@ -21,7 +21,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   test("filter by Easy shows only easy problems", async () => {
     const diffSelect = window.locator("[data-testid=sidebar] select").first();
     await diffSelect.selectOption("easy");
-    await window.waitForTimeout(500);
+    await window.waitForTimeout(1500);
     const count = await window.locator("[data-testid=problem-item]").count();
     expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThan(86);
@@ -30,7 +30,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
   test("filter by Hard shows fewer problems", async () => {
     const diffSelect = window.locator("[data-testid=sidebar] select").first();
     await diffSelect.selectOption("hard");
-    await window.waitForTimeout(500);
+    await window.waitForTimeout(1500);
     const count = await window.locator("[data-testid=problem-item]").count();
     expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThan(86);
@@ -85,6 +85,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await items.nth(1).click();
     await window.waitForTimeout(300);
     const descBefore = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
+    await window.locator("[data-testid=top-bar]").click();
     await window.keyboard.press("Meta+[");
     await window.waitForTimeout(500);
     const descAfter = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
@@ -101,6 +102,7 @@ test.describe("Navigation, Filtering, and Pattern Library", () => {
     await items.first().click();
     await window.waitForTimeout(300);
     const descBefore = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");
+    await window.locator("[data-testid=top-bar]").click();
     await window.keyboard.press("Meta+]");
     await window.waitForTimeout(500);
     const descAfter = await window.locator("[data-testid=tab-description]").textContent().catch(() => "");

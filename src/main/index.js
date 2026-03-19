@@ -149,7 +149,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#1a1a1a',
     titleBarStyle: 'hiddenInset',
-    show: process.env.NODE_ENV !== 'test',
+    show: process.env.NODE_ENV !== 'test' || process.env.LEETMONK_SHOW_WINDOW === '1',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,

@@ -197,6 +197,14 @@ export default function App() {
     setResults(null)
   }, [])
 
+  // E2E test helper: set editor content without relying on window.monaco global
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'test') return
+    window.__testSetCode = (code) => {
+      if (activeProblem) handleCodeChange(activeProblem.id, code)
+    }
+  }, [activeProblem, handleCodeChange])
+
   const markSessionProblemSolved = useCallback((problemId) => {
     if (!session || !session.problems.includes(problemId)) return
     const elapsed = Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 1000)
