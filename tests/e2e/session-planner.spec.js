@@ -1,12 +1,22 @@
 const { test, expect } = require("@playwright/test");
 const { launchApp } = require("./helpers");
 
+async function ensureSidebarExpanded(window) {
+  const visible = await window.locator("[data-testid=problem-item]").first().isVisible().catch(() => false);
+  if (!visible) {
+    const toggle = window.locator("[data-testid=top-bar] button").filter({ hasText: /[▣◧]/ });
+    await toggle.click();
+    await window.waitForTimeout(400);
+  }
+}
+
 test.describe("Session Planner", () => {
   let app, window;
 
   test.beforeEach(async () => {
     ({ app, window } = await launchApp());
     await window.locator("[data-testid=solved-counter]").waitFor({ timeout: 15000 });
+    await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-plan-session]").click();
     await window.locator("[data-testid=session-planner]").waitFor({ timeout: 5000 });
   });

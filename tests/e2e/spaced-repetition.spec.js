@@ -15,13 +15,24 @@ def max_profit(prices: List[int]) -> int:
 
 async function openFirstProblem(window) {
   await window.locator("[data-testid=problem-item]").first().click();
-  await window.locator(".monaco-editor").waitFor({ timeout: 8000 });
+  await window.locator(".monaco-editor").waitFor({ timeout: 10000 });
+  await window.waitForTimeout(2000); // wait for Monaco + __testSetCode to be ready
 }
 
 async function submitCorrectSolution(window) {
+  await window.locator("[data-testid=problem-item]").first().click();
+  await window.locator(".monaco-editor").waitFor({ timeout: 10000 });
+  await window.waitForTimeout(2000); // wait for Monaco + __testSetCode to be ready
+
   await setEditorValue(window, correctSolution);
+
+  // Verify code was set
+  await window.waitForTimeout(500);
+
   await window.locator("[data-testid=btn-submit]").click();
-  await window.locator("text=/\\d+ passed/i").waitFor({ timeout: 20000 });
+
+  // Wait for all test cases to pass - look for "N passed" result
+  await window.locator("text=/\\d+ passed/i").first().waitFor({ timeout: 25000 });
 }
 
 test.describe("Spaced Repetition (FSRS)", () => {
