@@ -308,111 +308,114 @@
           - generic [ref=e481]:
             - button "⚑" [active] [ref=e482] [cursor=pointer]
             - generic [ref=e483]: in 1d
-          - generic [ref=e485]:
-            - generic [ref=e486]:
-              - generic [ref=e487]:
-                - heading "Best Time to Buy and Sell Stock" [level=1] [ref=e488]
-                - generic [ref=e489]: easy
+            - generic [ref=e484]:
+              - button "Reset SR state" [ref=e485] [cursor=pointer]
+              - button "Remove flag" [ref=e486] [cursor=pointer]
+          - generic [ref=e488]:
+            - generic [ref=e489]:
               - generic [ref=e490]:
-                - button "Greedy" [ref=e491] [cursor=pointer]:
-                  - generic [ref=e492]: Greedy
-                - button "Array" [ref=e493] [cursor=pointer]:
-                  - generic [ref=e494]: Array
-            - generic [ref=e495]:
-              - generic [ref=e496] [cursor=pointer]: Description
-              - generic [ref=e497] [cursor=pointer]:
+                - heading "Best Time to Buy and Sell Stock" [level=1] [ref=e491]
+                - generic [ref=e492]: easy
+              - generic [ref=e493]:
+                - button "Greedy" [ref=e494] [cursor=pointer]:
+                  - generic [ref=e495]: Greedy
+                - button "Array" [ref=e496] [cursor=pointer]:
+                  - generic [ref=e497]: Array
+            - generic [ref=e498]:
+              - generic [ref=e499] [cursor=pointer]: Description
+              - generic [ref=e500] [cursor=pointer]:
                 - text: Hints
-                - generic [ref=e498]: (2)
-              - generic [ref=e499] [cursor=pointer]: Solutions
-              - generic [ref=e500] [cursor=pointer]: Submissions
-            - generic [ref=e502]:
-              - generic [ref=e503]:
-                - heading "Best Time to Buy and Sell Stock" [level=2] [ref=e504]
-                - paragraph [ref=e505]: You are tracking the daily fuel prices at a spacecraft refueling depot. You want to buy fuel on one day and sell it on a future day to maximize your profit.
-                - paragraph [ref=e506]:
+                - generic [ref=e501]: (2)
+              - generic [ref=e502] [cursor=pointer]: Solutions
+              - generic [ref=e503] [cursor=pointer]: Submissions
+            - generic [ref=e505]:
+              - generic [ref=e506]:
+                - heading "Best Time to Buy and Sell Stock" [level=2] [ref=e507]
+                - paragraph [ref=e508]: You are tracking the daily fuel prices at a spacecraft refueling depot. You want to buy fuel on one day and sell it on a future day to maximize your profit.
+                - paragraph [ref=e509]:
                   - text: Given an array
-                  - code [ref=e507]: prices
+                  - code [ref=e510]: prices
                   - text: where
-                  - code [ref=e508]: prices[i]
+                  - code [ref=e511]: prices[i]
                   - text: is the fuel price on day
-                  - code [ref=e509]: i
+                  - code [ref=e512]: i
                   - text: ", return the"
-                  - strong [ref=e510]: maximum profit
+                  - strong [ref=e513]: maximum profit
                   - text: you can achieve from a single buy-sell transaction. You must buy before you sell.
-                - paragraph [ref=e511]:
+                - paragraph [ref=e514]:
                   - text: If no profit is possible, return
-                  - code [ref=e512]: "0"
+                  - code [ref=e515]: "0"
                   - text: .
-                - paragraph [ref=e513]:
-                  - strong [ref=e514]: "Constraints:"
-                - list [ref=e515]:
-                  - listitem [ref=e516]:
-                    - code [ref=e517]: 1 <= prices.length <= 10^5
-                  - listitem [ref=e518]:
-                    - code [ref=e519]: 0 <= prices[i] <= 10^4
-              - generic [ref=e520]:
-                - heading "Example Cases" [level=3] [ref=e521]
-                - generic [ref=e522]:
-                  - generic [ref=e523]: Example 1
-                  - generic [ref=e524]:
-                    - generic [ref=e525]: "Input: prices = [7,1,5,3,6,4]"
-                    - generic [ref=e526]: "Output: 5"
-                    - generic [ref=e527]: "Explanation: Buy at 1, sell at 6 = profit of 5"
-                - generic [ref=e528]:
-                  - generic [ref=e529]: Example 2
-                  - generic [ref=e530]:
-                    - generic [ref=e531]: "Input: prices = [7,6,4,3,1]"
-                    - generic [ref=e532]: "Output: 0"
-                    - generic [ref=e533]: "Explanation: Strictly decreasing, no profit possible"
-                - generic [ref=e534]:
-                  - generic [ref=e535]: Example 3
-                  - generic [ref=e536]:
-                    - generic [ref=e537]: "Input: prices = [1,2,3,4,5]"
-                    - generic [ref=e538]: "Output: 4"
-                    - generic [ref=e539]: "Explanation: Buy at 1, sell at 5 = profit of 4"
-                - generic [ref=e540]:
-                  - generic [ref=e541]: Example 4
-                  - generic [ref=e542]:
-                    - generic [ref=e543]: "Input: prices = [3,1,4,8,2,5]"
-                    - generic [ref=e544]: "Output: 7"
-                    - generic [ref=e545]: "Explanation: Buy at 1, sell at 8 = profit of 7"
-        - separator [ref=e546]
-        - generic [ref=e548]:
-          - generic [ref=e550]:
-            - generic [ref=e551]:
-              - combobox [ref=e552] [cursor=pointer]:
+                - paragraph [ref=e516]:
+                  - strong [ref=e517]: "Constraints:"
+                - list [ref=e518]:
+                  - listitem [ref=e519]:
+                    - code [ref=e520]: 1 <= prices.length <= 10^5
+                  - listitem [ref=e521]:
+                    - code [ref=e522]: 0 <= prices[i] <= 10^4
+              - generic [ref=e523]:
+                - heading "Example Cases" [level=3] [ref=e524]
+                - generic [ref=e525]:
+                  - generic [ref=e526]: Example 1
+                  - generic [ref=e527]:
+                    - generic [ref=e528]: "Input: prices = [7,1,5,3,6,4]"
+                    - generic [ref=e529]: "Output: 5"
+                    - generic [ref=e530]: "Explanation: Buy at 1, sell at 6 = profit of 5"
+                - generic [ref=e531]:
+                  - generic [ref=e532]: Example 2
+                  - generic [ref=e533]:
+                    - generic [ref=e534]: "Input: prices = [7,6,4,3,1]"
+                    - generic [ref=e535]: "Output: 0"
+                    - generic [ref=e536]: "Explanation: Strictly decreasing, no profit possible"
+                - generic [ref=e537]:
+                  - generic [ref=e538]: Example 3
+                  - generic [ref=e539]:
+                    - generic [ref=e540]: "Input: prices = [1,2,3,4,5]"
+                    - generic [ref=e541]: "Output: 4"
+                    - generic [ref=e542]: "Explanation: Buy at 1, sell at 5 = profit of 4"
+                - generic [ref=e543]:
+                  - generic [ref=e544]: Example 4
+                  - generic [ref=e545]:
+                    - generic [ref=e546]: "Input: prices = [3,1,4,8,2,5]"
+                    - generic [ref=e547]: "Output: 7"
+                    - generic [ref=e548]: "Explanation: Buy at 1, sell at 8 = profit of 7"
+        - separator [ref=e549]
+        - generic [ref=e551]:
+          - generic [ref=e553]:
+            - generic [ref=e554]:
+              - combobox [ref=e555] [cursor=pointer]:
                 - option "Python 3" [selected]
                 - option "JavaScript"
-              - button "↺ Reset" [ref=e553] [cursor=pointer]
-              - button "▶ Run" [ref=e554] [cursor=pointer]
-              - button "✓ Submit" [ref=e555] [cursor=pointer]
-            - code [ref=e559]:
-              - generic [ref=e560]:
-                - textbox "Editor content" [ref=e561]
-                - textbox [ref=e562]
-                - generic [ref=e564]:
-                  - generic [ref=e567]: "1"
-                  - generic [ref=e569]: "2"
-                  - generic [ref=e570]:
-                    - generic [ref=e571] [cursor=pointer]: 
-                    - generic [ref=e572]: "3"
-                  - generic [ref=e574]: "4"
-                - generic [ref=e582]:
-                  - generic [ref=e584]: from typing import List
-                  - generic [ref=e587]: "def max_profit(prices: List[int]) -> int:"
-                  - generic [ref=e589]: pass
-          - separator [ref=e590]
-          - generic [ref=e592]:
-            - generic [ref=e593]: ▶
-            - generic [ref=e594]: Run or submit your code to see results
-            - generic [ref=e595]: Cmd+Enter to run · Cmd+Shift+Enter to submit
-    - generic [ref=e596]:
-      - generic [ref=e597]: best-time-buy-sell
-      - generic [ref=e598]: easy
-      - generic [ref=e599]: 1 / 86
-      - generic [ref=e600]: Python 3
-      - generic [ref=e601]: 0 / 86 solved
-  - generic [ref=e602]:
+              - button "↺ Reset" [ref=e556] [cursor=pointer]
+              - button "▶ Run" [ref=e557] [cursor=pointer]
+              - button "✓ Submit" [ref=e558] [cursor=pointer]
+            - code [ref=e562]:
+              - generic [ref=e563]:
+                - textbox "Editor content" [ref=e564]
+                - textbox [ref=e565]
+                - generic [ref=e567]:
+                  - generic [ref=e570]: "1"
+                  - generic [ref=e572]: "2"
+                  - generic [ref=e573]:
+                    - generic [ref=e574] [cursor=pointer]: 
+                    - generic [ref=e575]: "3"
+                  - generic [ref=e577]: "4"
+                - generic [ref=e585]:
+                  - generic [ref=e587]: from typing import List
+                  - generic [ref=e590]: "def max_profit(prices: List[int]) -> int:"
+                  - generic [ref=e592]: pass
+          - separator [ref=e593]
+          - generic [ref=e595]:
+            - generic [ref=e596]: ▶
+            - generic [ref=e597]: Run or submit your code to see results
+            - generic [ref=e598]: Cmd+Enter to run · Cmd+Shift+Enter to submit
+    - generic [ref=e599]:
+      - generic [ref=e600]: best-time-buy-sell
+      - generic [ref=e601]: easy
+      - generic [ref=e602]: 1 / 86
+      - generic [ref=e603]: Python 3
+      - generic [ref=e604]: 0 / 86 solved
+  - generic [ref=e605]:
     - alert
     - alert
 ```

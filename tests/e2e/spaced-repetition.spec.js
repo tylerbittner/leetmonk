@@ -131,18 +131,12 @@ test.describe("Spaced Repetition (FSRS)", () => {
   test("review queue shows flagged problems", async () => {
     await openFirstProblem(window);
     const flag = window.locator("[data-testid=review-flag]");
-    // First click flags the problem
+    // First click flags the problem (unflagged → flagged, no popup)
     await flag.click();
-    await window.waitForTimeout(300);
-    // Second click opens popup
-    await flag.click();
-    await window.locator("[data-testid=review-popup]").waitFor({ timeout: 5000 });
-    // Dismiss popup by pressing Escape or clicking elsewhere
-    await window.keyboard.press("Escape");
-    await window.locator("[data-testid=review-popup]").waitFor({ state: "hidden", timeout: 3000 }).catch(() => {});
-
-    // The review queue section in sidebar should show at least 1 item
+    await window.waitForTimeout(800); // wait for state update + IPC write
+    // Review queue should now show the flagged problem
     const reviewItems = window.locator("[data-testid=review-queue-item]");
+    await expect(reviewItems.first()).toBeVisible({ timeout: 5000 });
     const count = await reviewItems.count();
     expect(count).toBeGreaterThanOrEqual(1);
   });

@@ -72,6 +72,7 @@ export default function ReviewQueue({ problems, reviewData, srData = {}, onSelec
     return (
       <div
         key={p.id}
+        data-testid="review-queue-item"
         onClick={() => onSelect(p.id)}
         style={itemStyle(p.id === activeProblemId)}
         onMouseEnter={e => { if (p.id !== activeProblemId) e.currentTarget.style.background = 'var(--bg-secondary)' }}
