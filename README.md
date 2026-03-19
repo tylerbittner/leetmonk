@@ -44,24 +44,16 @@ Grab the `.dmg` from the [latest release](https://github.com/tylerbittner/leetmo
 
 **Requires** [Python 3.9+](https://python.org) installed (used to run your code locally).
 
-### Build from source (all platforms)
+### Run from source (all platforms)
 
 ```bash
 git clone https://github.com/tylerbittner/leetmonk.git
 cd leetmonk
 npm install
-npm run dev       # launch in dev mode
+npm run dev
 ```
 
-To build a distributable app:
-
-```bash
-npm run dist      # builds .app + .dmg (macOS)
-```
-
-**Requires** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org).
-
-Works on macOS, Windows, and Linux.
+**Requires** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org). Works on macOS, Windows, and Linux.
 
 ## Contributing
 
