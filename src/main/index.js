@@ -149,6 +149,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#1a1a1a',
     titleBarStyle: 'hiddenInset',
+    show: process.env.NODE_ENV !== 'test',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
