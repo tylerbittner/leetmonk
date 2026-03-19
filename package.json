@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "start": "electron-vite build && electron-vite preview",
     "preview": "electron-vite preview",
     "dist": "electron-vite build && electron-builder",
     "test": "jest --testPathPattern='tests/' --runInBand",

@@ -50,7 +50,7 @@ Grab the `.dmg` from the [latest release](https://github.com/tylerbittner/leetmo
 git clone https://github.com/tylerbittner/leetmonk.git
 cd leetmonk
 npm install
-npm run dev
+npm start
 ```
 
 **Requires** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org). Works on macOS, Windows, and Linux.
