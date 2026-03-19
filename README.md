@@ -21,40 +21,43 @@ LeetMonk removes the mechanism. No account, no network, no pull toward shallow e
 
 ## Features
 
-- **86 curated problems** in Python & JavaScript — arrays, DP, binary search, graphs, trees, and more
-- **Pattern Library** — 22 algorithm patterns with templates, "when to use" guides, and mastery tracking. Learn the *technique*, not just the problem.
-- **Spaced repetition (FSRS-6)** — rate yourself after each solve; due problems surface automatically. The science of retention, built in.
-- **Solution diff view** — compare your code side-by-side with reference solutions
-- **Monaco editor** with vim keybindings, focus mode, session planner, and keyboard shortcuts (`Cmd+Enter` to run, `Cmd+Shift+Enter` to submit)
-- **Fully local** — code runs on your machine, progress stays on your machine
+- **86 curated problems** in Python & JavaScript — arrays, dynamic programming, binary search, graphs, trees, sliding window, two pointers, and more
+- **Pattern Library** — 22 algorithm patterns with code templates, "when to use" guides, and mastery tracking. Learn the *technique*, not just the problem.
+- **Spaced repetition ([FSRS-6](https://github.com/open-spaced-repetition/ts-fsrs))** — rate yourself after each solve and the app computes optimal review intervals. Due problems surface automatically so you revisit them before you forget.
+- **Solution diff view** — compare your code side-by-side with reference solutions using the built-in diff editor
+- **Session planner** — batch problems by pattern, difficulty, or due reviews before you sit down, so the session itself is uninterrupted
+- **[Monaco code editor](https://microsoft.github.io/monaco-editor/)** (the engine behind VS Code) with optional vim keybindings, focus mode, and configurable font size
+- **Hints and solutions** — revealed progressively when you need them, invisible when you don't
+- **Fully local** — code executes on your machine, progress stays on your machine, nothing phones home
 
 ## Quick Start
 
-**Requirements:** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org)
+### Download (macOS)
 
-### macOS (packaged app)
+Grab the `.dmg` from the [latest release](https://github.com/tylerbittner/leetmonk/releases/latest), open it, and drag LeetMonk to Applications.
 
-```bash
-git clone https://github.com/tylerbittner/leetmonk.git
-cd leetmonk
-npm install
-npm run dist
-```
+> **Note:** The app is unsigned. On first launch, macOS will block it — click **Done**, then go to **System Settings → Privacy & Security** and click **"Open Anyway"**.
 
-Opens `dist/mac-arm64/LeetMonk.app` (Apple Silicon) or `dist/mac/LeetMonk.app` (Intel). Drag to `/Applications` to install.
+**Requires** [Python 3.9+](https://python.org) installed (used to run your code locally).
 
-> **Note:** The app is unsigned. On first launch macOS will block it — click **Done**, then go to **System Settings → Privacy & Security** and click **"Open Anyway"**. On older macOS, right-click the app → Open works instead.
-
-### All platforms (run from source)
+### Build from source (all platforms)
 
 ```bash
 git clone https://github.com/tylerbittner/leetmonk.git
 cd leetmonk
 npm install
-npm run dev
+npm run dev       # launch in dev mode
 ```
 
-Works on macOS, Windows, and Linux. Electron, Python 3, and Node.js must be available.
+To build a distributable app:
+
+```bash
+npm run dist      # builds .app + .dmg (macOS)
+```
+
+**Requires** [Node.js 18+](https://nodejs.org) and [Python 3.9+](https://python.org).
+
+Works on macOS, Windows, and Linux.
 
 ## Contributing
 
@@ -75,7 +78,7 @@ npm run test:problems
 | Code editor | [Monaco Editor](https://microsoft.github.io/monaco-editor/) |
 | Build tooling | [electron-vite](https://electron-vite.org/) |
 | Code execution | Python 3 + Node.js (spawned subprocesses) |
-| Spaced repetition | [FSRS-6](https://github.com/open-spaced-repetition/py-fsrs) (pure JS port) |
+| Spaced repetition | [ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs) |
 | Testing | [Jest](https://jestjs.io/) |
 
 ### Testing
