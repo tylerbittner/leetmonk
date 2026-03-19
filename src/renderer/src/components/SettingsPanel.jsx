@@ -156,7 +156,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '20px 24px 0',
-            cursor: 'grab',
+            cursor: 'default',
           }}
         >
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>

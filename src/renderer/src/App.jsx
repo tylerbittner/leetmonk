@@ -68,6 +68,13 @@ export default function App() {
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
   const currentLanguage = activeProblemId ? (languageMap[activeProblemId] ?? 'python') : 'python'
 
+  // Handle open-settings from native menu
+  useEffect(() => {
+    if (window.api.onOpenSettings) {
+      window.api.onOpenSettings(() => setShowSettings(true))
+    }
+  }, [])
+
   // Load everything on startup
   useEffect(() => {
     async function init() {
@@ -388,7 +395,8 @@ export default function App() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12, padding: '0 16px',
         height: 48, borderBottom: '1px solid var(--border)',
-        background: 'var(--bg-secondary)', flexShrink: 0, WebkitAppRegion: 'drag'
+        background: 'var(--bg-secondary)', flexShrink: 0, WebkitAppRegion: 'drag',
+        userSelect: 'none', WebkitUserSelect: 'none', cursor: 'default',
       }}>
         <div style={{ width: 70 }} />
         <span

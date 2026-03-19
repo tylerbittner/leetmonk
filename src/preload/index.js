@@ -17,5 +17,6 @@ contextBridge.exposeInMainWorld('api', {
   removeReviewItem: (args) => ipcRenderer.invoke('remove-review-item', args),
   getSrState: (args) => ipcRenderer.invoke('get-sr-state', args),
   setSrState: (args) => ipcRenderer.invoke('set-sr-state', args),
-  getAllSrState: () => ipcRenderer.invoke('get-all-sr-state')
+  getAllSrState: () => ipcRenderer.invoke('get-all-sr-state'),
+  onOpenSettings: (callback) => ipcRenderer.on('open-settings', callback)
 })
