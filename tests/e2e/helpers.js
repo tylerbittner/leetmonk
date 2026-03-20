@@ -79,4 +79,58 @@ async function ensureSidebarExpanded(window) {
   }
 }
 
-module.exports = { launchApp, setEditorValue, ensureSidebarExpanded };
+// Launch, perform actions, close, relaunch with SAME data dir — for persistence tests
+async function launchAppWithPersistence({ show = false } = {}) {
+  const tempDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "leetmonk-persist-test-"));
+  const srcProblems = path.join(projectRoot, "data/problems");
+  const destProblems = path.join(tempDataDir, "problems");
+  fs.mkdirSync(destProblems, { recursive: true });
+  for (const f of fs.readdirSync(srcProblems)) {
+    if (f.endsWith(".json")) {
+      fs.copyFileSync(path.join(srcProblems, f), path.join(destProblems, f));
+    }
+  }
+
+  const launch = async () => {
+    const app = await electron.launch({
+      args: [path.join(projectRoot, "out/main/index.js")],
+      env: {
+        ...process.env,
+        NODE_ENV: "test",
+        LEETMONK_SHOW_WINDOW: show ? "1" : "0",
+        ELECTRON_RENDERER_URL: "file://" + path.join(projectRoot, "out/renderer/index.html"),
+        LEETMONK_DATA_DIR: tempDataDir,
+      },
+      timeout: 30000,
+    });
+    const window = await app.firstWindow();
+    await window.waitForLoadState("load");
+    await window.waitForTimeout(2000);
+    return { app, window };
+  };
+
+  const cleanup = () => {
+    try { fs.rmSync(tempDataDir, { recursive: true, force: true }); } catch {}
+  };
+
+  const { app, window } = await launch();
+  return { app, window, relaunch: launch, cleanup, dataDir: tempDataDir };
+}
+
+// Submit the correct Two Sum solution and wait for accepted
+const CORRECT_SOLUTIONS = {
+  'best-time-buy-sell': `from typing import List\ndef max_profit(prices: List[int]) -> int:\n    min_price = float("inf")\n    max_p = 0\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        elif price - min_price > max_p:\n            max_p = price - min_price\n    return max_p`,
+};
+
+async function submitCorrectSolution(window, problemId = null) {
+  await window.locator("[data-testid=problem-item]").first().click();
+  await window.locator(".monaco-editor").waitFor({ timeout: 10000 });
+  await window.waitForTimeout(2000);
+  const code = CORRECT_SOLUTIONS['best-time-buy-sell'];
+  await setEditorValue(window, code);
+  await window.waitForTimeout(500);
+  await window.locator("[data-testid=btn-submit]").click();
+  await window.locator("text=✓ Accepted").waitFor({ timeout: 25000 });
+}
+
+module.exports = { launchApp, launchAppWithPersistence, setEditorValue, ensureSidebarExpanded, submitCorrectSolution, CORRECT_SOLUTIONS };

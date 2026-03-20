@@ -203,7 +203,11 @@ export default function App() {
     window.__testSetCode = (code) => {
       if (activeProblem) handleCodeChange(activeProblem.id, code)
     }
-  }, [activeProblem, handleCodeChange])
+    window.__testGetCode = () => {
+      if (activeProblem) return getCode(activeProblem.id)
+      return null
+    }
+  }, [activeProblem, handleCodeChange, getCode])
 
   const markSessionProblemSolved = useCallback((problemId) => {
     if (!session || !session.problems.includes(problemId)) return
