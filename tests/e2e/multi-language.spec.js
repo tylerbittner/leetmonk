@@ -62,6 +62,14 @@ test.describe("Multi-Language Workflow", () => {
     await window.locator("[data-testid=btn-submit]").click();
     await window.locator("text=✓ Accepted").waitFor({ timeout: 25000 });
 
+    // Dismiss rating modal before checking counter or switching language
+    const ratingModal = window.locator("[data-testid=rating-modal]");
+    if (await ratingModal.isVisible().catch(() => false)) {
+      await window.locator("[data-testid=rate-good]").click();
+      await expect(ratingModal).not.toBeVisible({ timeout: 5000 });
+      await window.waitForTimeout(500);
+    }
+
     const counterAfterPython = await window
       .locator("[data-testid=solved-counter]")
       .textContent();
