@@ -7,9 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test-macos:
     runs-on: macos-14
-    name: Test & Build
+    name: Test & Build (macOS)
 
     steps:
       - uses: actions/checkout@v4
@@ -37,3 +37,34 @@ jobs:
       - name: Run E2E tests
         run: npx playwright test
         timeout-minutes: 20
+
+  test-windows:
+    runs-on: windows-latest
+    name: Test & Build (Windows)
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build (verify compilation)
+        run: npx electron-vite build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npx playwright test
+        timeout-minutes: 25
