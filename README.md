@@ -8,6 +8,8 @@
 
 > I was heading camping for the weekend with no cell service, just wildflowers and stars. I didn't want to break my algo streak so I built an app to practice offline! 🏕️ 🤓
 
+![LeetMonk — Climbing Stairs solution accepted](docs/images/screenshot.png)
+
 ## Why Offline?
 
 Cal Newport calls it *deep work*: cognitively demanding practice performed in a state of distraction-free concentration. It's how real skill is built.
@@ -17,8 +19,6 @@ Most algorithm practice tools fight against this. Leaderboards invite comparison
 LeetMonk was designed around the opposite idea. No account, no network, no pull toward shallow engagement — just you, a problem, and a blank editor. An offline app removes the mechanism entirely. There's nothing to check. The decision to stay in flow is made once, at launch. After that, the environment does the work.
 
 The session planner exists for the same reason: decide what you'll practice *before* you sit down, so you're not making small decisions mid-session. Batch the planning; protect the practice. This is deliberate practice in solitude — the environment where craft deepens.
-
-![LeetMonk — Climbing Stairs solution accepted](docs/images/screenshot.png)
 
 ## Features
 
