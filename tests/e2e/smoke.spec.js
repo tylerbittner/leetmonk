@@ -73,11 +73,6 @@ test.describe("Smoke tests", () => {
     await expect(window.locator("[data-testid=setting-vim]")).toBeVisible();
   });
 
-  test("focus mode select exists in settings", async () => {
-    await window.keyboard.press("Meta+,");
-    await expect(window.locator("[data-testid=setting-focus-mode]")).toBeVisible();
-  });
-
   test("Pattern Library opens", async () => {
     await ensureSidebarExpanded(window);
     await window.locator("[data-testid=btn-patterns]").click();

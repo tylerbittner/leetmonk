@@ -57,14 +57,6 @@ export default function AboutModal({ onClose }) {
           © 2026 Tyler Bittner · Apache 2.0 License
         </div>
 
-        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 20, opacity: 0.7 }}>
-          Bell sound: "432 hz A Bell.wav" by{' '}
-          <a href="https://freesound.org/s/390543/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)' }}>
-            enolareven
-          </a>
-          {' '}— CC BY-NC 3.0
-        </div>
-
         <button
           onClick={onClose}
           style={{

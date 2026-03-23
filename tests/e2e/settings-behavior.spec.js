@@ -38,14 +38,6 @@ test.describe("Settings behavioral tests", () => {
     expect(newLabel).not.toBe(initialLabel);
   });
 
-  test("minimal focus mode changes select value", async () => {
-    await openSettings(window);
-    const select = window.locator("[data-testid=setting-focus-mode]");
-    await select.selectOption("minimal");
-    const val = await select.inputValue();
-    expect(val).toBe("minimal");
-  });
-
   test("celebration none changes select value", async () => {
     await openSettings(window);
     const select = window.locator("[data-testid=setting-celebration]");
@@ -66,24 +58,6 @@ test.describe("Settings behavioral tests", () => {
     expect(Number(val)).toBe(16);
   });
 
-  test("sound toggle changes state", async () => {
-    await openSettings(window);
-    const toggle = window.locator("[data-testid=setting-sound]");
-    const initialLabel = await toggle.getAttribute("aria-label");
-    await toggle.click();
-    await window.waitForTimeout(200);
-    const newLabel = await toggle.getAttribute("aria-label");
-    expect(newLabel).not.toBe(initialLabel);
-  });
-
-  test("focus mode shortcut Cmd+Shift+F exists as keyboard binding", async () => {
-    // Just verify the app responds to the shortcut without crashing
-    await window.keyboard.press("Meta+Shift+F");
-    await window.waitForTimeout(500);
-    // App should still be running
-    const counter = await window.locator("[data-testid=solved-counter]").textContent();
-    expect(counter).toMatch(/\d+\/\d+/);
-  });
 
   test("settings panel closes on Escape", async () => {
     await openSettings(window);

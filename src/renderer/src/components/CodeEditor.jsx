@@ -91,7 +91,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
           className="btn btn-ghost"
           onClick={onReset}
           disabled={running}
-          title="Reset to starter code (Cmd+R)"
+          data-tooltip="Reset to starter code (Cmd+R)"
           style={{ fontSize: 12, padding: '5px 10px' }}
         >
           ↺ Reset
@@ -101,7 +101,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
           className="btn btn-ghost"
           onClick={onRun}
           disabled={running}
-          title="Run against example cases (Cmd+Enter)"
+          data-tooltip="Run against example cases (Cmd+Enter)"
           style={{ fontSize: 12, padding: '5px 12px' }}
         >
           {running ? <Spinner /> : '▶ Run'}
@@ -111,7 +111,7 @@ export default function CodeEditor({ problem, code, language, onChange, onLangua
           className="btn btn-success"
           onClick={onSubmit}
           disabled={running}
-          title="Submit against all test cases (Cmd+Shift+Enter)"
+          data-tooltip="Submit against all test cases (Cmd+Shift+Enter)"
           style={{ fontSize: 12, padding: '5px 14px' }}
         >
           {running ? <Spinner /> : '✓ Submit'}

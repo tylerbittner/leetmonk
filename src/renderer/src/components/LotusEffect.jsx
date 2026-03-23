@@ -1,15 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 
-function playBellSound() {
-  try {
-    const audio = new Audio(new URL('../../../public/sounds/bell.mp3', import.meta.url).href)
-    audio.volume = 0.6
-    audio.play().catch(() => {})
-  } catch (_) {
-    // Audio unavailable — fail silently
-  }
-}
-
 function drawPetal(ctx, size) {
   ctx.beginPath()
   ctx.moveTo(0, -size)
@@ -27,12 +17,10 @@ const PETAL_COLORS = [
   [240, 220, 255],   // soft violet
 ]
 
-export default function LotusEffect({ soundEnabled = true }) {
+export default function LotusEffect() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
-    if (soundEnabled) playBellSound()
-
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -108,7 +96,7 @@ export default function LotusEffect({ soundEnabled = true }) {
 
     animate()
     return () => cancelAnimationFrame(frame)
-  }, [soundEnabled])
+  }, [])
 
   return (
     <canvas

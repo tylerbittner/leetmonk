@@ -1,6 +1,5 @@
 {
   "celebrationEffect": "none",
-  "soundOnSolve": false,
   "timerVisible": true,
   "editorFontSize": 18,
   "vimKeybindings": false,

@@ -20,20 +20,10 @@ import PatternLibrary from './components/PatternLibrary.jsx'
 
 const DEFAULT_SETTINGS = {
   celebrationEffect: 'lotus',
-  soundOnSolve: true,
   timerVisible: true,
   editorFontSize: 14,
   vimKeybindings: false,
-  focusMode: 'standard',
   sidebarWidth: 240,
-}
-
-function playBellSound() {
-  try {
-    const audio = new Audio(new URL('./public/sounds/bell.mp3', import.meta.url).href)
-    audio.volume = 0.6
-    audio.play().catch(() => {})
-  } catch (_) {}
 }
 import RatingModal from './components/RatingModal.jsx'
 import { processReview, newCardState } from './fsrs.js'
@@ -69,8 +59,7 @@ export default function App() {
 
   const activeProblem = problems.find(p => p.id === activeProblemId) || null
   const currentLanguage = activeProblemId ? (languageMap[activeProblemId] ?? 'python') : 'python'
-  const isMinimal = settings.focusMode === 'minimal'
-  const isSidebarHidden = sidebarCollapsed || isMinimal
+  const isSidebarHidden = sidebarCollapsed
 
   // Handle open-settings from native menu
   useEffect(() => {
@@ -126,13 +115,6 @@ export default function App() {
       } else if (e.metaKey && e.key === ',') {
         e.preventDefault()
         setShowSettings(s => !s)
-      } else if (e.metaKey && e.shiftKey && e.key === 'f') {
-        e.preventDefault()
-        setSettings(s => {
-          const next = { ...s, focusMode: s.focusMode === 'minimal' ? 'standard' : 'minimal' }
-          window.api.setSettings(next)
-          return next
-        })
       }
     }
     window.addEventListener('keydown', handleKey)
@@ -327,16 +309,9 @@ export default function App() {
 
   function triggerCelebration() {
     const effect = settings.celebrationEffect ?? 'lotus'
-    // Bell for confetti mode (lotus effect plays its own bell internally)
-    if (settings.soundOnSolve && effect === 'confetti') {
-      playBellSound()
-    }
     if (effect !== 'none') {
       setShowCelebration(true)
       setTimeout(() => setShowCelebration(false), 4000)
-    } else if (settings.soundOnSolve) {
-      // Play bell even with no visual effect
-      playBellSound()
     }
   }
 
@@ -472,20 +447,12 @@ export default function App() {
           <div className="titlebar-no-drag" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <TopBarBtn onClick={() => navigateProblem(-1)} title="Previous problem (Cmd+[)">‹</TopBarBtn>
             <TopBarBtn onClick={() => navigateProblem(1)} title="Next problem (Cmd+])">›</TopBarBtn>
-            <button onClick={() => setSidebarCollapsed(c => !c)} title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'} style={{
-              padding: '4px 8px', borderRadius: 4, border: '1px solid var(--border)',
-              background: sidebarCollapsed ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              color: sidebarCollapsed ? '#fff' : 'var(--text-muted)',
-              cursor: 'pointer', fontSize: 12, transition: 'background 0.15s, color 0.15s',
-            }}>
-              {sidebarCollapsed ? '◧' : '▣'}
-            </button>
-            {settings.timerVisible && <Timer problemId={activeProblem.id} />}
+            {settings.timerVisible && <div style={{ marginLeft: 88 }}><Timer problemId={activeProblem.id} /></div>}
           </div>
         )}
       </div>
 
-      {session && !isMinimal && (
+      {session && (
         <SessionBar
           session={session}
           problems={problems}
@@ -574,6 +541,7 @@ export default function App() {
             />
           )}
           <button
+            data-testid="sidebar-collapse-btn"
             onClick={() => setSidebarCollapsed(c => !c)}
             title={sidebarCollapsed ? 'Expand problem list' : 'Collapse problem list'}
             className="sidebar-toggle"
@@ -682,8 +650,8 @@ export default function App() {
         )}
       </div>
 
-      {/* Status bar — hidden in minimal mode */}
-      {settings.focusMode !== 'minimal' && (
+      {/* Status bar */}
+      {(
         <div style={{
           height: 24, borderTop: '1px solid var(--border)', display: 'flex',
           alignItems: 'center', padding: '0 16px', gap: 16, fontSize: 11,
@@ -760,7 +728,7 @@ export default function App() {
 
       {/* Celebration effects */}
       {showCelebration && settings.celebrationEffect === 'lotus' && (
-        <LotusEffect soundEnabled={settings.soundOnSolve} />
+        <LotusEffect />
       )}
       {showCelebration && settings.celebrationEffect === 'confetti' && (
         <ConfettiEffect />

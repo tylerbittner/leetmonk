@@ -71,9 +71,7 @@ async function ensureSidebarExpanded(window) {
     .isVisible()
     .catch(() => false);
   if (!isVisible) {
-    const toggle = window
-      .locator("[data-testid=top-bar] button")
-      .filter({ hasText: /[▣◧]/ });
+    const toggle = window.locator("[data-testid=sidebar-collapse-btn]");
     await toggle.click();
     await window.waitForTimeout(400);
   }

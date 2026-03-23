@@ -94,11 +94,9 @@ function StyledSelect({ value, onChange, options, testId }) {
 
 const DEFAULT_SETTINGS = {
   celebrationEffect: 'lotus',
-  soundOnSolve: true,
   timerVisible: true,
   editorFontSize: 14,
   vimKeybindings: false,
-  focusMode: 'standard',
 }
 
 export default function SettingsPanel({ settings, onSettingsChange, onClose, onBugReport }) {
@@ -239,21 +237,6 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
             <Toggle value={s.timerVisible} onChange={v => update('timerVisible', v)} />
           </SettingRow>
 
-          <SettingRow
-            label="Focus mode"
-            description="Minimal hides the sidebar, session bar, filter bar, and status bar. Toggle with Cmd+Shift+F"
-          >
-            <StyledSelect
-              testId="setting-focus-mode"
-              value={s.focusMode}
-              onChange={v => update('focusMode', v)}
-              options={[
-                { value: 'standard', label: 'Standard' },
-                { value: 'minimal', label: 'Minimal' },
-              ]}
-            />
-          </SettingRow>
-
           {/* Celebration section */}
           <SectionLabel>On Solve</SectionLabel>
 
@@ -271,13 +254,6 @@ export default function SettingsPanel({ settings, onSettingsChange, onClose, onB
                 { value: 'none', label: 'None' },
               ]}
             />
-          </SettingRow>
-
-          <SettingRow
-            label="Sound"
-            description="Meditation bell when you pass all tests"
-          >
-            <Toggle value={s.soundOnSolve} onChange={v => update('soundOnSolve', v)} testId="setting-sound" />
           </SettingRow>
 
           {/* Bug report */}

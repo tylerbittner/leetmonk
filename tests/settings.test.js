@@ -4,7 +4,6 @@ const os = require('os')
 
 const DEFAULT_SETTINGS = {
   celebrationEffect: 'lotus',
-  soundOnSolve: true,
   timerVisible: true,
   editorFontSize: 14,
   vimKeybindings: false,
@@ -15,7 +14,7 @@ const VALID_CELEBRATION_EFFECTS = ['lotus', 'confetti', 'none']
 const VALID_FOCUS_MODES = ['standard', 'minimal']
 
 test('default settings have all required keys', () => {
-  const required = ['celebrationEffect', 'soundOnSolve', 'timerVisible', 'editorFontSize', 'vimKeybindings', 'focusMode']
+  const required = ['celebrationEffect', 'timerVisible', 'editorFontSize', 'vimKeybindings', 'focusMode']
   for (const key of required) {
     expect(DEFAULT_SETTINGS).toHaveProperty(key)
   }
@@ -23,7 +22,6 @@ test('default settings have all required keys', () => {
 
 test('default settings values have correct types', () => {
   expect(typeof DEFAULT_SETTINGS.celebrationEffect).toBe('string')
-  expect(typeof DEFAULT_SETTINGS.soundOnSolve).toBe('boolean')
   expect(typeof DEFAULT_SETTINGS.timerVisible).toBe('boolean')
   expect(typeof DEFAULT_SETTINGS.editorFontSize).toBe('number')
   expect(typeof DEFAULT_SETTINGS.vimKeybindings).toBe('boolean')
@@ -65,7 +63,6 @@ test('partial saved settings merge correctly with defaults', () => {
   expect(merged.focusMode).toBe('minimal')
   expect(merged.editorFontSize).toBe(18)
   expect(merged.celebrationEffect).toBe('lotus')
-  expect(merged.soundOnSolve).toBe(true)
   expect(merged.timerVisible).toBe(true)
   expect(merged.vimKeybindings).toBe(false)
 })
@@ -88,12 +85,11 @@ test('unknown extra keys in saved settings are preserved in merge', () => {
 
 test('settings file round-trip preserves boolean false values', () => {
   const tmpFile = join(os.tmpdir(), `leetmonk-settings-bools-${Date.now()}.json`)
-  const testSettings = { ...DEFAULT_SETTINGS, soundOnSolve: false, timerVisible: false, vimKeybindings: false }
+  const testSettings = { ...DEFAULT_SETTINGS, timerVisible: false, vimKeybindings: false }
 
   writeFileSync(tmpFile, JSON.stringify(testSettings, null, 2))
   const loaded = JSON.parse(readFileSync(tmpFile, 'utf8'))
 
-  expect(loaded.soundOnSolve).toBe(false)
   expect(loaded.timerVisible).toBe(false)
   expect(loaded.vimKeybindings).toBe(false)
 
