@@ -18,10 +18,7 @@ LeetMonk was designed around the opposite idea. No account, no network, no pull 
 
 The session planner exists for the same reason: decide what you'll practice *before* you sit down, so you're not making small decisions mid-session. Batch the planning; protect the practice. This is deliberate practice in solitude — the environment where craft deepens.
 
-<!-- Screenshots -->
-<!-- ![Main editor view](docs/screenshots/editor.png) -->
-<!-- ![Pattern Library](docs/screenshots/patterns.png) -->
-<!-- ![Spaced repetition review](docs/screenshots/review.png) -->
+![LeetMonk — Climbing Stairs solution accepted](docs/images/screenshot.png)
 
 ## Features
 
@@ -30,7 +27,7 @@ The session planner exists for the same reason: decide what you'll practice *bef
 - **Spaced repetition ([FSRS-6](https://github.com/open-spaced-repetition/ts-fsrs))** — rate yourself after each solve and the app computes optimal review intervals. Due problems surface automatically so you revisit them before you forget.
 - **Solution diff view** — compare your code side-by-side with reference solutions using the built-in diff editor
 - **Session planner** — batch problems by pattern, difficulty, or due reviews before you sit down, so the session itself is uninterrupted
-- **[Monaco code editor](https://microsoft.github.io/monaco-editor/)** (the engine behind VS Code) with optional vim keybindings, focus mode, and configurable font size
+- **[Monaco code editor](https://microsoft.github.io/monaco-editor/)** (the engine behind VS Code) with optional vim keybindings and configurable font size
 - **Hints and solutions** — revealed progressively when you need them, invisible when you don't
 - **Fully local** — code executes on your machine, progress stays on your machine, nothing phones home
 
